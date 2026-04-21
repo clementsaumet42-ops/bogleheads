@@ -1,0 +1,1457 @@
+# Univers ETF — Boglehead FR — ~60 ETF toutes classes d'actifs
+# AVERTISSEMENT : Vérifier les ISIN avant utilisation. Certains marqués ISIN_A_VERIFIER.
+# Source : Euronext, Morningstar, JustETF — données indicatives, non contractuelles.
+
+univers_etf:
+
+  # ============================================================
+  # ACTIONS DÉVELOPPÉES — MONDE
+  # ============================================================
+  - isin: "IE0031442068"
+    ticker: "CW8"
+    nom: "Amundi MSCI World UCITS ETF (C) — PEA éligible"
+    emetteur: "Amundi"
+    classe_actifs: "Actions"
+    sous_classe: "Monde développé"
+    ter: 0.0038
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "ETF synthétique swap-based éligible PEA. Le plus populaire pour le PEA mondial."
+
+  - isin: "FR0011869353"
+    ticker: "WLD"
+    nom: "Lyxor PEA MSCI World UCITS ETF"
+    emetteur: "Amundi (ex-Lyxor)"
+    classe_actifs: "Actions"
+    sous_classe: "Monde développé"
+    ter: 0.0045
+    devise: "EUR"
+    domicile: "France"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Ancienne gamme Lyxor — éligible PEA via swap."
+
+  - isin: "IE00B4L5Y983"
+    ticker: "IWDA"
+    nom: "iShares Core MSCI World UCITS ETF (Acc)"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Monde développé"
+    ter: 0.0020
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Référence mondiale CTO — TER très bas, réplication physique."
+
+  - isin: "LU1681043599"
+    ticker: "LCWD"
+    nom: "Amundi MSCI World UCITS ETF (Acc) — CTO"
+    emetteur: "Amundi"
+    classe_actifs: "Actions"
+    sous_classe: "Monde développé"
+    ter: 0.0038
+    devise: "EUR"
+    domicile: "Luxembourg"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Version CTO de l'Amundi World — domicile Luxembourg."
+
+  - isin: "IE00B3RBWM25"
+    ticker: "VWRL"
+    nom: "Vanguard FTSE All-World UCITS ETF (Dist)"
+    emetteur: "Vanguard"
+    classe_actifs: "Actions"
+    sous_classe: "Monde (tous pays)"
+    ter: 0.0022
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Incluant pays émergents. Version distribuante — dividendes versés."
+
+  - isin: "IE00BK5BQT80"
+    ticker: "VWCE"
+    nom: "Vanguard FTSE All-World UCITS ETF (Acc)"
+    emetteur: "Vanguard"
+    classe_actifs: "Actions"
+    sous_classe: "Monde (tous pays)"
+    ter: 0.0022
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Version capitalisante VWRL — idéale CTO/IS pour croissance long terme."
+
+  # ============================================================
+  # ACTIONS DÉVELOPPÉES — ÉTATS-UNIS
+  # ============================================================
+  - isin: "QS0011215485"
+    ticker: "ESE"
+    nom: "BNP Paribas Easy S&P 500 UCITS ETF EUR — PEA éligible"
+    emetteur: "BNP Paribas AM"
+    classe_actifs: "Actions"
+    sous_classe: "USA S&P 500"
+    ter: 0.0015
+    devise: "EUR"
+    domicile: "France"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "ISIN_A_VERIFIER — S&P 500 éligible PEA via swap. TER parmi les plus bas."
+
+  - isin: "LU0312348589"
+    ticker: "500"
+    nom: "Amundi S&P 500 UCITS ETF (C)"
+    emetteur: "Amundi"
+    classe_actifs: "Actions"
+    sous_classe: "USA S&P 500"
+    ter: 0.0015
+    devise: "EUR"
+    domicile: "Luxembourg"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Amundi S&P 500 — version CTO/Luxembourg."
+
+  - isin: "IE00B5BMR087"
+    ticker: "CSP1"
+    nom: "iShares Core S&P 500 UCITS ETF (Acc)"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "USA S&P 500"
+    ter: 0.0007
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "TER 0,07% — parmi les moins chers du marché. Référence CTO US."
+
+  - isin: "IE0032077012"
+    ticker: "NASD"
+    nom: "Invesco EQQQ Nasdaq-100 UCITS ETF"
+    emetteur: "Invesco"
+    classe_actifs: "Actions"
+    sous_classe: "USA Nasdaq-100"
+    ter: 0.0020
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Exposition Nasdaq 100 — forte concentration tech. Facteur de risque concentration."
+
+  # ============================================================
+  # ACTIONS DÉVELOPPÉES — EUROPE
+  # ============================================================
+  - isin: "LU0908500753"
+    ticker: "ESE600"
+    nom: "Amundi MSCI Europe UCITS ETF (C)"
+    emetteur: "Amundi"
+    classe_actifs: "Actions"
+    sous_classe: "Europe Stoxx 600"
+    ter: 0.0015
+    devise: "EUR"
+    domicile: "Luxembourg"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "ISIN_A_VERIFIER — MSCI Europe large/mid cap. Éligible PEA (siège UE)."
+
+  - isin: "IE00B53QG562"
+    ticker: "EXSA"
+    nom: "iShares STOXX Europe 600 UCITS ETF (Acc)"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Europe Stoxx 600"
+    ter: 0.0020
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Stoxx Europe 600 — 600 plus grandes sociétés européennes."
+
+  - isin: "LU0392494562"
+    ticker: "C50"
+    nom: "Amundi MSCI EMU UCITS ETF — PEA éligible"
+    emetteur: "Amundi"
+    classe_actifs: "Actions"
+    sous_classe: "Zone Euro EMU"
+    ter: 0.0025
+    devise: "EUR"
+    domicile: "Luxembourg"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "MSCI EMU = Zone Euro uniquement. Éligible PEA naturellement."
+
+  # ============================================================
+  # ACTIONS DÉVELOPPÉES — JAPON / PACIFIQUE
+  # ============================================================
+  - isin: "IE00B95PGT31"
+    ticker: "XMJP"
+    nom: "Xtrackers MSCI Japan UCITS ETF (Acc)"
+    emetteur: "DWS (Xtrackers)"
+    classe_actifs: "Actions"
+    sous_classe: "Japon"
+    ter: 0.0020
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Exposition Japon — complément utile à MSCI World."
+
+  - isin: "IE00B52MJD48"
+    ticker: "XPXJ"
+    nom: "Xtrackers MSCI Pacific ex Japan UCITS ETF"
+    emetteur: "DWS (Xtrackers)"
+    classe_actifs: "Actions"
+    sous_classe: "Pacifique ex-Japon"
+    ter: 0.0020
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: false
+      Contrat_Cap_IS: false
+    notes: "Australie, Hong Kong, Singapour — diversification Pacifique."
+
+  # ============================================================
+  # SMALL CAPS
+  # ============================================================
+  - isin: "IE00BF4RFH31"
+    ticker: "WSML"
+    nom: "iShares MSCI World Small Cap UCITS ETF (Acc)"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Small Cap Monde"
+    ter: 0.0035
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Small caps mondiales — prime de risque small cap sur long terme."
+
+  - isin: "IE00B3VVMM84"
+    ticker: "IUS3"
+    nom: "iShares Russell 2000 UCITS ETF (Acc)"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Small Cap USA"
+    ter: 0.0033
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Russell 2000 — 2000 petites capitalisations américaines."
+
+  - isin: "IE00B02KXM00"
+    ticker: "IEUS"
+    nom: "iShares MSCI Europe Small Cap UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Small Cap Europe"
+    ter: 0.0040
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: false
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Small caps européennes — éligible PEA."
+
+  # ============================================================
+  # FACTEURS (FACTOR INVESTING)
+  # ============================================================
+  - isin: "IE00BP3QZD73"
+    ticker: "IWVL"
+    nom: "iShares Edge MSCI World Value Factor UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Facteur Value"
+    ter: 0.0030
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Facteur Value mondial — surpondération titres décotés."
+
+  - isin: "IE00BP3QZB51"
+    ticker: "IWQU"
+    nom: "iShares Edge MSCI World Quality Factor UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Facteur Quality"
+    ter: 0.0030
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Facteur Qualité — ROE élevé, faible endettement, bénéfices stables."
+
+  - isin: "IE00BP3QZC68"
+    ticker: "IWMO"
+    nom: "iShares Edge MSCI World Momentum Factor UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Facteur Momentum"
+    ter: 0.0030
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Facteur Momentum — titres en tendance haussière récente."
+
+  - isin: "IE00B8FHGS14"
+    ticker: "MVOL"
+    nom: "iShares Edge MSCI World Minimum Volatility UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Min Volatilité"
+    ter: 0.0030
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Minimum volatilité mondiale — portefeuille défensif actions."
+
+  # ============================================================
+  # ACTIONS ÉMERGENTES
+  # ============================================================
+  - isin: "IE00B4L5YC18"
+    ticker: "IEEM"
+    nom: "iShares Core MSCI Emerging Markets IMI UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Émergents MSCI EM IMI"
+    ter: 0.0018
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "MSCI EM IMI — pays émergents large/mid/small. Réplication physique."
+
+  - isin: "FR0013412012"
+    ticker: "PAEEM"
+    nom: "Amundi MSCI Emerging Markets UCITS ETF — PEA éligible"
+    emetteur: "Amundi"
+    classe_actifs: "Actions"
+    sous_classe: "Émergents MSCI EM"
+    ter: 0.0020
+    devise: "EUR"
+    domicile: "France"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "ISIN_A_VERIFIER — ETF pays émergents éligible PEA via swap synthétique."
+
+  - isin: "IE00BJ0KDR00"
+    ticker: "XMEM"
+    nom: "Xtrackers MSCI Emerging Markets Swap UCITS ETF"
+    emetteur: "DWS (Xtrackers)"
+    classe_actifs: "Actions"
+    sous_classe: "Émergents MSCI EM"
+    ter: 0.0020
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "MSCI EM swap-based — alternative CTO aux émergents."
+
+  - isin: "IE00BQT3WG13"
+    ticker: "CIND"
+    nom: "iShares MSCI India UCITS ETF (Acc)"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Inde"
+    ter: 0.0065
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Exposition Inde — forte croissance économique attendue."
+
+  - isin: "IE00B02KXK85"
+    ticker: "FXC"
+    nom: "iShares China Large Cap UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Chine"
+    ter: 0.0074
+    devise: "HKD"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Chine H-Shares — attention risque réglementaire et géopolitique."
+
+  # ============================================================
+  # OBLIGATIONS SOUVERAINES EURO
+  # ============================================================
+  - isin: "IE00B4WXJJ64"
+    ticker: "GOVS"
+    nom: "iShares Core € Govt Bond UCITS ETF (Acc)"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Obligations"
+    sous_classe: "Souverain EUR agrégé"
+    ter: 0.0009
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Obligations d'État zone euro — toutes maturités. TER exceptionnel."
+
+  - isin: "IE00B3FH7618"
+    ticker: "IBCI"
+    nom: "iShares € Govt Bond 1-3yr UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Obligations"
+    sous_classe: "Souverain EUR court terme"
+    ter: 0.0020
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Obligations souveraines EUR court terme 1-3 ans — faible duration."
+
+  - isin: "IE00B1FZS798"
+    ticker: "IBCM"
+    nom: "iShares € Govt Bond 3-7yr UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Obligations"
+    sous_classe: "Souverain EUR moyen terme"
+    ter: 0.0020
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Duration intermédiaire 3-7 ans — équilibre rendement/risque taux."
+
+  - isin: "IE00B1FZS913"
+    ticker: "IBCL"
+    nom: "iShares € Govt Bond 7-10yr UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Obligations"
+    sous_classe: "Souverain EUR long terme"
+    ter: 0.0020
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Duration longue 7-10 ans — sensible aux variations de taux."
+
+  - isin: "IE00BSKRJZ44"
+    ticker: "IBCX"
+    nom: "iShares € Govt Bond 20+yr UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Obligations"
+    sous_classe: "Souverain EUR ultra-long"
+    ter: 0.0020
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Ultra longue duration (20+ ans) — fort levier taux. Attention volatilité."
+
+  # ============================================================
+  # OBLIGATIONS CORPORATE ET AGRÉGÉES EUR
+  # ============================================================
+  - isin: "IE00B3F81R35"
+    ticker: "IEAA"
+    nom: "iShares Core € Corp Bond UCITS ETF (Acc)"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Obligations"
+    sous_classe: "Corporate IG EUR"
+    ter: 0.0020
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Obligations corporate Investment Grade zone euro — spread crédit IG."
+
+  - isin: "IE00B66F4759"
+    ticker: "IHYG"
+    nom: "iShares € High Yield Corp Bond UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Obligations"
+    sous_classe: "High Yield EUR"
+    ter: 0.0050
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "High Yield EUR — rendement élevé, risque crédit important."
+
+  - isin: "LU1650490474"
+    ticker: "AGGH"
+    nom: "iShares Core Global Aggregate Bond UCITS ETF EUR Hdg"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Obligations"
+    sous_classe: "Agrégé Monde EUR-hedgé"
+    ter: 0.0010
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Obligations monde toutes catégories, hedgé EUR — diversification globale."
+
+  # ============================================================
+  # OBLIGATIONS US HEDGÉES EUR
+  # ============================================================
+  - isin: "IE00BDFGJ444"
+    ticker: "IBTM"
+    nom: "iShares $ Treasury Bond 7-10yr UCITS ETF EUR Hdg"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Obligations"
+    sous_classe: "US Treasury EUR-hedgé"
+    ter: 0.0012
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Treasuries US 7-10 ans hedgés EUR — refuge en période de stress actions."
+
+  # ============================================================
+  # OBLIGATIONS INDEXÉES INFLATION
+  # ============================================================
+  - isin: "IE00B7LFXY77"
+    ticker: "ITPS"
+    nom: "iShares $ TIPS UCITS ETF EUR Hdg"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Obligations"
+    sous_classe: "Inflation TIPS USA"
+    ter: 0.0010
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "TIPS US hedgés EUR — protection contre l'inflation américaine."
+
+  - isin: "FR0010371401"
+    ticker: "C40"
+    nom: "Lyxor EUR 2-10Y Inflation Expectations UCITS ETF"
+    emetteur: "Amundi (ex-Lyxor)"
+    classe_actifs: "Obligations"
+    sous_classe: "Inflation OATi EUR"
+    ter: 0.0025
+    devise: "EUR"
+    domicile: "France"
+    capitalisant: false
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "ISIN_A_VERIFIER — Obligations indexées inflation zone euro (OATi, Bund i)."
+
+  # ============================================================
+  # OBLIGATIONS ÉMERGENTES
+  # ============================================================
+  - isin: "IE00B4613386"
+    ticker: "SEML"
+    nom: "iShares J.P. Morgan EM Local Govt Bond UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Obligations"
+    sous_classe: "EM Devises Locales"
+    ter: 0.0050
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Dette émergente en devises locales — prime de change et croissance EM."
+
+  - isin: "IE00B2NPKV68"
+    ticker: "SEMB"
+    nom: "iShares J.P. Morgan EM Bond UCITS ETF (USD Hedged)"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Obligations"
+    sous_classe: "EM Hard Currency"
+    ter: 0.0045
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Dette émergente en USD (hard currency) — moins de risque de change."
+
+  # ============================================================
+  # IMMOBILIER COTÉ (REITs)
+  # ============================================================
+  - isin: "IE00B83YJG36"
+    ticker: "IWDP"
+    nom: "iShares Developed Markets Property Yield UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Immobilier"
+    sous_classe: "REITs Monde"
+    ter: 0.0059
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "REITs marchés développés — rendement dividende élevé. Attention: distribue."
+
+  - isin: "IE00B1FZS350"
+    ticker: "EPRE"
+    nom: "SPDR FTSE EPRA Europe ex UK Real Estate UCITS ETF"
+    emetteur: "SPDR (State Street)"
+    classe_actifs: "Immobilier"
+    sous_classe: "REITs Europe"
+    ter: 0.0040
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: true
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "ISIN_A_VERIFIER — REITs Europe ex UK — éligible PEA (sociétés européennes)."
+
+  - isin: "IE00B1FZSF77"
+    ticker: "XREA"
+    nom: "Xtrackers FTSE Developed Europe Real Estate UCITS ETF"
+    emetteur: "DWS (Xtrackers)"
+    classe_actifs: "Immobilier"
+    sous_classe: "REITs Europe"
+    ter: 0.0033
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: true
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "ISIN_A_VERIFIER — REITs Europe développée. Éligible PEA."
+
+  # ============================================================
+  # OR PHYSIQUE (ETCs)
+  # ============================================================
+  - isin: "FR0013416716"
+    ticker: "GOLD"
+    nom: "Amundi Physical Gold ETC"
+    emetteur: "Amundi"
+    classe_actifs: "Or"
+    sous_classe: "Or physique"
+    ter: 0.0015
+    devise: "USD"
+    domicile: "France"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Or physique alloué — domicile France. TER parmi les plus bas."
+
+  - isin: "IE00B4ND3602"
+    ticker: "IGLN"
+    nom: "iShares Physical Gold ETC"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Or"
+    sous_classe: "Or physique"
+    ter: 0.0012
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Or physique alloué à Londres — TER 0,12%."
+
+  - isin: "DE000A0S9GB0"
+    ticker: "XGLD"
+    nom: "Xtrackers Physical Gold ETC (EUR)"
+    emetteur: "DWS (Xtrackers)"
+    classe_actifs: "Or"
+    sous_classe: "Or physique"
+    ter: 0.0025
+    devise: "EUR"
+    domicile: "Allemagne"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Or physique libellé EUR — domicile Allemagne."
+
+  # ============================================================
+  # MATIÈRES PREMIÈRES
+  # ============================================================
+  - isin: "IE00BZ1NCS44"
+    ticker: "CMOD"
+    nom: "iShares Diversified Commodity Swap UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Matières premières"
+    sous_classe: "Matières premières diversifiées"
+    ter: 0.0019
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Matières premières diversifiées via swap — énergie, métaux, agri."
+
+  - isin: "IE00BYMLZY52"
+    ticker: "LYTR"
+    nom: "Invesco Bloomberg Commodity UCITS ETF"
+    emetteur: "Invesco"
+    classe_actifs: "Matières premières"
+    sous_classe: "Matières premières diversifiées"
+    ter: 0.0019
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "ISIN_A_VERIFIER — Bloomberg Commodity Index — diversification matières premières."
+
+  # ============================================================
+  # INFRASTRUCTURE
+  # ============================================================
+  - isin: "IE00B1FZS467"
+    ticker: "INFR"
+    nom: "iShares Global Infrastructure UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Diversifiants"
+    sous_classe: "Infrastructure mondiale"
+    ter: 0.0065
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Infrastructure — actifs réels : aéroports, autoroutes, utilities. Inflation-linkée."
+
+  # ============================================================
+  # MONÉTAIRE
+  # ============================================================
+  - isin: "FR0010510800"
+    ticker: "CSH"
+    nom: "Lyxor Smart Overnight Return UCITS ETF"
+    emetteur: "Amundi (ex-Lyxor)"
+    classe_actifs: "Monétaire"
+    sous_classe: "Monétaire EUR"
+    ter: 0.0007
+    devise: "EUR"
+    domicile: "France"
+    capitalisant: true
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: false
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Réplique l'ESTR (ex-EONIA) — poche liquidités/attente. Éligible CTO."
+
+  - isin: "LU2082999306"
+    ticker: "XEON"
+    nom: "Xtrackers EUR Overnight Rate Swap UCITS ETF"
+    emetteur: "DWS (Xtrackers)"
+    classe_actifs: "Monétaire"
+    sous_classe: "Monétaire EUR"
+    ter: 0.0010
+    devise: "EUR"
+    domicile: "Luxembourg"
+    capitalisant: true
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: false
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "ESTR overnight — équivalent monétaire EUR très liquide."
+
+  # ============================================================
+  # THÉMATIQUES
+  # ============================================================
+  - isin: "IE00B4L5YX21"
+    ticker: "IH20"
+    nom: "iShares Global Water UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Thématiques"
+    sous_classe: "Eau"
+    ter: 0.0065
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Gestion et distribution d'eau — thématique ressources naturelles."
+
+  - isin: "IE00B1XNHC34"
+    ticker: "INRG"
+    nom: "iShares Global Clean Energy UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Thématiques"
+    sous_classe: "Énergie propre"
+    ter: 0.0065
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "Clean energy — solaire, éolien, hydrogène. Forte volatilité thématique."
+
+  - isin: "IE00B76VTN11"
+    ticker: "IHCG"
+    nom: "iShares Global Healthcare UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Thématiques"
+    sous_classe: "Santé"
+    ter: 0.0040
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Secteur santé mondial — pharma, biotech, dispositifs médicaux."
+
+  - isin: "IE00BGV5VN51"
+    ticker: "WTAI"
+    nom: "WisdomTree Artificial Intelligence UCITS ETF"
+    emetteur: "WisdomTree"
+    classe_actifs: "Thématiques"
+    sous_classe: "Intelligence Artificielle"
+    ter: 0.0040
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "IA et semi-conducteurs — thématique forte conviction, forte volatilité."
+
+  - isin: "IE00BZ0PKT83"
+    ticker: "HTEC"
+    nom: "ROBO Global Healthcare Technology and Innovation UCITS ETF"
+    emetteur: "ROBO Global"
+    classe_actifs: "Thématiques"
+    sous_classe: "MedTech"
+    ter: 0.0080
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "ISIN_A_VERIFIER — MedTech et innovation santé — TER élevé."
+
+  # ============================================================
+  # ETF COMPLÉMENTAIRES — MONDE TOTAL MARKET
+  # ============================================================
+  - isin: "IE00B3YLTY66"
+    ticker: "SSAC"
+    nom: "iShares MSCI ACWI UCITS ETF (Acc)"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Monde (ACWI)"
+    ter: 0.0020
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "MSCI ACWI = développés + émergents en un seul ETF. Alternative VWCE."
+
+  - isin: "IE00BD45KH83"
+    ticker: "FWRA"
+    nom: "Invesco FTSE All-World UCITS ETF (Acc)"
+    emetteur: "Invesco"
+    classe_actifs: "Actions"
+    sous_classe: "Monde (tous pays)"
+    ter: 0.0015
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "Alternative VWCE — TER légèrement inférieur à 0,22%."
+
+  - isin: "IE0007J05YL7"
+    ticker: "LCUW"
+    nom: "Amundi Prime All Country World UCITS ETF (Acc)"
+    emetteur: "Amundi"
+    classe_actifs: "Actions"
+    sous_classe: "Monde (tous pays)"
+    ter: 0.0007
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "TER exceptionnel 0,07% — gamme Amundi Prime. Alternative très compétitive."
+
+  # ============================================================
+  # PEA COMPLÉMENTAIRES
+  # ============================================================
+  - isin: "FR0007072015"
+    ticker: "LYPS"
+    nom: "Lyxor PEA S&P 500 UCITS ETF"
+    emetteur: "Amundi (ex-Lyxor)"
+    classe_actifs: "Actions"
+    sous_classe: "USA S&P 500"
+    ter: 0.0015
+    devise: "EUR"
+    domicile: "France"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "ISIN_A_VERIFIER — S&P 500 via swap éligible PEA. Domicile France."
+
+  - isin: "FR0013412285"
+    ticker: "PUST"
+    nom: "Amundi PEA S&P 500 ESG UCITS ETF"
+    emetteur: "Amundi"
+    classe_actifs: "Actions"
+    sous_classe: "USA S&P 500 ESG"
+    ter: 0.0025
+    devise: "EUR"
+    domicile: "France"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "ISIN_A_VERIFIER — S&P 500 ESG éligible PEA — version responsable."
+
+  - isin: "FR0011550177"
+    ticker: "PANX"
+    nom: "Amundi PEA Nasdaq-100 UCITS ETF"
+    emetteur: "Amundi"
+    classe_actifs: "Actions"
+    sous_classe: "USA Nasdaq-100"
+    ter: 0.0023
+    devise: "EUR"
+    domicile: "France"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: true
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "ISIN_A_VERIFIER — Nasdaq-100 via swap éligible PEA."
+
+  # ============================================================
+  # OBLIGATIONS COMPLÉMENTAIRES
+  # ============================================================
+  - isin: "LU1650490474"
+    ticker: "XBAE"
+    nom: "Xtrackers Global Government Bond EUR Hedged UCITS ETF"
+    emetteur: "DWS (Xtrackers)"
+    classe_actifs: "Obligations"
+    sous_classe: "Souverain Monde EUR-hedgé"
+    ter: 0.0020
+    devise: "EUR"
+    domicile: "Luxembourg"
+    capitalisant: true
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "ISIN_A_VERIFIER — Souverains monde EUR hedgé — alternative agrégé."
+
+  - isin: "IE00BGYWFS63"
+    ticker: "XZEB"
+    nom: "Xtrackers EUR Corporate Bond UCITS ETF"
+    emetteur: "DWS (Xtrackers)"
+    classe_actifs: "Obligations"
+    sous_classe: "Corporate IG EUR"
+    ter: 0.0012
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: true
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "ISIN_A_VERIFIER — Corporate IG EUR — TER compétitif."
+
+  # ============================================================
+  # ESG / ISR
+  # ============================================================
+  - isin: "IE00BYX2JD69"
+    ticker: "SUWU"
+    nom: "iShares MSCI World SRI UCITS ETF (Acc)"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Monde ESG/SRI"
+    ter: 0.0020
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "MSCI World SRI — critères ESG stricts. Pour mandats ISR/ESG."
+
+  - isin: "LU1861134382"
+    ticker: "LCUI"
+    nom: "Amundi MSCI World Climate Paris Aligned PAB UCITS ETF"
+    emetteur: "Amundi"
+    classe_actifs: "Actions"
+    sous_classe: "Monde ESG Paris Aligned"
+    ter: 0.0025
+    devise: "EUR"
+    domicile: "Luxembourg"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: true
+    notes: "ISIN_A_VERIFIER — Aligné accord de Paris — indices PAB."
+
+  # ============================================================
+  # DIVIDENDES / REVENUS
+  # ============================================================
+  - isin: "IE00B8GKDB10"
+    ticker: "VHYL"
+    nom: "Vanguard FTSE All-World High Dividend Yield UCITS ETF"
+    emetteur: "Vanguard"
+    classe_actifs: "Actions"
+    sous_classe: "Monde Hauts Dividendes"
+    ter: 0.0029
+    devise: "USD"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: false
+      PEE: false
+      CTO_perso: true
+      CTO_IS: false
+      Contrat_Cap_IS: false
+    notes: "Hauts dividendes monde — distribue régulièrement. Pour portefeuilles revenus."
+
+  - isin: "IE00B3F81409"
+    ticker: "IDVY"
+    nom: "iShares Euro Dividend UCITS ETF"
+    emetteur: "iShares (BlackRock)"
+    classe_actifs: "Actions"
+    sous_classe: "Europe Hauts Dividendes"
+    ter: 0.0040
+    devise: "EUR"
+    domicile: "Irlande"
+    capitalisant: false
+    eur_hedged: true
+    eligibilite:
+      PEA: true
+      PER: false
+      PEE: false
+      CTO_perso: true
+      CTO_IS: false
+      Contrat_Cap_IS: false
+    notes: "Dividendes zone euro — éligible PEA. Pour phase décumulation."
+
+  # ============================================================
+  # VOLATILITÉ / HEDGING
+  # ============================================================
+  - isin: "IE00BFXR7892"
+    ticker: "XDBC"
+    nom: "Xtrackers Physical Silver ETC"
+    emetteur: "DWS (Xtrackers)"
+    classe_actifs: "Diversifiants"
+    sous_classe: "Argent physique"
+    ter: 0.0045
+    devise: "USD"
+    domicile: "Allemagne"
+    capitalisant: true
+    eur_hedged: false
+    eligibilite:
+      PEA: false
+      PER: true
+      PEE: false
+      CTO_perso: true
+      CTO_IS: true
+      Contrat_Cap_IS: false
+    notes: "ISIN_A_VERIFIER — Argent physique — complément or, plus volatil."

@@ -1,0 +1,77 @@
+# Paramètres fiscaux 2026 — à valider avec votre expert-comptable
+# Source : Loi de Finances 2026, CGI, LFSS 2026
+
+annee: 2026
+
+prelevements_sociaux:
+  taux_global: 0.186           # 18,6% — hausse CSG/CRDS 2026
+  detail:
+    csg: 0.121                 # CSG 12,1%
+    crds: 0.005                # CRDS 0,5%
+    prelevement_solidarite: 0.060  # Prélèvement de solidarité 6,0%
+
+pfu:
+  taux_ir: 0.128               # 12,8%
+  taux_total_avec_ps: 0.314    # 12,8% + 18,6% (calculé)
+
+bareme_ir_2026:
+  tranches:
+    - jusqu_a: 11294
+      taux: 0.00
+    - jusqu_a: 28797
+      taux: 0.11
+    - jusqu_a: 82341
+      taux: 0.30
+    - jusqu_a: 177106
+      taux: 0.41
+    - au_dela: true
+      taux: 0.45
+
+cehr:
+  # Contribution Exceptionnelle sur les Hauts Revenus
+  tranches_celibataire:
+    - rfr_min: 250001
+      rfr_max: 500000
+      taux: 0.03
+    - rfr_min: 500001
+      taux: 0.04
+  tranches_couple:
+    - rfr_min: 500001
+      rfr_max: 1000000
+      taux: 0.03
+    - rfr_min: 1000001
+      taux: 0.04
+
+cdhr:
+  # Contribution Différentielle sur les Hauts Revenus (LF 2025)
+  description: "Assure un taux minimum d'imposition de 20% sur le RFR pour les foyers dont le RFR > 250k€"
+  taux_plancher_effectif: 0.20
+  seuil_declenchement_celibataire: 250000
+  seuil_declenchement_couple: 500000
+
+is:
+  # Impôt sur les Sociétés
+  taux_reduit: 0.15            # 15% jusqu'au seuil
+  taux_normal: 0.25            # 25% au-delà
+  seuil_taux_reduit: 42500    # € de bénéfice
+  conditions_taux_reduit:
+    - "CA < 10M€"
+    - "Capital entièrement libéré et détenu à ≥ 75% par des personnes physiques"
+
+contrat_capitalisation_is:
+  # Art. 238 septies E CGI - Base taxable forfaitaire annuelle
+  base_taxable_formule: "105% × TME × prime_versée"
+  tme_reference_2026: 0.030   # À vérifier — TME en vigueur à la souscription
+
+abattement_dividendes_bareme: 0.40  # 40% si option barème IR
+duree_report_deficit_cto: 10        # ans
+abattement_pv_duree_detention: false # Supprimé par LF 2018 pour titres acquis après 2018
+
+notes:
+  mark_to_market_is: |
+    Art. 209-0 A CGI : les OPCVM (dont ETF) détenus dans un CTO à l'IS sont soumis à
+    réévaluation mark-to-market annuelle. Les plus-values latentes sont imposées chaque année
+    même sans cession. ATTENTION : impact majeur sur la fonction objectif VAN.
+  ps_historique: |
+    Taux PS 2026 : 18,6% (hausse par rapport à 17,2% en 2024).
+    Décomposition : CSG 12,1% + CRDS 0,5% + Prélèvement solidarité 6,0%.

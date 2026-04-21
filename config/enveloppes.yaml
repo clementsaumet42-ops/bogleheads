@@ -1,0 +1,118 @@
+# Enveloppes fiscales disponibles — règles 2026
+
+enveloppes:
+  - id: CTO_perso
+    nom: "Compte-Titres Ordinaire Personnel"
+    plafond: null
+    fiscalite_entree: "Aucune — versements en capital après IS/IR"
+    fiscalite_courante:
+      dividendes: "PFU 31,4% (12,8% IR + 18,6% PS) ou option barème + 18,6% PS — abattement 40% si barème"
+      plus_values: "PFU 31,4% à la cession (ou barème)"
+      moins_values: "Reportable 10 ans sur PV de même nature"
+    fiscalite_sortie: "Identique fiscalité courante"
+    avantages:
+      - "Pas de plafond de versement"
+      - "Liquidité totale"
+      - "Large univers d'investissement"
+    inconvenients:
+      - "Imposition PV à la cession"
+      - "Prélèvements sociaux sur dividendes chaque année"
+    eligible_etf_types: ["UCITS", "ETC", "ETF_monde", "ETF_US", "REIT", "obligations"]
+    notes: "Enveloppe de référence — scénario naïf pour comparatif"
+
+  - id: CTO_IS
+    nom: "Compte-Titres à l'IS (société soumise à l'IS)"
+    plafond: null
+    fiscalite_entree: "Aucune"
+    fiscalite_courante:
+      mark_to_market: "IS 15/25% sur PV latentes annuelles (art. 209-0 A CGI) — PIÈGE MAJEUR"
+      dividendes: "IS 15/25% (régime mère-fille possible si participation ≥ 5%)"
+    fiscalite_sortie: "IS sur PV réalisées (net des reprises MTM déjà imposées)"
+    avantages:
+      - "Taux IS 15% avantageux si bénéfices < 42500€"
+      - "Déductibilité des moins-values de l'IS"
+    inconvenients:
+      - "Mark-to-market annuel sur OPCVM : PV latentes imposées SANS cession"
+      - "Moins avantageux que contrat cap IS pour les ETF capitalisants"
+    eligible_etf_types: ["UCITS", "ETC", "ETF_monde", "ETF_US", "REIT", "obligations"]
+    notes: "Préférer le contrat capitalisation IS pour les ETF capitalisants"
+
+  - id: Contrat_Cap_IS
+    nom: "Contrat de Capitalisation à l'IS"
+    plafond: null
+    fiscalite_entree: "Aucune"
+    fiscalite_courante:
+      base_forfaitaire: "IS sur 105% × TME × prime versée — très faible si TME bas"
+      mark_to_market: "Absent ! Avantage clé vs CTO IS"
+    fiscalite_sortie: "IS sur produits réels à la sortie"
+    avantages:
+      - "Pas de mark-to-market annuel : capitalisation fiscale complète"
+      - "Base taxable forfaitaire très faible (≈ 0,3% de la prime si TME 3%)"
+      - "Idéal pour les ETF capitalisants à forte plus-value latente"
+    inconvenients:
+      - "Univers de fonds limité selon assureur"
+      - "Frais de gestion assurantiel (0,5-1%/an)"
+      - "Moins de flexibilité qu'un CTO"
+    eligible_etf_types: ["ETF_capitalisant", "UC_OPCVM"]
+    notes: "Enveloppe premium pour IS — à privilégier pour les ETF actions capitalisants"
+
+  - id: PEA
+    nom: "Plan d'Épargne en Actions"
+    plafond: 150000
+    plafond_pme: 225000
+    fiscalite_entree: "Aucune (versements en espèces uniquement)"
+    fiscalite_courante:
+      dans_enveloppe: "Aucune — capitalisation en franchise d'impôt"
+    fiscalite_sortie:
+      avant_5_ans: "PFU 31,4% sur les gains (ou barème)"
+      apres_5_ans: "PS 18,6% uniquement (exonération IR) — avantage majeur"
+    avantages:
+      - "Exonération IR après 5 ans"
+      - "Idéal pour croissance long terme"
+      - "Abri les plus-values réinvesties"
+    inconvenients:
+      - "Plafond 150k€"
+      - "Eligibilité restreinte : titres UE / ETF synthétiques éligibles PEA"
+      - "Retrait avant 5 ans = clôture du plan"
+    eligible_etf_types: ["ETF_PEA_synth"]
+    notes: "ETF éligibles PEA = ETF synthétiques swap-based domiciliés UE avec exposition actions monde/US"
+
+  - id: PER
+    nom: "Plan d'Épargne Retraite"
+    plafond: null
+    plafond_deduction_annuelle: "10% des revenus professionnels N-1, max 35194€ (2026)"
+    fiscalite_entree: "Déductible du revenu imposable (TMI actuelle)"
+    fiscalite_courante:
+      dans_enveloppe: "Aucune — capitalisation en franchise d'impôt"
+    fiscalite_sortie:
+      capital: "IR sur capital (partie déductible) + PS 18,6% sur gains"
+      rente: "IR après abattement 10% + PS sur fraction imposable"
+    avantages:
+      - "Déduction fiscale à l'entrée (TMI actuelle)"
+      - "Idéal si TMI actuelle > TMI retraite"
+      - "Transfert de fiscalité : payé à la sortie (retraite = TMI plus basse)"
+    inconvenients:
+      - "Blocage jusqu'à la retraite (sauf cas exceptionnels)"
+      - "Imposition à la sortie"
+      - "Intérêt limité si TMI actuelle = TMI retraite"
+    eligible_etf_types: ["UCITS", "ETF_monde", "obligations", "fonds_euro"]
+    notes: "Optimal pour TMI 41%+ actuellement, retraite estimée à TMI 30% ou moins"
+
+  - id: PEE
+    nom: "Plan d'Épargne Entreprise"
+    plafond: null
+    abondement_max_employeur: 3741
+    blocage_ans: 5
+    fiscalite_entree: "Aucune sur versement volontaire ; abondement employeur exonéré d'IR (dans les limites)"
+    fiscalite_courante:
+      dans_enveloppe: "Aucune"
+    fiscalite_sortie: "Exonération IR sur PV et abondement (PS 18,6% dus sur gains)"
+    avantages:
+      - "Abondement employeur = TRI immédiat imbattable (ex : +100% si abondement à 100%)"
+      - "Exonération IR sur PV"
+    inconvenients:
+      - "Blocage 5 ans (sauf déblocage exceptionnel)"
+      - "Univers limité aux FCPE proposés par l'employeur"
+      - "Disponible uniquement aux salariés"
+    eligible_etf_types: ["FCPE", "ETF_PEE"]
+    notes: "TOUJOURS saturer l'abondement employeur en priorité — TRI immédiat imbattable"
