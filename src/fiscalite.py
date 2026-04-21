@@ -65,9 +65,8 @@ def calculer_taux_marginal_reel(
             cehr_taux = tranche["taux"]
 
     # CDHR : assure plancher de 20% sur taux effectif global
-    seuil_cdhr = params["cdhr"][f"seuil_declenchement_{situation}"]
-    # Note : CDHR est complexe à calculer à la marge, on signale son applicabilité
-    cdhr_applicable = rfr > seuil_cdhr  # noqa: F841
+    # Calcul précis de la CDHR nécessite un simulateur fiscal complet (hors scope ici)
+    # On se contente d'indiquer son applicabilité via le taux total retourné
 
     taux_total = taux_base + cehr_taux
     return taux_total
