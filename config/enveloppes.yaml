@@ -1,0 +1,231 @@
+# =============================================================================
+# Enveloppes d'investissement disponibles — France 2026
+# Sources : CMF, CGI, BOFiP
+# =============================================================================
+
+enveloppes:
+
+  # ---------------------------------------------------------------------------
+  # 1. Compte-Titres Ordinaire — Personne Physique (CTO Perso)
+  # ---------------------------------------------------------------------------
+  - id: cto_perso
+    nom: "CTO Personne Physique"
+    type_juridique: "Compte-titres ordinaire (art. L533-1 CMF)"
+    plafond: null                      # Aucun plafond de versement
+    eligibilite_etf: "Tous ETFs sans restriction (actions, obligations, matières premières)"
+    fiscalite_entree:
+      deductible: false
+      commentaire: "Versements effectués avec revenus nets d'impôts (IR payé en amont)"
+    fiscalite_courante:
+      dividendes: "PFU 31.4 % ou option barème (abattement 40 % + PS 18.6 %)"
+      interet: "PFU 31.4 % ou option barème"
+      plus_value_latente: "Aucune imposition tant que non réalisée"
+      commentaire: "Imposition des revenus encaissés chaque année"
+    fiscalite_sortie:
+      plus_value: "PFU 31.4 % sur PV réalisée (art. 150-0 A CGI)"
+      moins_value: "Imputable sur PV de même nature pendant 10 ans (art. 150-0 D CGI)"
+      taux_effectif_moyen: 0.314
+    blocage: false
+    avantages:
+      - "Flexibilité totale — aucun blocage"
+      - "Imputation des moins-values sur 10 ans"
+      - "Accès à tous les sous-jacents"
+    inconvenients:
+      - "Fiscalité la plus élevée sur les gains"
+      - "Aucun avantage à l'entrée"
+
+  # ---------------------------------------------------------------------------
+  # 2. Compte-Titres Ordinaire — Société à l'IS (CTO IS)
+  # PIÈGE MAJEUR : mark-to-market annuel sur OPCVM (art. 209-0 A CGI)
+  # ---------------------------------------------------------------------------
+  - id: cto_is
+    nom: "CTO Société IS"
+    type_juridique: "Compte-titres détenu par une société soumise à l'IS"
+    plafond: null
+    eligibilite_etf: "Tous ETFs — attention régime fiscal spécifique OPCVM"
+    fiscalite_entree:
+      deductible: false
+      commentaire: "Versements depuis trésorerie société (IS déjà payé ou résultat courant)"
+    fiscalite_courante:
+      opcvm_actions: |
+        PIÈGE : Régime art. 209-0 A CGI — les OPCVM (incluant les ETF actions) sont taxés
+        annuellement sur la variation de valeur liquidative même sans cession.
+        IS 25 % (ou 15 % si PME) sur PV latente nette annuelle.
+      titres_vifs: "IS sur dividendes et PV réalisées uniquement"
+      commentaire: |
+        Régime mark-to-market obligatoire pour les OPCVM relevant de l'article 209-0 A CGI.
+        Inclut la grande majorité des ETF UCITS. Consulter BOFiP IS-BASE-35-30.
+    fiscalite_sortie:
+      plus_value: "IS sur PV réalisée (nette des PV latentes déjà taxées)"
+      taux_effectif_moyen: 0.25
+    blocage: false
+    avantages:
+      - "Pas de plafond"
+      - "Déductibilité des charges de gestion"
+    inconvenients:
+      - "PIÈGE art. 209-0 A : imposition annuelle des PV latentes sur OPCVM/ETF"
+      - "Double imposition apparente (PV latente puis réalisée — avec mécanisme correctif)"
+      - "Complexité comptable importante"
+      - "IS + PS lors de redistribution au dirigeant"
+
+  # ---------------------------------------------------------------------------
+  # 3. Contrat de Capitalisation — Personne Morale IS
+  # Solution pour contourner le mark-to-market de l'art. 209-0 A CGI
+  # ---------------------------------------------------------------------------
+  - id: contrat_capi_is
+    nom: "Contrat de Capitalisation IS"
+    type_juridique: "Contrat d'assurance-vie capitalisation souscrit par société IS (art. L132-1 C.assur.)"
+    plafond: null
+    eligibilite_etf: "Fonds euros + UC (OPCVM, ETF via UC selon assureur)"
+    fiscalite_entree:
+      deductible: false
+      commentaire: "Versement prime nette depuis trésorerie de la société"
+    fiscalite_courante:
+      base_imposable: |
+        Base forfaitaire annuelle = 105 % × TME × prime nette versée.
+        Art. 38 sexdecies GB Ann. III CGI. Taxée à l'IS chaque année.
+        AVANTAGE : évite le mark-to-market de l'art. 209-0 A CGI.
+      commentaire: |
+        La capitalisation réelle (interne au contrat) n'est pas imposable annuellement.
+        Seule la base forfaitaire TME est taxée. Si TME = 3 %, base = 3 150 € pour 100 000 € primés.
+    fiscalite_sortie:
+      plus_value: |
+        IS sur PV réalisée lors du rachat (valeur de rachat - primes versées).
+        Déduction des bases forfaitaires déjà taxées les années précédentes.
+      taux_effectif_moyen: 0.25
+    blocage: false
+    avantages:
+      - "Pas de mark-to-market annuel sur les UC/ETF"
+      - "Capitalisation interne en report d'imposition"
+      - "Base imposable annuelle réduite (forfait TME)"
+    inconvenients:
+      - "Frais d'enveloppe assureur (0.5 % à 1 % / an selon contrat)"
+      - "Liquidité dépendante des conditions du contrat"
+      - "Nécessite une société IS (SAS, SARL, SCI IS…)"
+
+  # ---------------------------------------------------------------------------
+  # 4. Plan d'Épargne en Actions (PEA)
+  # Art. L221-30 à L221-32 CMF, art. 157 bis CGI
+  # ---------------------------------------------------------------------------
+  - id: pea
+    nom: "PEA"
+    type_juridique: "Plan d'Épargne en Actions (art. L221-30 CMF)"
+    plafond: 150000                    # Plafond versements 150 000 € (art. L221-30 CMF)
+    eligibilite_etf: |
+      ETFs UCITS domiciliés UE/EEE investis à 75 % minimum en actions UE/EEE.
+      Les ETFs synthétiques (swap) sur indices mondiaux (ex : MSCI World) sont éligibles
+      si le portefeuille de substitution respecte la règle des 75 % actions UE (BOFiP RPPM-RCM-40-50-50-20).
+    fiscalite_entree:
+      deductible: false
+      commentaire: "Aucun avantage fiscal à l'entrée"
+    fiscalite_courante:
+      dividendes: "Exonérés d'IR à l'intérieur du PEA (capitalisés)"
+      plus_value_latente: "Aucune imposition"
+      commentaire: "Capitalisation libre sans imposition interne"
+    fiscalite_sortie:
+      avant_5_ans: "PFU 31.4 % sur PV + clôture du plan"
+      apres_5_ans: "Exonération IR totale — PS 17.2 % (ou 18.6 % si LF 2026 — À VALIDER) dus"
+      commentaire: |
+        Après 5 ans : PV exonérée d'IR (art. 157 bis CGI).
+        PS calculés sur PV globale du plan (taux en vigueur à chaque retrait).
+      taux_effectif_sortie_apres_5ans: 0.172
+    blocage: true
+    duree_blocage_ans: 5
+    avantages:
+      - "Exonération IR totale après 5 ans"
+      - "Capitalisation en report d'imposition"
+      - "Accès aux ETFs MSCI World via synthétique"
+    inconvenients:
+      - "Plafond 150 000 €"
+      - "Univers restreint aux valeurs UE/EEE (direct ou synthétique)"
+      - "PS dus même après 5 ans"
+
+  # ---------------------------------------------------------------------------
+  # 5. Plan d'Épargne Retraite (PER individuel)
+  # Ord. 2019-766, art. L224-1 CMF, art. 163 quatervicies CGI
+  # ---------------------------------------------------------------------------
+  - id: per
+    nom: "PER Individuel"
+    type_juridique: "Plan d'Épargne Retraite individuel (art. L224-1 CMF)"
+    plafond: null                      # Plafond dynamique selon revenus (10 % revenus N-1 plafonné 8 PASS)
+    eligibilite_etf: "UC selon assureur/gestionnaire — large gamme ETFs possibles"
+    fiscalite_entree:
+      deductible: true
+      commentaire: |
+        Versements déductibles du revenu imposable dans la limite du plafond épargne retraite
+        (art. 163 quatervicies CGI). Économie d'impôt = versement × TMI.
+        Option de non-déduction possible (sortie exonérée IR sur capital).
+    fiscalite_courante:
+      plus_value_latente: "Aucune imposition (capitalisation interne)"
+      commentaire: "Report d'imposition total pendant la phase d'accumulation"
+    fiscalite_sortie:
+      sortie_capital_versements:
+        si_deduction_a_entree: "IR au barème (TMI) sur le capital (versements + gains)"
+        si_pas_deduction: "Exonération IR sur la part capital — seuls les gains sont imposés"
+      sortie_capital_gains: "PS 10.3 % sur gains (taux réduit — À VALIDER BOFiP)"
+      sortie_rente: "IR barème après abattement 10 % (rente viagère à titre gratuit)"
+      commentaire: |
+        La fiscalité de sortie dépend du choix fait à l'entrée (déduction ou non).
+        Avec déduction : intéressant si TMI à l'entrée > TMI à la sortie.
+    blocage: true
+    deblocages_anticipes:
+      - "Acquisition résidence principale"
+      - "Invalidité 2e ou 3e catégorie"
+      - "Décès du conjoint"
+      - "Surendettement"
+      - "Expiration droits chômage"
+      - "Liquidation judiciaire non-salariés"
+    avantages:
+      - "Déduction fiscale à l'entrée (économie = versement × TMI)"
+      - "Capitalisation sans imposition interne"
+      - "Souplesse de sortie (capital ou rente)"
+    inconvenients:
+      - "Blocage jusqu'à la retraite (sauf cas de déblocage)"
+      - "Imposition à la sortie si déduction prise à l'entrée"
+      - "Frais d'enveloppe selon assureur"
+
+  # ---------------------------------------------------------------------------
+  # 6. Plan d'Épargne Entreprise (PEE)
+  # Art. L3332-1 et suivants CT, art. 163 bis B CGI
+  # ---------------------------------------------------------------------------
+  - id: pee
+    nom: "PEE"
+    type_juridique: "Plan d'Épargne Entreprise (art. L3332-1 CT)"
+    plafond_versements: "25 % de la rémunération brute annuelle"
+    eligibilite_etf: "FCPE (Fonds Communs de Placement d'Entreprise) et actionnariat salarié"
+    fiscalite_entree:
+      deductible: false
+      commentaire: |
+        Versements volontaires non déductibles mais abondement employeur exonéré d'IR
+        (dans limite 8 % PASS, soit ~3 709 € en 2026 — À VALIDER PASS 2026).
+        Intéressement et participation versés sur PEE exonérés d'IR.
+    fiscalite_courante:
+      dividendes_fcpe: "Réinvestis dans le FCPE — non imposables annuellement"
+      commentaire: "Capitalisation interne sans imposition"
+    fiscalite_sortie:
+      plus_value: "Exonération IR totale (art. 163 bis B CGI)"
+      ps_dus: "PS 17.2 % (ou 18.6 % — À VALIDER) sur PV"
+      commentaire: |
+        PV de cession des parts FCPE exonérées d'IR mais soumises aux PS.
+        Avantage fiscal significatif vs CTO si PV importantes.
+      taux_effectif_sortie: 0.172
+    blocage: true
+    duree_blocage_ans: 5
+    deblocages_anticipes:
+      - "Mariage / PACS"
+      - "Naissance 3e enfant"
+      - "Divorce / séparation avec garde d'enfant"
+      - "Invalidité (bénéficiaire, conjoint, enfants)"
+      - "Décès (bénéficiaire ou conjoint)"
+      - "Rupture contrat de travail"
+      - "Acquisition résidence principale"
+      - "Surendettement"
+      - "Création / reprise entreprise"
+    avantages:
+      - "Abondement employeur (levier important)"
+      - "Exonération IR sur PV à la sortie"
+      - "Intéressement/participation défiscalisés si versés sur PEE"
+    inconvenients:
+      - "Univers d'investissement limité aux FCPE proposés"
+      - "Blocage 5 ans"
+      - "PS dus à la sortie"
