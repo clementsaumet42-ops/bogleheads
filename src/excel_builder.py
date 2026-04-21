@@ -773,7 +773,7 @@ def _creer_feuille_allocation(wb: Workbook) -> None:
 # Feuille 6 : Asset_Location_Matrice
 # ---------------------------------------------------------------------------
 
-def _creer_feuille_asset_location(wb: Workbook, etf_data: dict) -> None:
+def _creer_feuille_asset_location(wb: Workbook, etf_data: dict, fiscalite: dict | None = None) -> None:
     """Crée la matrice ETF × Enveloppe pour l'asset location.
 
     Inclut les contraintes d'éligibilité (cellules grisées si non éligible),
@@ -782,6 +782,7 @@ def _creer_feuille_asset_location(wb: Workbook, etf_data: dict) -> None:
     Args:
         wb: Classeur openpyxl.
         etf_data: Dictionnaire issu de univers_etf.yaml.
+        fiscalite: Dictionnaire issu de fiscalite_2026.yaml (pour les taux de sortie).
     """
     ws = wb.create_sheet("Asset_Location_Matrice")
     ws.sheet_view.showGridLines = False
@@ -929,8 +930,16 @@ def _creer_feuille_asset_location(wb: Workbook, etf_data: dict) -> None:
     ws.cell(row=row, column=1).value = "VAN nette d'impôts (estimation simplifiée)"
     ws.cell(row=row, column=1).font = Font(bold=True, size=10)
 
-    # Taux de sortie numériques pour la formule VAN
-    taux_sortie_num = [0.314, 0.25, 0.25, 0.172, 0.413, 0.172]  # Approximations
+    # Taux de sortie extraits de la configuration fiscale (ou valeurs par défaut documentées)
+    if fiscalite:
+        pfu = fiscalite.get("pfu", {}).get("taux_total", 0.314)
+        is_25 = fiscalite.get("is", {}).get("taux_normal", 0.25)
+        ps = fiscalite.get("prelevements_sociaux", {}).get("taux_total", 0.172)
+        tmi_moyen = 0.30 + ps  # Approximation PER sortie : TMI moyen 30% + PS
+    else:
+        pfu, is_25, ps, tmi_moyen = 0.314, 0.25, 0.172, 0.413
+    # CTO Perso=PFU, CTO IS=IS25%, ContratCapi=IS25%, PEA=PS, PER=TMI+PS, PEE=PS
+    taux_sortie_num = [pfu, is_25, is_25, ps, tmi_moyen, ps]
     formule_parts = []
     for i, taux in enumerate(taux_sortie_num):
         col = 6 + i
@@ -1411,7 +1420,7 @@ def construire_workbook(
     _creer_feuille_enveloppes(wb, enveloppes_data)
     _creer_feuille_etf(wb, etf_data)
     _creer_feuille_allocation(wb)
-    _creer_feuille_asset_location(wb, etf_data)
+    _creer_feuille_asset_location(wb, etf_data, fiscalite)
     _creer_feuille_rebalancement(wb)
     _creer_feuille_reporting(wb)
 

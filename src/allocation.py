@@ -39,6 +39,9 @@ PROFILS_DEFAUT = {
 # Tolérance par défaut autour de l'allocation cible (en points de pourcentage absolus)
 TOLERANCE_PAR_DEFAUT = 0.05  # ±5 points absolus
 
+# Tolérance numérique pour la validation des sommes de pourcentages (arrondi flottant)
+TOLERANCE_SOMME = 0.001
+
 
 @dataclass
 class AllocationCible:
@@ -72,7 +75,7 @@ class AllocationCible:
     def __post_init__(self):
         """Valide la cohérence de l'allocation après initialisation."""
         total = self.pct_actions + self.pct_obligations + self.pct_liquidites
-        if not (0.999 <= total <= 1.001):
+        if not (1 - TOLERANCE_SOMME <= total <= 1 + TOLERANCE_SOMME):
             raise ValueError(
                 f"L'allocation ne totalise pas 100 % : {total:.1%}. "
                 "Vérifier pct_actions + pct_obligations + pct_liquidites = 1."
@@ -244,7 +247,7 @@ class AllocationCible:
             Instance modifiée (pour chaînage).
         """
         total = pct_monde + pct_usa + pct_europe + pct_emergents + pct_small_cap
-        if not (0.999 <= total <= 1.001):
+        if not (1 - TOLERANCE_SOMME <= total <= 1 + TOLERANCE_SOMME):
             raise ValueError(
                 f"La décomposition actions ne totalise pas 100 % : {total:.1%}."
             )
@@ -278,7 +281,7 @@ class AllocationCible:
             Instance modifiée (pour chaînage).
         """
         total = pct_etat_euro + pct_etat_usa + pct_credit_ig + pct_high_yield
-        if not (0.999 <= total <= 1.001):
+        if not (1 - TOLERANCE_SOMME <= total <= 1 + TOLERANCE_SOMME):
             raise ValueError(
                 f"La décomposition obligations ne totalise pas 100 % : {total:.1%}."
             )

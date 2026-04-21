@@ -110,7 +110,13 @@ class TestCEHR:
         assert calculer_cehr(600000, "couple") == 3000.0
 
     def test_cehr_couple_1200000(self):
-        """CEHR pour couple RFR 1 200 000 € = (500k×3%) + (200k×4%) = 15k + 8k = 23k €."""
+        """CEHR pour couple RFR 1 200 000 €.
+
+        Calcul :
+        - Tranche 3% : (1 000 000 - 500 000) × 3% = 500 000 × 3% = 15 000 €
+        - Tranche 4% : (1 200 000 - 1 000 000) × 4% = 200 000 × 4% = 8 000 €
+        - Total CEHR = 15 000 + 8 000 = 23 000 €
+        """
         assert calculer_cehr(1200000, "couple") == 23000.0
 
     def test_cehr_situation_invalide(self):

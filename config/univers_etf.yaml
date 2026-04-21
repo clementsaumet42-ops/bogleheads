@@ -56,7 +56,7 @@ etfs:
     domicile: Irlande
     type: capitalisant
     eligibilite:
-      pea: false         # Domicile hors UE/EEE (Irlande hors règle synthétique PEA)
+      pea: false         # Non éligible PEA : domicilié en Irlande (UE), mais réplication physique — ne remplit pas la condition synthétique requise pour l'exposition mondiale hors zone UE
       pea_pme: false
       per: true
       pee: false

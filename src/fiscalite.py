@@ -27,15 +27,25 @@ def _charger_config_fiscalite(chemin: str | Path | None = None) -> dict:
         # Remonte depuis src/ jusqu'à la racine du projet
         racine = Path(__file__).resolve().parent.parent
         chemin = racine / "config" / "fiscalite_2026.yaml"
-    with open(chemin, "r", encoding="utf-8") as fh:
-        return yaml.safe_load(fh)
+    try:
+        with open(chemin, "r", encoding="utf-8") as fh:
+            return yaml.safe_load(fh)
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(
+            f"Fichier de configuration fiscale introuvable : {chemin}. "
+            "Vérifier que le fichier config/fiscalite_2026.yaml est présent."
+        ) from exc
+    except yaml.YAMLError as exc:
+        raise ValueError(
+            f"Erreur de parsing YAML dans le fichier {chemin} : {exc}"
+        ) from exc
 
 
 # Instance chargée une seule fois au niveau du module
 try:
     _CONFIG = _charger_config_fiscalite()
-except FileNotFoundError:
-    # Valeurs de secours pour éviter un crash si le YAML n'est pas trouvé
+except (FileNotFoundError, ValueError):
+    # Valeurs de secours pour éviter un crash si le YAML est absent ou invalide
     _CONFIG = {}
 
 
