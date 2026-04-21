@@ -136,7 +136,7 @@ class AllocationCible:
             pct_obligations = min(max(age / 100.0, 0.0), 1.0)
         elif variante == "conservateur":
             pct_obligations = min(max((age + 10) / 100.0, 0.0), 1.0)
-        elif variante in ("agressif", "agressif"):
+        elif variante in ("agressif",):
             pct_obligations = min(max((age - 10) / 100.0, 0.0), 1.0)
         else:
             raise ValueError(
