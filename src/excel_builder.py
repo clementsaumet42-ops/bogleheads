@@ -648,7 +648,7 @@ def creer_onglet_asset_location(wb: openpyxl.Workbook, etfs: list, enveloppes: l
         ("Obligations / Fixed Income", "PER → Contrat Cap IS → CTO IS", "Rendement fixe mieux dans enveloppe défiscalisée"),
         ("Or (ETCs)", "CTO perso → PER", "ETCs non éligibles PEA — CTO simple"),
         ("REITs / Immobilier coté", "PER → CTO perso", "Dividendes imposables — mieux dans enveloppe"),
-        ("Monétaire / Liquidités", "CTO IS → CTO perso", "Faible rendement — hors enveloppes précieuseuses"),
+        ("Monétaire / Liquidités", "CTO IS → CTO perso", "Faible rendement — hors enveloppes précieuses"),
         ("ETF actions IS (holding)", "Contrat Cap IS > CTO IS", "Éviter le mark-to-market annuel (art. 209-0 A CGI)"),
     ]
     ws.cell(row=row, column=1, value="Classe d'actifs").font = _font(bold=True)
@@ -971,7 +971,9 @@ def creer_onglet_profil_individuel(
     etfs: list,
     params_fiscaux: dict,
 ):
-    nom_onglet = f"Profil_{profil['id']}_{profil['code'].split('_')[2][:10]}"
+    code_parts = profil["code"].split("_")
+    code_suffix = code_parts[2][:10] if len(code_parts) >= 3 else profil["code"][:10]
+    nom_onglet = f"Profil_{profil['id']}_{code_suffix}"
     ws = wb.create_sheet(nom_onglet)
     ws.sheet_view.showGridLines = False
 

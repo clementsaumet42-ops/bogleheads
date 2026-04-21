@@ -55,9 +55,10 @@ def test_ages_coherents(profils_data):
     profils = profils_data["profils"]
     jeune = next(p for p in profils if p["id"] == 5)
     pre_retraite = next(p for p in profils if p["id"] == 6)
-    assert jeune["allocation_cible_bogleheads"]["actions"] > \
-           pre_retraite["allocation_cible_bogleheads"]["actions"], \
-        "Jeune cadre devrait avoir plus d'actions que le pré-retraité"
+    assert (
+        jeune["allocation_cible_bogleheads"]["actions"]
+        > pre_retraite["allocation_cible_bogleheads"]["actions"]
+    ), "Jeune cadre devrait avoir plus d'actions que le pré-retraité"
 
 
 def test_get_profil_par_id(profils_data):

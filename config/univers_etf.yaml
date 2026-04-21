@@ -1307,7 +1307,7 @@ univers_etf:
   # ============================================================
   # OBLIGATIONS COMPLÉMENTAIRES
   # ============================================================
-  - isin: "LU1650490474"
+  - isin: "ISIN_A_VERIFIER"
     ticker: "XBAE"
     nom: "Xtrackers Global Government Bond EUR Hedged UCITS ETF"
     emetteur: "DWS (Xtrackers)"
