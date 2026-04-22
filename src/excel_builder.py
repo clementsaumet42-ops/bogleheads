@@ -1,1435 +1,1529 @@
-# -*- coding: utf-8 -*-
 """
-Constructeur du classeur Excel — outil CGP Bogleheads France 2026.
-Génère un classeur openpyxl complet avec 8 feuilles structurées.
-
-Feuilles générées :
-1. Paramètres_Client
-2. Paramètres_Fiscalité_2026
-3. Enveloppes
-4. Univers_ETF
-5. Allocation_Cible
-6. Asset_Location_Matrice
-7. Rebalancement
-8. Reporting_Client
+Générateur Excel — Boglehead FR
+Génère output/portefeuille_bogleheads.xlsx avec tous les onglets
 """
-
-from __future__ import annotations
-from openpyxl import Workbook
-from openpyxl.styles import (
-    PatternFill, Font, Alignment, Border, Side, numbers
-)
-from openpyxl.styles.numbers import FORMAT_PERCENTAGE_00, FORMAT_NUMBER_COMMA_SEPARATED1
-from openpyxl.worksheet.table import Table, TableStyleInfo
-from openpyxl.worksheet.datavalidation import DataValidation
-from openpyxl.formatting.rule import Rule, CellIsRule, FormulaRule
+import yaml
+import openpyxl
+from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.table import Table, TableStyleInfo
+from openpyxl.chart import BarChart, Reference
+from openpyxl.formatting.rule import ColorScaleRule, DataBarRule
+from pathlib import Path
+import datetime
 
-
-# ---------------------------------------------------------------------------
-# Constantes de style
-# ---------------------------------------------------------------------------
-
-# Couleurs enveloppes
-COULEURS_ENVELOPPES = {
-    "cto_perso":       "FFF2CC",   # Jaune pâle
-    "cto_is":          "FCE4D6",   # Orange très pâle
-    "contrat_capi_is": "DDEBF7",   # Bleu très pâle
-    "pea":             "E2EFDA",   # Vert très pâle
-    "per":             "EAD1DC",   # Violet très pâle
-    "pee":             "D9EAD3",   # Vert menthe très pâle
+# ─── Palette couleurs ───────────────────────────────────────────────
+COULEURS_CLASSES = {
+    "Actions": "4472C4",
+    "Obligations": "ED7D31",
+    "Immobilier": "A9D18E",
+    "Or": "FFD966",
+    "Matières premières": "9DC3E6",
+    "Monétaire": "70AD47",
+    "Thématiques": "BF8FBF",
+    "Diversifiants": "FF9999",
 }
 
-# Couleurs de mise en forme conditionnelle
-ROUGE_CLAIR = "FFCCCC"
-VERT_CLAIR = "CCFFCC"
-GRIS_CLAIR = "D9D9D9"
-ORANGE_CLAIR = "FFE0B2"
+COULEUR_HEADER = "1F3864"
+COULEUR_SUBHEADER = "2E75B6"
+COULEUR_AVERTISSEMENT = "C00000"
+COULEUR_OK = "70AD47"
+COULEUR_WARNING = "FFC000"
+COULEUR_DANGER = "FF0000"
+COULEUR_LIGHT_BLUE = "DDEEFF"
+COULEUR_LIGHT_GREY = "F2F2F2"
+COULEUR_GOLD = "FFD966"
 
-# Couleur non-éligible (grisé)
-GRIS_NON_ELIGIBLE = "BFBFBF"
-
-# Police par défaut
-POLICE_TITRE = Font(bold=True, size=12)
-POLICE_EN_TETE = Font(bold=True, size=10, color="FFFFFF")
-POLICE_CORPS = Font(size=10)
-POLICE_AVERTISSEMENT = Font(bold=True, color="C00000")
-
-# Remplissage en-têtes
-FILL_EN_TETE_BLEU = PatternFill(fill_type="solid", fgColor="1F497D")
-FILL_EN_TETE_VERT = PatternFill(fill_type="solid", fgColor="375623")
-FILL_EN_TETE_ORANGE = PatternFill(fill_type="solid", fgColor="974706")
-FILL_TITRE_PAGE = PatternFill(fill_type="solid", fgColor="2F5496")
-
-# Alignement centré
-ALIGN_CENTRE = Alignment(horizontal="center", vertical="center", wrap_text=True)
-ALIGN_GAUCHE = Alignment(horizontal="left", vertical="center", wrap_text=True)
-ALIGN_DROITE = Alignment(horizontal="right", vertical="center")
+ROOT = Path(__file__).parent.parent
 
 
-# ---------------------------------------------------------------------------
-# Fonctions utilitaires
-# ---------------------------------------------------------------------------
+# ─── Helpers de style ───────────────────────────────────────────────
+def load_yaml(filename: str) -> dict:
+    with open(ROOT / "config" / filename, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
 
-def _appliquer_bordure(ws, min_row: int, max_row: int, min_col: int, max_col: int):
-    """Applique une bordure fine à une plage de cellules.
 
-    Args:
-        ws: Feuille de calcul openpyxl.
-        min_row, max_row, min_col, max_col: Bornes de la plage.
-    """
-    bordure_fine = Border(
-        left=Side(style="thin"),
-        right=Side(style="thin"),
-        top=Side(style="thin"),
-        bottom=Side(style="thin"),
+def _fill(color: str) -> PatternFill:
+    return PatternFill("solid", fgColor=color)
+
+
+def _font(bold=False, color="000000", size=10, italic=False) -> Font:
+    return Font(bold=bold, color=color, size=size, italic=italic)
+
+
+def _align(h="left", v="center", wrap=False) -> Alignment:
+    return Alignment(horizontal=h, vertical=v, wrap_text=wrap)
+
+
+def _thin_border() -> Border:
+    s = Side(style="thin")
+    return Border(left=s, right=s, top=s, bottom=s)
+
+
+def style_header(cell, bg=COULEUR_HEADER, fg="FFFFFF", size=11, bold=True):
+    cell.fill = _fill(bg)
+    cell.font = Font(bold=bold, color=fg, size=size)
+    cell.alignment = _align("center", "center", wrap=True)
+    cell.border = _thin_border()
+
+
+def style_subheader(cell, bg=COULEUR_SUBHEADER):
+    cell.fill = _fill(bg)
+    cell.font = Font(bold=True, color="FFFFFF", size=10)
+    cell.alignment = _align("center", "center")
+    cell.border = _thin_border()
+
+
+def style_data(cell, bg=None, bold=False, align_h="left", number_format=None):
+    if bg:
+        cell.fill = _fill(bg)
+    cell.font = _font(bold=bold)
+    cell.alignment = _align(align_h)
+    cell.border = _thin_border()
+    if number_format:
+        cell.number_format = number_format
+
+
+def set_col_width(ws, col: int, width: float):
+    ws.column_dimensions[get_column_letter(col)].width = width
+
+
+def ajouter_disclaimer(ws, row: int, col_start=1, col_end=10) -> int:
+    disclaimer = (
+        "⚠️ AVERTISSEMENT : Ce fichier est un outil pédagogique d'aide à la décision. "
+        "Il ne constitue PAS un conseil en investissement au sens de la Directive MIF II. "
+        "Tout conseil doit être personnalisé par un CIF/CGP agréé AMF. "
+        "Paramètres fiscaux indicatifs — valider avec votre expert-comptable."
     )
-    for row in ws.iter_rows(min_row=min_row, max_row=max_row, min_col=min_col, max_col=max_col):
-        for cell in row:
-            cell.border = bordure_fine
-
-
-def _en_tete_feuille(ws, titre: str, sous_titre: str = ""):
-    """Crée un en-tête visuel pour une feuille.
-
-    Args:
-        ws: Feuille de calcul.
-        titre: Titre principal.
-        sous_titre: Sous-titre optionnel.
-    """
-    ws["A1"] = titre
-    ws["A1"].font = Font(bold=True, size=14, color="FFFFFF")
-    ws["A1"].fill = FILL_TITRE_PAGE
-    ws["A1"].alignment = ALIGN_CENTRE
-    ws.merge_cells("A1:J1")
-
-    if sous_titre:
-        ws["A2"] = sous_titre
-        ws["A2"].font = Font(italic=True, size=10, color="595959")
-        ws["A2"].alignment = ALIGN_CENTRE
-        ws.merge_cells("A2:J2")
-
-
-def _cellule_etiquette(ws, row: int, col: int, valeur: str):
-    """Formate une cellule comme étiquette (gras, fond bleu clair).
-
-    Args:
-        ws: Feuille de calcul.
-        row, col: Position de la cellule.
-        valeur: Texte de l'étiquette.
-    """
-    cell = ws.cell(row=row, column=col, value=valeur)
-    cell.font = Font(bold=True, size=10)
-    cell.fill = PatternFill(fill_type="solid", fgColor="DCE6F1")
-    cell.alignment = ALIGN_GAUCHE
-
-
-def _cellule_valeur(ws, row: int, col: int, valeur, format_nombre: str | None = None):
-    """Formate une cellule comme valeur éditable.
-
-    Args:
-        ws: Feuille de calcul.
-        row, col: Position.
-        valeur: Valeur de la cellule.
-        format_nombre: Format numérique openpyxl.
-    """
-    cell = ws.cell(row=row, column=col, value=valeur)
-    cell.font = POLICE_CORPS
-    cell.fill = PatternFill(fill_type="solid", fgColor="FFFFD9")
-    cell.alignment = ALIGN_GAUCHE
-    if format_nombre:
-        cell.number_format = format_nombre
-    return cell
-
-
-def _creer_table(ws, ref: str, nom: str, style_nom: str = "TableStyleMedium9") -> Table:
-    """Crée une table structurée openpyxl.
-
-    Args:
-        ws: Feuille de calcul.
-        ref: Référence de la plage (ex: 'A3:F20').
-        nom: Nom de la table (doit être unique dans le classeur).
-        style_nom: Nom du style de table Excel.
-
-    Returns:
-        Objet Table créé et ajouté à la feuille.
-    """
-    table = Table(displayName=nom, ref=ref)
-    style = TableStyleInfo(
-        name=style_nom,
-        showFirstColumn=False,
-        showLastColumn=False,
-        showRowStripes=True,
-        showColumnStripes=False,
+    ws.merge_cells(
+        start_row=row, start_column=col_start, end_row=row, end_column=col_end
     )
-    table.tableStyleInfo = style
-    ws.add_table(table)
-    return table
+    cell = ws.cell(row=row, column=col_start, value=disclaimer)
+    cell.fill = _fill("FFF2CC")
+    cell.font = Font(bold=True, color=COULEUR_AVERTISSEMENT, size=9, italic=True)
+    cell.alignment = _align("left", "center", wrap=True)
+    ws.row_dimensions[row].height = 35
+    return row + 1
 
 
-# ---------------------------------------------------------------------------
-# Feuille 1 : Paramètres_Client
-# ---------------------------------------------------------------------------
+def titre_section(ws, row: int, texte: str, col_start=1, col_end=8, bg=COULEUR_SUBHEADER) -> int:
+    ws.merge_cells(
+        start_row=row, start_column=col_start, end_row=row, end_column=col_end
+    )
+    cell = ws.cell(row=row, column=col_start, value=texte)
+    cell.fill = _fill(bg)
+    cell.font = Font(bold=True, color="FFFFFF", size=11)
+    cell.alignment = _align("left", "center")
+    ws.row_dimensions[row].height = 20
+    return row + 1
 
-def _creer_feuille_parametres_client(wb: Workbook) -> None:
-    """Crée la feuille de paramètres client avec champs éditables.
 
-    Args:
-        wb: Classeur openpyxl.
-    """
+# ─── Onglet 1 : Paramètres Client ───────────────────────────────────
+def creer_onglet_parametres_client(wb: openpyxl.Workbook, profil: dict = None):
     ws = wb.create_sheet("Paramètres_Client")
     ws.sheet_view.showGridLines = False
 
-    _en_tete_feuille(
-        ws,
-        "⚙️ Paramètres Client — CGP Bogleheads France 2026",
-        "Remplir les champs jaunes — ces paramètres alimentent les calculs des autres feuilles",
-    )
-
-    # Largeurs des colonnes
-    ws.column_dimensions["A"].width = 35
-    ws.column_dimensions["B"].width = 20
-    ws.column_dimensions["C"].width = 40
+    # Titre principal
+    ws.merge_cells("A1:F1")
+    c = ws["A1"]
+    c.value = "🏦 PARAMÈTRES CLIENT — BOGLEHEAD FR 2026"
+    style_header(c, size=14)
     ws.row_dimensions[1].height = 30
-    ws.row_dimensions[2].height = 18
 
-    # Titre section 1
-    ws["A4"] = "👤 INFORMATIONS PERSONNELLES"
-    ws["A4"].font = Font(bold=True, size=11, color="1F497D")
-    ws.merge_cells("A4:C4")
+    row = ajouter_disclaimer(ws, 2, 1, 6)
 
-    parametres_perso = [
-        ("Âge du titulaire (ans)", 40, "#"),
-        ("Situation familiale", "celibataire", None),
-        ("Tranche Marginale d'Imposition (TMI)", 0.30, "0%"),
-        ("Revenu Fiscal de Référence (RFR, €)", 80000, "#,##0 €"),
-        ("Horizon de placement (ans)", 20, "#"),
-        ("Objectif rendement annuel net (%)", 0.05, "0.0%"),
-        ("Tolérance au risque (1=faible, 5=élevée)", 3, "#"),
-    ]
+    if profil:
+        row = titre_section(ws, row, "📋 IDENTITÉ ET SITUATION FISCALE", 1, 6)
+        infos = [
+            ("Nom / Référence", profil.get("nom", "—")),
+            ("Âge", profil.get("age", "—")),
+            ("Situation familiale", profil.get("situation_familiale", "—")),
+            ("TMI (Taux Marginal d'Imposition)", f"{profil.get('tmi', 0)*100:.0f}%"),
+            ("RFR annuel estimé", profil.get("rfr_annuel", 0)),
+            ("Régime fiscal", profil.get("regime_fiscal", "—")),
+            ("CEHR applicable", "Oui" if profil.get("cehr_applicable") else "Non"),
+            ("CDHR applicable", "Oui" if profil.get("cdhr_applicable") else "Non"),
+        ]
+        for label, val in infos:
+            ws.cell(row=row, column=1, value=label).font = _font(bold=True)
+            ws.cell(row=row, column=1).fill = _fill(COULEUR_LIGHT_GREY)
+            ws.cell(row=row, column=2, value=val)
+            if isinstance(val, (int, float)) and not isinstance(val, bool):
+                ws.cell(row=row, column=2).number_format = "#,##0 €"
+            row += 1
 
-    row = 5
-    for label, valeur_defaut, fmt in parametres_perso:
-        _cellule_etiquette(ws, row, 1, label)
-        _cellule_valeur(ws, row, 2, valeur_defaut, fmt)
         row += 1
+        row = titre_section(ws, row, "💰 PATRIMOINE ET CAPACITÉ D'ÉPARGNE", 1, 6)
+        infos2 = [
+            ("Patrimoine financier total", profil.get("patrimoine_financier_total", 0)),
+            ("Patrimoine immobilier", profil.get("patrimoine_immobilier", 0)),
+            ("Revenus annuels bruts", profil.get("revenus_annuels_bruts", 0)),
+            ("Capacité d'épargne annuelle", profil.get("capacite_epargne_annuelle", 0)),
+            ("Horizon de placement (ans)", profil.get("horizon_placement_ans", 0)),
+            ("Score de risque (SRRI / 7)", profil.get("score_risque", "—")),
+        ]
+        for label, val in infos2:
+            ws.cell(row=row, column=1, value=label).font = _font(bold=True)
+            ws.cell(row=row, column=1).fill = _fill(COULEUR_LIGHT_GREY)
+            cell = ws.cell(row=row, column=2, value=val)
+            if isinstance(val, (int, float)) and not isinstance(val, bool):
+                cell.number_format = "#,##0 €" if val > 100 else "0"
+            row += 1
 
-    # Validation liste TMI
-    dv_tmi = DataValidation(
-        type="list",
-        formula1='"11%,30%,41%,45%"',
-        allow_blank=False,
-        showErrorMessage=True,
-        errorTitle="TMI invalide",
-        error="Sélectionner une TMI valide : 11%, 30%, 41%, 45%",
-    )
-    dv_tmi.add(ws["B7"])
-    ws.add_data_validation(dv_tmi)
-
-    # Validation situation familiale
-    dv_sitfam = DataValidation(
-        type="list",
-        formula1='"celibataire,couple,veuf"',
-        allow_blank=False,
-    )
-    dv_sitfam.add(ws["B6"])
-    ws.add_data_validation(dv_sitfam)
-
-    # Titre section 2 — Patrimoine
-    ws.cell(row=row + 1, column=1).value = "💰 PATRIMOINE & ENVELOPPES"
-    ws.cell(row=row + 1, column=1).font = Font(bold=True, size=11, color="1F497D")
-    ws.merge_cells(f"A{row+1}:C{row+1}")
-    row += 2
-
-    parametres_patrimoine = [
-        ("Patrimoine financier total (€)", 500000, "#,##0 €"),
-        ("Dont : PEA existant (€)", 50000, "#,##0 €"),
-        ("Dont : PER existant (€)", 30000, "#,##0 €"),
-        ("Dont : PEE existant (€)", 20000, "#,##0 €"),
-        ("Dont : CTO perso existant (€)", 100000, "#,##0 €"),
-        ("Détient une société IS ?", "Non", None),
-        ("Si oui — trésorerie disponible société (€)", 0, "#,##0 €"),
-    ]
-
-    for label, valeur_defaut, fmt in parametres_patrimoine:
-        _cellule_etiquette(ws, row, 1, label)
-        _cellule_valeur(ws, row, 2, valeur_defaut, fmt)
         row += 1
-
-    # Validation Oui/Non
-    dv_oninon = DataValidation(type="list", formula1='"Oui,Non"', allow_blank=False)
-    dv_oninon.add(ws.cell(row=row - 2, column=2))
-    ws.add_data_validation(dv_oninon)
-
-    # Titre section 3 — Paramètres de simulation
-    ws.cell(row=row + 1, column=1).value = "📊 PARAMÈTRES DE SIMULATION"
-    ws.cell(row=row + 1, column=1).font = Font(bold=True, size=11, color="1F497D")
-    ws.merge_cells(f"A{row+1}:C{row+1}")
-    row += 2
-
-    parametres_simulation = [
-        ("Profil de risque", "equilibre", None),
-        ("Règle âge-en-obligations ?", "Oui", None),
-        ("Variante règle âge (standard/conservateur/agressif)", "standard", None),
-        ("Méthode rebalancement", "relatif_5pct", None),
-        ("Taux actualisation flux futurs (%)", 0.04, "0.0%"),
-    ]
-
-    for label, valeur_defaut, fmt in parametres_simulation:
-        _cellule_etiquette(ws, row, 1, label)
-        _cellule_valeur(ws, row, 2, valeur_defaut, fmt)
+        row = titre_section(ws, row, "🎯 OBJECTIFS", 1, 6)
+        ws.cell(row=row, column=1, value="Objectif principal").font = _font(bold=True)
+        ws.cell(row=row, column=1).fill = _fill(COULEUR_LIGHT_GREY)
+        ws.cell(row=row, column=2, value=profil.get("objectif_principal", "—"))
+        ws.row_dimensions[row].height = 20
         row += 1
+        for i, obj in enumerate(profil.get("objectifs_secondaires", []), 1):
+            ws.cell(row=row, column=1, value=f"Objectif secondaire {i}").fill = _fill(COULEUR_LIGHT_GREY)
+            ws.cell(row=row, column=2, value=obj)
+            row += 1
+    else:
+        row = titre_section(ws, row, "📋 SAISIR LES PARAMÈTRES CLIENT ICI", 1, 6)
+        champs = [
+            ("Nom / Référence client", ""),
+            ("Âge", 0),
+            ("Situation familiale", ""),
+            ("TMI (%)", 0.30),
+            ("RFR annuel (€)", 0),
+            ("Régime fiscal", "IR"),
+            ("Patrimoine financier total (€)", 0),
+            ("Capacité d'épargne annuelle (€)", 0),
+            ("Horizon de placement (ans)", 0),
+            ("Score de risque (1-7)", 4),
+        ]
+        for label, val in champs:
+            ws.cell(row=row, column=1, value=label).font = _font(bold=True)
+            ws.cell(row=row, column=1).fill = _fill(COULEUR_LIGHT_GREY)
+            ws.cell(row=row, column=2, value=val)
+            row += 1
 
-    # Validation profil de risque
-    dv_profil = DataValidation(
-        type="list",
-        formula1='"prudent,equilibre,dynamique"',
-        allow_blank=False,
-    )
-    dv_profil.add(ws.cell(row=row - 5, column=2))
-    ws.add_data_validation(dv_profil)
-
-    # Note légale
-    note_row = row + 2
-    ws.cell(row=note_row, column=1).value = (
-        "⚠️ AVERTISSEMENT : Les calculs fournis sont indicatifs et pédagogiques. "
-        "Ils ne constituent pas un conseil en investissement. Consulter un professionnel "
-        "agréé pour toute décision patrimoniale."
-    )
-    ws.cell(row=note_row, column=1).font = POLICE_AVERTISSEMENT
-    ws.cell(row=note_row, column=1).alignment = Alignment(wrap_text=True)
-    ws.merge_cells(f"A{note_row}:C{note_row}")
-    ws.row_dimensions[note_row].height = 45
-
-    _appliquer_bordure(ws, 5, row - 1, 1, 2)
+    set_col_width(ws, 1, 40)
+    set_col_width(ws, 2, 35)
+    for c in range(3, 7):
+        set_col_width(ws, c, 15)
+    ws.freeze_panes = "A3"
 
 
-# ---------------------------------------------------------------------------
-# Feuille 2 : Paramètres_Fiscalité_2026
-# ---------------------------------------------------------------------------
-
-def _creer_feuille_fiscalite(wb: Workbook, fiscalite: dict) -> None:
-    """Crée la feuille des paramètres fiscaux 2026.
-
-    Args:
-        wb: Classeur openpyxl.
-        fiscalite: Dictionnaire issu de fiscalite_2026.yaml.
-    """
+# ─── Onglet 2 : Fiscalité 2026 ──────────────────────────────────────
+def creer_onglet_fiscalite(wb: openpyxl.Workbook, params_fiscaux: dict):
     ws = wb.create_sheet("Paramètres_Fiscalité_2026")
     ws.sheet_view.showGridLines = False
 
-    _en_tete_feuille(
-        ws,
-        "📋 Paramètres Fiscaux France 2026",
-        "Sources : LF 2026, LFSS 2026, CGI, BOFiP — taux marqués À VALIDER à confirmer sur texte officiel",
-    )
-
-    ws.column_dimensions["A"].width = 40
-    ws.column_dimensions["B"].width = 18
-    ws.column_dimensions["C"].width = 50
+    ws.merge_cells("A1:G1")
+    c = ws["A1"]
+    c.value = "📊 PARAMÈTRES FISCAUX 2026 — FRANCE"
+    style_header(c, size=14)
     ws.row_dimensions[1].height = 30
-    ws.row_dimensions[2].height = 18
 
-    # En-têtes du tableau
-    en_tetes = ["Paramètre", "Valeur", "Source / Commentaire"]
-    row = 4
-    for col, texte in enumerate(en_tetes, start=1):
-        cell = ws.cell(row=row, column=col, value=texte)
-        cell.font = POLICE_EN_TETE
-        cell.fill = FILL_EN_TETE_BLEU
-        cell.alignment = ALIGN_CENTRE
+    row = ajouter_disclaimer(ws, 2, 1, 7)
 
-    row = 5
-    # Construction des lignes depuis le YAML
-    lignes_fiscalite = _extraire_lignes_fiscalite(fiscalite)
-
-    for label, valeur, commentaire in lignes_fiscalite:
-        ws.cell(row=row, column=1).value = label
-        ws.cell(row=row, column=1).font = Font(size=10)
-        ws.cell(row=row, column=1).alignment = ALIGN_GAUCHE
-
-        cell_val = ws.cell(row=row, column=2, value=valeur)
-        cell_val.alignment = ALIGN_CENTRE
-        cell_val.font = Font(size=10, bold=True)
-        # Format numérique selon le type
-        if isinstance(valeur, float) and 0 < valeur <= 1:
-            cell_val.number_format = "0.0%"
-
-        ws.cell(row=row, column=3).value = commentaire
-        ws.cell(row=row, column=3).font = Font(size=9, italic=True, color="595959")
-        ws.cell(row=row, column=3).alignment = ALIGN_GAUCHE
-
-        # Alternance des lignes
-        if row % 2 == 0:
-            for col in range(1, 4):
-                ws.cell(row=row, column=col).fill = PatternFill(
-                    fill_type="solid", fgColor="F2F2F2"
-                )
+    # ── PFU ──
+    row = titre_section(ws, row, "🔢 PRÉLÈVEMENT FORFAITAIRE UNIQUE (PFU / FLAT TAX)", 1, 7)
+    headers = ["Composante", "Taux", "Application", "Notes"]
+    for i, h in enumerate(headers, 1):
+        style_subheader(ws.cell(row=row, column=i, value=h))
+    row += 1
+    pfu_data = [
+        ("IR (Impôt sur le Revenu)", "12,8%", "Dividendes + Plus-values", "Taux fixe PFU"),
+        ("Prélèvements Sociaux (PS)", "18,6%", "Dividendes + Plus-values + PEA sortie", "CSG 12,1% + CRDS 0,5% + Solidarité 6%"),
+        ("PFU TOTAL", "31,4%", "CTO personnel par défaut", "12,8% + 18,6%"),
+        ("Option barème IR", "TMI + 18,6%", "Sur option — si TMI < 12,8%", "Abattement 40% dividendes si option barème"),
+    ]
+    for data in pfu_data:
+        for j, val in enumerate(data, 1):
+            cell = ws.cell(row=row, column=j, value=val)
+            style_data(cell, bg=COULEUR_LIGHT_GREY if row % 2 == 0 else None)
         row += 1
 
-    # Création de la table structurée
-    last_row = row - 1
-    ref_table = f"A4:{get_column_letter(3)}{last_row}"
-    _creer_table(ws, ref_table, "tblFiscalite", "TableStyleMedium2")
-
-    _appliquer_bordure(ws, 4, last_row, 1, 3)
-
-
-def _extraire_lignes_fiscalite(fiscalite: dict) -> list[tuple]:
-    """Extrait les lignes de données fiscales depuis le dictionnaire YAML.
-
-    Args:
-        fiscalite: Dictionnaire de paramètres fiscaux.
-
-    Returns:
-        Liste de tuples (label, valeur, commentaire).
-    """
-    lignes = []
-
-    # PFU
-    pfu = fiscalite.get("pfu", {})
-    lignes += [
-        ("PFU — Taux total (Flat Tax)", pfu.get("taux_total", 0.314), "Art. 200 A CGI — 12.8% IR + 18.6% PS"),
-        ("PFU — Quote-part IR", pfu.get("taux_ir", 0.128), "Art. 200 A CGI"),
-        ("PFU — Quote-part PS", pfu.get("taux_ps", 0.186), "Art. L136-6 CSS + ord. 96-50"),
-        ("PFU — Abattement dividendes option barème", pfu.get("abattement_dividendes_bareme", 0.40), "Art. 158-3-2° CGI"),
+    row += 1
+    # ── Enveloppes fiscalité sortie ──
+    row = titre_section(ws, row, "🏦 FISCALITÉ PAR ENVELOPPE (SORTIE)", 1, 7)
+    headers = ["Enveloppe", "IR sortie", "PS sortie", "Total sortie", "Avantage vs CTO", "Plafond versement", "Remarque clé"]
+    for i, h in enumerate(headers, 1):
+        style_subheader(ws.cell(row=row, column=i, value=h))
+    row += 1
+    env_data = [
+        ("CTO personnel", "12,8% (PFU)", "18,6%", "31,4%", "Référence", "Illimité", "Scénario de référence"),
+        ("PEA (après 5 ans)", "0% (exonéré)", "18,6%", "18,6%", "−12,8% vs CTO", "150 000 €", "PRIORITÉ — 12,8% économisés"),
+        ("PEA (avant 5 ans)", "12,8%", "18,6%", "31,4%", "Aucun", "150 000 €", "Équivalent CTO avant 5 ans"),
+        ("PER (retraite)", "TMI retraite", "18,6% gains", "Variable", "Transfert fiscal", "Illimité", "Déduction à l'entrée = avantage si TMI baisse"),
+        ("PEE", "0% (exonéré)", "18,6%", "18,6%", "−12,8% vs CTO", "Illimité", "Abondement employeur = TRI immédiat"),
+        ("Contrat cap IS", "IS 15/25%", "N/A (IS)", "15-25%", "vs CTO IS MTM", "Illimité", "Pas de mark-to-market = avantage majeur IS"),
+        ("CTO IS", "IS 15/25% + MTM", "N/A (IS)", "15-25%*", "* MTM pénalisant", "Illimité", "⚠️ Mark-to-market annuel sur OPCVM"),
     ]
+    for i, data in enumerate(env_data):
+        bg = COULEUR_LIGHT_GREY if i % 2 == 0 else None
+        for j, val in enumerate(data, 1):
+            cell = ws.cell(row=row, column=j, value=val)
+            style_data(cell, bg=bg)
+            if j == 5:  # Avantage
+                if "12,8%" in str(val):
+                    cell.font = Font(bold=True, color=COULEUR_OK, size=10)
+                elif "⚠️" in str(val) or "pénalisant" in str(val):
+                    cell.font = Font(bold=True, color=COULEUR_AVERTISSEMENT, size=10)
+        row += 1
 
-    # Prélèvements sociaux
-    ps = fiscalite.get("prelevements_sociaux", {})
-    detail = ps.get("detail", {})
-    lignes += [
-        ("PS — Taux total", ps.get("taux_total", 0.186), "À VALIDER LF/LFSS 2026"),
-        ("PS — CSG", detail.get("csg", 0.099), "Art. L136-6 CSS — 9.9%"),
-        ("PS — CRDS", detail.get("crds", 0.005), "Ord. 96-50 — 0.5%"),
-        ("PS — Prélèvement solidarité", detail.get("prelevement_solidarite", 0.075), "Art. 235 ter ZD CGI — 7.5%"),
-        ("PS — Contribution additionnelle", detail.get("contribution_additionnelle", 0.007), "À VALIDER LFSS 2026 — 0.7%"),
-        ("PS — Sortie PER capital (gains)", ps.get("taux_sortie_per_capital", 0.103), "À VALIDER BOFiP"),
+    row += 1
+    # ── IS ──
+    row = titre_section(ws, row, "🏢 IMPÔT SUR LES SOCIÉTÉS (IS)", 1, 7)
+    headers = ["Tranche bénéfice", "Taux IS", "Conditions", "Exemple", "", "", ""]
+    for i, h in enumerate(headers, 1):
+        style_subheader(ws.cell(row=row, column=i, value=h))
+    row += 1
+    is_data = [
+        ("0 → 42 500 €", "15% (taux réduit)", "CA < 10M€, capital ≥75% pers. physiques", "42 500 € × 15% = 6 375 € IS"),
+        ("Au-delà de 42 500 €", "25% (taux normal)", "Sur la fraction > 42 500 €", "57 500 € × 25% = 14 375 € IS"),
+        ("Exemple 100 000 € bénéfice", "→ IS = 20 750 €", "Taux effectif = 20,75%", "42 500×15% + 57 500×25%"),
     ]
+    for data in is_data:
+        for j, val in enumerate(data, 1):
+            style_data(ws.cell(row=row, column=j, value=val))
+        row += 1
 
-    # CEHR
-    cehr = fiscalite.get("cehr", {})
-    cel = cehr.get("celibataire", {})
-    cpl = cehr.get("couple", {})
-    lignes += [
-        ("CEHR — Taux tranche 1 (3%)", cehr.get("taux_tranche_1", 0.03), "Art. 223 sexies CGI — célib > 250k€ / couple > 500k€"),
-        ("CEHR — Taux tranche 2 (4%)", cehr.get("taux_tranche_2", 0.04), "Art. 223 sexies CGI — célib > 500k€ / couple > 1M€"),
-        ("CEHR — Seuil célib tranche 1 (€)", cel.get("seuil_3pct", 250000), "RFR > 250 000 € pour célibataire"),
-        ("CEHR — Seuil célib tranche 2 (€)", cel.get("seuil_4pct", 500000), "RFR > 500 000 € pour célibataire"),
-        ("CEHR — Seuil couple tranche 1 (€)", cpl.get("seuil_3pct", 500000), "RFR > 500 000 € pour couple/PACS"),
-        ("CEHR — Seuil couple tranche 2 (€)", cpl.get("seuil_4pct", 1000000), "RFR > 1 000 000 € pour couple/PACS"),
-    ]
+    row += 1
+    # ── CEHR/CDHR ──
+    row = titre_section(ws, row, "⚠️ CEHR ET CDHR (HAUTS REVENUS)", 1, 7)
+    ws.cell(row=row, column=1, value="CEHR (Célibataire)").font = _font(bold=True)
+    ws.cell(row=row, column=2, value="RFR 250 001 – 500 000 € → +3%")
+    ws.cell(row=row, column=3, value="RFR > 500 000 € → +4%")
+    ws.cell(row=row, column=4, value="S'ajoute au PFU/barème")
+    row += 1
+    ws.cell(row=row, column=1, value="CEHR (Couple)").font = _font(bold=True)
+    ws.cell(row=row, column=2, value="RFR 500 001 – 1 000 000 € → +3%")
+    ws.cell(row=row, column=3, value="RFR > 1 000 000 € → +4%")
+    row += 1
+    ws.cell(row=row, column=1, value="CDHR (LF 2025)").font = _font(bold=True)
+    ws.cell(row=row, column=2, value="Taux effectif minimum 20% si RFR > 250 000 € (célibataire)")
+    ws.merge_cells(start_row=row, start_column=2, end_row=row, end_column=6)
+    row += 1
 
-    # CDHR
-    cdhr = fiscalite.get("cdhr", {})
-    lignes += [
-        ("CDHR — Taux effectif minimal", cdhr.get("taux_minimal", 0.20), "LF 2025 art. 3 — À VALIDER reconduite 2026"),
-        ("CDHR — Seuil célibataire (€)", cdhr.get("seuil_celibataire", 250000), "RFR > 250 000 € célib"),
-        ("CDHR — Seuil couple (€)", cdhr.get("seuil_couple", 500000), "RFR > 500 000 € couple"),
-    ]
+    row += 1
+    # ── Contrat cap IS ──
+    row = titre_section(ws, row, "📜 CONTRAT DE CAPITALISATION IS (ART. 238 SEPTIES E CGI)", 1, 7)
+    ws.cell(row=row, column=1, value="Formule base taxable annuelle").font = _font(bold=True)
+    ws.cell(row=row, column=2, value="Base = 105% × TME × Prime versée")
+    ws.cell(row=row, column=3, value="Exemple: 1 000 000 € × 3% × 105% = 31 500 € base/an")
+    ws.merge_cells(start_row=row, start_column=3, end_row=row, end_column=7)
+    row += 1
+    ws.cell(row=row, column=1, value="IS sur base forfaitaire").font = _font(bold=True)
+    ws.cell(row=row, column=2, value="31 500 € × 15% = 4 725 € IS/an (vs MTM CTO IS)")
+    ws.cell(row=row, column=3, value="⚠️ TME = taux en vigueur à la SOUSCRIPTION — vérifier avec assureur")
+    ws.merge_cells(start_row=row, start_column=3, end_row=row, end_column=7)
+    row += 1
+    ws.cell(row=row, column=1, value="Absence de mark-to-market").font = _font(bold=True, color=COULEUR_OK)
+    ws.cell(row=row, column=2, value="✅ Avantage MAJEUR vs CTO IS : pas de taxation des PV latentes")
+    ws.merge_cells(start_row=row, start_column=2, end_row=row, end_column=7)
+    row += 1
 
-    # IS
-    is_data = fiscalite.get("is", {})
-    lignes += [
-        ("IS — Taux réduit PME", is_data.get("taux_reduit", 0.15), "Art. 219 I b CGI — PME (CA < 10M€)"),
-        ("IS — Plafond taux réduit (€)", is_data.get("seuil_taux_reduit", 42500), "42 500 € depuis LF 2024 (relevé de 38 120 €)"),
-        ("IS — Taux normal", is_data.get("taux_normal", 0.25), "Art. 219 CGI"),
-    ]
-
-    # TME et plafonds
-    lignes += [
-        ("TME — Taux Moyen Emprunts d'État", fiscalite.get("tme", 0.030), "À paramétrer — publication Banque de France"),
-        ("Plafond PEA (€)", fiscalite.get("plafonds", {}).get("pea", 150000), "Art. L221-30 CMF"),
-        ("Plafond PEA-PME cumulé (€)", fiscalite.get("plafonds", {}).get("pea_pme", 225000), "Art. L221-32-1 CMF"),
-    ]
-
-    return lignes
+    for col, w in [(1, 30), (2, 22), (3, 22), (4, 22), (5, 20), (6, 18), (7, 35)]:
+        set_col_width(ws, col, w)
+    ws.freeze_panes = "A3"
 
 
-# ---------------------------------------------------------------------------
-# Feuille 3 : Enveloppes
-# ---------------------------------------------------------------------------
-
-def _creer_feuille_enveloppes(wb: Workbook, enveloppes_data: dict) -> None:
-    """Crée la feuille de synthèse des enveloppes d'investissement.
-
-    Args:
-        wb: Classeur openpyxl.
-        enveloppes_data: Dictionnaire issu de enveloppes.yaml.
-    """
+# ─── Onglet 3 : Enveloppes ──────────────────────────────────────────
+def creer_onglet_enveloppes(wb: openpyxl.Workbook, enveloppes: list):
     ws = wb.create_sheet("Enveloppes")
     ws.sheet_view.showGridLines = False
 
-    _en_tete_feuille(
-        ws,
-        "🏦 Enveloppes d'Investissement — Synthèse Fiscale",
-        "Comparaison des 6 enveloppes disponibles selon le profil client",
-    )
-
-    # Largeurs colonnes
-    largeurs = [20, 30, 15, 30, 25, 25, 25, 12, 35]
-    for i, largeur in enumerate(largeurs, start=1):
-        ws.column_dimensions[get_column_letter(i)].width = largeur
+    ws.merge_cells("A1:H1")
+    c = ws["A1"]
+    c.value = "🏦 ENVELOPPES FISCALES DISPONIBLES — FRANCE 2026"
+    style_header(c, size=14)
     ws.row_dimensions[1].height = 30
 
-    # En-têtes
-    en_tetes = [
-        "ID", "Nom", "Plafond (€)", "Éligibilité ETFs",
-        "Fiscalité entrée", "Fiscalité courante", "Fiscalité sortie",
-        "Blocage", "Avantages clés",
-    ]
-    row = 4
-    for col, texte in enumerate(en_tetes, start=1):
-        cell = ws.cell(row=row, column=col, value=texte)
-        cell.font = POLICE_EN_TETE
-        cell.fill = FILL_EN_TETE_VERT
-        cell.alignment = ALIGN_CENTRE
+    row = ajouter_disclaimer(ws, 2, 1, 8)
 
-    enveloppes_list = enveloppes_data.get("enveloppes", []) if isinstance(enveloppes_data, dict) else enveloppes_data
+    headers = ["ID Enveloppe", "Nom complet", "Plafond (€)", "Fiscalité sortie (résumé)",
+               "Avantages clés", "Inconvénients", "ETF éligibles", "Notes CGP"]
+    row = titre_section(ws, row, "📋 TABLEAU RÉCAPITULATIF DES ENVELOPPES", 1, 8)
+    for i, h in enumerate(headers, 1):
+        style_subheader(ws.cell(row=row, column=i, value=h))
+    row += 1
 
-    row = 5
-    for env in enveloppes_list:
-        env_id = env.get("id", "")
-        couleur = COULEURS_ENVELOPPES.get(env_id, "FFFFFF")
-        fill_env = PatternFill(fill_type="solid", fgColor=couleur)
+    env_colors = {
+        "PEA": "C6EFCE",
+        "PER": "BDD7EE",
+        "PEE": "FFEB9C",
+        "CTO_perso": "F2F2F2",
+        "CTO_IS": "FCE4D6",
+        "Contrat_Cap_IS": "E2EFDA",
+    }
 
-        # Synthèse de la fiscalité de sortie
-        fs = env.get("fiscalite_sortie", {})
-        if isinstance(fs, dict):
-            taux_sortie = fs.get("taux_effectif_moyen") or fs.get("taux_effectif_sortie_apres_5ans") or fs.get("taux_effectif_sortie", "")
-            desc_sortie = f"Taux eff. ≈ {taux_sortie:.0%}" if isinstance(taux_sortie, float) else str(taux_sortie)
-        else:
-            desc_sortie = str(fs)
+    for env in enveloppes:
+        bg = env_colors.get(env["id"], "FFFFFF")
+        plafond = env.get("plafond") or "Illimité"
+        if isinstance(plafond, (int, float)):
+            plafond = f"{plafond:,} €".replace(",", " ")
 
-        # Synthèse des avantages
-        avantages = env.get("avantages", [])
-        avantages_str = " | ".join(avantages[:2]) if avantages else ""
+        # Sortie fiscale résumée
+        sortie = env.get("fiscalite_sortie", "")
+        if isinstance(sortie, dict):
+            sortie = " | ".join(f"{k}: {v}" for k, v in sortie.items())
 
-        # Fiscalité courante
-        fc = env.get("fiscalite_courante", {})
-        if isinstance(fc, dict):
-            fc_str = fc.get("commentaire", "")[:80] if fc.get("commentaire") else ""
-        else:
-            fc_str = ""
+        avantages = "\n".join(f"• {a}" for a in env.get("avantages", []))
+        inconvenients = "\n".join(f"• {i}" for i in env.get("inconvenients", []))
+        etfs = ", ".join(env.get("eligible_etf_types", []))
 
-        # Fiscalité entrée
-        fe = env.get("fiscalite_entree", {})
-        if isinstance(fe, dict):
-            fe_deductible = "✅ Déductible" if fe.get("deductible") else "❌ Non déductible"
-        else:
-            fe_deductible = ""
-
-        valeurs = [
-            env_id,
-            env.get("nom", ""),
-            env.get("plafond", "Sans plafond"),
-            env.get("eligibilite_etf", "")[:60],
-            fe_deductible,
-            fc_str,
-            desc_sortie,
-            "Oui" if env.get("blocage") else "Non",
-            avantages_str,
+        row_data = [
+            env["id"],
+            env["nom"],
+            plafond,
+            sortie,
+            avantages,
+            inconvenients,
+            etfs,
+            env.get("notes", ""),
         ]
+        max_lines = max(len(avantages.split("\n")), len(inconvenients.split("\n")), 2)
+        ws.row_dimensions[row].height = max(25, max_lines * 15)
 
-        for col, valeur in enumerate(valeurs, start=1):
-            cell = ws.cell(row=row, column=col, value=valeur)
-            cell.fill = fill_env
-            cell.alignment = ALIGN_GAUCHE
-            cell.font = Font(size=9)
-
-        ws.row_dimensions[row].height = 45
+        for j, val in enumerate(row_data, 1):
+            cell = ws.cell(row=row, column=j, value=val)
+            cell.fill = _fill(bg)
+            cell.font = _font(size=9, bold=(j == 1))
+            cell.alignment = _align("left", "top", wrap=True)
+            cell.border = _thin_border()
         row += 1
 
-    last_row = row - 1
-    ref_table = f"A4:{get_column_letter(9)}{last_row}"
-    _creer_table(ws, ref_table, "tblEnveloppes", "TableStyleMedium7")
-    _appliquer_bordure(ws, 4, last_row, 1, 9)
+    # Priorités d'utilisation
+    row += 1
+    row = titre_section(ws, row, "🎯 ORDRE DE PRIORITÉ D'UTILISATION (BOGLEHEAD FR)", 1, 8)
+    priorites = [
+        ("1️⃣", "PEE", "TOUJOURS saturer l'abondement employeur en PREMIER — TRI immédiat imbattable"),
+        ("2️⃣", "PEA", "Priorité croissance long terme — exonération IR après 5 ans — plafond 150 000 €"),
+        ("3️⃣", "PER", "Si TMI actuelle > TMI retraite estimée — déduction fiscale à l'entrée"),
+        ("4️⃣", "Contrat Cap IS", "Si holding IS — pour les ETF capitalisants — pas de mark-to-market"),
+        ("5️⃣", "CTO perso", "Surplus d'épargne — liquidité maximale — PFU 31,4%"),
+        ("⚠️", "CTO IS", "PIÈGE : mark-to-market annuel — préférer contrat cap IS pour les ETF"),
+    ]
+    for prio, env_id, explication in priorites:
+        ws.cell(row=row, column=1, value=prio).font = _font(bold=True, size=12)
+        ws.cell(row=row, column=2, value=env_id).font = _font(bold=True, color=COULEUR_SUBHEADER)
+        ws.merge_cells(start_row=row, start_column=3, end_row=row, end_column=8)
+        ws.cell(row=row, column=3, value=explication).alignment = _align("left", "center", wrap=True)
+        ws.row_dimensions[row].height = 20
+        row += 1
+
+    widths = [18, 35, 14, 40, 40, 40, 35, 40]
+    for i, w in enumerate(widths, 1):
+        set_col_width(ws, i, w)
+    ws.freeze_panes = "A4"
 
 
-# ---------------------------------------------------------------------------
-# Feuille 4 : Univers_ETF
-# ---------------------------------------------------------------------------
-
-def _creer_feuille_etf(wb: Workbook, etf_data: dict) -> None:
-    """Crée la feuille de l'univers ETF avec tableau structuré.
-
-    Args:
-        wb: Classeur openpyxl.
-        etf_data: Dictionnaire issu de univers_etf.yaml.
-    """
+# ─── Onglet 4 : Univers ETF ─────────────────────────────────────────
+def creer_onglet_univers_etf(wb: openpyxl.Workbook, etfs: list):
     ws = wb.create_sheet("Univers_ETF")
     ws.sheet_view.showGridLines = False
 
-    _en_tete_feuille(
-        ws,
-        "📈 Univers ETF Boglehead — France 2026",
-        "~25 ETFs sélectionnés selon critères : TER, liquidité, éligibilité fiscale",
-    )
-
-    largeurs = [18, 12, 45, 20, 30, 8, 8, 12, 14, 8, 8, 8, 8, 8]
-    for i, largeur in enumerate(largeurs, start=1):
-        ws.column_dimensions[get_column_letter(i)].width = largeur
+    ws.merge_cells("A1:N1")
+    c = ws["A1"]
+    c.value = f"📈 UNIVERS ETF — BOGLEHEAD FR 2026 ({len(etfs)} ETF)"
+    style_header(c, size=14)
     ws.row_dimensions[1].height = 30
 
-    en_tetes = [
-        "ISIN", "Ticker", "Nom", "Émetteur", "Classe d'Actifs",
-        "TER %", "Devise", "Domicile", "Type",
-        "PEA", "PER", "PEE", "CTO", "PEA-PME",
+    ajouter_disclaimer(ws, 2, 1, 14)
+
+    headers = [
+        "ISIN", "Ticker", "Nom", "Émetteur", "Classe d'actifs", "Sous-classe",
+        "TER (%)", "Devise", "Capitalisant", "EUR-Hedgé",
+        "PEA", "PER", "CTO", "Notes",
     ]
+    for i, h in enumerate(headers, 1):
+        style_subheader(ws.cell(row=3, column=i, value=h))
+    ws.row_dimensions[3].height = 22
 
-    row = 4
-    for col, texte in enumerate(en_tetes, start=1):
-        cell = ws.cell(row=row, column=col, value=texte)
-        cell.font = POLICE_EN_TETE
-        cell.fill = FILL_EN_TETE_ORANGE
-        cell.alignment = ALIGN_CENTRE
+    for idx, etf in enumerate(etfs):
+        row = idx + 4
+        classe = etf.get("classe_actifs", "")
+        bg_hex = COULEURS_CLASSES.get(classe, "FFFFFF")
+        # Alternance légère
+        bg = bg_hex if idx % 2 == 0 else "FFFFFF"
 
-    etfs = etf_data.get("etfs", []) if isinstance(etf_data, dict) else []
-    row = 5
-    for etf in etfs:
-        eligibilite = etf.get("eligibilite", {})
-
-        valeurs = [
+        elig = etf.get("eligibilite", {})
+        row_data = [
             etf.get("isin", ""),
             etf.get("ticker", ""),
             etf.get("nom", ""),
             etf.get("emetteur", ""),
-            etf.get("classe_actifs", ""),
-            etf.get("ter", 0) * 100 if isinstance(etf.get("ter"), float) else etf.get("ter", 0),
+            classe,
+            etf.get("sous_classe", ""),
+            etf.get("ter", 0),
             etf.get("devise", ""),
-            etf.get("domicile", ""),
-            etf.get("type", ""),
-            "✅" if eligibilite.get("pea") else "❌",
-            "✅" if eligibilite.get("per") else "❌",
-            "✅" if eligibilite.get("pee") else "❌",
-            "✅" if eligibilite.get("cto") else "❌",
-            "✅" if eligibilite.get("pea_pme") else "❌",
+            "✅" if etf.get("capitalisant") else "❌",
+            "✅" if etf.get("eur_hedged") else "❌",
+            "✅" if elig.get("PEA") else "❌",
+            "✅" if elig.get("PER") else "❌",
+            "✅" if elig.get("CTO_perso") else "❌",
+            etf.get("notes", ""),
         ]
+        for j, val in enumerate(row_data, 1):
+            cell = ws.cell(row=row, column=j, value=val)
+            cell.fill = _fill(bg)
+            cell.font = _font(size=9)
+            cell.alignment = _align("center" if j in (7, 8, 9, 10, 11, 12, 13) else "left", wrap=True)
+            cell.border = _thin_border()
+            if j == 7:  # TER
+                cell.number_format = "0.00%"
 
-        for col, valeur in enumerate(valeurs, start=1):
-            cell = ws.cell(row=row, column=col, value=valeur)
-            cell.alignment = ALIGN_CENTRE if col >= 9 else ALIGN_GAUCHE
-            cell.font = Font(size=9)
+    # Tableau Excel structuré
+    n_rows = len(etfs)
+    if n_rows > 0:
+        last_row = n_rows + 3
+        tbl = Table(displayName="tblETF", ref=f"A3:N{last_row}")
+        style = TableStyleInfo(
+            name="TableStyleMedium9",
+            showFirstColumn=False,
+            showLastColumn=False,
+            showRowStripes=True,
+            showColumnStripes=False,
+        )
+        tbl.tableStyleInfo = style
+        ws.add_table(tbl)
 
-        # Coloration selon type
-        if etf.get("type") == "capitalisant":
-            ws.cell(row=row, column=9).fill = PatternFill(fill_type="solid", fgColor="E2EFDA")
-        else:
-            ws.cell(row=row, column=9).fill = PatternFill(fill_type="solid", fgColor="FCE4D6")
-
-        row += 1
-
-    last_row = row - 1
-    ref_table = f"A4:{get_column_letter(14)}{last_row}"
-    _creer_table(ws, ref_table, "tblETF", "TableStyleMedium5")
-    _appliquer_bordure(ws, 4, last_row, 1, 14)
+    widths = [16, 8, 50, 20, 15, 25, 8, 8, 10, 10, 6, 6, 6, 45]
+    for i, w in enumerate(widths, 1):
+        set_col_width(ws, i, w)
+    ws.freeze_panes = "A4"
+    ws.auto_filter.ref = f"A3:N{len(etfs)+3}"
 
 
-# ---------------------------------------------------------------------------
-# Feuille 5 : Allocation_Cible
-# ---------------------------------------------------------------------------
-
-def _creer_feuille_allocation(wb: Workbook) -> None:
-    """Crée la feuille d'allocation cible avec la règle âge-en-obligations.
-
-    Args:
-        wb: Classeur openpyxl.
-    """
+# ─── Onglet 5 : Allocation Cible ────────────────────────────────────
+def creer_onglet_allocation_cible(wb: openpyxl.Workbook, profil: dict = None):
     ws = wb.create_sheet("Allocation_Cible")
     ws.sheet_view.showGridLines = False
 
-    _en_tete_feuille(
-        ws,
-        "🎯 Allocation Cible — Approche Bogleheads",
-        "Règle : pct_obligations ≈ âge (age-in-bonds rule) | Profils prudent / équilibré / dynamique",
-    )
-
-    ws.column_dimensions["A"].width = 35
-    ws.column_dimensions["B"].width = 18
-    ws.column_dimensions["C"].width = 18
-    ws.column_dimensions["D"].width = 18
-    ws.column_dimensions["E"].width = 25
+    ws.merge_cells("A1:G1")
+    c = ws["A1"]
+    c.value = "🎯 ALLOCATION CIBLE — PORTEFEUILLE BOGLEHEAD FR"
+    style_header(c, size=14)
     ws.row_dimensions[1].height = 30
+    ajouter_disclaimer(ws, 2, 1, 7)
 
-    # ---- Tableau 1 : Profils prédéfinis ----
-    ws["A4"] = "📊 PROFILS D'ALLOCATION PRÉDÉFINIS"
-    ws["A4"].font = Font(bold=True, size=11, color="1F497D")
-    ws.merge_cells("A4:E4")
+    row = 4
+    row = titre_section(ws, row, "📊 ALLOCATION CIBLE PAR CLASSE D'ACTIFS", 1, 7)
+    headers = ["Classe d'actifs", "Allocation cible (%)", "Montant (€)", "ETF de référence", "Enveloppe prioritaire", "Justification", "Couleur"]
+    for i, h in enumerate(headers, 1):
+        style_subheader(ws.cell(row=row, column=i, value=h))
+    row += 1
 
-    en_tetes_profils = ["Classe d'Actifs", "Prudent", "Équilibré", "Dynamique", "Description"]
-    row = 5
-    for col, texte in enumerate(en_tetes_profils, start=1):
-        cell = ws.cell(row=row, column=col, value=texte)
-        cell.font = POLICE_EN_TETE
-        cell.fill = FILL_EN_TETE_BLEU
-        cell.alignment = ALIGN_CENTRE
+    if profil:
+        alloc = profil.get("allocation_cible_bogleheads", {})
+        patrimoine = profil.get("patrimoine_financier_total", 0)
+        commentaire = alloc.get("commentaire", "")
+        classes = {
+            "actions": ("Actions", "CW8 (PEA) / IWDA (CTO)", "PEA → CTO → PER"),
+            "obligations": ("Obligations", "GOVS / AGGH", "PER → Contrat Cap IS"),
+            "immobilier_cote": ("Immobilier coté (REITs)", "IWDP / EPRE", "PER → CTO"),
+            "or": ("Or physique (ETC)", "GOLD / IGLN", "CTO → PER"),
+            "liquidites": ("Liquidités / Monétaire", "CSH / XEON", "CTO IS → CTO"),
+        }
+        classe_colors = {
+            "actions": "4472C4",
+            "obligations": "ED7D31",
+            "immobilier_cote": "A9D18E",
+            "or": "FFD966",
+            "liquidites": "70AD47",
+        }
+        for key, (label, etf_ref, env_prio) in classes.items():
+            pct = alloc.get(key, 0.0)
+            montant = pct * patrimoine
+            bg = classe_colors.get(key, "FFFFFF")
+            row_data = [label, pct, montant, etf_ref, env_prio, "", ""]
+            for j, val in enumerate(row_data, 1):
+                cell = ws.cell(row=row, column=j, value=val)
+                if j == 1:
+                    cell.fill = _fill(bg)
+                    cell.font = _font(bold=True, size=10)
+                elif j == 2:
+                    cell.number_format = "0.0%"
+                    cell.font = _font(bold=True, size=11)
+                    cell.alignment = _align("center")
+                elif j == 3:
+                    cell.number_format = "#,##0 €"
+                elif j == 7:
+                    cell.fill = _fill(bg)
+                cell.border = _thin_border()
+            row += 1
 
-    lignes_profils = [
-        ("Actions", 0.30, 0.60, 0.80, "Inclut monde, émergents, small cap"),
-        ("Obligations", 0.70, 0.40, 0.20, "Inclut souverains, crédit IG"),
-        ("Liquidités", 0.00, 0.00, 0.00, "Hors scope (fonds monétaire si besoin)"),
-        ("TOTAL", 1.00, 1.00, 1.00, "Doit totaliser 100%"),
+        # Total
+        ws.cell(row=row, column=1, value="TOTAL").font = _font(bold=True, size=11)
+        ws.cell(row=row, column=1).fill = _fill(COULEUR_HEADER)
+        ws.cell(row=row, column=1).font = Font(bold=True, color="FFFFFF", size=11)
+        total_pct = sum(v for k, v in alloc.items() if k != "commentaire")
+        ws.cell(row=row, column=2, value=total_pct).number_format = "0.0%"
+        ws.cell(row=row, column=2).font = _font(bold=True, size=11)
+        ws.cell(row=row, column=3, value=patrimoine).number_format = "#,##0 €"
+        ws.cell(row=row, column=3).font = _font(bold=True)
+        row += 2
+
+        if commentaire:
+            ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=7)
+            ws.cell(row=row, column=1, value=f"💬 {commentaire}")
+            ws.cell(row=row, column=1).font = _font(italic=True, size=10)
+            ws.cell(row=row, column=1).fill = _fill("FFF2CC")
+            ws.row_dimensions[row].height = 30
+            row += 1
+    else:
+        ws.cell(row=row, column=1, value="ℹ️ Sélectionner un profil client pour afficher l'allocation.")
+
+    # Règles Boglehead
+    row += 1
+    row = titre_section(ws, row, "📏 RÈGLES BOGLEHEAD FR (HEURISTIQUES)", 1, 7)
+    regles = [
+        "Règle de l'âge : % obligations ≈ âge − 10 (heuristique — à adapter au profil risque)",
+        "Règle 3 fonds : 1 ETF Monde + 1 ETF Obligations + 1 ETF Émergents",
+        "Règle glide path : réduire progressivement les actions à l'approche de la retraite",
+        "Rebalancement : méthode Larry Swedroe — si dérive > 25% de la cible (relatif) ou > 5 pts absolus",
+        "Asset location : actions croissance en PEA, obligations en PER, or en CTO",
+        "Frugalité : privilégier les ETF à TER < 0,20% — chaque point de frais = impact majeur sur 20 ans",
     ]
-
-    row = 6
-    for label, prudent, equilibre, dynamique, desc in lignes_profils:
-        is_total = label == "TOTAL"
-        ws.cell(row=row, column=1).value = label
-        ws.cell(row=row, column=1).font = Font(bold=is_total, size=10)
-        for col, val in enumerate([prudent, equilibre, dynamique], start=2):
-            cell = ws.cell(row=row, column=col, value=val)
-            cell.number_format = "0%"
-            cell.alignment = ALIGN_CENTRE
-            cell.font = Font(bold=is_total, size=10)
-        ws.cell(row=row, column=5).value = desc
-        ws.cell(row=row, column=5).font = Font(size=9, italic=True)
+    for regle in regles:
+        ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=7)
+        ws.cell(row=row, column=1, value=f"• {regle}")
+        ws.cell(row=row, column=1).font = _font(size=10)
+        ws.cell(row=row, column=1).fill = _fill(COULEUR_LIGHT_GREY if row % 2 == 0 else "FFFFFF")
+        ws.row_dimensions[row].height = 20
         row += 1
 
-    last_row_profils = row - 1
-    _creer_table(ws, f"A5:E{last_row_profils}", "tblProfils", "TableStyleMedium9")
-    _appliquer_bordure(ws, 5, last_row_profils, 1, 5)
-
-    # ---- Tableau 2 : Règle âge-en-obligations ----
-    row += 2
-    ws.cell(row=row, column=1).value = "🎂 RÈGLE ÂGE-EN-OBLIGATIONS (Bogleheads)"
-    ws.cell(row=row, column=1).font = Font(bold=True, size=11, color="1F497D")
-    ws.merge_cells(f"A{row}:E{row}")
-    row += 1
-
-    en_tetes_age = ["Âge", "% Obligations (std)", "% Actions (std)", "% Oblig (conserv.)", "% Oblig (agressif)"]
-    for col, texte in enumerate(en_tetes_age, start=1):
-        cell = ws.cell(row=row, column=col, value=texte)
-        cell.font = POLICE_EN_TETE
-        cell.fill = FILL_EN_TETE_BLEU
-        cell.alignment = ALIGN_CENTRE
-
-    first_age_row = row + 1
-    ages = [25, 30, 35, 40, 45, 50, 55, 60, 65, 70]
-    row += 1
-    for age in ages:
-        pct_oblig_std = min(age / 100.0, 1.0)
-        pct_act_std = 1.0 - pct_oblig_std
-        pct_oblig_conserv = min((age + 10) / 100.0, 1.0)
-        pct_oblig_agressif = max((age - 10) / 100.0, 0.0)
-
-        valeurs = [age, pct_oblig_std, pct_act_std, pct_oblig_conserv, pct_oblig_agressif]
-        for col, val in enumerate(valeurs, start=1):
-            cell = ws.cell(row=row, column=col, value=val)
-            cell.alignment = ALIGN_CENTRE
-            cell.font = Font(size=10)
-            if col > 1:
-                cell.number_format = "0%"
-        row += 1
-
-    last_age_row = row - 1
-    _creer_table(ws, f"A{first_age_row - 1}:E{last_age_row}", "tblAgeObligations", "TableStyleLight1")
-    _appliquer_bordure(ws, first_age_row - 1, last_age_row, 1, 5)
-
-    # ---- Tableau 3 : Décomposition sous-classes ----
-    row += 2
-    ws.cell(row=row, column=1).value = "🔍 DÉCOMPOSITION DES SOUS-CLASSES D'ACTIFS"
-    ws.cell(row=row, column=1).font = Font(bold=True, size=11, color="1F497D")
-    ws.merge_cells(f"A{row}:E{row}")
-    row += 1
-
-    en_tetes_sous = ["Poche", "Sous-classe", "% de la poche", "ETF de référence", "Remarque"]
-    for col, texte in enumerate(en_tetes_sous, start=1):
-        cell = ws.cell(row=row, column=col, value=texte)
-        cell.font = POLICE_EN_TETE
-        cell.fill = FILL_EN_TETE_VERT
-        cell.alignment = ALIGN_CENTRE
-
-    first_sous_row = row + 1
-    sous_classes = [
-        ("Actions", "Monde (MSCI World)", 0.60, "EWLD / IWDA / SWRD", "Cœur portefeuille"),
-        ("Actions", "Émergents (MSCI EM)", 0.15, "PAEEM / EIMI", "Diversification pays émergents"),
-        ("Actions", "Europe (MSCI Europe)", 0.15, "ESE / IMEU", "Complément zone euro"),
-        ("Actions", "Small Cap Monde", 0.10, "WPEA", "Prime taille — optionnel"),
-        ("Obligations", "État Zone Euro", 0.50, "MTS / IEAG", "Ancre sécurité"),
-        ("Obligations", "État USA (Treasuries)", 0.20, "VUTY", "Diversification risque souverain"),
-        ("Obligations", "Crédit IG Euro", 0.20, "CORP", "Rendement supplémentaire"),
-        ("Obligations", "Haut rendement", 0.10, "IHYG", "Optionnel — risque crédit élevé"),
-    ]
-
-    row += 1
-    for poche, sous_classe, pct, etf_ref, remarque in sous_classes:
-        couleur = "E2EFDA" if poche == "Actions" else "DDEBF7"
-        fill = PatternFill(fill_type="solid", fgColor=couleur)
-        for col, val in enumerate([poche, sous_classe, pct, etf_ref, remarque], start=1):
-            cell = ws.cell(row=row, column=col, value=val)
-            cell.fill = fill
-            cell.font = Font(size=9)
-            cell.alignment = ALIGN_CENTRE if col == 3 else ALIGN_GAUCHE
-            if col == 3:
-                cell.number_format = "0%"
-        row += 1
-
-    last_sous_row = row - 1
-    _creer_table(ws, f"A{first_sous_row - 1}:E{last_sous_row}", "tblSousClasses", "TableStyleLight9")
-    _appliquer_bordure(ws, first_sous_row - 1, last_sous_row, 1, 5)
+    widths = [35, 18, 18, 30, 28, 35, 10]
+    for i, w in enumerate(widths, 1):
+        set_col_width(ws, i, w)
+    ws.freeze_panes = "A4"
 
 
-# ---------------------------------------------------------------------------
-# Feuille 6 : Asset_Location_Matrice
-# ---------------------------------------------------------------------------
-
-def _creer_feuille_asset_location(wb: Workbook, etf_data: dict, fiscalite: dict | None = None) -> None:
-    """Crée la matrice ETF × Enveloppe pour l'asset location.
-
-    Inclut les contraintes d'éligibilité (cellules grisées si non éligible),
-    les plafonds par enveloppe, et des cellules prêtes pour le Solveur Excel.
-
-    Args:
-        wb: Classeur openpyxl.
-        etf_data: Dictionnaire issu de univers_etf.yaml.
-        fiscalite: Dictionnaire issu de fiscalite_2026.yaml (pour les taux de sortie).
-    """
+# ─── Onglet 6 : Asset Location Matrice ──────────────────────────────
+def creer_onglet_asset_location(wb: openpyxl.Workbook, etfs: list, enveloppes: list, profil: dict = None):
     ws = wb.create_sheet("Asset_Location_Matrice")
     ws.sheet_view.showGridLines = False
 
-    _en_tete_feuille(
-        ws,
-        "🧩 Matrice Asset Location — ETF × Enveloppe",
-        "Cellules grisées = non éligible | Objectif : maximiser VAN nette d'impôts | Prêt pour Solveur Excel",
-    )
+    ws.merge_cells("A1:I1")
+    c = ws["A1"]
+    c.value = "🗺️ MATRICE D'ASSET LOCATION — ETF × ENVELOPPES"
+    style_header(c, size=14)
+    ws.row_dimensions[1].height = 30
+    ajouter_disclaimer(ws, 2, 1, 9)
 
-    # Identifiants et noms des enveloppes
-    enveloppes_ids = ["cto_perso", "cto_is", "contrat_capi_is", "pea", "per", "pee"]
-    enveloppes_noms = ["CTO Perso", "CTO IS", "Capi IS", "PEA", "PER", "PEE"]
-    plafonds = {
-        "cto_perso": "Sans plafond",
-        "cto_is": "Sans plafond",
-        "contrat_capi_is": "Sans plafond",
-        "pea": "150 000 €",
-        "per": "Variable",
-        "pee": "25% salaire",
-    }
-    taux_sortie = {
-        "cto_perso": "31.4%",
-        "cto_is": "25%",
-        "contrat_capi_is": "25%",
-        "pea": "17.2%",
-        "per": "TMI+10.3%",
-        "pee": "17.2%",
-    }
-
-    # Largeurs colonnes
-    ws.column_dimensions["A"].width = 10   # ISIN
-    ws.column_dimensions["B"].width = 8    # Ticker
-    ws.column_dimensions["C"].width = 40   # Nom ETF
-    ws.column_dimensions["D"].width = 22   # Classe actifs
-    ws.column_dimensions["E"].width = 8    # Type
-
-    n_env = len(enveloppes_ids)
-    for i in range(n_env):
-        ws.column_dimensions[get_column_letter(6 + i)].width = 14
-
-    # En-têtes fixes
-    en_tetes_fixes = ["ISIN", "Ticker", "Nom ETF", "Classe Actifs", "Type"]
     row = 4
-    for col, texte in enumerate(en_tetes_fixes, start=1):
-        cell = ws.cell(row=row, column=col, value=texte)
-        cell.font = POLICE_EN_TETE
-        cell.fill = FILL_EN_TETE_BLEU
-        cell.alignment = ALIGN_CENTRE
+    row = titre_section(ws, row, "📊 MATRICE ÉLIGIBILITÉ ETF × ENVELOPPE", 1, 9)
 
-    # En-têtes enveloppes avec couleurs
-    for i, (env_id, nom) in enumerate(zip(enveloppes_ids, enveloppes_noms)):
-        col = 6 + i
-        couleur_hex = COULEURS_ENVELOPPES.get(env_id, "FFFFFF")
-        cell = ws.cell(row=4, column=col, value=nom)
-        cell.font = Font(bold=True, size=10)
-        cell.fill = PatternFill(fill_type="solid", fgColor=couleur_hex)
-        cell.alignment = ALIGN_CENTRE
-
-    # Plafonds
-    ws.cell(row=5, column=1).value = "Plafond"
-    ws.cell(row=5, column=1).font = Font(bold=True, size=9, italic=True)
-    for i, env_id in enumerate(enveloppes_ids):
-        cell = ws.cell(row=5, column=6 + i, value=plafonds[env_id])
-        cell.font = Font(size=9, italic=True)
-        cell.alignment = ALIGN_CENTRE
-
-    # Taux de sortie
-    ws.cell(row=6, column=1).value = "Taux sortie"
-    ws.cell(row=6, column=1).font = Font(bold=True, size=9, italic=True)
-    for i, env_id in enumerate(enveloppes_ids):
-        cell = ws.cell(row=6, column=6 + i, value=taux_sortie[env_id])
-        cell.font = Font(size=9, italic=True, color="C00000")
-        cell.alignment = ALIGN_CENTRE
-
-    # Remplissage des ETFs
-    etfs = etf_data.get("etfs", []) if isinstance(etf_data, dict) else []
-    row = 7
-    fill_non_eligible = PatternFill(fill_type="solid", fgColor=GRIS_NON_ELIGIBLE)
-    fill_eligible = PatternFill(fill_type="solid", fgColor="FFFFFF")
+    env_ids = ["PEA", "PER", "PEE", "CTO_perso", "CTO_IS", "Contrat_Cap_IS"]
+    headers = ["ISIN", "Nom ETF", "Classe"] + env_ids
+    for i, h in enumerate(headers, 1):
+        style_subheader(ws.cell(row=row, column=i, value=h))
+    row += 1
 
     for etf in etfs:
-        eligibilite = etf.get("eligibilite", {})
+        elig = etf.get("eligibilite", {})
+        classe = etf.get("classe_actifs", "")
+        bg_hex = COULEURS_CLASSES.get(classe, "FFFFFF")
+        row_data = [etf.get("isin", ""), etf.get("nom", ""), classe]
+        for env_id in env_ids:
+            row_data.append("✅" if elig.get(env_id) else "—")
 
-        # Colonnes fixes
-        valeurs_fixes = [
-            etf.get("isin", ""),
-            etf.get("ticker", ""),
-            etf.get("nom", ""),
-            etf.get("classe_actifs", ""),
-            etf.get("type", ""),
-        ]
-        for col, val in enumerate(valeurs_fixes, start=1):
-            cell = ws.cell(row=row, column=col, value=val)
-            cell.font = Font(size=9)
-            cell.alignment = ALIGN_GAUCHE
-
-        # Colonnes enveloppes
-        for i, env_id in enumerate(enveloppes_ids):
-            col = 6 + i
-            est_eligible = eligibilite.get(env_id, False)
-
-            if not est_eligible:
-                # Cellule grisée — non éligible
-                cell = ws.cell(row=row, column=col, value="—")
-                cell.fill = fill_non_eligible
-                cell.font = Font(size=9, color="808080")
-                cell.alignment = ALIGN_CENTRE
+        for j, val in enumerate(row_data, 1):
+            cell = ws.cell(row=row, column=j, value=val)
+            cell.font = _font(size=9)
+            cell.border = _thin_border()
+            if j <= 3:
+                cell.fill = _fill(bg_hex)
+                cell.alignment = _align("left", "center", wrap=True)
             else:
-                # Cellule éditable — montant à allouer (défaut 0)
-                cell = ws.cell(row=row, column=col, value=0)
-                cell.fill = fill_eligible
-                cell.number_format = "#,##0 €"
-                cell.font = Font(size=9)
-                cell.alignment = ALIGN_DROITE
-
-        ws.row_dimensions[row].height = 30
+                cell.alignment = _align("center")
+                if val == "✅":
+                    cell.fill = _fill("C6EFCE")
+                else:
+                    cell.fill = _fill("FCE4D6")
         row += 1
 
-    last_etf_row = row - 1
-
-    # Ligne totaux par enveloppe (pour contraintes Solveur)
     row += 1
-    ws.cell(row=row, column=1).value = "TOTAL enveloppe"
-    ws.cell(row=row, column=1).font = Font(bold=True, size=10)
-    ws.merge_cells(f"A{row}:E{row}")
-
-    for i, env_id in enumerate(enveloppes_ids):
-        col = 6 + i
-        # Formule somme de la colonne (uniquement les lignes avec valeurs numériques)
-        col_lettre = get_column_letter(col)
-        ws.cell(row=row, column=col).value = f"=SUMIF({col_lettre}7:{col_lettre}{last_etf_row},\"<>—\")"
-        ws.cell(row=row, column=col).font = Font(bold=True, size=10)
-        ws.cell(row=row, column=col).number_format = "#,##0 €"
-        ws.cell(row=row, column=col).fill = PatternFill(fill_type="solid", fgColor="FFF2CC")
-        ws.cell(row=row, column=col).alignment = ALIGN_DROITE
-
-    # Cellule objectif VAN nette d'impôts
-    row += 2
-    ws.cell(row=row, column=1).value = "📍 CELLULE OBJECTIF — VAN nette d'impôts"
-    ws.cell(row=row, column=1).font = Font(bold=True, size=11, color="C00000")
-    ws.merge_cells(f"A{row}:E{row}")
-
+    # Légende
+    row = titre_section(ws, row, "🔑 RÈGLES D'ASSET LOCATION BOGLEHEAD FR", 1, 9)
+    regles_al = [
+        ("Actions mondiales (PEA éligible)", "PEA en PRIORITÉ → CTO → PER", "Économie IR 12,8% sur la totalité des gains"),
+        ("Actions hors PEA (ETF physiques)", "PER → CTO perso → Contrat Cap IS", "PER = déduction entrée, CTO = liquidité"),
+        ("Obligations / Fixed Income", "PER → Contrat Cap IS → CTO IS", "Rendement fixe mieux dans enveloppe défiscalisée"),
+        ("Or (ETCs)", "CTO perso → PER", "ETCs non éligibles PEA — CTO simple"),
+        ("REITs / Immobilier coté", "PER → CTO perso", "Dividendes imposables — mieux dans enveloppe"),
+        ("Monétaire / Liquidités", "CTO IS → CTO perso", "Faible rendement — hors enveloppes précieuses"),
+        ("ETF actions IS (holding)", "Contrat Cap IS > CTO IS", "Éviter le mark-to-market annuel (art. 209-0 A CGI)"),
+    ]
+    ws.cell(row=row, column=1, value="Classe d'actifs").font = _font(bold=True)
+    ws.cell(row=row, column=2, value="Enveloppe recommandée").font = _font(bold=True)
+    ws.cell(row=row, column=3, value="Justification").font = _font(bold=True)
+    for j in range(1, 4):
+        ws.cell(row=row, column=j).fill = _fill(COULEUR_SUBHEADER)
+        ws.cell(row=row, column=j).font = Font(bold=True, color="FFFFFF")
     row += 1
-    ws.cell(row=row, column=1).value = "VAN nette d'impôts (estimation simplifiée)"
-    ws.cell(row=row, column=1).font = Font(bold=True, size=10)
+    for i, (classe, reco, justif) in enumerate(regles_al):
+        bg = COULEUR_LIGHT_GREY if i % 2 == 0 else "FFFFFF"
+        ws.cell(row=row, column=1, value=classe).fill = _fill(bg)
+        ws.cell(row=row, column=2, value=reco).fill = _fill(bg)
+        ws.cell(row=row, column=2).font = _font(bold=True, color=COULEUR_SUBHEADER)
+        ws.cell(row=row, column=3, value=justif).fill = _fill(bg)
+        ws.merge_cells(start_row=row, start_column=3, end_row=row, end_column=9)
+        ws.cell(row=row, column=3).alignment = _align("left", "center", wrap=True)
+        row += 1
 
-    # Taux de sortie extraits de la configuration fiscale (ou valeurs par défaut documentées)
-    if fiscalite:
-        pfu = fiscalite.get("pfu", {}).get("taux_total", 0.314)
-        is_25 = fiscalite.get("is", {}).get("taux_normal", 0.25)
-        ps = fiscalite.get("prelevements_sociaux", {}).get("taux_total", 0.172)
-        tmi_moyen = 0.30 + ps  # Approximation PER sortie : TMI moyen 30% + PS
-    else:
-        pfu, is_25, ps, tmi_moyen = 0.314, 0.25, 0.172, 0.413
-    # CTO Perso=PFU, CTO IS=IS25%, ContratCapi=IS25%, PEA=PS, PER=TMI+PS, PEE=PS
-    taux_sortie_num = [pfu, is_25, is_25, ps, tmi_moyen, ps]
-    formule_parts = []
-    for i, taux in enumerate(taux_sortie_num):
-        col = 6 + i
-        col_lettre = get_column_letter(col)
-        formule_parts.append(
-            f"SUMIF({col_lettre}7:{col_lettre}{last_etf_row},\"<>—\")*(1-{taux})"
-        )
-
-    ws.cell(row=row, column=6).value = "=" + "+".join(formule_parts)
-    ws.cell(row=row, column=6).font = Font(bold=True, size=11, color="1F497D")
-    ws.cell(row=row, column=6).number_format = "#,##0 €"
-    ws.cell(row=row, column=6).fill = PatternFill(fill_type="solid", fgColor="E2EFDA")
-
-    _appliquer_bordure(ws, 4, last_etf_row, 1, 5 + n_env)
-
-    # Note d'utilisation
-    row += 2
-    ws.cell(row=row, column=1).value = (
-        "💡 Utilisation du Solveur Excel : Définir la cellule VAN comme objectif à maximiser. "
-        "Variables : cellules blanches (allocations en €). "
-        "Contraintes : totaux ≤ plafonds enveloppes, sommes = allocations cibles, cellules grisées = 0."
-    )
-    ws.cell(row=row, column=1).font = Font(size=9, italic=True, color="595959")
-    ws.cell(row=row, column=1).alignment = Alignment(wrap_text=True)
-    ws.merge_cells(f"A{row}:{get_column_letter(5 + n_env)}{row}")
-    ws.row_dimensions[row].height = 45
+    widths = [16, 45, 18, 8, 8, 8, 8, 8, 18]
+    for i, w in enumerate(widths, 1):
+        set_col_width(ws, i, w)
+    ws.freeze_panes = "A5"
 
 
-# ---------------------------------------------------------------------------
-# Feuille 7 : Rebalancement
-# ---------------------------------------------------------------------------
-
-def _creer_feuille_rebalancement(wb: Workbook) -> None:
-    """Crée la feuille de rebalancement avec calcul de coût fiscal.
-
-    Args:
-        wb: Classeur openpyxl.
-    """
+# ─── Onglet 7 : Rebalancement ───────────────────────────────────────
+def creer_onglet_rebalancement(wb: openpyxl.Workbook):
     ws = wb.create_sheet("Rebalancement")
     ws.sheet_view.showGridLines = False
 
-    _en_tete_feuille(
-        ws,
-        "⚖️ Rebalancement — Bandes de Tolérance & Coût Fiscal",
-        "Méthodes : ±5 pts absolus (relatif_5pct) ou ±25% relatif (Larry Swedroe) | Cash-flow rebalancing prioritaire",
+    ws.merge_cells("A1:H1")
+    c = ws["A1"]
+    c.value = "⚖️ OUTIL DE REBALANCEMENT — BOGLEHEAD FR"
+    style_header(c, size=14)
+    ws.row_dimensions[1].height = 30
+    ajouter_disclaimer(ws, 2, 1, 8)
+
+    row = 4
+    row = titre_section(ws, row, "📊 TABLEAU DE SUIVI DE L'ALLOCATION", 1, 8)
+    headers = ["Classe d'actifs", "Cible (%)", "Actuelle (%)", "Dérive (pts abs.)",
+               "Dérive (%rel)", "Action", "Montant à arbitrer (€)", "Enveloppe privilégiée"]
+    for i, h in enumerate(headers, 1):
+        style_subheader(ws.cell(row=row, column=i, value=h))
+    row += 1
+
+    classes = ["Actions", "Obligations", "Immobilier coté", "Or", "Liquidités", "TOTAL"]
+    cibles = [0.65, 0.20, 0.05, 0.05, 0.05, 1.00]
+    env_pref = ["PEA/CTO", "PER/ContratIS", "PER/CTO", "CTO", "CTO", ""]
+    patrimoine_exemple = 500000
+
+    for i, (classe, cible, env) in enumerate(zip(classes, cibles, env_pref)):
+        is_total = classe == "TOTAL"
+        bg = COULEUR_HEADER if is_total else (COULEUR_LIGHT_GREY if i % 2 == 0 else "FFFFFF")
+        fg = "FFFFFF" if is_total else "000000"
+
+        ws.cell(row=row, column=1, value=classe).fill = _fill(bg)
+        ws.cell(row=row, column=1).font = _font(bold=is_total, color=fg)
+        ws.cell(row=row, column=2, value=cible).number_format = "0.0%"
+        ws.cell(row=row, column=2).fill = _fill(bg)
+
+        if not is_total:
+            # Formule dérive = actuelle - cible
+            derive_col = get_column_letter(4)
+            actuelle_col = get_column_letter(3)
+            cible_col = get_column_letter(2)
+
+            ws.cell(row=row, column=3, value=cible).number_format = "0.0%"  # à saisir
+            ws.cell(row=row, column=3).fill = _fill("FFFFC0")  # Zone de saisie
+            ws.cell(row=row, column=3).comment = None
+
+            ws.cell(row=row, column=4,
+                    value=f"={actuelle_col}{row}-{cible_col}{row}").number_format = "0.0%"
+            ws.cell(row=row, column=4).fill = _fill(bg)
+
+            ws.cell(row=row, column=5,
+                    value=f"=IF({cible_col}{row}>0,ABS({derive_col}{row})/{cible_col}{row},0)").number_format = "0.0%"
+            ws.cell(row=row, column=5).fill = _fill(bg)
+
+            ws.cell(row=row, column=6,
+                    value=f'=IF(ABS({derive_col}{row})>0.05,"ARBITRER",IF(E{row}>0.25,"SURVEILLER","OK"))')
+            ws.cell(row=row, column=6).alignment = _align("center")
+
+            ws.cell(row=row, column=7,
+                    value=f"=ABS({derive_col}{row})*{patrimoine_exemple}").number_format = "#,##0 €"
+            ws.cell(row=row, column=7).fill = _fill(bg)
+
+            ws.cell(row=row, column=8, value=env).font = _font(italic=True)
+        else:
+            ws.cell(row=row, column=3, value=f"=SUM(C{row-5}:C{row-1})").number_format = "0.0%"
+            for col in range(2, 9):
+                ws.cell(row=row, column=col).fill = _fill(bg)
+                ws.cell(row=row, column=col).font = Font(bold=True, color=fg)
+
+        for col in range(1, 9):
+            ws.cell(row=row, column=col).border = _thin_border()
+        row += 1
+
+    # Mise en forme conditionnelle sur la colonne Action (F)
+    from openpyxl.formatting.rule import CellIsRule
+    green_fill = PatternFill(bgColor=COULEUR_OK, fill_type="solid")
+    red_fill = PatternFill(bgColor=COULEUR_DANGER, fill_type="solid")
+    orange_fill = PatternFill(bgColor=COULEUR_WARNING, fill_type="solid")
+    action_range = f"F{row-5}:F{row-1}"
+    ws.conditional_formatting.add(
+        action_range,
+        CellIsRule(operator="equal", formula=['"OK"'], fill=green_fill)
+    )
+    ws.conditional_formatting.add(
+        action_range,
+        CellIsRule(operator="equal", formula=['"ARBITRER"'], fill=red_fill)
+    )
+    ws.conditional_formatting.add(
+        action_range,
+        CellIsRule(operator="equal", formula=['"SURVEILLER"'], fill=orange_fill)
     )
 
-    ws.column_dimensions["A"].width = 35
-    ws.column_dimensions["B"].width = 15
-    ws.column_dimensions["C"].width = 15
-    ws.column_dimensions["D"].width = 15
-    ws.column_dimensions["E"].width = 15
-    ws.column_dimensions["F"].width = 20
-    ws.row_dimensions[1].height = 30
-
-    # ---- Section 1 : Allocation actuelle ----
-    row = 4
-    ws["A4"] = "📊 SAISIE DE L'ALLOCATION ACTUELLE"
-    ws["A4"].font = Font(bold=True, size=11, color="1F497D")
-    ws.merge_cells("A4:F4")
-    row = 5
-
-    en_tetes_alloc = [
-        "Classe d'Actifs", "Montant actuel (€)", "% Actuel",
-        "% Cible", "Écart (pts)", "Statut"
+    row += 1
+    row = titre_section(ws, row, "📋 MÉTHODE DE REBALANCEMENT — ORDRE DE PRIORITÉ", 1, 8)
+    methodes = [
+        ("1ère priorité : Versements", "Orienter les nouveaux versements vers les classes sous-pondérées → coût fiscal = 0"),
+        ("2ème priorité : Arbitrage intra-enveloppe", "PEA, PER, PEE → arbitrage SANS fiscalité (enveloppe = bouclier fiscal)"),
+        ("3ème priorité : Arbitrage CTO", "PFU 31,4% sur les plus-values → calculer le seuil de rentabilité"),
+        ("Méthode Swedroe (recommandée)", "Rebalancer si dérive > 25% de la cible (relatif) OU > 5 pts absolus"),
+        ("Fréquence recommandée", "Vérification annuelle + après chaque mouvement de marché > 20%"),
+        ("Coût fiscal arbitrage CTO", "PV × 31,4% → seuil : dérive > 3-5 ans de surperformance de l'allocation cible"),
     ]
-    for col, texte in enumerate(en_tetes_alloc, start=1):
-        cell = ws.cell(row=row, column=col, value=texte)
-        cell.font = POLICE_EN_TETE
-        cell.fill = FILL_EN_TETE_BLEU
-        cell.alignment = ALIGN_CENTRE
-
-    row = 6
-    # Ligne Actions
-    ws.cell(row=row, column=1).value = "Actions"
-    _cellule_valeur(ws, row, 2, 300000, "#,##0 €")
-    ws.cell(row=row, column=3).value = "=B6/B9"
-    ws.cell(row=row, column=3).number_format = "0.0%"
-    ws.cell(row=row, column=4).value = 0.60
-    ws.cell(row=row, column=4).number_format = "0%"
-    ws.cell(row=row, column=5).value = "=C6-D6"
-    ws.cell(row=row, column=5).number_format = "+0.0%;-0.0%"
-    ws.cell(row=row, column=6).value = '=IF(ABS(C6-D6)<=0.05,"✅ Dans bandes","⚠️ Hors bandes")'
-    row += 1
-
-    # Ligne Obligations
-    ws.cell(row=row, column=1).value = "Obligations"
-    _cellule_valeur(ws, row, 2, 180000, "#,##0 €")
-    ws.cell(row=row, column=3).value = "=B7/B9"
-    ws.cell(row=row, column=3).number_format = "0.0%"
-    ws.cell(row=row, column=4).value = 0.40
-    ws.cell(row=row, column=4).number_format = "0%"
-    ws.cell(row=row, column=5).value = "=C7-D7"
-    ws.cell(row=row, column=5).number_format = "+0.0%;-0.0%"
-    ws.cell(row=row, column=6).value = '=IF(ABS(C7-D7)<=0.05,"✅ Dans bandes","⚠️ Hors bandes")'
-    row += 1
-
-    # Ligne Liquidités
-    ws.cell(row=row, column=1).value = "Liquidités"
-    _cellule_valeur(ws, row, 2, 20000, "#,##0 €")
-    ws.cell(row=row, column=3).value = "=B8/B9"
-    ws.cell(row=row, column=3).number_format = "0.0%"
-    ws.cell(row=row, column=4).value = 0.00
-    ws.cell(row=row, column=4).number_format = "0%"
-    ws.cell(row=row, column=5).value = "=C8-D8"
-    ws.cell(row=row, column=5).number_format = "+0.0%;-0.0%"
-    ws.cell(row=row, column=6).value = '=IF(ABS(C8-D8)<=0.05,"✅ Dans bandes","⚠️ Hors bandes")'
-    row += 1
-
-    # Ligne Total
-    ws.cell(row=row, column=1).value = "TOTAL"
-    ws.cell(row=row, column=1).font = Font(bold=True)
-    ws.cell(row=row, column=2).value = "=SUM(B6:B8)"
-    ws.cell(row=row, column=2).number_format = "#,##0 €"
-    ws.cell(row=row, column=2).font = Font(bold=True)
-    ws.cell(row=row, column=3).value = "=SUM(C6:C8)"
-    ws.cell(row=row, column=3).number_format = "0.0%"
-    ws.cell(row=row, column=3).font = Font(bold=True)
-
-    _creer_table(ws, f"A5:F{row}", "tblAllocationActuelle", "TableStyleMedium2")
-    _appliquer_bordure(ws, 5, row, 1, 6)
-
-    # Mise en forme conditionnelle — rouge si hors bandes
-    rouge_fill = PatternFill(start_color=ROUGE_CLAIR, end_color=ROUGE_CLAIR, fill_type="solid")
-    vert_fill = PatternFill(start_color=VERT_CLAIR, end_color=VERT_CLAIR, fill_type="solid")
-
-    for r in [6, 7, 8]:
-        ws.conditional_formatting.add(
-            f"F{r}",
-            FormulaRule(formula=[f'F{r}="⚠️ Hors bandes"'], fill=rouge_fill),
-        )
-        ws.conditional_formatting.add(
-            f"F{r}",
-            FormulaRule(formula=[f'F{r}="✅ Dans bandes"'], fill=vert_fill),
-        )
-
-    # ---- Section 2 : Paramètres de tolérance ----
-    row += 3
-    ws.cell(row=row, column=1).value = "⚙️ PARAMÈTRES DE TOLÉRANCE"
-    ws.cell(row=row, column=1).font = Font(bold=True, size=11, color="1F497D")
-    ws.merge_cells(f"A{row}:F{row}")
-    row += 1
-
-    params_tolerance = [
-        ("Méthode de tolérance", "relatif_5pct", "Valeurs : relatif_5pct, larry_swedroe"),
-        ("Bande absolue (±pts)", 0.05, "Pour méthode relatif_5pct : ±5 points"),
-        ("Bande relative Swedroe (%)", 0.25, "Pour méthode Swedroe : ±25% de la cible"),
-    ]
-    debut_tolerance = row
-    for label, val, commentaire in params_tolerance:
-        _cellule_etiquette(ws, row, 1, label)
-        _cellule_valeur(ws, row, 2, val, "0%" if isinstance(val, float) else None)
-        ws.cell(row=row, column=3).value = commentaire
-        ws.cell(row=row, column=3).font = Font(size=9, italic=True)
-        ws.merge_cells(f"C{row}:F{row}")
-        row += 1
-    _appliquer_bordure(ws, debut_tolerance, row - 1, 1, 2)
-
-    # ---- Section 3 : Calcul coût fiscal arbitrage ----
-    row += 2
-    ws.cell(row=row, column=1).value = "💰 CALCUL DU COÛT FISCAL D'UN ARBITRAGE"
-    ws.cell(row=row, column=1).font = Font(bold=True, size=11, color="1F497D")
-    ws.merge_cells(f"A{row}:F{row}")
-    row += 1
-
-    en_tetes_arbitrage = [
-        "Paramètre", "Valeur", "Actions (CTO)", "Obligations (PEA)",
-        "Obligations (PER)", "Commentaire"
-    ]
-    for col, texte in enumerate(en_tetes_arbitrage, start=1):
-        cell = ws.cell(row=row, column=col, value=texte)
-        cell.font = POLICE_EN_TETE
-        cell.fill = FILL_EN_TETE_ORANGE
-        cell.alignment = ALIGN_CENTRE
-
-    row += 1
-    debut_arbitrage = row
-    arbitrage_params = [
-        ("PV latente estimée (€)", 50000, 50000, 20000, 20000, "Modifier selon la situation"),
-        ("Taux imposition enveloppe", "", 0.314, 0.172, 0.413, "CTO=31.4% | PEA=17.2% | PER=41.3% (TMI41+PS10.3%)"),
-        ("Impôt immédiat (€)", "", "=C_PV*C_TAUX", "=D_PV*D_TAUX", "=E_PV*E_TAUX", "=pv_latente × taux"),
-        ("Coût opportunité 10 ans (€)", "", "Voir formule", "Voir formule", "Voir formule", "=impôt×((1+7%)^10-1)"),
-        ("Recommandation", "", "Arbitrage coûteux", "Moins coûteux", "Coûteux si TMI élevée", ""),
-    ]
-
-    for label, val_a, val_b, val_c, val_d, comm in arbitrage_params:
-        ws.cell(row=row, column=1).value = label
-        ws.cell(row=row, column=1).font = Font(bold=True, size=9)
-        ws.cell(row=row, column=2).value = val_a
-        ws.cell(row=row, column=3).value = val_b
-        ws.cell(row=row, column=4).value = val_c
-        ws.cell(row=row, column=5).value = val_d
-        ws.cell(row=row, column=6).value = comm
-        ws.cell(row=row, column=6).font = Font(size=9, italic=True)
-        for col in [3, 4, 5]:
-            cell = ws.cell(row=row, column=col)
-            if isinstance(cell.value, float) and 0 < cell.value <= 1:
-                cell.number_format = "0.0%"
-            elif isinstance(cell.value, (int, float)) and cell.value > 1:
-                cell.number_format = "#,##0 €"
+    for methode, explication in methodes:
+        ws.cell(row=row, column=1, value=methode).font = _font(bold=True, color=COULEUR_SUBHEADER)
+        ws.merge_cells(start_row=row, start_column=2, end_row=row, end_column=8)
+        ws.cell(row=row, column=2, value=explication).alignment = _align("left", "center", wrap=True)
+        ws.row_dimensions[row].height = 22
+        for col in range(1, 9):
+            ws.cell(row=row, column=col).border = _thin_border()
         row += 1
 
-    _appliquer_bordure(ws, debut_arbitrage - 1, row - 1, 1, 6)
-
-    # ---- Section 4 : Recommandation rééquilibrage ----
-    row += 2
-    ws.cell(row=row, column=1).value = "💡 STRATÉGIE DE RÉÉQUILIBRAGE RECOMMANDÉE"
-    ws.cell(row=row, column=1).font = Font(bold=True, size=11, color="1F497D")
-    ws.merge_cells(f"A{row}:F{row}")
-    row += 1
-
-    conseils = [
-        ("1. CASH-FLOW REBALANCING", "Utiliser les nouveaux versements et dividendes pour acheter les classes sous-pondérées — AUCUN coût fiscal", "PRIORITÉ 1"),
-        ("2. COUPON STRIPPING", "Réorienter les dividendes/coupons distribués vers les classes déficitaires", "PRIORITÉ 2"),
-        ("3. ARBITRAGE ENVELOPPE EXONÉRÉE", "Rééquilibrer en vendant/achetant à l'intérieur du PEA (exonéré IR) ou du PER", "PRIORITÉ 3"),
-        ("4. ARBITRAGE CTO (DERNIER RECOURS)", "Seulement si déséquilibre > bandes et impossible autrement — minimiser les PV réalisées", "DERNIER RECOURS"),
-    ]
-
-    for strategie, description, priorite in conseils:
-        ws.cell(row=row, column=1).value = strategie
-        ws.cell(row=row, column=1).font = Font(bold=True, size=10)
-        ws.cell(row=row, column=2).value = description
-        ws.cell(row=row, column=2).font = Font(size=9)
-        ws.merge_cells(f"B{row}:E{row}")
-        cell_prio = ws.cell(row=row, column=6, value=priorite)
-        cell_prio.font = Font(bold=True, size=9)
-        if "PRIORITÉ 1" in priorite:
-            cell_prio.fill = PatternFill(fill_type="solid", fgColor=VERT_CLAIR)
-        elif "DERNIER" in priorite:
-            cell_prio.fill = PatternFill(fill_type="solid", fgColor=ROUGE_CLAIR)
-        else:
-            cell_prio.fill = PatternFill(fill_type="solid", fgColor=ORANGE_CLAIR)
-        row += 1
-
-    _appliquer_bordure(ws, row - 4, row - 1, 1, 6)
+    widths = [28, 14, 14, 14, 12, 14, 22, 28]
+    for i, w in enumerate(widths, 1):
+        set_col_width(ws, i, w)
+    ws.freeze_panes = "A5"
 
 
-# ---------------------------------------------------------------------------
-# Feuille 8 : Reporting_Client
-# ---------------------------------------------------------------------------
-
-def _creer_feuille_reporting(wb: Workbook) -> None:
-    """Crée la feuille de reporting client avec synthèse globale.
-
-    Args:
-        wb: Classeur openpyxl.
-    """
+# ─── Onglet 8 : Reporting Client ────────────────────────────────────
+def creer_onglet_reporting(wb: openpyxl.Workbook, profil: dict = None):
     ws = wb.create_sheet("Reporting_Client")
     ws.sheet_view.showGridLines = False
 
-    _en_tete_feuille(
-        ws,
-        "📄 Reporting Client — Synthèse Patrimoniale Bogleheads",
-        "Synthèse par enveloppe, par classe d'actifs | Valeur ajoutée fiscale vs scénario CTO naïf",
-    )
-
-    ws.column_dimensions["A"].width = 30
-    ws.column_dimensions["B"].width = 18
-    ws.column_dimensions["C"].width = 18
-    ws.column_dimensions["D"].width = 18
-    ws.column_dimensions["E"].width = 18
-    ws.column_dimensions["F"].width = 25
+    ws.merge_cells("A1:H1")
+    c = ws["A1"]
+    c.value = "📋 REPORTING CLIENT — BOGLEHEAD FR"
+    style_header(c, size=14)
     ws.row_dimensions[1].height = 30
 
-    # ---- Bloc 1 : Synthèse globale ----
+    # Date de génération
+    ws.cell(row=2, column=1, value=f"Généré le : {datetime.date.today().strftime('%d/%m/%Y')}")
+    ws.cell(row=2, column=1).font = _font(italic=True, size=9)
+    row = ajouter_disclaimer(ws, 3, 1, 8)
+
+    if profil:
+        row = titre_section(ws, row, f"👤 SYNTHÈSE — {profil.get('nom', 'Client')}", 1, 8)
+        ws.cell(row=row, column=1, value="Patrimoine financier total").font = _font(bold=True)
+        ws.cell(row=row, column=2, value=profil.get("patrimoine_financier_total", 0)).number_format = "#,##0 €"
+        ws.cell(row=row, column=3, value="Capacité d'épargne annuelle").font = _font(bold=True)
+        ws.cell(row=row, column=4, value=profil.get("capacite_epargne_annuelle", 0)).number_format = "#,##0 €"
+        row += 1
+        ws.cell(row=row, column=1, value="Horizon de placement").font = _font(bold=True)
+        ws.cell(row=row, column=2, value=f"{profil.get('horizon_placement_ans', 0)} ans")
+        ws.cell(row=row, column=3, value="Score de risque SRRI").font = _font(bold=True)
+        ws.cell(row=row, column=4, value=f"{profil.get('score_risque', '—')} / 7")
+        row += 2
+
+        row = titre_section(ws, row, "🏦 RÉPARTITION PAR ENVELOPPE", 1, 8)
+        headers = ["Enveloppe", "Encours actuel (€)", "Versements prévus/an (€)", "Plafond restant (€)", "Avantage fiscal clé", "", "", ""]
+        for i, h in enumerate(headers, 1):
+            style_subheader(ws.cell(row=row, column=i, value=h))
+        row += 1
+
+        env_dispo = profil.get("enveloppes_disponibles", {})
+        env_labels = {
+            "PEA": ("PEA", "Exonération IR après 5 ans"),
+            "PER": ("PER (Plan Épargne Retraite)", "Déduction fiscale à l'entrée"),
+            "PEE": ("PEE (Plan Épargne Entreprise)", "Abondement + exonération IR"),
+            "CTO_perso": ("CTO Personnel", "Liquidité totale"),
+            "CTO_IS": ("CTO IS (Holding)", "Taux IS 15/25%"),
+            "Contrat_Cap_IS": ("Contrat Cap. IS (Holding)", "Pas de mark-to-market"),
+        }
+        total_patrimoine_env = 0
+        for env_key, (label, avantage) in env_labels.items():
+            env_data = env_dispo.get(env_key)
+            if env_data is None:
+                continue
+            encours = env_data.get("encours_actuel", 0) or 0
+            versements = env_data.get("versement_annuel_prevu", 0) or 0
+            plafond = env_data.get("plafond", None)
+            plafond_restant = max(0, plafond - encours) if plafond else "Illimité"
+            total_patrimoine_env += encours
+
+            row_data = [label, encours, versements, plafond_restant, avantage, "", "", ""]
+            for j, val in enumerate(row_data, 1):
+                cell = ws.cell(row=row, column=j, value=val)
+                if j == 2 and isinstance(val, (int, float)):
+                    cell.number_format = "#,##0 €"
+                elif j == 3 and isinstance(val, (int, float)):
+                    cell.number_format = "#,##0 €"
+                elif j == 4 and isinstance(val, (int, float)):
+                    cell.number_format = "#,##0 €"
+                cell.border = _thin_border()
+            row += 1
+
+        ws.cell(row=row, column=1, value="TOTAL enveloppes").font = _font(bold=True)
+        ws.cell(row=row, column=1).fill = _fill(COULEUR_HEADER)
+        ws.cell(row=row, column=1).font = Font(bold=True, color="FFFFFF")
+        ws.cell(row=row, column=2, value=total_patrimoine_env).number_format = "#,##0 €"
+        ws.cell(row=row, column=2).font = _font(bold=True)
+        row += 2
+
+        row = titre_section(ws, row, "🎯 OBJECTIFS ET PRÉCONISATIONS", 1, 8)
+        ws.cell(row=row, column=1, value="Objectif principal").font = _font(bold=True)
+        ws.merge_cells(start_row=row, start_column=2, end_row=row, end_column=8)
+        ws.cell(row=row, column=2, value=profil.get("objectif_principal", "—"))
+        ws.row_dimensions[row].height = 20
+        row += 1
+        for i, obj in enumerate(profil.get("objectifs_secondaires", []), 1):
+            ws.cell(row=row, column=1, value=f"Obj. secondaire {i}").font = _font(bold=True)
+            ws.cell(row=row, column=1).fill = _fill(COULEUR_LIGHT_GREY)
+            ws.merge_cells(start_row=row, start_column=2, end_row=row, end_column=8)
+            ws.cell(row=row, column=2, value=obj)
+            row += 1
+    else:
+        ws.cell(row=row, column=1, value="ℹ️ Sélectionner un profil pour générer le reporting.")
+
+    widths = [35, 20, 22, 18, 35, 15, 15, 15]
+    for i, w in enumerate(widths, 1):
+        set_col_width(ws, i, w)
+    ws.freeze_panes = "A4"
+
+
+# ─── Onglet 9 : Profils Types ────────────────────────────────────────
+def creer_onglet_profils_types(wb: openpyxl.Workbook, profils: dict):
+    ws = wb.create_sheet("Profils_Types")
+    ws.sheet_view.showGridLines = False
+
+    ws.merge_cells("A1:K1")
+    c = ws["A1"]
+    c.value = "👥 PROFILS CLIENTS TYPES — BOGLEHEAD FR 2026 (FICTIFS ET ILLUSTRATIFS)"
+    style_header(c, size=14)
+    ws.row_dimensions[1].height = 30
+    ajouter_disclaimer(ws, 2, 1, 11)
+
     row = 4
-    ws["A4"] = "🌐 SYNTHÈSE GLOBALE DU PATRIMOINE"
-    ws["A4"].font = Font(bold=True, size=12, color="1F497D")
-    ws.merge_cells("A4:F4")
-    row = 5
+    row = titre_section(ws, row, "📋 TABLEAU DES 6 PROFILS TYPES", 1, 11)
 
-    synthese_globale = [
-        ("Patrimoine financier total", "=Paramètres_Client!B12", "#,##0 €", ""),
-        ("Dont PEA", "=Paramètres_Client!B13", "#,##0 €", ""),
-        ("Dont PER", "=Paramètres_Client!B14", "#,##0 €", ""),
-        ("Dont PEE", "=Paramètres_Client!B15", "#,##0 €", ""),
-        ("Dont CTO Perso", "=Paramètres_Client!B16", "#,##0 €", ""),
-        ("TMI", "=Paramètres_Client!B7", "0%", ""),
-        ("Horizon de placement", "=Paramètres_Client!B10", "# ans", ""),
-        ("Profil de risque", "=Paramètres_Client!B22", "@", ""),
+    headers = [
+        "#", "Code", "Profil", "Âge", "TMI", "RFR (€)",
+        "Patrimoine Fin. (€)", "Actions", "Obligations", "Score Risque", "Objectif principal"
     ]
+    for i, h in enumerate(headers, 1):
+        style_subheader(ws.cell(row=row, column=i, value=h))
+    row += 1
 
-    for label, valeur, fmt, commentaire in synthese_globale:
-        _cellule_etiquette(ws, row, 1, label)
-        cell = ws.cell(row=row, column=2, value=valeur)
-        cell.font = Font(bold=True, size=10)
-        cell.fill = PatternFill(fill_type="solid", fgColor="EBF1DE")
-        cell.alignment = ALIGN_DROITE
-        if fmt and fmt != "@":
-            cell.number_format = fmt
-        if commentaire:
-            ws.cell(row=row, column=3).value = commentaire
-            ws.cell(row=row, column=3).font = Font(size=9, italic=True)
+    profil_colors = [
+        "BDD7EE", "C6EFCE", "FFEB9C", "FCE4D6", "E2EFDA", "F2F2F2"
+    ]
+    for idx, profil in enumerate(profils.get("profils", [])):
+        bg = profil_colors[idx % len(profil_colors)]
+        alloc = profil.get("allocation_cible_bogleheads", {})
+        row_data = [
+            profil.get("id"),
+            profil.get("code"),
+            profil.get("nom"),
+            profil.get("age"),
+            profil.get("tmi"),
+            profil.get("rfr_annuel"),
+            profil.get("patrimoine_financier_total"),
+            alloc.get("actions", 0),
+            alloc.get("obligations", 0),
+            profil.get("score_risque"),
+            profil.get("objectif_principal"),
+        ]
+        for j, val in enumerate(row_data, 1):
+            cell = ws.cell(row=row, column=j, value=val)
+            cell.fill = _fill(bg)
+            cell.font = _font(size=9, bold=(j <= 3))
+            cell.border = _thin_border()
+            cell.alignment = _align("center" if j in (1, 4, 5, 8, 9, 10) else "left")
+            if j == 5:
+                cell.number_format = "0%"
+            elif j in (6, 7):
+                cell.number_format = "#,##0"
+            elif j in (8, 9):
+                cell.number_format = "0%"
         row += 1
 
-    _appliquer_bordure(ws, 5, row - 1, 1, 2)
+    # Tableau structuré
+    last_row = row - 1
+    tbl = Table(displayName="tblProfils", ref=f"A5:K{last_row}")
+    style = TableStyleInfo(name="TableStyleMedium2", showRowStripes=True)
+    tbl.tableStyleInfo = style
+    ws.add_table(tbl)
 
-    # ---- Bloc 2 : Répartition par enveloppe ----
-    row += 2
-    ws.cell(row=row, column=1).value = "🏦 RÉPARTITION PAR ENVELOPPE"
-    ws.cell(row=row, column=1).font = Font(bold=True, size=12, color="1F497D")
-    ws.merge_cells(f"A{row}:F{row}")
     row += 1
+    row = titre_section(ws, row, "⚠️ DISCLAIMER LÉGAL", 1, 11)
+    ws.merge_cells(start_row=row, start_column=1, end_row=row+2, end_column=11)
+    disclaimer_text = profils.get("disclaimer", "Ces profils sont fictifs et illustratifs.")
+    ws.cell(row=row, column=1, value=disclaimer_text)
+    ws.cell(row=row, column=1).font = _font(italic=True, size=9, color=COULEUR_AVERTISSEMENT)
+    ws.cell(row=row, column=1).alignment = _align("left", "top", wrap=True)
+    ws.cell(row=row, column=1).fill = _fill("FFF2CC")
+    ws.row_dimensions[row].height = 60
 
-    en_tetes_env = ["Enveloppe", "Valeur actuelle (€)", "% Patrimoine", "Plafond", "Espace restant (€)", "Taux sortie"]
-    for col, texte in enumerate(en_tetes_env, start=1):
-        cell = ws.cell(row=row, column=col, value=texte)
-        cell.font = POLICE_EN_TETE
-        cell.fill = FILL_EN_TETE_BLEU
-        cell.alignment = ALIGN_CENTRE
+    widths = [5, 28, 30, 6, 8, 14, 18, 10, 10, 10, 40]
+    for i, w in enumerate(widths, 1):
+        set_col_width(ws, i, w)
+    ws.freeze_panes = "A5"
 
-    debut_env = row + 1
-    row += 1
 
-    enveloppes_reporting = [
-        ("CTO Personne Physique", "=Paramètres_Client!B16", "Sans plafond", "N/A", "31.4%", "cto_perso"),
-        ("CTO Société IS", 0, "Sans plafond", "N/A", "25%", "cto_is"),
-        ("Contrat Capitalisation IS", 0, "Sans plafond", "N/A", "25%", "contrat_capi_is"),
-        ("PEA", "=Paramètres_Client!B13", "150 000 €", "=150000-Paramètres_Client!B13", "17.2%", "pea"),
-        ("PER Individuel", "=Paramètres_Client!B14", "Variable", "N/A", "TMI+10.3%", "per"),
-        ("PEE", "=Paramètres_Client!B15", "25% salaire brut", "N/A", "17.2%", "pee"),
-        ("TOTAL", "=SUM(B{0}:B{1})", "", "", "", ""),
+# ─── Onglet 10 : Profil Individuel ──────────────────────────────────
+def creer_onglet_profil_individuel(
+    wb: openpyxl.Workbook,
+    profil: dict,
+    etfs: list,
+    params_fiscaux: dict,
+):
+    code_parts = profil["code"].split("_")
+    code_suffix = code_parts[2][:10] if len(code_parts) >= 3 else profil["code"][:10]
+    nom_onglet = f"Profil_{profil['id']}_{code_suffix}"
+    ws = wb.create_sheet(nom_onglet)
+    ws.sheet_view.showGridLines = False
+
+    # En-tête
+    ws.merge_cells("A1:I1")
+    c = ws["A1"]
+    c.value = f"👤 PROFIL {profil['id']} — {profil['nom'].upper()}"
+    style_header(c, size=13)
+    ws.row_dimensions[1].height = 28
+    ajouter_disclaimer(ws, 2, 1, 9)
+
+    row = 4
+    # ── Identité ──
+    row = titre_section(ws, row, "📋 PARAMÈTRES DU PROFIL", 1, 9, bg="2E75B6")
+    infos = [
+        ("Nom", profil.get("nom")),
+        ("Âge", f"{profil.get('age')} ans"),
+        ("Situation", profil.get("situation_familiale")),
+        ("TMI", f"{profil.get('tmi', 0)*100:.0f}%"),
+        ("RFR annuel", profil.get("rfr_annuel", 0)),
+        ("Patrimoine financier", profil.get("patrimoine_financier_total", 0)),
+        ("Capacité épargne / an", profil.get("capacite_epargne_annuelle", 0)),
+        ("Horizon placement", f"{profil.get('horizon_placement_ans')} ans"),
+        ("Score de risque (SRRI)", f"{profil.get('score_risque')} / 7"),
+        ("CEHR applicable", "✅ Oui" if profil.get("cehr_applicable") else "❌ Non"),
+        ("CDHR applicable", "✅ Oui" if profil.get("cdhr_applicable") else "❌ Non"),
+        ("Holding IS", "✅ Oui" if profil.get("particularites_fiscales", {}).get("holding_is") else "❌ Non"),
     ]
-
-    total_formula_start = row
-    for i, (nom, valeur, plafond, espace, taux, env_id) in enumerate(enveloppes_reporting):
-        if nom == "TOTAL":
-            valeur = f"=SUM(B{total_formula_start}:B{row-1})"
-            ws.cell(row=row, column=1).value = nom
-            ws.cell(row=row, column=1).font = Font(bold=True)
-            cell_total = ws.cell(row=row, column=2, value=valeur)
-            cell_total.font = Font(bold=True)
-            cell_total.number_format = "#,##0 €"
-            cell_total.alignment = ALIGN_DROITE
-            ws.cell(row=row, column=3).value = "=B{}/B{}&\"\"".format(row, row)
-            ws.cell(row=row, column=3).number_format = "0.0%"
-        else:
-            couleur = COULEURS_ENVELOPPES.get(env_id, "FFFFFF")
-            fill = PatternFill(fill_type="solid", fgColor=couleur)
-            ws.cell(row=row, column=1).value = nom
-            ws.cell(row=row, column=1).fill = fill
-            ws.cell(row=row, column=1).font = Font(bold=False, size=10)
-
-            cell_val = ws.cell(row=row, column=2, value=valeur)
-            cell_val.fill = fill
-            cell_val.number_format = "#,##0 €"
-            cell_val.alignment = ALIGN_DROITE
-
-            pct_row = row
-            total_row = total_formula_start + len(enveloppes_reporting) - 1
-            cell_pct = ws.cell(row=row, column=3)
-            cell_pct.value = f"=IFERROR(B{pct_row}/B{total_row + 1},0)"
-            cell_pct.number_format = "0.0%"
-            cell_pct.fill = fill
-            cell_pct.alignment = ALIGN_CENTRE
-
-            ws.cell(row=row, column=4).value = plafond
-            ws.cell(row=row, column=4).fill = fill
-            ws.cell(row=row, column=4).alignment = ALIGN_CENTRE
-
-            cell_espace = ws.cell(row=row, column=5, value=espace)
-            cell_espace.fill = fill
-            if isinstance(espace, str) and espace.startswith("="):
-                cell_espace.number_format = "#,##0 €"
-            cell_espace.alignment = ALIGN_DROITE
-
-            cell_taux = ws.cell(row=row, column=6, value=taux)
-            cell_taux.fill = fill
-            cell_taux.font = Font(color="C00000", bold=True, size=10)
-            cell_taux.alignment = ALIGN_CENTRE
-
+    for i in range(0, len(infos), 2):
+        lbl1, val1 = infos[i]
+        ws.cell(row=row, column=1, value=lbl1).font = _font(bold=True)
+        ws.cell(row=row, column=1).fill = _fill(COULEUR_LIGHT_GREY)
+        cell1 = ws.cell(row=row, column=2, value=val1)
+        if isinstance(val1, (int, float)):
+            cell1.number_format = "#,##0 €"
+        if i + 1 < len(infos):
+            lbl2, val2 = infos[i + 1]
+            ws.cell(row=row, column=4, value=lbl2).font = _font(bold=True)
+            ws.cell(row=row, column=4).fill = _fill(COULEUR_LIGHT_GREY)
+            cell2 = ws.cell(row=row, column=5, value=val2)
+            if isinstance(val2, (int, float)):
+                cell2.number_format = "#,##0 €"
         row += 1
 
-    _creer_table(ws, f"A{debut_env - 1}:F{row - 1}", "tblReportingEnveloppes", "TableStyleMedium4")
-    _appliquer_bordure(ws, debut_env - 1, row - 1, 1, 6)
-
-    # ---- Bloc 3 : Valeur ajoutée fiscale ----
-    row += 2
-    ws.cell(row=row, column=1).value = "📈 VALEUR AJOUTÉE FISCALE VS SCÉNARIO NAÏF (TOUT CTO)"
-    ws.cell(row=row, column=1).font = Font(bold=True, size=12, color="1F497D")
-    ws.merge_cells(f"A{row}:F{row}")
+    # ── Allocation cible ──
+    row += 1
+    row = titre_section(ws, row, "🎯 ALLOCATION CIBLE", 1, 9, bg="375623")
+    alloc = profil.get("allocation_cible_bogleheads", {})
+    patrimoine = profil.get("patrimoine_financier_total", 0)
+    headers = ["Classe", "Allocation (%)", "Montant (€)", "ETF suggéré", "Enveloppe prioritaire"]
+    for i, h in enumerate(headers, 1):
+        style_subheader(ws.cell(row=row, column=i, value=h))
     row += 1
 
-    en_tetes_va = [
-        "Scénario", "Gain brut hypothétique (€)", "Impôt estimé (€)",
-        "Gain net (€)", "Taux effectif", "Avantage vs CTO (€)"
-    ]
-    for col, texte in enumerate(en_tetes_va, start=1):
-        cell = ws.cell(row=row, column=col, value=texte)
-        cell.font = POLICE_EN_TETE
-        cell.fill = FILL_EN_TETE_VERT
-        cell.alignment = ALIGN_CENTRE
-
-    debut_va = row + 1
-    row += 1
-
-    # Hypothèse : rendement 7% sur 100k€ sur 10 ans
-    gain_hypothetique = 96715  # (1.07^10 - 1) × 100 000
-
-    scenarios = [
-        ("Tout CTO (scénario naïf)", gain_hypothetique, gain_hypothetique * 0.314, gain_hypothetique * 0.686, 0.314, 0),
-        ("Optimisé PEA 60%", gain_hypothetique, gain_hypothetique * (0.6 * 0.172 + 0.4 * 0.314),
-         gain_hypothetique * (1 - (0.6 * 0.172 + 0.4 * 0.314)), 0.6 * 0.172 + 0.4 * 0.314, None),
-        ("Optimisé PEA + PER (TMI 30%)", gain_hypothetique, gain_hypothetique * 0.18,
-         gain_hypothetique * 0.82, 0.18, None),
-        ("Optimisé PEA + PER (TMI 41%)", gain_hypothetique, gain_hypothetique * 0.16,
-         gain_hypothetique * 0.84, 0.16, None),
-    ]
-
-    impot_cto = gain_hypothetique * 0.314  # Référence CTO
-
-    for nom, gain_brut, impot, gain_net, taux_eff, avantage in scenarios:
-        if avantage is None:
-            avantage = impot_cto - impot
-
-        for col, val in enumerate([nom, gain_brut, impot, gain_net, taux_eff, avantage], start=1):
-            cell = ws.cell(row=row, column=col, value=round(val, 2) if isinstance(val, float) else val)
-            cell.font = Font(size=10)
-            cell.alignment = ALIGN_CENTRE if col > 1 else ALIGN_GAUCHE
-            if col in [2, 3, 4, 6]:
-                cell.number_format = "#,##0 €"
-            elif col == 5:
+    classe_map = {
+        "actions": ("Actions", "CW8 (PEA) / IWDA (CTO)", "PEA → CTO → PER"),
+        "obligations": ("Obligations", "GOVS / AGGH", "PER → Contrat Cap IS"),
+        "immobilier_cote": ("Immobilier coté", "IWDP / EPRE", "PER → CTO"),
+        "or": ("Or", "GOLD / IGLN", "CTO"),
+        "liquidites": ("Liquidités", "CSH / XEON", "CTO IS → CTO"),
+    }
+    total_alloc = 0.0
+    for key, (label, etf_ref, env_prio) in classe_map.items():
+        pct = alloc.get(key, 0.0)
+        if not pct:
+            continue
+        total_alloc += pct
+        montant = pct * patrimoine
+        bg = COULEURS_CLASSES.get(label.split()[0], "FFFFFF")
+        for j, val in enumerate([label, pct, montant, etf_ref, env_prio], 1):
+            cell = ws.cell(row=row, column=j, value=val)
+            cell.fill = _fill(bg)
+            cell.border = _thin_border()
+            if j == 2:
                 cell.number_format = "0.0%"
+                cell.alignment = _align("center")
+            elif j == 3:
+                cell.number_format = "#,##0 €"
+        row += 1
+    ws.cell(row=row, column=1, value="TOTAL").font = Font(bold=True, color="FFFFFF")
+    ws.cell(row=row, column=1).fill = _fill(COULEUR_HEADER)
+    ws.cell(row=row, column=2, value=total_alloc).number_format = "0.0%"
+    ws.cell(row=row, column=2).font = _font(bold=True)
+    ws.cell(row=row, column=3, value=patrimoine).number_format = "#,##0 €"
+    ws.cell(row=row, column=3).font = _font(bold=True)
+    row += 2
 
-        # Colorer la ligne référence en gris
-        if "naïf" in nom:
-            for col in range(1, 7):
-                ws.cell(row=row, column=col).fill = PatternFill(fill_type="solid", fgColor=GRIS_CLAIR)
+    # ── Enveloppes ──
+    row = titre_section(ws, row, "🏦 ENVELOPPES DISPONIBLES ET ENCOURS", 1, 9, bg="843C0C")
+    headers = ["Enveloppe", "Encours actuel (€)", "Plafond (€)", "Plafond restant (€)", "Versements prévus/an", "Avantage fiscal", "", "", ""]
+    for i, h in enumerate(headers, 1):
+        style_subheader(ws.cell(row=row, column=i, value=h))
+    row += 1
 
+    env_dispo = profil.get("enveloppes_disponibles", {})
+    env_labels_map = {
+        "PEA": "Exonération IR après 5 ans (18,6% PS seulement)",
+        "PER": "Déduction TMI actuelle à l'entrée",
+        "PEE": f"Abondement {env_dispo.get('PEE', {}).get('abondement_employeur_pct', 0)*100 if env_dispo.get('PEE') else 0:.0f}% + exonération IR",
+        "CTO_perso": "Liquidité totale — PFU 31,4%",
+        "CTO_IS": "IS 15/25% — attention MTM annuel",
+        "Contrat_Cap_IS": "Pas de MTM — base forfaitaire IS × TME",
+    }
+    env_plafonds = {"PEA": 150000, "PER": None, "PEE": None, "CTO_perso": None, "CTO_IS": None, "Contrat_Cap_IS": None}
+    for env_key, avantage in env_labels_map.items():
+        env_data = env_dispo.get(env_key)
+        if env_data is None:
+            continue
+        encours = env_data.get("encours_actuel", 0) or 0
+        versements = env_data.get("versement_annuel_prevu", 0) or 0
+        plafond = env_plafonds.get(env_key)
+        plafond_restant = max(0, plafond - encours) if plafond else "—"
+
+        row_data = [env_key, encours, plafond or "—", plafond_restant, versements, avantage, "", "", ""]
+        for j, val in enumerate(row_data, 1):
+            cell = ws.cell(row=row, column=j, value=val)
+            cell.border = _thin_border()
+            cell.font = _font(size=9)
+            if j == 2 and isinstance(val, (int, float)):
+                cell.number_format = "#,##0 €"
+            elif j == 3 and isinstance(val, (int, float)):
+                cell.number_format = "#,##0 €"
+            elif j == 4 and isinstance(val, (int, float)):
+                cell.number_format = "#,##0 €"
+            elif j == 5 and isinstance(val, (int, float)):
+                cell.number_format = "#,##0 €"
         row += 1
 
-    _creer_table(ws, f"A{debut_va - 1}:F{row - 1}", "tblValeurAjoutee", "TableStyleMedium3")
-    _appliquer_bordure(ws, debut_va - 1, row - 1, 1, 6)
-
-    # ---- Note hypothèses ----
     row += 1
-    ws.cell(row=row, column=1).value = (
-        "📌 Hypothèses : Gain brut = rendement 7%/an × 10 ans × 100 000 € de capital initial. "
-        "Taux effectifs approximatifs selon la composition des enveloppes. "
-        "⚠️ Ces projections sont purement indicatives — ne constituent pas un conseil en investissement."
-    )
-    ws.cell(row=row, column=1).font = Font(size=9, italic=True, color="595959")
-    ws.cell(row=row, column=1).alignment = Alignment(wrap_text=True)
-    ws.merge_cells(f"A{row}:F{row}")
-    ws.row_dimensions[row].height = 45
+    # ── Calculs fiscaux ──
+    row = titre_section(ws, row, "💡 CALCULS FISCAUX ILLUSTRATIFS", 1, 9, bg="7030A0")
+    from src.fiscalite import calculer_pfu, avantage_fiscal_pea, calculer_avantage_per, calculer_is
+
+    # PFU sur 10 000€ gain
+    gain_exemple = 10000
+    pfu = calculer_pfu(gain_exemple, params_fiscaux)
+    ws.cell(row=row, column=1, value=f"PFU sur {gain_exemple:,}€ de gain (CTO)").font = _font(bold=True)
+    ws.cell(row=row, column=2, value=f"IR: {pfu['ir']:.0f}€ + PS: {pfu['ps']:.0f}€ = {pfu['total_impots']:.0f}€")
+    ws.cell(row=row, column=3, value=f"Net: {pfu['net']:.0f}€ ({pfu['taux_effectif']*100:.1f}%)")
+    row += 1
+
+    # PEA après 5 ans
+    pea_avantage = avantage_fiscal_pea(gain_exemple, params_fiscaux, apres_5_ans=True)
+    ws.cell(row=row, column=1, value="Avantage PEA après 5 ans (vs CTO)").font = _font(bold=True)
+    ws.cell(row=row, column=2, value=f"Économie: {pea_avantage['economie']:.0f}€ par {gain_exemple:,}€ de gain")
+    ws.cell(row=row, column=3, value=f"PS seulement: {pea_avantage['taux_effectif_pea']*100:.1f}%")
+    row += 1
+
+    # Avantage PER
+    tmi = profil.get("tmi", 0.30)
+    horizon = profil.get("horizon_placement_ans", 20)
+    per_res = calculer_avantage_per(10000, tmi, 0.30, 0.06, horizon, params_fiscaux)
+    ws.cell(row=row, column=1, value=f"Avantage PER (TMI {tmi*100:.0f}% → 30% à retraite)").font = _font(bold=True)
+    ws.cell(row=row, column=2, value=f"PER net sur {horizon}ans: {per_res['capital_per_net']:.0f}€")
+    ws.cell(row=row, column=3, value=f"vs CTO net: {per_res['capital_cto_net']:.0f}€")
+    ws.cell(row=row, column=4, value=f"Avantage: {per_res['avantage_per']:.0f}€")
+    row += 2
+
+    ws.cell(row=row, column=1, value=f"💬 {alloc.get('commentaire', '')}").font = _font(italic=True, size=9)
+    ws.cell(row=row, column=1).fill = _fill("FFF2CC")
+    ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=9)
+    ws.row_dimensions[row].height = 30
+
+    widths = [30, 20, 18, 18, 22, 40, 12, 12, 12]
+    for i, w in enumerate(widths, 1):
+        set_col_width(ws, i, w)
+    ws.freeze_panes = "A4"
 
 
-# ---------------------------------------------------------------------------
-# Fonction principale de construction du classeur
-# ---------------------------------------------------------------------------
+# ─── Onglet 11 : Comparatif Profils ─────────────────────────────────
+def creer_onglet_comparatif_profils(wb: openpyxl.Workbook, profils: dict, params_fiscaux: dict):
+    ws = wb.create_sheet("Comparatif_Profils")
+    ws.sheet_view.showGridLines = False
 
-def construire_workbook(
-    fiscalite: dict,
-    enveloppes_data: dict,
-    etf_data: dict,
-) -> Workbook:
-    """Construit le classeur Excel complet Bogleheads CGP France 2026.
+    ws.merge_cells("A1:J1")
+    c = ws["A1"]
+    c.value = "📊 COMPARATIF FISCAL — 6 PROFILS vs SCÉNARIO NAÏF CTO"
+    style_header(c, size=14)
+    ws.row_dimensions[1].height = 30
+    ajouter_disclaimer(ws, 2, 1, 10)
 
-    Crée les 8 feuilles structurées avec tableaux, validations et mises en forme.
+    row = 4
+    row = titre_section(ws, row, "🔢 GAIN FISCAL ESTIMÉ PAR PROFIL (HORIZON COMPLET)", 1, 10)
 
-    Args:
-        fiscalite: Dictionnaire issu de config/fiscalite_2026.yaml.
-        enveloppes_data: Dictionnaire issu de config/enveloppes.yaml.
-        etf_data: Dictionnaire issu de config/univers_etf.yaml.
+    headers = [
+        "Profil", "Nom", "Patrimoine (€)", "Horizon (ans)", "TMI",
+        "Capital naïf CTO (€)", "Capital optimisé (€)", "Gain fiscal (€)",
+        "Gain (%)", "Enveloppe clé"
+    ]
+    for i, h in enumerate(headers, 1):
+        style_subheader(ws.cell(row=row, column=i, value=h))
+    row += 1
 
-    Returns:
-        Classeur openpyxl prêt à être sauvegardé.
-    """
-    wb = Workbook()
+    from src.fiscalite import calculer_pfu, avantage_fiscal_pea
+    rendement = 0.06  # 6% hypothèse
 
-    # Suppression de la feuille par défaut créée par openpyxl
+    profil_colors = ["BDD7EE", "C6EFCE", "FFEB9C", "FCE4D6", "E2EFDA", "F2F2F2"]
+
+    for idx, profil in enumerate(profils.get("profils", [])):
+        patrimoine = profil.get("patrimoine_financier_total", 0)
+        horizon = profil.get("horizon_placement_ans", 20)
+        tmi = profil.get("tmi", 0.30)
+        taux_ps = params_fiscaux["prelevements_sociaux"]["taux_global"]
+        taux_pfu = params_fiscaux["pfu"]["taux_ir"]
+
+        # Capital brut
+        capital_brut = patrimoine * ((1 + rendement) ** horizon)
+        gain_brut = capital_brut - patrimoine
+
+        # Scénario naïf CTO : PFU 31.4% sur tous les gains
+        impots_naive = gain_brut * (taux_pfu + taux_ps)
+        capital_naive = capital_brut - impots_naive
+
+        # Scénario optimisé : PEA (18.6% PS), PER (PS seulement simplifié), CTO reste
+        # Pondération simplifiée selon les enveloppes disponibles
+        env_dispo = profil.get("enveloppes_disponibles", {})
+        pea_encours = (env_dispo.get("PEA") or {}).get("encours_actuel", 0) or 0
+        per_encours = (env_dispo.get("PER") or {}).get("encours_actuel", 0) or 0
+        pee_encours = (env_dispo.get("PEE") or {}).get("encours_actuel", 0) or 0
+        is_encours = (
+            (env_dispo.get("Contrat_Cap_IS") or {}).get("encours_actuel", 0) or 0
+            + (env_dispo.get("CTO_IS") or {}).get("encours_actuel", 0) or 0
+        )
+        cto_encours = (env_dispo.get("CTO_perso") or {}).get("encours_actuel", 0) or 0
+        total_env = pea_encours + per_encours + pee_encours + is_encours + cto_encours
+
+        if total_env > 0:
+            pct_pea = pea_encours / total_env
+            pct_per = per_encours / total_env
+            pct_pee = pee_encours / total_env
+            pct_is = is_encours / total_env
+            pct_cto = cto_encours / total_env
+        else:
+            pct_pea = pct_per = pct_pee = pct_is = 0.0
+            pct_cto = 1.0
+
+        # Taux effectif moyen pondéré (simplifié)
+        taux_is_moy = params_fiscaux["is"]["taux_reduit"]
+        taux_moyen = (
+            pct_pea * taux_ps
+            + pct_per * taux_ps
+            + pct_pee * taux_ps
+            + pct_is * taux_is_moy
+            + pct_cto * (taux_pfu + taux_ps)
+        )
+        impots_optim = gain_brut * taux_moyen
+        capital_optim = capital_brut - impots_optim
+
+        gain_fiscal = capital_optim - capital_naive
+        gain_pct = gain_fiscal / capital_naive if capital_naive > 0 else 0
+
+        # Enveloppe clé
+        holding_is = profil.get("particularites_fiscales", {}).get("holding_is", False)
+        if holding_is:
+            env_cle = "Contrat Cap IS"
+        elif pea_encours > 0:
+            env_cle = "PEA + PER"
+        else:
+            env_cle = "PER"
+
+        bg = profil_colors[idx % len(profil_colors)]
+        row_data = [
+            profil.get("id"),
+            profil.get("nom"),
+            patrimoine,
+            horizon,
+            tmi,
+            capital_naive,
+            capital_optim,
+            gain_fiscal,
+            gain_pct,
+            env_cle,
+        ]
+        for j, val in enumerate(row_data, 1):
+            cell = ws.cell(row=row, column=j, value=val)
+            cell.fill = _fill(bg)
+            cell.font = _font(size=9, bold=(j <= 2))
+            cell.border = _thin_border()
+            cell.alignment = _align("center" if j in (1, 4, 5, 9) else "right" if j in (3, 6, 7, 8) else "left")
+            if j in (3, 6, 7, 8):
+                cell.number_format = "#,##0"
+            elif j == 5:
+                cell.number_format = "0%"
+            elif j == 9:
+                cell.number_format = "0.0%"
+                if val > 0.05:
+                    cell.fill = _fill("C6EFCE")
+                    cell.font = Font(bold=True, color="375623", size=9)
+        row += 1
+
+    row += 1
+    # Note méthodologique
+    row = titre_section(ws, row, "📝 MÉTHODOLOGIE (SIMPLIFIÉE)", 1, 10)
+    notes = [
+        "Hypothèse : rendement annuel 6%, gains 100% en capital (pas de dividendes distribués).",
+        "Scénario naïf CTO : PFU 31,4% (12,8% IR + 18,6% PS) sur la totalité des gains à la cession.",
+        "Scénario optimisé : taux effectif moyen pondéré par enveloppe (PEA → 18,6% PS, PER → 18,6% PS, IS → 15%, CTO → 31,4%).",
+        "⚠️ Calcul illustratif — ne prend pas en compte : CEHR, CDHR, versements futurs, MTM CTO IS, inflation.",
+        "Pour un calcul précis, utiliser le solveur avec les contraintes réelles de chaque profil.",
+    ]
+    for note in notes:
+        ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=10)
+        ws.cell(row=row, column=1, value=f"• {note}")
+        ws.cell(row=row, column=1).font = _font(size=9, italic=True)
+        ws.cell(row=row, column=1).fill = _fill(COULEUR_LIGHT_GREY if row % 2 == 0 else "FFFFFF")
+        ws.row_dimensions[row].height = 18
+        row += 1
+
+    widths = [6, 30, 16, 10, 8, 16, 16, 14, 10, 18]
+    for i, w in enumerate(widths, 1):
+        set_col_width(ws, i, w)
+    ws.freeze_panes = "A5"
+
+
+# ─── Onglet 12 : Tutoriel Solveur ───────────────────────────────────
+def creer_onglet_tuto_solveur(wb: openpyxl.Workbook):
+    ws = wb.create_sheet("Tuto_Solveur")
+    ws.sheet_view.showGridLines = False
+
+    ws.merge_cells("A1:F1")
+    c = ws["A1"]
+    c.value = "🧮 TUTORIEL SOLVEUR EXCEL — OPTIMISATION ASSET LOCATION"
+    style_header(c, size=14)
+    ws.row_dimensions[1].height = 30
+
+    ajouter_disclaimer(ws, 2, 1, 6)
+
+    row = 4
+    sections = [
+        ("🎯 OBJECTIF DU SOLVEUR", [
+            "Le Solveur Excel permet de résoudre le problème d'asset location optimal :",
+            "→ Quels ETF mettre dans quelle enveloppe pour maximiser le capital net après impôts ?",
+            "",
+            "Formulation mathématique :",
+            "  Variables : x_ij = montant en € de l'ETF i dans l'enveloppe j",
+            "  Fonction objectif : MAXIMISER Σ VAN_après_impôts(x_ij) sur l'horizon",
+            "  Contraintes :",
+            "    (1) Eligibilité : x_ij = 0 si ETF i non éligible à enveloppe j",
+            "    (2) Plafonds : Σi x_ij ≤ plafond_j (PEA ≤ 150 000€)",
+            "    (3) Allocation : Σj x_ij = allocation_cible_i × patrimoine_total ± tolérance",
+            "    (4) Non-négativité : x_ij ≥ 0",
+            "    (5) Budget : Σi Σj x_ij = patrimoine_total",
+        ]),
+        ("📐 TYPE DE PROBLÈME D'OPTIMISATION", [
+            "Vocabulaire de l'optimisation :",
+            "  • LP (Linear Programming) : si la fonction objectif est linéaire en x_ij",
+            "    → Cas simplifié : taux fiscaux fixes, pas de coûts non-linéaires",
+            "  • QP (Quadratic Programming) : si on optimise la variance du portefeuille",
+            "    → Cas Markowitz : covariances entre actifs = terme quadratique",
+            "  • MILP (Mixed Integer LP) : si on ajoute des variables 0/1 d'ouverture d'enveloppe",
+            "    → Exemple : décider si ouvrir un PER (variable binaire y_PER ∈ {0,1})",
+            "",
+            "Pour l'asset location Boglehead :",
+            "  → Problème LP (linéaire) si taux fiscaux supposés fixes",
+            "  → Solveur GRG non linéaire si on inclut les effets d'interaction fiscale",
+            "  → MILP si décisions d'ouverture d'enveloppe (nécessite OpenSolver)",
+        ]),
+        ("🛠️ ACTIVATION DU SOLVEUR EXCEL (WINDOWS)", [
+            "Étape 1 : Fichier → Options → Compléments",
+            "Étape 2 : En bas de page, 'Gérer : Compléments Excel' → Atteindre",
+            "Étape 3 : Cocher 'Solveur' → OK",
+            "Étape 4 : L'onglet Données affiche maintenant le bouton 'Solveur'",
+            "",
+            "Sur Mac :",
+            "Étape 1 : Excel → Préférences → Compléments",
+            "Étape 2 : Cocher Solveur → OK",
+            "Étape 3 : Onglet Outils → Solveur",
+        ]),
+        ("🔧 PARAMÉTRAGE DU SOLVEUR (EXEMPLE PROFIL 3)", [
+            "Contexte Profil 3 — Dirigeant PME — 3 000 000€ de patrimoine financier",
+            "Enveloppes : PEA (saturé 150k€), PER (80k€), CTO perso (400k€),",
+            "             CTO IS (500k€), Contrat Cap IS (1 200k€)",
+            "",
+            "Cellule objectif : =SOMME(VAN_nette_par_enveloppe)",
+            "  → VAN nette PEA = Σ(ETFi_PEA) × (1+r)^H × (1 - 0.186)",
+            "  → VAN nette PER = Σ(ETFi_PER) × (1+r)^H × (1 - 0.186)",
+            "  → VAN nette Contrat Cap IS = Σ(ETFi_CapIS) × [(1+r)^H - base_forfaitaire_IS]",
+            "  → VAN nette CTO IS = Σ(ETFi_CTOIS) × (1+r)^H × (1 - IS_MTM_annuel)",
+            "  → VAN nette CTO perso = Σ(ETFi_CTO) × (1+r)^H × (1 - 0.314)",
+            "",
+            "Variables à modifier : cellules x_ij (montants par ETF × enveloppe)",
+            "Maximiser : cellule objectif = Σ VAN nettes",
+        ]),
+        ("⚙️ CONTRAINTES À SAISIR", [
+            "Contrainte 1 — Éligibilité (bloquer les combinaisons interdites) :",
+            "  → x_IWDA_PEA = 0 (iShares MSCI World non éligible PEA car physique)",
+            "  → x_CW8_Contrat_Cap_IS = 0 (ETF swap PEA non disponible en assurance)",
+            "",
+            "Contrainte 2 — Plafond PEA :",
+            "  → Σ(toutes enveloppes PEA) ≤ 150 000 - encours_actuel",
+            "",
+            "Contrainte 3 — Allocation cible (±5 pts de tolérance) :",
+            "  → Σ(ETF actions toutes enveloppes) ≥ 0.50 × patrimoine_total",
+            "  → Σ(ETF actions toutes enveloppes) ≤ 0.60 × patrimoine_total",
+            "",
+            "Contrainte 4 — Budget total :",
+            "  → Σi Σj x_ij = 3 000 000 €",
+            "",
+            "Contrainte 5 — Non-négativité :",
+            "  → Toutes les cellules x_ij ≥ 0",
+        ]),
+        ("🚀 OPENSOLVER — RECOMMANDÉ POUR LES GRANDS PROBLÈMES", [
+            "Le Solveur intégré Excel est limité à 200 variables et 100 contraintes.",
+            "Pour les portefeuilles complexes (6 enveloppes × 60 ETF = 360 variables),",
+            "utiliser OpenSolver : https://opensolver.org",
+            "",
+            "Avantages OpenSolver vs Solveur Excel :",
+            "  • Illimité en variables et contraintes",
+            "  • Algorithmes plus puissants (CBC, GLPK, Gurobi)",
+            "  • Résout les MILP (décisions binaires d'ouverture d'enveloppe)",
+            "  • Export du modèle LP pour vérification",
+            "",
+            "Installation OpenSolver :",
+            "  1. Télécharger sur opensolver.org",
+            "  2. Extraire et copier dans C:\\Users\\[user]\\AppData\\Roaming\\Microsoft\\Excel\\XLSTART",
+            "  3. Redémarrer Excel → onglet 'OpenSolver' apparaît",
+        ]),
+        ("🐛 TROUBLESHOOTING", [
+            "Problème : 'Le Solveur n'a pas trouvé de solution réalisable'",
+            "  → Vérifier que les contraintes d'allocation ne se contredisent pas",
+            "  → Vérifier que le budget total ≥ Σ plafonds minimum des enveloppes",
+            "  → Relaxer la contrainte d'allocation (±5% → ±10%)",
+            "",
+            "Problème : 'La solution courante est optimale' mais sous-optimale",
+            "  → Le Solveur a trouvé un optimum local — essayer plusieurs points de départ",
+            "  → Utiliser l'option 'Essais multiples' si disponible",
+            "  → Passer au solveur GRG avec recherche aléatoire",
+            "",
+            "Problème : Les variables ETF IS ont une valeur trop faible",
+            "  → Vérifier que l'hypothèse MTM est bien encodée dans la VAN IS",
+            "  → Le Solveur 'fuit' le CTO IS à cause du MTM — c'est le bon comportement !",
+            "",
+            "Conseil CGP : Toujours valider la solution du Solveur manuellement.",
+            "La qualité de l'optimisation dépend entièrement des hypothèses de rendement.",
+        ]),
+        ("📊 EXEMPLE NUMÉRIQUE — PROFIL 3 SIMPLIFIÉ", [
+            "Patrimoine : 3 000 000 € | Horizon : 15 ans | Rendement supposé : 6%/an",
+            "",
+            "Capital brut en 15 ans : 3 000 000 × (1.06)^15 = 7 189 670 €",
+            "Gain brut total : 4 189 670 €",
+            "",
+            "Scénario naïf CTO (PFU 31.4%) :",
+            "  Impôts = 4 189 670 × 31.4% = 1 315 556 €",
+            "  Capital net = 5 874 114 €",
+            "",
+            "Scénario optimisé Profil 3 :",
+            "  Contrat Cap IS (1.2M€) : base forfaitaire ≈ 39 600€/an × IS 15% = 5 940€/an → négligeable",
+            "  PEA (150k€) saturé : PS 18.6% seulement sur gains PEA",
+            "  PER (80k€) : PS 18.6% sur gains + IR sortie réduit",
+            "  CTO perso (400k€) : PFU 31.4% standard",
+            "  Gain fiscal estimé vs naïf CTO : +15 à +25% de capital net",
+            "",
+            "⚠️ Ces chiffres sont illustratifs. Voir onglet Comparatif_Profils pour les calculs.",
+        ]),
+    ]
+
+    for titre_section_text, lignes in sections:
+        row = titre_section(ws, row, titre_section_text, 1, 6)
+        for ligne in lignes:
+            ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=6)
+            cell = ws.cell(row=row, column=1, value=ligne)
+            if ligne.startswith("  ") or ligne.startswith("→"):
+                cell.font = _font(size=10, italic=True)
+                cell.fill = _fill(COULEUR_LIGHT_GREY)
+            elif ligne.startswith("Étape") or ligne.startswith("Contrainte") or ligne.startswith("Problème") or ligne.startswith("Avantage"):
+                cell.font = _font(size=10, bold=True, color=COULEUR_SUBHEADER)
+            elif ligne == "":
+                ws.row_dimensions[row].height = 8
+            else:
+                cell.font = _font(size=10)
+            cell.alignment = _align("left", "center", wrap=True)
+            ws.row_dimensions[row].height = max(ws.row_dimensions[row].height or 15, 15)
+            row += 1
+        row += 1
+
+    set_col_width(ws, 1, 100)
+    for i in range(2, 7):
+        set_col_width(ws, i, 5)
+    ws.freeze_panes = "A3"
+
+
+# ─── Fonction principale ─────────────────────────────────────────────
+def generer_excel(chemin_sortie: str = None):
+    """Génère le fichier Excel complet Boglehead FR."""
+    if chemin_sortie is None:
+        chemin_sortie = str(ROOT / "output" / "portefeuille_bogleheads.xlsx")
+
+    # Chargement des données
+    params_fiscaux = load_yaml("fiscalite_2026.yaml")
+    enveloppes_data = load_yaml("enveloppes.yaml")["enveloppes"]
+    etfs_data = load_yaml("univers_etf.yaml")["univers_etf"]
+    profils_data = load_yaml("profils_clients.yaml")
+
+    wb = openpyxl.Workbook()
+    # Supprimer la feuille par défaut
     if "Sheet" in wb.sheetnames:
         del wb["Sheet"]
 
-    # Création des 8 feuilles dans l'ordre
-    _creer_feuille_parametres_client(wb)
-    _creer_feuille_fiscalite(wb, fiscalite)
-    _creer_feuille_enveloppes(wb, enveloppes_data)
-    _creer_feuille_etf(wb, etf_data)
-    _creer_feuille_allocation(wb)
-    _creer_feuille_asset_location(wb, etf_data, fiscalite)
-    _creer_feuille_rebalancement(wb)
-    _creer_feuille_reporting(wb)
+    # ── Création des onglets ──────────────────────────────────────────
+    print("  → Onglet Paramètres_Client")
+    creer_onglet_parametres_client(wb)
 
-    # Propriétés du classeur
-    wb.properties.title = "Outil CGP Bogleheads France 2026"
-    wb.properties.creator = "CGP Bogleheads — Gestion Indicielle Passive"
+    print("  → Onglet Paramètres_Fiscalité_2026")
+    creer_onglet_fiscalite(wb, params_fiscaux)
+
+    print("  → Onglet Enveloppes")
+    creer_onglet_enveloppes(wb, enveloppes_data)
+
+    print("  → Onglet Univers_ETF")
+    creer_onglet_univers_etf(wb, etfs_data)
+
+    print("  → Onglet Allocation_Cible")
+    creer_onglet_allocation_cible(wb)
+
+    print("  → Onglet Asset_Location_Matrice")
+    creer_onglet_asset_location(wb, etfs_data, enveloppes_data)
+
+    print("  → Onglet Rebalancement")
+    creer_onglet_rebalancement(wb)
+
+    print("  → Onglet Reporting_Client")
+    creer_onglet_reporting(wb)
+
+    print("  → Onglet Profils_Types")
+    creer_onglet_profils_types(wb, profils_data)
+
+    for profil in profils_data.get("profils", []):
+        nom_court = profil.get("nom", f"Profil_{profil['id']}")
+        print(f"  → Onglet Profil {profil['id']} — {nom_court}")
+        creer_onglet_profil_individuel(wb, profil, etfs_data, params_fiscaux)
+
+    print("  → Onglet Comparatif_Profils")
+    creer_onglet_comparatif_profils(wb, profils_data, params_fiscaux)
+
+    print("  → Onglet Tuto_Solveur")
+    creer_onglet_tuto_solveur(wb)
+
+    # Mise en page générale — propriétés du classeur
+    wb.properties.title = "Boglehead FR — Outil CGP Multi-Enveloppes 2026"
+    wb.properties.subject = "Allocation Boglehead multi-enveloppes — France 2026"
+    wb.properties.creator = "Boglehead FR — Outil CGP"
     wb.properties.description = (
-        "Outil de conseil patrimonial Bogleheads — "
-        "Allocation d'actifs, asset location, rebalancement, fiscalité 2026"
+        "Outil pédagogique de gestion de portefeuille Boglehead multi-enveloppes fiscales. "
+        "Ne constitue pas un conseil en investissement."
     )
 
-    return wb
+    # Sauvegarde
+    Path(chemin_sortie).parent.mkdir(parents=True, exist_ok=True)
+    wb.save(chemin_sortie)
+    print(f"\n✅ Fichier sauvegardé : {chemin_sortie}")
+    print(f"   Onglets créés : {len(wb.sheetnames)}")
+    for name in wb.sheetnames:
+        print(f"   • {name}")

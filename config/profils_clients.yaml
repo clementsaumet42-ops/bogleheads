@@ -1,0 +1,382 @@
+# Profils clients types — FICTIFS ET ILLUSTRATIFS
+# AVERTISSEMENT LÉGAL : Ces profils sont entièrement fictifs et construits à des fins
+# pédagogiques et d'illustration uniquement. Ils ne constituent en aucun cas un conseil
+# en investissement personnalisé au sens de la Directive MIF II. Tout conseil doit être
+# personnalisé par un CIF/CGP agréé AMF.
+
+disclaimer: |
+  Ces profils sont fictifs et illustratifs. Ils ne constituent pas un conseil personnalisé.
+  Tout investissement comporte des risques. Les performances passées ne préjugent pas
+  des performances futures. Consulter un CGP/CIF agréé AMF avant toute décision.
+
+profils:
+  - id: 1
+    code: "PROFIL_1_CADRE_SUP"
+    nom: "Cadre Supérieur Salarié"
+    age: 45
+    situation_familiale: "Marié, 2 enfants"
+    tmi: 0.41
+    rfr_annuel: 180000
+    cehr_applicable: false
+    cdhr_applicable: false
+    regime_fiscal: "IR"
+    patrimoine_financier_total: 500000
+    patrimoine_immobilier: 350000
+    revenus_annuels_bruts: 220000
+    capacite_epargne_annuelle: 40000
+    horizon_placement_ans: 20
+
+    allocation_cible_bogleheads:
+      actions: 0.65
+      obligations: 0.20
+      immobilier_cote: 0.05
+      or: 0.05
+      liquidites: 0.05
+      commentaire: "Profil équilibré offensif — horizon 20 ans, pas encore en phase de décumulation"
+
+    enveloppes_disponibles:
+      PEA:
+        plafond: 150000
+        encours_actuel: 80000
+        ouvert: true
+        date_ouverture: "2018-03-15"
+        avantage_fiscal_5ans: true
+      PER:
+        encours_actuel: 50000
+        ouvert: true
+        versement_annuel_prevu: 10000
+      PEE:
+        encours_actuel: 20000
+        ouvert: true
+        abondement_employeur_pct: 0.50
+        versement_annuel_prevu: 5000
+      CTO_perso:
+        encours_actuel: 150000
+        ouvert: true
+      CTO_IS: null
+      Contrat_Cap_IS: null
+
+    particularites_fiscales:
+      pee_pea_actifs: true
+      holding_is: false
+      stock_options: false
+      rsu: false
+
+    objectif_principal: "Préparation retraite + transmission patrimoine"
+    objectifs_secondaires:
+      - "Optimisation fiscale annuelle (PER, PEE abondement)"
+      - "Croissance du capital long terme"
+
+    score_risque: 6
+
+  - id: 2
+    code: "PROFIL_2_DIRIGEANT_GG"
+    nom: "Cadre Dirigeant Grand Groupe"
+    age: 52
+    situation_familiale: "Marié, 3 enfants"
+    tmi: 0.45
+    rfr_annuel: 650000
+    cehr_applicable: true
+    cehr_taux: 0.04
+    cdhr_applicable: true
+    regime_fiscal: "IR"
+    patrimoine_financier_total: 1500000
+    patrimoine_immobilier: 800000
+    revenus_annuels_bruts: 800000
+    capacite_epargne_annuelle: 150000
+    horizon_placement_ans: 13
+
+    allocation_cible_bogleheads:
+      actions: 0.55
+      obligations: 0.25
+      immobilier_cote: 0.08
+      or: 0.07
+      liquidites: 0.05
+      commentaire: "Profil équilibré — horizon retraite 13 ans, CEHR+CDHR → optimisation IS/PEA"
+
+    enveloppes_disponibles:
+      PEA:
+        plafond: 150000
+        encours_actuel: 145000
+        ouvert: true
+        date_ouverture: "2015-06-01"
+        avantage_fiscal_5ans: true
+      PER:
+        encours_actuel: 120000
+        ouvert: true
+        versement_annuel_prevu: 35000
+      PEE:
+        encours_actuel: 80000
+        ouvert: true
+        abondement_employeur_pct: 1.00
+        versement_annuel_prevu: 15000
+      CTO_perso:
+        encours_actuel: 500000
+        ouvert: true
+      CTO_IS: null
+      Contrat_Cap_IS: null
+
+    particularites_fiscales:
+      pee_pea_actifs: true
+      holding_is: false
+      stock_options: true
+      rsu: true
+      rsu_plan_en_cours: "150000€ de RSU en vesting sur 3 ans"
+
+    objectif_principal: "Optimisation fiscale (CEHR/CDHR) + préparation retraite"
+    objectifs_secondaires:
+      - "Gestion des RSU et stock-options"
+      - "Diversification hors employeur"
+
+    score_risque: 5
+
+  - id: 3
+    code: "PROFIL_3_DIRIGEANT_PME"
+    nom: "Dirigeant PME avec Holding IS"
+    age: 50
+    situation_familiale: "Marié, 2 enfants"
+    tmi: 0.45
+    rfr_annuel: 900000
+    cehr_applicable: true
+    cehr_taux: 0.04
+    cdhr_applicable: true
+    regime_fiscal: "IR + IS (holding)"
+    patrimoine_financier_total: 3000000
+    dont_holding_is: 2000000
+    patrimoine_immobilier: 1500000
+    revenus_annuels_bruts: 350000
+    capacite_epargne_annuelle: 200000
+    horizon_placement_ans: 15
+
+    allocation_cible_bogleheads:
+      actions: 0.55
+      obligations: 0.20
+      immobilier_cote: 0.10
+      or: 0.08
+      liquidites: 0.07
+      commentaire: "Optim IS via contrat cap IS — 2M€ en holding, arbitrage contrat cap IS vs CTO IS"
+
+    enveloppes_disponibles:
+      PEA:
+        plafond: 150000
+        encours_actuel: 150000
+        ouvert: true
+        date_ouverture: "2012-01-10"
+        avantage_fiscal_5ans: true
+      PER:
+        encours_actuel: 80000
+        ouvert: true
+        versement_annuel_prevu: 35000
+      PEE: null
+      CTO_perso:
+        encours_actuel: 400000
+        ouvert: true
+      CTO_IS:
+        encours_actuel: 500000
+        ouvert: true
+        entite: "SCI Holding SA"
+      Contrat_Cap_IS:
+        encours_actuel: 1200000
+        ouvert: true
+        entite: "SCI Holding SA"
+        tme_souscription: 0.028
+
+    particularites_fiscales:
+      pee_pea_actifs: false
+      holding_is: true
+      holding_nom: "SCI Holding SA"
+      contrat_cap_is_actif: true
+      cession_societe_prevue: false
+      apport_cession_150_0b_ter: false
+
+    objectif_principal: "Optimisation de la holding IS + transmission"
+    objectifs_secondaires:
+      - "Arbitrage contrat cap IS vs CTO IS (mark-to-market)"
+      - "Préparation cession à 10-15 ans"
+
+    score_risque: 5
+
+  - id: 4
+    code: "PROFIL_4_PROFESSION_LIBERALE"
+    nom: "Profession Libérale"
+    age: 48
+    situation_familiale: "Marié, 2 enfants"
+    tmi: 0.45
+    rfr_annuel: 350000
+    cehr_applicable: true
+    cehr_taux: 0.03
+    cdhr_applicable: true
+    regime_fiscal: "IR (BNC/BIC)"
+    patrimoine_financier_total: 1000000
+    patrimoine_immobilier: 600000
+    revenus_annuels_bruts: 420000
+    capacite_epargne_annuelle: 80000
+    horizon_placement_ans: 17
+
+    allocation_cible_bogleheads:
+      actions: 0.60
+      obligations: 0.22
+      immobilier_cote: 0.08
+      or: 0.05
+      liquidites: 0.05
+      commentaire: "PER Madelin/PERin saturé — optimisation par CTO + PEA"
+
+    enveloppes_disponibles:
+      PEA:
+        plafond: 150000
+        encours_actuel: 120000
+        ouvert: true
+        date_ouverture: "2016-09-20"
+        avantage_fiscal_5ans: true
+      PER:
+        encours_actuel: 180000
+        ouvert: true
+        type: "PERin (ex-Madelin)"
+        versement_annuel_prevu: 35000
+        plafond_deduction_bnc: true
+      PEE: null
+      CTO_perso:
+        encours_actuel: 600000
+        ouvert: true
+      CTO_IS: null
+      Contrat_Cap_IS: null
+
+    particularites_fiscales:
+      pee_pea_actifs: false
+      holding_is: false
+      per_madelin_type: true
+      cotisations_sociales_tns: true
+
+    objectif_principal: "Optimisation fiscale TMI 45% + retraite"
+    objectifs_secondaires:
+      - "Saturation PER Madelin (déduction BNC)"
+      - "PEA prioritaire pour la croissance"
+
+    score_risque: 6
+
+  - id: 5
+    code: "PROFIL_5_JEUNE_CADRE"
+    nom: "Jeune Cadre en Constitution"
+    age: 32
+    situation_familiale: "Célibataire"
+    tmi: 0.30
+    rfr_annuel: 65000
+    cehr_applicable: false
+    cdhr_applicable: false
+    regime_fiscal: "IR"
+    patrimoine_financier_total: 150000
+    patrimoine_immobilier: 0
+    revenus_annuels_bruts: 80000
+    capacite_epargne_annuelle: 24000
+    horizon_placement_ans: 33
+
+    allocation_cible_bogleheads:
+      actions: 0.85
+      obligations: 0.05
+      immobilier_cote: 0.05
+      or: 0.03
+      liquidites: 0.02
+      commentaire: "Phase accumulation — horizon long, risque max, PEA en priorité absolue. Règle: 100-âge = 68% actions min."
+
+    enveloppes_disponibles:
+      PEA:
+        plafond: 150000
+        encours_actuel: 40000
+        ouvert: true
+        date_ouverture: "2022-04-01"
+        avantage_fiscal_5ans: false
+      PER:
+        encours_actuel: 5000
+        ouvert: true
+        versement_annuel_prevu: 3000
+      PEE:
+        encours_actuel: 8000
+        ouvert: true
+        abondement_employeur_pct: 0.50
+        versement_annuel_prevu: 3000
+      CTO_perso:
+        encours_actuel: 97000
+        ouvert: true
+      CTO_IS: null
+      Contrat_Cap_IS: null
+
+    particularites_fiscales:
+      pee_pea_actifs: true
+      holding_is: false
+
+    objectif_principal: "Accumulation patrimoniale long terme"
+    objectifs_secondaires:
+      - "Saturer le PEA (priorité n°1)"
+      - "Abondement PEE (priorité n°2)"
+      - "CTO pour le surplus"
+
+    score_risque: 7
+
+  - id: 6
+    code: "PROFIL_6_PRE_RETRAITE"
+    nom: "Pré-retraité / Cédant"
+    age: 62
+    situation_familiale: "Marié, 3 enfants adultes"
+    tmi: 0.45
+    rfr_annuel: 1500000
+    cehr_applicable: true
+    cehr_taux: 0.04
+    cdhr_applicable: true
+    regime_fiscal: "IR + IS (holding)"
+    patrimoine_financier_total: 5000000
+    dont_holding_is: 2000000
+    patrimoine_immobilier: 2000000
+    revenus_annuels_bruts: 200000
+    capacite_epargne_annuelle: 150000
+    horizon_placement_ans: 30
+
+    allocation_cible_bogleheads:
+      actions: 0.35
+      obligations: 0.35
+      immobilier_cote: 0.10
+      or: 0.10
+      liquidites: 0.10
+      commentaire: "Glide path engagé — post-cession, objectif revenus + transmission. Profil défensif."
+
+    enveloppes_disponibles:
+      PEA:
+        plafond: 150000
+        encours_actuel: 150000
+        ouvert: true
+        date_ouverture: "2008-11-03"
+        avantage_fiscal_5ans: true
+      PER:
+        encours_actuel: 200000
+        ouvert: true
+        versement_annuel_prevu: 15000
+      PEE: null
+      CTO_perso:
+        encours_actuel: 1500000
+        ouvert: true
+      CTO_IS:
+        encours_actuel: 300000
+        ouvert: true
+        entite: "Holding Familiale SAS"
+      Contrat_Cap_IS:
+        encours_actuel: 1650000
+        ouvert: true
+        entite: "Holding Familiale SAS"
+        tme_souscription: 0.025
+
+    particularites_fiscales:
+      pee_pea_actifs: false
+      holding_is: true
+      holding_nom: "Holding Familiale SAS"
+      contrat_cap_is_actif: true
+      apport_cession_150_0b_ter: true
+      note_apport_cession: "Report d'imposition sur PV de cession via apport-cession art. 150-0 B ter CGI — remploi obligatoire"
+      glide_path: true
+      objectif_transmission: true
+
+    objectif_principal: "Revenus + transmission patrimoniale"
+    objectifs_secondaires:
+      - "Glide path progressif vers obligations/or"
+      - "Optimisation contrat cap IS (report PV apport-cession)"
+      - "Structuration pour transmission aux enfants"
+
+    score_risque: 3

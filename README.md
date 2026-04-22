@@ -1,51 +1,45 @@
-# 🏦 Bogleheads CGP — Outil de Gestion Patrimoniale Indicielle France
+# 🏦 Boglehead FR — Outil CGP Multi-Enveloppes 2026
 
-Outil complet d'aide à la décision pour Conseillers en Gestion de Patrimoine (CGP)
-suivant l'approche **Bogleheads** (gestion indicielle passive, low-cost, long terme).
+> **Outil pédagogique** pour conseillers en gestion de patrimoine (CGP/CIF) et investisseurs autonomes.
+> Génère un fichier Excel complet pour la gestion de portefeuille Boglehead multi-enveloppes fiscales.
 
-Génère un classeur Excel interactif avec 8 feuilles couvrant la fiscalité 2026,
-les enveloppes d'investissement, l'allocation d'actifs, l'asset location et le rebalancement.
-
----
-
-## 🎯 Fonctionnalités
-
-| Feuille | Description |
-|---------|-------------|
-| **Paramètres_Client** | Saisie âge, TMI, RFR, horizon, patrimoine — dropdowns validés |
-| **Paramètres_Fiscalité_2026** | PFU, PS, CEHR, CDHR, IS avec sources CGI/BOFiP |
-| **Enveloppes** | Synthèse fiscale des 6 enveloppes (CTO, PEA, PER, PEE, Capi IS) |
-| **Univers_ETF** | ~25 ETFs Boglehead avec éligibilités par enveloppe |
-| **Allocation_Cible** | Règle âge-en-obligations + profils prudent/équilibré/dynamique |
-| **Asset_Location_Matrice** | Matrice ETF × Enveloppe, cellules grisées si non éligible, Solveur Excel |
-| **Rebalancement** | Bandes de tolérance ±5 % ou Larry Swedroe, coût fiscal arbitrage |
-| **Reporting_Client** | Synthèse globale + valeur ajoutée fiscale vs scénario CTO naïf |
+> ⚠️ **Avertissement légal** : Cet outil est fourni à titre pédagogique uniquement. Il ne constitue pas un conseil en investissement personnalisé au sens de la Directive MIF II. Tout conseil patrimonial doit être personnalisé par un CIF/CGP agréé AMF. Les paramètres fiscaux 2026 sont indicatifs — valider avec votre expert-comptable.
 
 ---
 
-## 📋 Prérequis
+## 📋 Description
 
-- **Python 3.11+**
-- `pip` (gestionnaire de paquets Python)
+Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** contenant 17 onglets dédiés à la gestion d'un portefeuille Boglehead en France, avec optimisation multi-enveloppes fiscales (PEA, PER, PEE, CTO, Contrat Cap IS).
+
+### Fonctionnalités
+
+- 📊 **60+ ETF** couvrant toutes les classes d'actifs (actions, obligations, or, REITs, matières premières)
+- 🏦 **6 enveloppes fiscales** avec règles 2026 (PS 18,6%, PFU 31,4%, IS 15/25%)
+- 👥 **6 profils clients types** (Cadre sup, Dirigeant grand groupe, Dirigeant PME, Profession libérale, Jeune cadre, Pré-retraité)
+- 🧮 **Tutoriel Solveur Excel** pour l'optimisation d'asset location
+- ⚖️ **Outil de rebalancement** avec bandes de tolérance (méthode Larry Swedroe)
+- 💡 **Calculs fiscaux** : CEHR, CDHR, contrat capitalisation IS, mark-to-market
 
 ---
 
 ## 🚀 Installation
 
-```bash
-# Cloner le dépôt
-git clone https://github.com/clementsaumet42-ops/bogleheads.git
-cd bogleheads
+### Prérequis
 
-# Installer les dépendances
+- Python 3.9+
+- pip
+
+### Installation des dépendances
+
+```bash
 pip install -r requirements.txt
 ```
 
 ---
 
-## ▶️ Utilisation
+## 📊 Utilisation
 
-### Générer le classeur Excel
+### Générer le fichier Excel
 
 ```bash
 python build_excel.py
@@ -61,119 +55,148 @@ pytest tests/ -v
 
 ---
 
-## 📂 Structure du projet
+## 📁 Structure du projet
 
 ```
 bogleheads/
+├── README.md
+├── requirements.txt
+├── .gitignore
+├── build_excel.py              ← Point d'entrée
 ├── config/
-│   ├── fiscalite_2026.yaml   # Taux fiscaux France 2026 (LF 2026)
-│   ├── enveloppes.yaml       # 6 enveloppes : CTO, PEA, PER, PEE, Capi IS, CTO IS
-│   └── univers_etf.yaml      # ~25 ETFs Bogleheads avec ISIN et éligibilités
+│   ├── fiscalite_2026.yaml     ← Paramètres fiscaux France 2026
+│   ├── enveloppes.yaml         ← Règles des 6 enveloppes fiscales
+│   ├── univers_etf.yaml        ← ~60 ETF Boglehead
+│   └── profils_clients.yaml   ← 6 profils clients fictifs
 ├── src/
-│   ├── fiscalite.py          # Calculs PFU, CEHR, CDHR, IS, mark-to-market
-│   ├── enveloppes.py         # Dataclasses enveloppes
-│   ├── allocation.py         # Allocation cible + règle âge-en-obligations
-│   ├── asset_location.py     # Priorités enveloppe par classe d'actifs
-│   ├── rebalancement.py      # Bandes tolérance + recommandations
-│   └── excel_builder.py      # Constructeur classeur (8 feuilles)
-├── tests/
-│   └── test_fiscalite.py     # Tests pytest — calculs fiscaux
+│   ├── fiscalite.py            ← Calculs PFU, IS, PEA, PER, CEHR, CDHR
+│   ├── enveloppes.py           ← Règles métier enveloppes
+│   ├── allocation.py           ← Allocation cible Boglehead
+│   ├── asset_location.py       ← Optimisation asset location
+│   ├── rebalancement.py        ← Rebalancement et coûts fiscaux
+│   └── excel_builder.py        ← Générateur Excel (openpyxl)
 ├── docs/
-│   ├── regles_fiscales.md    # Référentiel fiscal avec sources légales
-│   └── architecture.md       # Architecture technique
-├── output/                   # Fichiers Excel générés (gitignorés)
-├── build_excel.py            # Point d'entrée principal
-└── requirements.txt
+│   ├── regles_fiscales.md      ← Règles fiscales par enveloppe + articles CGI
+│   ├── architecture.md         ← Architecture du projet
+│   └── tuto_solveur.md         ← Tutoriel Solveur Excel complet
+├── tests/
+│   ├── test_fiscalite.py       ← Tests calculs fiscaux
+│   └── test_profils.py         ← Tests profils clients
+└── output/
+    └── .gitkeep
 ```
 
 ---
 
-## ⚙️ Configuration
+## 📊 Onglets Excel générés
 
-### Modifier les taux fiscaux
-
-Éditer `config/fiscalite_2026.yaml` :
-
-```yaml
-pfu:
-  taux_total: 0.314   # Modifier ici si LF 2027 change le PFU
-
-tme: 0.030            # Taux Moyen des Emprunts d'État — actualiser chaque année
-```
-
-### Ajouter un ETF
-
-Éditer `config/univers_etf.yaml` :
-
-```yaml
-- isin: IE00XXXXXXXX
-  ticker: MYETF
-  nom: "Mon Nouvel ETF UCITS"
-  emetteur: Amundi
-  classe_actifs: Actions Monde
-  ter: 0.0015
-  devise: EUR
-  domicile: Irlande
-  type: capitalisant
-  eligibilite:
-    pea: false
-    per: true
-    pee: false
-    cto: true
-    pea_pme: false
-```
-
-### Modifier une enveloppe
-
-Éditer `config/enveloppes.yaml` — chaque enveloppe a un `id` unique
-(`cto_perso`, `cto_is`, `contrat_capi_is`, `pea`, `per`, `pee`).
+| Onglet | Description |
+|---|---|
+| `Paramètres_Client` | Saisie des paramètres du client |
+| `Paramètres_Fiscalité_2026` | Référentiel fiscal France 2026 |
+| `Enveloppes` | Tableau comparatif des 6 enveloppes |
+| `Univers_ETF` | ~60 ETF avec éligibilité par enveloppe (tableau structuré) |
+| `Allocation_Cible` | Allocation Boglehead par classe d'actifs |
+| `Asset_Location_Matrice` | Matrice ETF × Enveloppe |
+| `Rebalancement` | Outil de suivi des dérives d'allocation |
+| `Reporting_Client` | Synthèse patrimoniale client |
+| `Profils_Types` | Tableau des 6 profils types |
+| `Profil_1_CADRE` | Cadre Supérieur Salarié (45 ans, TMI 41%) |
+| `Profil_2_DIRIGEANT` | Cadre Dirigeant Grand Groupe (52 ans, TMI 45%, CEHR) |
+| `Profil_3_DIRIGEANT` | Dirigeant PME avec Holding IS (50 ans, Contrat Cap IS) |
+| `Profil_4_PROFESSION` | Profession Libérale / TNS (48 ans, PER Madelin) |
+| `Profil_5_JEUNE` | Jeune Cadre en Constitution (32 ans, PEA priorité) |
+| `Profil_6_PRE` | Pré-retraité / Cédant (62 ans, post-cession, glide path) |
+| `Comparatif_Profils` | Gain fiscal estimé vs scénario naïf CTO |
+| `Tuto_Solveur` | Tutoriel Solveur Excel pas-à-pas |
 
 ---
 
-## 🧪 Tests
+## 👥 Profils clients
 
-```bash
-# Tous les tests
-pytest tests/ -v
+| # | Profil | Âge | TMI | Patrimoine fin. | Actions | Enveloppe clé |
+|---|---|---|---|---|---|---|
+| 1 | Cadre Supérieur Salarié | 45 ans | 41% | 500 000 € | 65% | PEA + PER + PEE |
+| 2 | Cadre Dirigeant Grand Groupe | 52 ans | 45% | 1 500 000 € | 55% | PEA + PER + PEE (CEHR/CDHR) |
+| 3 | Dirigeant PME avec Holding IS | 50 ans | 45% | 3 000 000 € | 55% | Contrat Cap IS + PEA |
+| 4 | Profession Libérale / TNS | 48 ans | 45% | 1 000 000 € | 60% | PER Madelin + PEA |
+| 5 | Jeune Cadre en Constitution | 32 ans | 30% | 150 000 € | 85% | PEA (priorité absolue) |
+| 6 | Pré-retraité / Cédant | 62 ans | 45% | 5 000 000 € | 35% | Contrat Cap IS + glide path |
 
-# Tests rapides (sans verbosité)
-pytest tests/
+> Ces profils sont **entièrement fictifs** et construits à des fins pédagogiques.
 
-# Test d'un cas spécifique
-pytest tests/test_fiscalite.py::TestPFU::test_pfu_10000 -v
+---
+
+## 🧮 Tutoriel Solveur Excel — Résumé
+
+Le Solveur Excel permet d'optimiser la répartition des ETF entre les enveloppes pour **maximiser le capital net après impôts**.
+
+### Formulation mathématique
+
+```
+MAX  Σ_i Σ_j VAN_ij(x_ij)
+s.c. x_ij = 0  si ETF i non éligible à l'enveloppe j
+     Σ_i x_i,PEA ≤ 150 000 - encours_PEA
+     (α_k ± 5%) × P ≤ Σ_{classe k} x_ij ≤ (α_k + 5%) × P
+     Σ_i Σ_j x_ij = P  (budget total)
+     x_ij ≥ 0
 ```
 
-### Tests couverts
+### Activation du Solveur — Windows
 
-| Test | Vérification |
-|------|-------------|
-| `test_pfu_10000` | PFU 31.4 % sur 10 000 € = 3 140 € |
-| `test_cehr_600000_celibataire` | CEHR = 7 500 € + 4 000 € = 11 500 € |
-| `test_is_50000` | IS = 6 375 € + 1 875 € = 8 250 € |
-| `test_mark_to_market_5pct` | Base imposable = 5 000 € sans cession |
-| `test_contrat_cap_is_base` | Base forfaitaire = 3 150 € (TME 3 %) |
-| `test_cdhr_plancher_20pct` | CDHR = 20 000 € pour garantir 20 % |
+1. `Fichier` → `Options` → `Compléments`
+2. `Gérer : Compléments Excel` → `Atteindre`
+3. Cocher ☑ `Solveur` → `OK`
+4. `Données` → `Solveur`
+
+### Activation du Solveur — Mac
+
+1. `Excel` → `Préférences` → `Compléments`
+2. Cocher ☑ `Solveur` → `OK`
+3. Menu `Outils` → `Solveur`
+
+### OpenSolver (recommandé pour 60 ETF × 6 enveloppes = 360 variables)
+
+Le Solveur intégré est limité à 200 variables. Pour les portefeuilles complets, utiliser **OpenSolver** :
+- Téléchargement gratuit : https://opensolver.org
+- Supporte les MILP (décisions binaires d'ouverture d'enveloppe)
+- Algorithmes CBC, GLPK, Gurobi
+
+→ Voir `docs/tuto_solveur.md` pour le tutoriel complet avec exemple Profil 3.
 
 ---
 
-## 📖 Documentation fiscale
+## 📜 Règles fiscales clés 2026
 
-Voir `docs/regles_fiscales.md` pour le détail des règles fiscales avec leurs sources légales.
+| Enveloppe | Fiscalité sortie | Avantage vs CTO |
+|---|---|---|
+| **PEA (≥5 ans)** | 18,6% PS seulement | **−12,8% IR** |
+| **PER** | TMI retraite + PS gains | Déduction à l'entrée |
+| **PEE** | 18,6% PS seulement | **−12,8% IR** + abondement |
+| **Contrat Cap IS** | IS 15/25% base forfaitaire | Pas de mark-to-market |
+| CTO IS | IS 15/25% + **MTM annuel** | ⚠️ Piège MTM OPCVM |
+| CTO perso | PFU 31,4% | Référence |
+
+> **Prélèvements Sociaux 2026 : 18,6%** (CSG 12,1% + CRDS 0,5% + Solidarité 6,0%)
+> **CEHR** : +3% (RFR 250-500k€) ou +4% (RFR > 500k€) — s'ajoute au PFU
+> **CDHR** : taux effectif minimum 20% pour RFR > 250k€ — LF 2025
 
 ---
 
-## ⚠️ Avertissement légal
+## 🏗️ Architecture
 
-> Les informations et calculs fournis par cet outil sont **indicatifs et pédagogiques**.
-> Ils **ne constituent pas** un conseil en investissement, fiscal ou juridique.
-> Certains taux sont marqués "**À VALIDER**" — ils doivent être confirmés sur les textes
-> officiels publiés (LF, LFSS, CGI, BOFiP).
->
-> Consulter un professionnel agréé (CGP, expert-comptable, avocat fiscaliste) avant
-> toute décision patrimoniale.
+Voir `docs/architecture.md` pour le détail complet.
+
+```
+YAML configs ──→ src/*.py ──→ excel_builder.py ──→ output/*.xlsx
+                    │
+               tests/ pytest
+```
 
 ---
 
 ## 📄 Licence
 
-MIT — Usage libre avec attribution.
+Ce projet est fourni à titre pédagogique. Les paramètres fiscaux sont indicatifs et doivent être validés par un expert-comptable ou conseiller fiscal agréé avant toute utilisation professionnelle.
+
+**Avertissement réglementaire** : Cet outil ne constitue pas un service d'investissement au sens de la Directive MIF II (2014/65/UE). Son utilisation dans le cadre d'un conseil patrimonial professionnel nécessite que le CGP/CIF soit dûment agréé par l'AMF et respecte ses obligations de conseil personnalisé.

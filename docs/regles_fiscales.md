@@ -1,240 +1,181 @@
-# Règles Fiscales — CGP Bogleheads France 2026
+# Règles Fiscales — Enveloppes françaises 2026
 
-> **⚠️ AVERTISSEMENT LÉGAL** : Ce document est fourni à titre pédagogique uniquement.
-> Il ne constitue pas un conseil en investissement ou fiscal. Les taux et règles cités
-> sont à valider sur les textes officiels publiés. Consulter un professionnel agréé.
+> **Avertissement** : Ce document est à titre informatif et pédagogique. Valider chaque règle avec un expert-comptable ou avocat fiscaliste avant application.
 
 ---
 
-## Table des matières
+## 1. PFU (Prélèvement Forfaitaire Unique) — CGI art. 200 A
 
-1. [Prélèvement Forfaitaire Unique (PFU)](#1-prélèvement-forfaitaire-unique-pfu)
-2. [Prélèvements Sociaux (PS)](#2-prélèvements-sociaux)
-3. [Contribution Exceptionnelle sur les Hauts Revenus (CEHR)](#3-cehr)
-4. [Contribution Différentielle sur les Hauts Revenus (CDHR)](#4-cdhr)
-5. [Impôt sur les Sociétés (IS)](#5-impôt-sur-les-sociétés)
-6. [Mark-to-Market IS — Piège art. 209-0 A CGI](#6-mark-to-market-is)
-7. [Contrat de Capitalisation IS](#7-contrat-de-capitalisation-is)
-8. [Fiscalité par Enveloppe](#8-fiscalité-par-enveloppe)
+Le PFU (ou *flat tax*) s'applique par défaut aux revenus du capital (dividendes, intérêts, plus-values mobilières).
 
----
-
-## 1. Prélèvement Forfaitaire Unique (PFU)
-
-**Sources** : Art. 200 A CGI, LF 2018 (entrée en vigueur 1er janvier 2018), BOFiP RPPM-RCM-20-15
-
-### Taux 2026
-
-| Composante | Taux |
-|---|---|
-| Quote-part IR | 12.8 % |
-| Quote-part PS | 18.6 % (À VALIDER) |
-| **PFU total** | **31.4 %** |
-
-### Champ d'application
-
-- Plus-values de cession de valeurs mobilières (art. 150-0 A CGI)
-- Dividendes d'actions
-- Intérêts et produits de placement à revenu fixe
-- Revenus distribués par OPCVM
-
-### Option pour le barème progressif
-
-Le contribuable peut **opter globalement** pour le barème de l'IR (art. 200 A 2 CGI).
-Dans ce cas :
-- Abattement de **40 %** sur les dividendes (art. 158-3-2° CGI)
-- Déductibilité de la **CSG à 6.8 %** sur revenus de placement imposés au barème
-- Intéressant si TMI < 12.8 % (tranche 0 %) — rare pour dividendes importants
-
-### Imputation des moins-values
-
-- Moins-values de l'année et des 10 années précédentes imputables sur les plus-values de même nature (art. 150-0 D CGI)
-- ⚠️ Attention : L'option pour le barème une année ne reporte pas les moins-values des années PFU
-
----
-
-## 2. Prélèvements Sociaux
-
-**Sources** : Art. L136-1 et s. CSS, Ordonnance 96-50 du 24 janvier 1996, Art. 235 ter ZD CGI
-
-### Décomposition 2026 — À VALIDER sur LFSS 2026
-
-| Contribution | Taux | Base légale |
+| Composante | Taux 2026 | Base légale |
 |---|---|---|
-| CSG | 9.9 % | Art. L136-6 CSS |
-| CRDS | 0.5 % | Ord. 96-50 |
-| Prélèvement de solidarité | 7.5 % | Art. 235 ter ZD CGI |
-| Contribution additionnelle | 0.7 % | **À VALIDER LFSS 2026** |
-| **Total** | **18.6 %** | |
+| IR (Impôt sur le Revenu) | **12,8%** | Art. 200 A CGI |
+| CSG | 12,1% | Art. L136-7 CSS |
+| CRDS | 0,5% | Art. 15 Ord. 96-50 |
+| Prélèvement solidarité | 6,0% | Art. 235 ter CGI |
+| **PS total** | **18,6%** | — |
+| **PFU total** | **31,4%** | — |
 
-### Taux réduit PER capital
-
-Pour la part des gains sur les versements déduits lors de la sortie en capital du PER, le taux PS applicable est de **10.3 %** (taux réduit). **À VALIDER BOFiP.**
+**Option barème IR** : Le contribuable peut opter pour l'imposition au barème progressif si cela est plus avantageux (TMI < 12,8%). Dans ce cas :
+- Abattement de 40% sur les dividendes (art. 158 CGI)
+- PS de 18,6% reste dus
+- CSG partiellement déductible du revenu global (6,8%)
 
 ---
 
-## 3. CEHR
+## 2. Plan d'Épargne en Actions (PEA) — CGI art. 163 quinquies D
 
-**Sources** : Art. 223 sexies CGI, BOFiP IR-IFI-CHAMP-30-20
+### Plafonds de versement
+- **PEA classique** : 150 000 € par personne
+- **PEA-PME** : 225 000 € (cumulable avec PEA classique dans la limite de 225 000 €)
 
-### Tranches
+### Fiscalité des retraits
+| Durée de détention | IR | PS | Total |
+|---|---|---|---|
+| < 5 ans | 12,8% (PFU) | 18,6% | **31,4%** |
+| ≥ 5 ans | **0%** (exonéré) | 18,6% | **18,6%** |
 
-| Situation | RFR | Taux |
+> ⭐ **Avantage clé** : Après 5 ans, l'IR (12,8%) est totalement exonéré. Sur un portefeuille de 300 000 € de plus-values, cela représente **38 400 € d'économie**.
+
+### Arbitrages intra-PEA
+Les cessions et réinvestissements au sein du PEA ne sont pas imposables — la capitalisation est complète en franchise d'impôt.
+
+### ETF éligibles PEA
+Seuls les ETF synthétiques (swap-based) permettent une exposition aux marchés extra-européens via un PEA. L'ETF acquiert formellement des titres européens et conclut un swap pour obtenir la performance souhaitée (MSCI World, S&P 500, etc.).
+
+---
+
+## 3. Plan d'Épargne Retraite (PER) — CGI art. 163 quatervicies
+
+### Avantage fiscal à l'entrée
+Les versements volontaires sont déductibles du revenu imposable dans la limite de :
+- **Salariés** : 10% des revenus professionnels N-1, plafond 35 194 € (2026)
+- **TNS (BNC/BIC)** : 10% du bénéfice imposable + 15% entre 1 et 8 PASS, plafond ~85 780 €
+
+### Fiscalité à la sortie
+| Mode de sortie | Partie capital versé | Partie gains |
 |---|---|---|
-| Célibataire | 250 001 € à 500 000 € | 3 % |
-| Célibataire | > 500 000 € | 4 % (sur l'excédent) |
-| Couple/PACS | 500 001 € à 1 000 000 € | 3 % |
-| Couple/PACS | > 1 000 000 € | 4 % (sur l'excédent) |
+| En capital | IR (barème) | PS 18,6% |
+| En rente | IR après abattement 10% | PS sur fraction imposable |
 
-### Exemple de calcul — célibataire RFR 600 000 €
+### Intérêt du PER
+Le PER est intéressant si : **TMI actuelle > TMI estimée à la retraite**
 
-```
-Tranche 3 % : (500 000 - 250 000) × 3 % = 7 500 €
-Tranche 4 % : (600 000 - 500 000) × 4 % = 4 000 €
-CEHR total  : 11 500 €
-```
+Exemple : Versement 35 000 € à TMI 45% → économie immédiate 15 750 €. Si TMI retraite = 30%, l'impôt à la sortie sur le capital = 10 500 €. Gain net : 5 250 € (+ effet de capitalisation sur 20 ans).
 
 ---
 
-## 4. CDHR
+## 4. Plan d'Épargne Entreprise (PEE) — C. trav. art. L3332-1
 
-**Sources** : Art. 3 LF 2025 — **À VALIDER reconduite LF 2026**, BOFiP à publier
+### Abondement employeur
+L'employeur peut abonder les versements volontaires :
+- Maximum : 3 fois le versement salarié, plafond légal **3 741 € / an** (2026)
+- L'abondement est exonéré d'IR et de cotisations sociales (sauf CSG/CRDS)
 
-### Principe
+> 🏆 **Priorité absolue** : Si l'employeur abonde à 100%, le TRI immédiat est de 100% avant impôts. Aucune autre enveloppe ne peut rivaliser.
 
-La CDHR vise à garantir un **taux effectif minimal de 20 %** pour les contribuables dont le Revenu Fiscal de Référence (RFR) dépasse :
+### Fiscalité à la sortie
+- **Exonération IR** sur les gains et l'abondement (après 5 ans de blocage)
+- **PS 18,6%** restent dus sur les gains
+
+---
+
+## 5. Compte-Titres Ordinaire (CTO) Personnel — CGI art. 150-0 A
+
+### Imposition des plus-values
+- PFU 31,4% sur les plus-values à la cession
+- Option barème possible (avec abattement 40% sur dividendes)
+
+### Report des moins-values
+Les moins-values mobilières sont **reportables 10 ans** et imputables sur les plus-values de même nature (art. 150-0 D bis CGI).
+
+### Dividendes
+- PFU 31,4% par défaut (12,8% IR + 18,6% PS)
+- Si option barème : abattement 40% sur dividendes qualifiés (sociétés IS françaises ou UE)
+
+---
+
+## 6. CTO à l'IS — CGI art. 209-0 A (Mark-to-Market)
+
+### ⚠️ Piège du Mark-to-Market
+L'article 209-0 A du CGI impose une réévaluation annuelle des OPCVM (dont ETF) détenus dans un CTO à l'IS :
+
+> *"Les OPCVM soumis à l'IS à raison des plus-values latentes réalisées au cours de l'exercice."*
+
+**Conséquence pratique** : Un ETF MSCI World acheté 1 000 000 € qui vaut 1 060 000 € au 31/12 génère **60 000 € de plus-value imposable à l'IS**, même si aucune cession n'a eu lieu.
+
+**Impact sur la VAN** :
+- CTO IS avec ETF capitalisant = IS annuel sur gains latents → détruit la capitalisation
+- Solutution : **Contrat de Capitalisation IS** qui échappe à ce régime
+
+---
+
+## 7. Contrat de Capitalisation IS — CGI art. 238 septies E
+
+### Base taxable forfaitaire
+La base imposable annuelle est calculée de manière forfaitaire :
+
+**Base = 105% × TME × Prime versée**
+
+Où TME = Taux Moyen d'État à la date de souscription.
+
+**Exemple** : Prime 1 000 000 € × TME 3% × 105% = **31 500 € de base imposable**
+IS à 15% = **4 725 € par an** (vs MTM potentiellement 10x plus élevé)
+
+### Avantage clé
+- **Pas de mark-to-market** : les plus-values latentes ne sont pas imposées annuellement
+- **Capitalisation complète** en franchise d'IS
+- Imposition réelle seulement à la sortie du contrat (sur les produits réels)
+
+---
+
+## 8. CEHR (Contribution Exceptionnelle sur les Hauts Revenus) — CGI art. 223 sexies
+
+| Situation | RFR | Taux CEHR |
+|---|---|---|
+| Célibataire | 250 001 – 500 000 € | 3% |
+| Célibataire | > 500 000 € | 4% |
+| Couple | 500 001 – 1 000 000 € | 3% |
+| Couple | > 1 000 000 € | 4% |
+
+La CEHR s'applique sur le **RFR global**, y compris les revenus du capital. Elle s'ajoute au PFU ou au barème.
+
+**Taux marginal effectif sur revenus du capital pour un célibataire RFR > 500k€** :
+PFU (12,8%) + PS (18,6%) + CEHR (4%) = **35,4%**
+
+---
+
+## 9. CDHR (Contribution Différentielle sur les Hauts Revenus) — LF 2025
+
+Introduite par la Loi de Finances 2025, la CDHR assure un **taux effectif minimum de 20%** sur le RFR des foyers dont le RFR dépasse :
 - 250 000 € pour un célibataire
-- 500 000 € pour un couple/PACS
+- 500 000 € pour un couple
 
-### Formule
-
-```
-CDHR = max(0 ; RFR × 20 % - impôts_avant_CDHR)
-```
-
-### Note
-
-Introduite en LF 2025 et théoriquement reconduite en 2026. **À CONFIRMER** sur le texte de la LF 2026.
+Elle est calculée comme la différence entre 20% × RFR et le total des impositions déjà versées. Son calcul précis est complexe et doit être effectué par un CIF agréé.
 
 ---
 
-## 5. Impôt sur les Sociétés
+## 10. IS (Impôt sur les Sociétés) — CGI art. 219
 
-**Sources** : Art. 219 CGI, BOFiP BIC-IS, LF 2024 (relèvement plafond taux réduit)
-
-### Taux 2026
-
-| Bénéfice | Taux | Condition |
+| Tranche de bénéfice | Taux | Conditions |
 |---|---|---|
-| ≤ 42 500 € | 15 % (taux réduit) | PME (CA < 10 M€, capital détenu à 75 % par PP) |
-| > 42 500 € | 25 % | Taux normal |
-
-⚠️ **Note** : Le seuil de 42 500 € résulte du relèvement opéré par la LF 2024 (art. 11) du précédent seuil de 38 120 €.
+| 0 → 42 500 € | **15%** (taux réduit) | CA < 10M€, capital ≥75% pers. physiques |
+| > 42 500 € | **25%** (taux normal) | — |
 
 ---
 
-## 6. Mark-to-Market IS
+## Références légales synthétiques
 
-**Sources** : Art. 209-0 A CGI, BOFiP BIC-BASE-35-30
-
-### ⚠️ PIÈGE MAJEUR pour les sociétés IS
-
-Les OPCVM (y compris les ETF UCITS) détenus par une **société soumise à l'IS** via un compte-titres ordinaire (CTO IS) sont soumis à l'imposition **annuelle** sur la variation de valeur liquidative, **même sans cession**.
-
-### Mécanisme
-
-```
-Base imposable année N = Valeur_liquidative_31/12/N - Valeur_liquidative_31/12/(N-1)
-IS dû = base_imposable × taux_IS (si positif)
-```
-
-### Solution
-
-Préférer le **contrat de capitalisation IS** (voir section suivante) pour les placements financiers en trésorerie de société.
-
----
-
-## 7. Contrat de Capitalisation IS
-
-**Sources** : Art. 38 sexdecies GB Annexe III CGI, BOFiP BIC-BASE-20-20
-
-### Principe
-
-Pour les sociétés IS, la base imposable annuelle d'un contrat de capitalisation est calculée de manière **forfaitaire** :
-
-```
-Base imposable annuelle = 105 % × TME × prime_nette
-```
-
-**Avantage** : évite le mark-to-market de l'art. 209-0 A CGI applicable aux ETF en CTO direct.
-
-### Exemple
-
-| Paramètre | Valeur |
+| Règle | Article CGI / Texte |
 |---|---|
-| Prime nette versée | 100 000 € |
-| TME | 3.0 % |
-| Base forfaitaire | 3 150 € |
-| IS estimé (25 %) | 787.50 € |
-
-### Comparaison avec CTO IS (ETF +10 %)
-
-| Enveloppe | Base imposable | IS (25 %) |
-|---|---|---|
-| CTO IS (mark-to-market) | 10 000 € | 2 500 € |
-| Contrat capitalisation IS | 3 150 € | 787.50 € |
-| **Économie annuelle** | **6 850 €** | **1 712.50 €** |
-
----
-
-## 8. Fiscalité par Enveloppe
-
-### CTO Personne Physique
-
-**Base légale** : Art. 150-0 A, 200 A CGI
-
-| Phase | Fiscalité |
-|---|---|
-| Entrée | Revenus nets d'impôts (aucun avantage) |
-| Détention | PFU ou barème sur dividendes/coupons chaque année |
-| Sortie | PFU 31.4 % sur PV réalisée |
-| Moins-values | Imputables sur 10 ans |
-
-### PEA
-
-**Base légale** : Art. L221-30 CMF, Art. 157 bis CGI, BOFiP RPPM-RCM-40-50-50-20
-
-| Phase | Fiscalité |
-|---|---|
-| Entrée | Aucun avantage |
-| Détention | Capitalisation libre, aucun impôt interne |
-| Sortie < 5 ans | PFU 31.4 % + clôture du plan |
-| Sortie ≥ 5 ans | **IR exonéré**, PS 17.2 % (ou 18.6 % — À VALIDER) |
-
-**Éligibilité ETF** : ETFs UCITS investis à ≥ 75 % en actions UE/EEE. Les ETFs synthétiques (swap) sur MSCI World sont éligibles si le portefeuille de substitution respecte cette règle.
-
-### PER Individuel
-
-**Base légale** : Ord. 2019-766, Art. L224-1 CMF, Art. 163 quatervicies CGI
-
-| Phase | Fiscalité |
-|---|---|
-| Entrée | **Déductible** du revenu imposable (dans les plafonds) |
-| Détention | Report d'imposition total |
-| Sortie capital | IR barème (TMI) + PS 10.3 % sur gains (si déduction prise) |
-| Sortie rente | IR barème après abattement 10 % |
-
-### PEE
-
-**Base légale** : Art. L3332-1 CT, Art. 163 bis B CGI
-
-| Phase | Fiscalité |
-|---|---|
-| Abondement employeur | Exonéré IR (dans limite 8 % PASS) |
-| Intéressement versé | Exonéré IR |
-| Détention | Capitalisation libre |
-| Sortie ≥ 5 ans | **IR exonéré sur PV**, PS 17.2 % (ou 18.6 % — À VALIDER) |
-
----
-
-*Document mis à jour pour la LF/LFSS 2026. Taux marqués "À VALIDER" à confirmer sur les textes officiels publiés.*
+| PFU | Art. 200 A CGI |
+| PEA | Art. 163 quinquies D CGI |
+| PER | Art. 163 quatervicies CGI |
+| CTO Plus-values | Art. 150-0 A CGI |
+| Mark-to-Market IS | Art. 209-0 A CGI |
+| Contrat Cap IS | Art. 238 septies E CGI |
+| CEHR | Art. 223 sexies CGI |
+| Report moins-values | Art. 150-0 D bis CGI |
+| IS taux réduit PME | Art. 219-I-b CGI |
+| Apport-cession | Art. 150-0 B ter CGI |

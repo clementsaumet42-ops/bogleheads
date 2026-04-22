@@ -1,95 +1,77 @@
-# =============================================================================
-# Paramètres fiscaux France 2026
-# Sources : LF 2026, LFSS 2026, CGI, BOFiP
-# Certains taux sont à valider sur publication officielle (marqués À VALIDER)
-# =============================================================================
+# Paramètres fiscaux 2026 — à valider avec votre expert-comptable
+# Source : Loi de Finances 2026, CGI, LFSS 2026
 
-# ---------------------------------------------------------------------------
-# Prélèvements sociaux (PS) — article L136-1 et suivants CSS
-# Taux global : 17.2 % → maintenu à 17.2 % en 2025 ; 2026 à confirmer
-# ATTENTION : La décomposition ci-dessous inclut la contribution additionnelle
-# de 1.4 % introduite dans certains scénarios LFSS — À VALIDER sur texte final
-# ---------------------------------------------------------------------------
+annee: 2026
+
 prelevements_sociaux:
-  # Taux total applicable aux revenus du patrimoine (dividendes, PV mobilières)
-  taux_total: 0.186          # 18.6 % — À VALIDER sur LF/LFSS 2026
+  taux_global: 0.186           # 18,6% — hausse CSG/CRDS 2026
   detail:
-    csg: 0.099               # CSG 9.9 % (art. L136-6 CSS)
-    crds: 0.005              # CRDS 0.5 % (ord. 96-50)
-    prelevement_solidarite: 0.075   # Prélèvement de solidarité 7.5 % (art. 235 ter ZD CGI)
-    contribution_additionnelle: 0.007  # Contribution additionnelle 0.7 % — À VALIDER LFSS 2026
-  # PS réduit applicable sur les gains de sortie PER en capital (hors intérêts)
-  taux_sortie_per_capital: 0.103   # 10.3 % — À VALIDER BOFiP IS-BIC ou CGI art. 163 quatervicies
+    csg: 0.121                 # CSG 12,1%
+    crds: 0.005                # CRDS 0,5%
+    prelevement_solidarite: 0.060  # Prélèvement de solidarité 6,0%
 
-# ---------------------------------------------------------------------------
-# Prélèvement Forfaitaire Unique (PFU / Flat Tax) — art. 200 A CGI
-# Entré en vigueur le 1er janvier 2018 (LF 2018)
-# ---------------------------------------------------------------------------
 pfu:
-  taux_ir: 0.128             # Quote-part IR 12.8 %
-  taux_ps: 0.186             # Quote-part PS 18.6 %
-  taux_total: 0.314          # PFU total 31.4 %
-  # Option pour le barème progressif : abattement 40 % sur dividendes (art. 158-3-2° CGI)
-  abattement_dividendes_bareme: 0.40
+  taux_ir: 0.128               # 12,8%
+  taux_total_avec_ps: 0.314    # 12,8% + 18,6% (calculé)
 
-# ---------------------------------------------------------------------------
-# Contribution Exceptionnelle sur les Hauts Revenus (CEHR) — art. 223 sexies CGI
-# Introduite par LF 2012, maintenue sans modification substantielle
-# ---------------------------------------------------------------------------
+bareme_ir_2026:
+  tranches:
+    - jusqu_a: 11294
+      taux: 0.00
+    - jusqu_a: 28797
+      taux: 0.11
+    - jusqu_a: 82341
+      taux: 0.30
+    - jusqu_a: 177106
+      taux: 0.41
+    - au_dela: true
+      taux: 0.45
+
 cehr:
-  celibataire:
-    seuil_3pct: 250000       # RFR > 250 000 € → taux 3 %
-    seuil_4pct: 500000       # RFR > 500 000 € → taux 4 % sur l'excédent
-  couple:
-    seuil_3pct: 500000       # RFR > 500 000 € (couple/PACS/veuf)
-    seuil_4pct: 1000000      # RFR > 1 000 000 €
-  taux_tranche_1: 0.03       # 3 %
-  taux_tranche_2: 0.04       # 4 %
+  # Contribution Exceptionnelle sur les Hauts Revenus
+  tranches_celibataire:
+    - rfr_min: 250001
+      rfr_max: 500000
+      taux: 0.03
+    - rfr_min: 500001
+      taux: 0.04
+  tranches_couple:
+    - rfr_min: 500001
+      rfr_max: 1000000
+      taux: 0.03
+    - rfr_min: 1000001
+      taux: 0.04
 
-# ---------------------------------------------------------------------------
-# Contribution Différentielle sur les Hauts Revenus (CDHR) — LF 2025 art. 3
-# Reconduite en 2026 sous réserve de confirmation (À VALIDER LF 2026)
-# Objectif : taux effectif minimal de 20 % pour RFR > 250 000 € (célib)
-# ---------------------------------------------------------------------------
 cdhr:
-  seuil_celibataire: 250000  # Seuil de déclenchement (célib)
-  seuil_couple: 500000       # Seuil de déclenchement (couple)
-  taux_minimal: 0.20         # Taux effectif global minimal visé
-  # Source : art. 3 LF 2025 ; BOFiP à publier — À VALIDER reconduite 2026
+  # Contribution Différentielle sur les Hauts Revenus (LF 2025)
+  description: "Assure un taux minimum d'imposition de 20% sur le RFR pour les foyers dont le RFR > 250k€"
+  taux_plancher_effectif: 0.20
+  seuil_declenchement_celibataire: 250000
+  seuil_declenchement_couple: 500000
 
-# ---------------------------------------------------------------------------
-# Impôt sur les Sociétés (IS) — art. 219 CGI
-# Taux réduit PME : 15 % jusqu'à 42 500 € (relèvement de 38 120 € ; LF 2024)
-# Conditions : CA < 10 M€, capital libéré détenu à 75 % par personnes physiques
-# ---------------------------------------------------------------------------
 is:
-  seuil_taux_reduit: 42500   # Bénéfice plafonné au taux réduit (LF 2024 art. 11)
-  taux_reduit: 0.15          # 15 %
-  taux_normal: 0.25          # 25 %
-  # Source : art. 219 I b CGI, BOFiP BIC-IS
+  # Impôt sur les Sociétés
+  taux_reduit: 0.15            # 15% jusqu'au seuil
+  taux_normal: 0.25            # 25% au-delà
+  seuil_taux_reduit: 42500    # € de bénéfice
+  conditions_taux_reduit:
+    - "CA < 10M€"
+    - "Capital entièrement libéré et détenu à ≥ 75% par des personnes physiques"
 
-# ---------------------------------------------------------------------------
-# Taux Moyen des Emprunts d'État (TME) — utilisé pour contrats capitalisation IS
-# Référence : art. 38 sexdecies GB ann. III CGI (valeur de rachat théorique)
-# La base imposable annuelle = 105 % × TME × prime nette
-# ---------------------------------------------------------------------------
-tme: 0.030                   # 3.0 % — À PARAMÉTRER selon publication Banque de France
+contrat_capitalisation_is:
+  # Art. 238 septies E CGI - Base taxable forfaitaire annuelle
+  base_taxable_formule: "105% × TME × prime_versée"
+  tme_reference_2026: 0.030   # À vérifier — TME en vigueur à la souscription
 
-# ---------------------------------------------------------------------------
-# Plafonds des enveloppes fiscales
-# ---------------------------------------------------------------------------
-plafonds:
-  pea: 150000                # PEA : 150 000 € versements (art. L221-30 CMF)
-  pea_pme: 225000            # PEA-PME : 225 000 € cumulé PEA+PEA-PME (art. L221-32-1 CMF)
-  per_deductible_per_an: null  # Variable selon revenus — calculé dynamiquement (art. 163 quatervicies CGI)
+abattement_dividendes_bareme: 0.40  # 40% si option barème IR
+duree_report_deficit_cto: 10        # ans
+abattement_pv_duree_detention: false # Supprimé par LF 2018 pour titres acquis après 2018
 
-# ---------------------------------------------------------------------------
-# Tranches de l'impôt sur le revenu (barème 2026 — sur revenus 2025)
-# Art. 197 CGI — À VALIDER revalorisation LF 2026
-# ---------------------------------------------------------------------------
-tranches_ir:
-  - { jusqu_a: 11294,  taux: 0.00 }
-  - { jusqu_a: 28797,  taux: 0.11 }
-  - { jusqu_a: 82341,  taux: 0.30 }
-  - { jusqu_a: 177106, taux: 0.41 }
-  - { au_dela: 177106, taux: 0.45 }
+notes:
+  mark_to_market_is: |
+    Art. 209-0 A CGI : les OPCVM (dont ETF) détenus dans un CTO à l'IS sont soumis à
+    réévaluation mark-to-market annuelle. Les plus-values latentes sont imposées chaque année
+    même sans cession. ATTENTION : impact majeur sur la fonction objectif VAN.
+  ps_historique: |
+    Taux PS 2026 : 18,6% (hausse par rapport à 17,2% en 2024).
+    Décomposition : CSG 12,1% + CRDS 0,5% + Prélèvement solidarité 6,0%.
