@@ -46,6 +46,7 @@ htmlcov/
 # Output Excel files
 output/*.xlsx
 output/*.xls
+!output/.gitkeep
 
 # OS
 .DS_Store
