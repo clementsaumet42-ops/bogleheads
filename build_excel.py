@@ -31,6 +31,7 @@ def main():
     print("  • Profil_6_PRE")
     print("  • Comparatif_Profils")
     print("  • Tuto_Solveur")
+    print("  • Projection_MonteCarlo")
     print("\n📊 Ouvrez le fichier dans Excel et activez le Solveur pour l'optimisation.")
 
 

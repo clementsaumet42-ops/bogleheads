@@ -1,0 +1,46 @@
+# Hypothèses de rendement réel (net d'inflation) - sources académiques (Dimson-Marsh-Staunton, JST)
+# Moyennes géométriques long terme + volatilités annualisées
+classes_actifs:
+  actions_monde:
+    rendement_moyen: 0.067      # 6,7 %
+    volatilite: 0.18            # 18 %
+  actions_usa:
+    rendement_moyen: 0.075
+    volatilite: 0.19
+  actions_europe:
+    rendement_moyen: 0.055
+    volatilite: 0.20
+  actions_emergents:
+    rendement_moyen: 0.065
+    volatilite: 0.25
+  obligations:
+    rendement_moyen: 0.020
+    volatilite: 0.06
+  monetaire:
+    rendement_moyen: 0.005
+    volatilite: 0.01
+  or:
+    rendement_moyen: 0.020
+    volatilite: 0.15
+  immobilier:
+    rendement_moyen: 0.055
+    volatilite: 0.17
+  matieres_premieres:
+    rendement_moyen: 0.030
+    volatilite: 0.20
+
+# Corrélations inter-classes (matrice simplifiée, long terme)
+correlations:
+  actions_obligations: -0.10
+  actions_or: 0.00
+  actions_immobilier: 0.65
+
+# Paramètres de simulation
+simulation:
+  nb_tirages: 10000
+  horizons_annees: [10, 20, 30]
+  seed: 42                      # pour reproductibilité
+  percentiles: [5, 10, 25, 50, 75, 90, 95]
+
+# Inflation prévisionnelle pour conversion réel ↔ nominal
+inflation_annuelle: 0.02
