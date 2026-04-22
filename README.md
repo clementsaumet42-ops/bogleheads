@@ -13,7 +13,7 @@ Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** co
 
 ### Fonctionnalités
 
-- 📊 **60+ ETF** couvrant toutes les classes d'actifs (actions, obligations, or, REITs, matières premières)
+- 📊 **70 ETF** couvrant toutes les classes d'actifs (actions, obligations, or, REITs, matières premières)
 - 🏦 **6 enveloppes fiscales** avec règles 2026 (PS 18,6%, PFU 31,4%, IS 15/25%)
 - 👥 **6 profils clients types** (Cadre sup, Dirigeant grand groupe, Dirigeant PME, Profession libérale, Jeune cadre, Pré-retraité)
 - 🧮 **Tutoriel Solveur Excel** pour l'optimisation d'asset location
@@ -66,7 +66,7 @@ bogleheads/
 ├── config/
 │   ├── fiscalite_2026.yaml     ← Paramètres fiscaux France 2026
 │   ├── enveloppes.yaml         ← Règles des 6 enveloppes fiscales
-│   ├── univers_etf.yaml        ← ~60 ETF Boglehead
+│   ├── univers_etf.yaml        ← 70 ETF Boglehead (schéma enrichi)
 │   └── profils_clients.yaml   ← 6 profils clients fictifs
 ├── src/
 │   ├── fiscalite.py            ← Calculs PFU, IS, PEA, PER, CEHR, CDHR
@@ -78,24 +78,75 @@ bogleheads/
 ├── docs/
 │   ├── regles_fiscales.md      ← Règles fiscales par enveloppe + articles CGI
 │   ├── architecture.md         ← Architecture du projet
-│   └── tuto_solveur.md         ← Tutoriel Solveur Excel complet
+│   ├── tuto_solveur.md         ← Tutoriel Solveur Excel complet
+│   └── schema_univers_etf.md   ← Schéma et documentation de univers_etf.yaml
 ├── tests/
 │   ├── test_fiscalite.py       ← Tests calculs fiscaux
-│   └── test_profils.py         ← Tests profils clients
+│   ├── test_profils.py         ← Tests profils clients
+│   └── test_univers_etf.py     ← Tests validation univers ETF (ISIN, PEA, schéma)
 └── output/
     └── .gitkeep
 ```
 
 ---
 
-## 📊 Onglets Excel générés
+## 📈 Univers ETF
+
+Le référentiel ETF est défini dans `config/univers_etf.yaml`. Il contient **70 ETF** couvrant toutes les classes d'actifs d'un portefeuille Boglehead.
+
+### Classes d'actifs couvertes
+
+| Classe | Nb ETF | Exemples |
+|--------|--------|---------|
+| Actions — Monde | 7 | CW8 (Amundi PEA), IWDA (iShares), VWCE (Vanguard), XMWO (Xtrackers) |
+| Actions — USA | 5 | CSP1 (iShares), LYPS (Amundi/Lyxor PEA) |
+| Actions — Europe | 3 | EXSA (iShares), C50 (Amundi EMU PEA) |
+| Actions — Émergents | 5 | IEEM (iShares), PAEEM (Amundi PEA) |
+| Actions — Facteurs | 4 | IWVL (Value), IWQU (Quality), IWMO (Momentum), MVOL (Min Vol) |
+| Obligations | 12 | GOVS, AGGH, IEAA, IBTM, ITPS |
+| Immobilier (REITs) | 3 | IWDP, EPRE, XREA |
+| Or physique | 3 | GOLD, IGLN, XGLD |
+| Matières premières | 2 | CMOD, LYTR |
+| Monétaire | 2 | CSH, XEON |
+| Thématiques / ESG | 7 | INRG, IHCG, WTAI, SUWU |
+
+### Schéma enrichi
+
+Chaque ETF dispose des champs suivants (nouveaux champs en **gras**) :
+
+- `isin`, `ticker`, `nom`, `emetteur`, `classe_actifs`, `sous_classe`
+- `ter`, `devise`, `domicile`, `capitalisant`, `eur_hedged`
+- **`methode_replication`** : `physique` | `synthetique_swap` | `synthetique_swap_unfunded` | `physique_optimisee`
+- **`url_dic_kid`** : URL du Document d'Informations Clés officiel (ou `null`)
+- **`date_verification_dic`** : date ISO de dernière vérification
+- `eligibilite` : `PEA`, `PER`, `PEE`, `CTO_perso`, `CTO_IS`, `Contrat_Cap_IS`, **`AV_UC`**
+- **`contrats_av_reference`** : liste des contrats AV où l'ETF est disponible
+- **`frais_entree_typique_pct`** : frais d'entrée typiques courtier
+
+→ Voir **[docs/schema_univers_etf.md](docs/schema_univers_etf.md)** pour la documentation complète du schéma.
+
+### Ajouter un ETF
+
+1. Copier un bloc ETF existant dans `config/univers_etf.yaml`
+2. Modifier `isin`, `nom`, `ticker`, et les autres champs
+3. Sourcer le DIC/KID officiel → renseigner `url_dic_kid`
+4. Vérifier l'éligibilité PEA (physique vs swap, domicile UE/EEE)
+5. Lancer les tests de validation :
+
+```bash
+pytest tests/test_univers_etf.py -v
+```
+
+---
+
+
 
 | Onglet | Description |
 |---|---|
 | `Paramètres_Client` | Saisie des paramètres du client |
 | `Paramètres_Fiscalité_2026` | Référentiel fiscal France 2026 |
 | `Enveloppes` | Tableau comparatif des 6 enveloppes |
-| `Univers_ETF` | ~60 ETF avec éligibilité par enveloppe (tableau structuré) |
+| `Univers_ETF` | ~70 ETF avec éligibilité par enveloppe (tableau structuré) |
 | `Allocation_Cible` | Allocation Boglehead par classe d'actifs |
 | `Asset_Location_Matrice` | Matrice ETF × Enveloppe |
 | `Rebalancement` | Outil de suivi des dérives d'allocation |
