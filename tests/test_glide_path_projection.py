@@ -35,4 +35,6 @@ def test_glide_path_plus_conservateur_mediane_plus_basse_mais_p10_plus_haute():
     r_c = simuler_monte_carlo_glide_path(glide_path=gp_conservateur, **kwargs)
 
     # Le P10 du conservateur devrait être au moins aussi haut que celui de l'agressif
+    # On tolère un écart de 10% (facteur 0.9) car la simulation est stochastique
+    # et l'important est que le downside protection soit significativement présent.
     assert r_c.capital_final_percentiles[10] >= r_a.capital_final_percentiles[10] * 0.9

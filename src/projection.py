@@ -11,9 +11,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 import yaml
+
+if TYPE_CHECKING:
+    from src.glide_path import GlidePath
 
 # Ordre canonique des classes d'actifs (correspond aux colonnes du YAML)
 _CLASSES = [
@@ -508,9 +512,3 @@ def simuler_monte_carlo_glide_path(
         annee_mediane_atteinte_objectif=annee_mediane_atteinte_objectif,
         parametres=params_compat,
     )
-
-
-# Typage tardif pour éviter l'import circulaire
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from src.glide_path import GlidePath

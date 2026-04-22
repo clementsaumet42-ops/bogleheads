@@ -11,13 +11,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 
 import numpy as np
 import yaml
-
-if TYPE_CHECKING:
-    pass
 
 # Import pour interop avec projection
 from src.projection import AllocationClasses
