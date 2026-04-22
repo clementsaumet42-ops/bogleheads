@@ -19,6 +19,7 @@ Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** co
 - 🧮 **Tutoriel Solveur Excel** pour l'optimisation d'asset location
 - ⚖️ **Outil de rebalancement** avec bandes de tolérance (méthode Larry Swedroe)
 - 💡 **Calculs fiscaux** : CEHR, CDHR, contrat capitalisation IS, mark-to-market
+- 📈 **Projection Monte-Carlo** : simulation de 10 000 trajectoires sur 10/20/30 ans avec probabilité d'atteinte d'objectif
 
 ---
 
@@ -67,13 +68,15 @@ bogleheads/
 │   ├── fiscalite_2026.yaml     ← Paramètres fiscaux France 2026
 │   ├── enveloppes.yaml         ← Règles des 6 enveloppes fiscales
 │   ├── univers_etf.yaml        ← 70 ETF Boglehead (schéma enrichi)
-│   └── profils_clients.yaml   ← 6 profils clients fictifs
+│   ├── profils_clients.yaml   ← 6 profils clients fictifs
+│   └── projection_params.yaml ← Hypothèses de rendement/volatilité
 ├── src/
 │   ├── fiscalite.py            ← Calculs PFU, IS, PEA, PER, CEHR, CDHR
 │   ├── enveloppes.py           ← Règles métier enveloppes
 │   ├── allocation.py           ← Allocation cible Boglehead
 │   ├── asset_location.py       ← Optimisation asset location
 │   ├── rebalancement.py        ← Rebalancement et coûts fiscaux
+│   ├── projection.py           ← Projection Monte-Carlo
 │   └── excel_builder.py        ← Générateur Excel (openpyxl)
 ├── docs/
 │   ├── regles_fiscales.md      ← Règles fiscales par enveloppe + articles CGI
@@ -160,6 +163,7 @@ pytest tests/test_univers_etf.py -v
 | `Profil_6_PRE` | Pré-retraité / Cédant (62 ans, post-cession, glide path) |
 | `Comparatif_Profils` | Gain fiscal estimé vs scénario naïf CTO |
 | `Tuto_Solveur` | Tutoriel Solveur Excel pas-à-pas |
+| `Projection_MonteCarlo` | Projection patrimoniale Monte-Carlo (10 000 tirages, percentiles 10/50/90) |
 
 ---
 
