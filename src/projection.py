@@ -11,9 +11,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 import yaml
+
+if TYPE_CHECKING:
+    from src.glide_path import GlidePath
 
 # Ordre canonique des classes d'actifs (correspond aux colonnes du YAML)
 _CLASSES = [
@@ -389,3 +393,122 @@ def projeter_profil(
         resultats[horizon] = simuler_monte_carlo(params, params_marche)
 
     return resultats
+
+
+def simuler_monte_carlo_glide_path(
+    capital_initial: float,
+    versement_annuel: float,
+    age_debut: int,
+    horizon_annees: int,
+    glide_path: "GlidePath",  # type: ignore[name-defined]  # évite import circulaire
+    nb_tirages: int = 10_000,
+    seed: int | None = 42,
+    params_marche: dict | None = None,
+    objectif_capital: float | None = None,
+) -> ResultatProjection:
+    """
+    Variante de simuler_monte_carlo où l'allocation change chaque année
+    selon le glide_path (rebalancement annuel vers l'allocation_a_age(age_courant)).
+
+    À chaque année t :
+      - age_t = age_debut + t
+      - alloc_t = glide_path.allocation_a_age(age_t)
+      - Rendement de la période appliqué
+      - Versement annuel ajouté selon alloc_t
+      - Rebalancement annuel vers alloc_t
+    """
+    if params_marche is None:
+        params_marche = charger_params()
+
+    mu, sigma = _construire_matrice_covariance(params_marche)
+
+    n_classes = len(_CLASSES)
+    T = horizon_annees
+
+    rng = np.random.default_rng(seed)
+
+    # Allocation initiale
+    alloc_init = glide_path.allocation_a_age(age_debut).as_array()
+    somme = alloc_init.sum()
+    if somme > 0:
+        alloc_init = alloc_init / somme
+
+    portefeuille = np.outer(np.ones(nb_tirages), alloc_init) * capital_initial
+
+    trajectoires = np.zeros((nb_tirages, T + 1))
+    trajectoires[:, 0] = portefeuille.sum(axis=1)
+
+    try:
+        L = np.linalg.cholesky(sigma)
+    except np.linalg.LinAlgError:
+        L = np.diag(np.sqrt(np.diag(sigma)))
+
+    # Tirage vectorisé : shape (T, n_tirages, n_classes)
+    Z = rng.standard_normal((T, nb_tirages, n_classes))
+    rendements = mu + Z @ L.T
+
+    for t in range(T):
+        age_t = age_debut + t
+        alloc_t = glide_path.allocation_a_age(age_t).as_array()
+        somme_t = alloc_t.sum()
+        if somme_t > 0:
+            alloc_t = alloc_t / somme_t
+
+        # Appliquer le rendement de la période
+        portefeuille = portefeuille * (1.0 + rendements[t])
+
+        # Ajouter le versement annuel réparti selon l'allocation courante
+        if versement_annuel != 0:
+            portefeuille += versement_annuel * alloc_t
+
+        # Rebalancement annuel vers l'allocation cible de l'année
+        total = portefeuille.sum(axis=1, keepdims=True)
+        portefeuille = total * alloc_t
+
+        trajectoires[:, t + 1] = portefeuille.sum(axis=1)
+
+    # Statistiques
+    percentiles_config = params_marche.get("simulation", {}).get(
+        "percentiles", [5, 10, 25, 50, 75, 90, 95]
+    )
+    capital_final = trajectoires[:, -1]
+    capital_final_percentiles = {
+        p: float(np.percentile(capital_final, p)) for p in percentiles_config
+    }
+
+    capital_median_par_annee = np.percentile(trajectoires, 50, axis=0)
+    capital_p10_par_annee = np.percentile(trajectoires, 10, axis=0)
+    capital_p90_par_annee = np.percentile(trajectoires, 90, axis=0)
+
+    probabilite_objectif = None
+    annee_mediane_atteinte_objectif = None
+    if objectif_capital is not None:
+        probabilite_objectif = probabilite_atteindre_objectif(trajectoires, objectif_capital)
+        for annee in range(T + 1):
+            if capital_median_par_annee[annee] >= objectif_capital:
+                annee_mediane_atteinte_objectif = annee
+                break
+
+    # Construire un ParametresProjection pour la compatibilité du dataclass résultat
+    alloc_debut = glide_path.allocation_a_age(age_debut)
+    params_compat = ParametresProjection(
+        capital_initial=capital_initial,
+        versement_annuel=versement_annuel,
+        horizon_annees=horizon_annees,
+        allocation=alloc_debut,
+        nb_tirages=nb_tirages,
+        seed=seed,
+        objectif_capital=objectif_capital,
+        rebalancement_annuel=True,
+    )
+
+    return ResultatProjection(
+        trajectoires=trajectoires,
+        capital_final_percentiles=capital_final_percentiles,
+        capital_median_par_annee=capital_median_par_annee,
+        capital_p10_par_annee=capital_p10_par_annee,
+        capital_p90_par_annee=capital_p90_par_annee,
+        probabilite_objectif=probabilite_objectif,
+        annee_mediane_atteinte_objectif=annee_mediane_atteinte_objectif,
+        parametres=params_compat,
+    )

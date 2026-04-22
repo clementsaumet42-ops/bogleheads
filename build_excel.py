@@ -3,6 +3,7 @@
 Point d'entrée — génère output/portefeuille_bogleheads.xlsx
 Usage : python build_excel.py
 """
+import sys
 from pathlib import Path
 from src.excel_builder import generer_excel
 
@@ -12,7 +13,16 @@ def main():
     chemin_sortie.parent.mkdir(exist_ok=True)
 
     print("🏗️  Génération du fichier Excel Boglehead FR...")
-    generer_excel(str(chemin_sortie))
+    try:
+        generer_excel(str(chemin_sortie))
+    except PermissionError:
+        print(
+            f"\n❌ Impossible d'écrire {chemin_sortie}.\n"
+            "   Le fichier est probablement ouvert dans Excel.\n"
+            "   → Ferme-le puis relance `python build_excel.py`.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
     print("\nOnglets créés :")
     print("  • Paramètres_Client")
     print("  • Paramètres_Fiscalité_2026")
@@ -32,6 +42,7 @@ def main():
     print("  • Comparatif_Profils")
     print("  • Tuto_Solveur")
     print("  • Projection_MonteCarlo")
+    print("  • Glide_Path")
     print("\n📊 Ouvrez le fichier dans Excel et activez le Solveur pour l'optimisation.")
 
 

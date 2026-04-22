@@ -20,6 +20,7 @@ Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** co
 - ⚖️ **Outil de rebalancement** avec bandes de tolérance (méthode Larry Swedroe)
 - 💡 **Calculs fiscaux** : CEHR, CDHR, contrat capitalisation IS, mark-to-market
 - 📈 **Projection Monte-Carlo** : simulation de 10 000 trajectoires sur 10/20/30 ans avec probabilité d'atteinte d'objectif
+- 🔄 **Glide path automatique** (lifecycle investing) : évolution de l'allocation selon l'âge avec 6 stratégies paramétrables (Bogle, target-date, conservateur…)
 
 ---
 
@@ -69,7 +70,8 @@ bogleheads/
 │   ├── enveloppes.yaml         ← Règles des 6 enveloppes fiscales
 │   ├── univers_etf.yaml        ← 70 ETF Boglehead (schéma enrichi)
 │   ├── profils_clients.yaml   ← 6 profils clients fictifs
-│   └── projection_params.yaml ← Hypothèses de rendement/volatilité
+│   ├── projection_params.yaml ← Hypothèses de rendement/volatilité
+│   └── glide_paths.yaml        ← Règles de glide paths
 ├── src/
 │   ├── fiscalite.py            ← Calculs PFU, IS, PEA, PER, CEHR, CDHR
 │   ├── enveloppes.py           ← Règles métier enveloppes
@@ -77,6 +79,7 @@ bogleheads/
 │   ├── asset_location.py       ← Optimisation asset location
 │   ├── rebalancement.py        ← Rebalancement et coûts fiscaux
 │   ├── projection.py           ← Projection Monte-Carlo
+│   ├── glide_path.py           ← Glide path (lifecycle investing)
 │   └── excel_builder.py        ← Générateur Excel (openpyxl)
 ├── docs/
 │   ├── regles_fiscales.md      ← Règles fiscales par enveloppe + articles CGI
@@ -164,6 +167,7 @@ pytest tests/test_univers_etf.py -v
 | `Comparatif_Profils` | Gain fiscal estimé vs scénario naïf CTO |
 | `Tuto_Solveur` | Tutoriel Solveur Excel pas-à-pas |
 | `Projection_MonteCarlo` | Projection patrimoniale Monte-Carlo (10 000 tirages, percentiles 10/50/90) |
+| `Glide_Path` | Trajectoire d'allocation dans le temps (lifecycle investing) |
 
 ---
 
@@ -276,8 +280,8 @@ YAML configs ──→ src/*.py ──→ excel_builder.py ──→ output/*.xl
 ### 🎯 Fonctionnalités métier — Priorité haute
 
 - [ ] **Optimiseur intégré** (`src/optimizer.py`) avec `pulp` ou `scipy.optimize.milp` — remplace le Solveur Excel et gère > 200 variables. L'Excel sort déjà optimisé.
-- [ ] **Projection patrimoniale Monte-Carlo** (`src/projection.py`) : 10 000 tirages, médiane + percentiles 10/90, probabilité d'atteindre un objectif, intégration des versements périodiques et de la fiscalité de sortie. Onglet Excel `Projection_30ans` avec graphiques.
-- [ ] **Glide path automatique** (lifecycle investing) : règles paramétrables dans `config/glide_paths.yaml` (Bogle 110-âge, target-date, conservateur), onglet `Glide_Path` par profil avec trajectoire année par année.
+- [x] **Projection patrimoniale Monte-Carlo** (`src/projection.py`) : 10 000 tirages, médiane + percentiles 10/90, probabilité d'atteindre un objectif, intégration des versements périodiques et de la fiscalité de sortie. Onglet Excel `Projection_30ans` avec graphiques.
+- [x] **Glide path automatique** (lifecycle investing) : règles paramétrables dans `config/glide_paths.yaml` (Bogle 110-âge, target-date, conservateur), onglet `Glide_Path` par profil avec trajectoire année par année.
 
 ### 💡 Fonctionnalités métier — Priorité moyenne
 
