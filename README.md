@@ -246,6 +246,93 @@ YAML configs ──→ src/*.py ──→ excel_builder.py ──→ output/*.xl
 
 ---
 
+## 🗺️ Roadmap & Fonctionnalités futures
+
+> Liste des améliorations envisagées pour le projet, classées par thème et priorité.
+> Les contributions sont les bienvenues — ouvrez une issue avant de commencer un gros chantier.
+
+### 🔧 Qualité de code & outillage
+
+- [ ] Découper `src/excel_builder.py` (71 Ko, monolithique) en sous-package `src/excel/` avec un fichier par onglet
+- [ ] Ajouter le typage statique complet (`mypy`, type hints) sur tous les modules
+- [ ] Valider les YAML avec **Pydantic v2** (modèles `ETF`, `Enveloppe`, `Profil`, `Fiscalite`)
+- [ ] Migrer `requirements.txt` vers `pyproject.toml` (PEP 621) avec extras `[dev]`
+- [ ] Ajouter `ruff` (lint + format), `.pre-commit-config.yaml`, `mypy` en strict
+- [ ] Ajouter un fichier `LICENSE` explicite (MIT recommandé)
+- [ ] Ajouter `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, templates d'issues et de PR
+
+### 🤖 CI/CD
+
+- [ ] Workflow GitHub Actions `ci.yml` : lint + tests + build Excel en artefact
+- [ ] Matrice Python 3.9 / 3.10 / 3.11 / 3.12
+- [ ] Couverture de tests `pytest --cov` + upload Codecov (objectif ≥ 80 %)
+- [ ] Couvrir par des tests les modules `allocation.py`, `asset_location.py`, `rebalancement.py`, `enveloppes.py`, `excel_builder.py`
+- [ ] Release GitHub automatique sur tag (build + asset `.xlsx` joint)
+
+### 🎯 Fonctionnalités métier — Priorité haute
+
+- [ ] **Optimiseur intégré** (`src/optimizer.py`) avec `pulp` ou `scipy.optimize.milp` — remplace le Solveur Excel et gère > 200 variables. L'Excel sort déjà optimisé.
+- [ ] **Projection patrimoniale Monte-Carlo** (`src/projection.py`) : 10 000 tirages, médiane + percentiles 10/90, probabilité d'atteindre un objectif, intégration des versements périodiques et de la fiscalité de sortie. Onglet Excel `Projection_30ans` avec graphiques.
+- [ ] **Glide path automatique** (lifecycle investing) : règles paramétrables dans `config/glide_paths.yaml` (Bogle 110-âge, target-date, conservateur), onglet `Glide_Path` par profil avec trajectoire année par année.
+
+### 💡 Fonctionnalités métier — Priorité moyenne
+
+- [ ] **Optimisation des versements** (DCA vs Lump-sum) : simulation des deux stratégies pour un apport ponctuel (prime de cession, héritage) + recommandation.
+- [ ] **Tax-loss harvesting** (CTO) : détection des moins-values latentes en fin d'année pour compenser les plus-values.
+- [ ] **Calculateur "sortie PER" optimale** : simulation rente / capital fractionné / capital en une fois selon TMI retraite.
+- [ ] **Rebalancement intelligent** :
+  - Rebalancement par flux (orienter les versements vers les classes sous-pondérées, pas de fiscalité)
+  - Calcul du coût fiscal réel du rebalancement vente/rachat
+  - Onglet `Alertes` listant les positions à rebalancer
+- [ ] **Optimisation Assurance-Vie avancée** :
+  - Abattement annuel 4 600 € / 9 200 € après 8 ans
+  - Stratégie de rachats programmés post-8 ans
+  - Comparaison AV Luxembourg vs France
+  - Transmission : art. 990 I vs 757 B
+- [ ] **Module transmission / succession** :
+  - Droits de succession selon lien de parenté
+  - Stratégies : donation-partage, démembrement, AV avant 70 ans
+  - Simulation transmission pour chaque profil type
+- [ ] **Reporting client PDF** (`reportlab` ou `weasyprint`) : rapport prêt à remettre, logo CGP personnalisable.
+
+### 🎨 Fonctionnalités — Priorité basse / Nice-to-have
+
+- [ ] **Interface web Streamlit** (`app.py`) : saisie navigateur + téléchargement Excel + PDF.
+- [ ] **Import / Export de portefeuille existant** (CSV Bourse Direct, Degiro, Fortuneo, Linxea) + comparaison allocation actuelle vs cible Boglehead.
+- [ ] **Mise à jour automatique des données ETF** via GitHub Actions cron (scraping JustETF / AMF, PR automatique, alerte si perte éligibilité PEA).
+- [ ] **Comparateur "Boglehead vs fonds actif"** : démonstration pédagogique de l'écart sur 20-30 ans.
+- [ ] **Stress tests historiques** : backtest 2008, 2020, 1973 (stagflation) avec drawdown max et temps de récupération.
+- [ ] **Mode "Éducation client"** : onglet `Pédagogie` avec infographies (PEA vs CTO, capitalisant vs distribuant, réplication physique vs synthétique, effet du TER sur 30 ans).
+- [ ] **Élargissement hors France** : Belgique (TOB, précompte), Suisse (3e pilier), Luxembourg (contrat de capitalisation). Architecture YAML déjà multi-années.
+- [ ] **Assistant IA conversationnel** dans Streamlit : description en langage naturel → choix automatique du profil + recommandations.
+
+### 🛠️ CLI & distribution
+
+- [ ] CLI propre avec `click` ou `typer` :
+  ```bash
+  bogleheads build --profil 3 --output mon_portefeuille.xlsx
+  bogleheads build --all-profils
+  bogleheads validate-etf
+  bogleheads add-etf --isin IE00B4L5Y983
+  ```
+- [ ] Packaging PyPI (`pip install bogleheads-fr`)
+- [ ] `Dockerfile` pour exécution sans environnement Python local
+- [ ] Documentation hébergée via `mkdocs-material` + GitHub Pages
+- [ ] Paramétrage par année fiscale : `config/fiscalite/2025.yaml`, `2026.yaml`, `2027.yaml`, sélection par CLI `--year 2026`
+
+### 🗓️ Sprints suggérés
+
+| Sprint | Focus | Livrables |
+|---|---|---|
+| **S1** (1-2 sem.) | Qualité code | `pyproject.toml`, CI, LICENSE, découpage `excel_builder.py` |
+| **S2** (2 sem.) | Optimiseur + Projection MC | Gros bond fonctionnel |
+| **S3** (1 sem.) | Glide path + Rebalancement par flux | Différenciation CGP |
+| **S4** (2 sem.) | Streamlit + PDF | Passage CLI → produit |
+| **S5** (1 sem.) | Import portefeuille + Comparateur | Argumentaire commercial |
+| **S6+** | AV avancée, Succession, Refresh auto | Profondeur métier |
+
+---
+
 ## 📄 Licence
 
 Ce projet est fourni à titre pédagogique. Les paramètres fiscaux sont indicatifs et doivent être validés par un expert-comptable ou conseiller fiscal agréé avant toute utilisation professionnelle.
