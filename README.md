@@ -21,6 +21,7 @@ Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** co
 - 💡 **Calculs fiscaux** : CEHR, CDHR, contrat capitalisation IS, mark-to-market
 - 📈 **Projection Monte-Carlo** : simulation de 10 000 trajectoires sur 10/20/30 ans avec probabilité d'atteinte d'objectif
 - 🔄 **Glide path automatique** (lifecycle investing) : évolution de l'allocation selon l'âge avec 6 stratégies paramétrables (Bogle, target-date, conservateur…)
+- 💸 **Rebalancement par flux** (cash flow rebalancing) : rééquilibrage sans vente, zéro fiscalité
 
 ---
 
@@ -71,13 +72,15 @@ bogleheads/
 │   ├── univers_etf.yaml        ← 70 ETF Boglehead (schéma enrichi)
 │   ├── profils_clients.yaml   ← 6 profils clients fictifs
 │   ├── projection_params.yaml ← Hypothèses de rendement/volatilité
-│   └── glide_paths.yaml        ← Règles de glide paths
+│   ├── glide_paths.yaml        ← Règles de glide paths
+│   └── rebalancement_flux.yaml ← Bandes + fiscalité par enveloppe
 ├── src/
 │   ├── fiscalite.py            ← Calculs PFU, IS, PEA, PER, CEHR, CDHR
 │   ├── enveloppes.py           ← Règles métier enveloppes
 │   ├── allocation.py           ← Allocation cible Boglehead
 │   ├── asset_location.py       ← Optimisation asset location
 │   ├── rebalancement.py        ← Rebalancement et coûts fiscaux
+│   ├── rebalancement_flux.py   ← Rebalancement par flux (cash flow rebalancing)
 │   ├── projection.py           ← Projection Monte-Carlo
 │   ├── glide_path.py           ← Glide path (lifecycle investing)
 │   └── excel_builder.py        ← Générateur Excel (openpyxl)
@@ -168,6 +171,7 @@ pytest tests/test_univers_etf.py -v
 | `Tuto_Solveur` | Tutoriel Solveur Excel pas-à-pas |
 | `Projection_MonteCarlo` | Projection patrimoniale Monte-Carlo (10 000 tirages, percentiles 10/50/90) |
 | `Glide_Path` | Trajectoire d'allocation dans le temps (lifecycle investing) |
+| `Rebalancement_Flux` | Outil de rebalancement par flux avec comparaison fiscale |
 
 ---
 
@@ -289,7 +293,7 @@ YAML configs ──→ src/*.py ──→ excel_builder.py ──→ output/*.xl
 - [ ] **Tax-loss harvesting** (CTO) : détection des moins-values latentes en fin d'année pour compenser les plus-values.
 - [ ] **Calculateur "sortie PER" optimale** : simulation rente / capital fractionné / capital en une fois selon TMI retraite.
 - [ ] **Rebalancement intelligent** :
-  - Rebalancement par flux (orienter les versements vers les classes sous-pondérées, pas de fiscalité)
+  - [x] Rebalancement par flux (orienter les versements vers les classes sous-pondérées, pas de fiscalité)
   - Calcul du coût fiscal réel du rebalancement vente/rachat
   - Onglet `Alertes` listant les positions à rebalancer
 - [ ] **Optimisation Assurance-Vie avancée** :

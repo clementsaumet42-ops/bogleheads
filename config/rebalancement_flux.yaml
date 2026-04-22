@@ -1,0 +1,42 @@
+# Paramètres du rebalancement par flux (cash flow rebalancing)
+# Stratégie : utiliser les versements pour ramener vers l'allocation cible
+# sans vendre → pas de fiscalité des plus-values
+
+# Bandes de tolérance par classe d'actifs (méthode Larry Swedroe 5/25)
+# Une classe est "à rebalancer" si |poids_actuel - poids_cible| > tolerance_absolue
+# OU si |poids_actuel - poids_cible| / poids_cible > tolerance_relative
+bandes_tolerance:
+  tolerance_absolue: 0.05        # ±5 points de pourcentage
+  tolerance_relative: 0.25       # ±25 % relatif
+
+# Priorités de répartition quand plusieurs classes sont sous-pondérées
+# ordre d'alimentation en cas d'insuffisance du versement
+priorites_classes:
+  - actions_monde           # priorité 1
+  - obligations
+  - actions_usa
+  - actions_europe
+  - actions_emergents
+  - immobilier
+  - or_
+  - monetaire
+  - matieres_premieres
+
+# Paramètres fiscaux de comparaison (versus rebalancement par vente)
+# Hypothèses : PV latente moyenne de 30 % du montant à arbitrer
+hypothese_plus_value_latente_pct: 0.30
+
+# Taux fiscaux sortie par enveloppe (pour calcul du coût évité)
+taux_fiscalite_par_enveloppe:
+  CTO_perso: 0.314        # PFU 30 % + PS (inclus)
+  CTO_IS: 0.25            # IS 25 %
+  Contrat_Cap_IS: 0.25
+  PEA: 0.186              # PS seulement après 5 ans
+  PER: 0.00               # pas de fiscalité en phase d'accumulation
+  PEE: 0.186
+  AV_UC: 0.246            # PFU 24,7 % hors abattement
+
+# Seuils de déclenchement d'un rebalancement par vente
+# Si la dérive est trop forte, les versements ne suffiront pas → passage en vente
+seuil_derive_vente_absolue: 0.15    # 15 points de pourcentage
+seuil_horizon_versements_mois: 24   # si rattrapage > 24 mois → vente

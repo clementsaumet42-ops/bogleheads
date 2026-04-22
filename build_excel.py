@@ -43,6 +43,7 @@ def main():
     print("  • Tuto_Solveur")
     print("  • Projection_MonteCarlo")
     print("  • Glide_Path")
+    print("  • Rebalancement_Flux")
     print("\n📊 Ouvrez le fichier dans Excel et activez le Solveur pour l'optimisation.")
 
 
