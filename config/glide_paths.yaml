@@ -1,0 +1,89 @@
+# Glide paths disponibles (lifecycle investing)
+# Chaque glide path définit la part d'actions (%) en fonction de l'âge.
+# Le reste est alloué entre obligations, monétaire selon une règle "tail".
+
+glide_paths:
+
+  bogle_classique:
+    description: "Règle de Bogle : actions% = 110 − âge, plancher 20%, plafond 90%"
+    type: formule
+    formule: "max(20, min(90, 110 - age))"   # en %
+    repartition_defensive:                    # répartition du non-actions
+      obligations: 0.80
+      monetaire: 0.20
+
+  conservateur:
+    description: "Règle conservatrice : actions% = 100 − âge"
+    type: formule
+    formule: "max(15, min(85, 100 - age))"
+    repartition_defensive:
+      obligations: 0.75
+      monetaire: 0.25
+
+  agressif:
+    description: "Règle agressive : actions% = 120 − âge (tolérance au risque élevée)"
+    type: formule
+    formule: "max(30, min(95, 120 - age))"
+    repartition_defensive:
+      obligations: 0.85
+      monetaire: 0.15
+
+  target_date_2040:
+    description: "Target-date fund style, interpolation linéaire entre points clés"
+    type: points
+    points:
+      - {age: 25, actions: 90}
+      - {age: 35, actions: 85}
+      - {age: 45, actions: 75}
+      - {age: 55, actions: 60}
+      - {age: 65, actions: 45}
+      - {age: 75, actions: 35}
+      - {age: 85, actions: 30}
+    repartition_defensive:
+      obligations: 0.80
+      monetaire: 0.20
+
+  target_date_2050:
+    description: "Target-date 2050 (horizon plus long)"
+    type: points
+    points:
+      - {age: 25, actions: 95}
+      - {age: 40, actions: 85}
+      - {age: 55, actions: 70}
+      - {age: 65, actions: 55}
+      - {age: 75, actions: 40}
+    repartition_defensive:
+      obligations: 0.80
+      monetaire: 0.20
+
+  pre_retraite_glide_down:
+    description: "Désensibilisation progressive avant/après retraite (profil 6 Pré-retraité)"
+    type: points
+    points:
+      - {age: 55, actions: 50}
+      - {age: 60, actions: 40}
+      - {age: 62, actions: 35}
+      - {age: 65, actions: 30}
+      - {age: 70, actions: 25}
+      - {age: 80, actions: 20}
+    repartition_defensive:
+      obligations: 0.70
+      monetaire: 0.30
+
+# Répartition de la poche actions par défaut
+# (respecte la philosophie Boglehead : dominante Monde + satellites)
+repartition_actions_defaut:
+  actions_monde: 0.60
+  actions_usa: 0.15
+  actions_europe: 0.10
+  actions_emergents: 0.10
+  immobilier: 0.05
+
+# Association profil → glide path recommandé
+association_profils:
+  profil_1_cadre: bogle_classique
+  profil_2_dirigeant: conservateur
+  profil_3_dirigeant_pme: bogle_classique
+  profil_4_profession: bogle_classique
+  profil_5_jeune: agressif
+  profil_6_pre_retraite: pre_retraite_glide_down
