@@ -9,7 +9,7 @@
 
 ## 📋 Description
 
-Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** contenant 17 onglets dédiés à la gestion d'un portefeuille Boglehead en France, avec optimisation multi-enveloppes fiscales (PEA, PER, PEE, CTO, Contrat Cap IS).
+Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** contenant 17 onglets dédiés à la gestion d'un portefeuille Boglehead en France, avec optimisation multi-enveloppes fiscales (PEA, PER, PEE, CTO, Contrat Cap IS). Il génère également un **PDF client 13 pages** personnalisable aux couleurs du cabinet.
 
 ### Fonctionnalités
 
@@ -23,6 +23,7 @@ Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** co
 - 🔄 **Glide path automatique** (lifecycle investing) : évolution de l'allocation selon l'âge avec 6 stratégies paramétrables (Bogle, target-date, conservateur…)
 - 💸 **Rebalancement par flux** (cash flow rebalancing) : rééquilibrage sans vente, zéro fiscalité
 - 🎯 **Rebalancement optimal** (MILP + cascade fiscale) : plan d'action chiffré minimisant le coût fiscal, avec gestion CMP/FIFO, tax-loss harvesting, abattements AV, contraintes PEA/PER
+- 📄 **PDF client 13 pages** : rapport patrimonial professionnel avec graphiques matplotlib (camembert patrimoine, projection Monte-Carlo), personnalisable via `config/pdf_cabinet.yaml`
 
 ---
 
@@ -50,6 +51,51 @@ python build_excel.py
 ```
 
 Le fichier est généré dans `output/portefeuille_bogleheads.xlsx`.
+
+### Générer le PDF client (13 pages)
+
+```bash
+# Tous les profils
+python build_pdf.py
+
+# Un seul profil (par code ou par id)
+python build_pdf.py --profil PROFIL_1_CADRE_SUP
+python build_pdf.py --profil 1
+
+# Cabinet personnalisé
+python build_pdf.py --cabinet config/pdf_cabinet.yaml --output output/
+```
+
+Les PDFs sont générés dans `output/<PROFIL_CODE>_<YYYYMMDD>.pdf`. Des exemples sont disponibles dans `examples/`.
+
+**Structure du PDF (13 pages)** :
+| # | Page | Contenu |
+|---|---|---|
+| 1 | Couverture | Logo cabinet, nom client, date |
+| 2 | Synthèse exécutive | Patrimoine total, allocation, actions clés |
+| 3 | Profil client | Situation, objectifs, horizon, TMI |
+| 4 | Patrimoine actuel | Tableau enveloppes × classes + camembert |
+| 5 | Philosophie Boglehead | Les 3 principes ETF passifs |
+| 6 | Allocation cible | Résultat optimisé, bornes par classe |
+| 7 | Asset location | Matrice classes × enveloppes, logique fiscale |
+| 8 | Univers ETF | ~15 ETF sélectionnés : ISIN, TER, éligibilité |
+| 9 | Projection Monte-Carlo | Graphique 30 ans médiane + P10/P90 |
+| 10 | Plan de rebalancement | Cascade gratuit / flux / vente optimisée |
+| 11 | Fiscalité & transmission | TMI, abattements AV, PER, succession |
+| 12 | Suivi recommandé | Calendrier trimestriel, KPIs, alertes |
+| 13 | Mentions légales | Hypothèses, avertissements AMF, glossaire |
+
+**Personnalisation cabinet** (`config/pdf_cabinet.yaml`) :
+```yaml
+cabinet:
+  nom: "Cabinet Saumet Patrimoine"
+  logo_path: "assets/logo_cabinet.png"  # optionnel
+  adresse: "12 Rue de la République, Lyon"
+  numero_orias: "XXXXXXXXXXXX"
+style:
+  couleur_primary: "#1a4d8f"
+  couleur_accent:  "#d4a017"
+```
 
 ### Lancer les tests
 
@@ -388,7 +434,7 @@ YAML configs ──→ src/*.py ──→ excel_builder.py ──→ output/*.xl
   - Droits de succession selon lien de parenté
   - Stratégies : donation-partage, démembrement, AV avant 70 ans
   - Simulation transmission pour chaque profil type
-- [ ] **Reporting client PDF** (`reportlab` ou `weasyprint`) : rapport prêt à remettre, logo CGP personnalisable.
+- [x] **Reporting client PDF** (`reportlab`) : rapport 13 pages prêt à remettre, logo CGP personnalisable — voir `build_pdf.py` et `src/pdf_builder.py`.
 
 ### 🎨 Fonctionnalités — Priorité basse / Nice-to-have
 

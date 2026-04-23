@@ -17,20 +17,17 @@ from typing import Any
 
 import matplotlib
 import matplotlib.pyplot as plt
-import numpy as np
 
 matplotlib.use("Agg")
 
-from reportlab.lib.colors import HexColor, black, lightgrey, white
+from reportlab.lib.colors import HexColor, lightgrey, white
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.platypus import (
-    FrameBreak,
     HRFlowable,
     Image,
     KeepInFrame,
-    KeepTogether,
     PageBreak,
     Paragraph,
     Spacer,
@@ -150,7 +147,6 @@ def _eur(v: Any) -> str:
 
 def _build_styles(cfg: CabinetConfig) -> dict[str, ParagraphStyle]:
     primary, accent, neutral = _colors(cfg)
-    base = getSampleStyleSheet()
 
     def ps(name: str, **kw) -> ParagraphStyle:
         return ParagraphStyle(name, **kw)
@@ -374,7 +370,7 @@ def _save_fig(fig: plt.Figure, path: Path) -> None:
 
 
 def _make_pie_chart(labels: list[str], values: list[float], title: str, cfg: CabinetConfig) -> Path:
-    primary, accent, neutral = _colors(cfg)
+    primary_hex = cfg.style.couleur_primary
     palette = [
         "#1a4d8f",
         "#d4a017",
@@ -399,13 +395,13 @@ def _make_pie_chart(labels: list[str], values: list[float], title: str, cfg: Cab
         at.set_fontsize(7)
     ax.legend(
         wedges,
-        [f"{l} ({v * 100:.1f}%)" for l, v in zip(labels, values)],
+        [f"{lb} ({v * 100:.1f}%)" for lb, v in zip(labels, values)],
         loc="lower center",
         bbox_to_anchor=(0.5, -0.25),
         fontsize=7,
         ncol=2,
     )
-    ax.set_title(_s(title), fontsize=10, fontweight="bold", color=str(primary))
+    ax.set_title(_s(title), fontsize=10, fontweight="bold", color=primary_hex)
     path = _tmp_png("pie")
     _save_fig(fig, path)
     return path
@@ -418,16 +414,19 @@ def _make_projection_chart(
     p90: list[float],
     cfg: CabinetConfig,
 ) -> Path:
-    primary, accent, _ = _colors(cfg)
+    primary_hex = cfg.style.couleur_primary
+    accent_hex = cfg.style.couleur_accent
     fig, ax = plt.subplots(figsize=(7, 4))
-    ax.fill_between(annees, p10, p90, alpha=0.15, color=str(primary), label="P10 - P90")
-    ax.plot(annees, mediane, color=str(primary), linewidth=2, label="Mediane")
-    ax.plot(annees, p10, color=str(primary), linewidth=0.8, linestyle="--", alpha=0.6)
-    ax.plot(annees, p90, color=str(primary), linewidth=0.8, linestyle="--", alpha=0.6)
+    ax.fill_between(annees, p10, p90, alpha=0.15, color=primary_hex, label="P10 - P90")
+    ax.plot(annees, mediane, color=primary_hex, linewidth=2, label="Mediane")
+    ax.plot(annees, p10, color=accent_hex, linewidth=0.8, linestyle="--", alpha=0.8)
+    ax.plot(annees, p90, color=accent_hex, linewidth=0.8, linestyle="--", alpha=0.8)
     ax.set_xlabel("Annees", fontsize=8)
     ax.set_ylabel("Capital (EUR)", fontsize=8)
     ax.set_title("Projection Monte-Carlo du patrimoine", fontsize=10, fontweight="bold")
-    ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"{x / 1e6:.1f}M" if x >= 1e6 else f"{x / 1e3:.0f}k"))
+    ax.yaxis.set_major_formatter(
+        plt.FuncFormatter(lambda x, _: f"{x / 1e6:.1f}M" if x >= 1e6 else f"{x / 1e3:.0f}k")
+    )
     ax.legend(fontsize=8)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
@@ -606,7 +605,7 @@ def _page_synthese(
         (f"{horizon} ans", "Horizon placement"),
     ]
     kpi_w = CONTENT_W / len(kpis)
-    kpi_row = [[_kpi_box(v, l, styles, primary, kpi_w - 0.2 * cm) for v, l in kpis]]
+    kpi_row = [[_kpi_box(v, lbl, styles, primary, kpi_w - 0.2 * cm) for v, lbl in kpis]]
     kpi_table = Table(kpi_row, colWidths=[kpi_w] * len(kpis))
     kpi_table.setStyle(
         TableStyle(
@@ -623,7 +622,6 @@ def _page_synthese(
 
     # Allocation actuelle vs cible
     alloc = profil.get("allocation_cible_bogleheads", {}) or {}
-    enveloppes = profil.get("enveloppes_disponibles") or {}
 
     elements.append(Paragraph("Allocation cible Boglehead", styles["h2"]))
     alloc_data = [["Classe d'actifs", "Cible"]]
@@ -1105,8 +1103,8 @@ def _page_asset_location(
         "CTO : soumis au PFU 30% (ou bareme sur option), a utiliser en dernier recours pour actifs "
         "non eligibles aux enveloppes fiscales privilegiees.",
     ]
-    for l in logique:
-        elements.append(Paragraph(f"  - {_s(l)}", styles["bullet"]))
+    for line in logique:
+        elements.append(Paragraph(f"  - {_s(line)}", styles["bullet"]))
 
     return elements
 
@@ -1353,13 +1351,6 @@ def _page_rebalancement(
     capacite = float(profil.get("capacite_epargne_annuelle", 0))
     tmi = float(profil.get("tmi", 0))
 
-    # Build approximate current allocation from enveloppe data
-    total_env = sum(
-        float(v.get("encours_actuel", 0))
-        for v in enveloppes.values()
-        if isinstance(v, dict) and v.get("encours_actuel")
-    )
-
     # Try rebalancement module
     reb_data: dict | None = None
     try:
@@ -1477,7 +1468,6 @@ def _page_fiscalite(
 
     tmi = float(profil.get("tmi", 0))
     rfr = profil.get("rfr_annuel")
-    capacite = float(profil.get("capacite_epargne_annuelle", 0))
     enveloppes = profil.get("enveloppes_disponibles") or {}
     situation = _s(profil.get("situation_familiale", "N/A"))
 
@@ -1497,7 +1487,6 @@ def _page_fiscalite(
     # PER deduction
     elements.append(Paragraph("Opportunite PER — Deduction fiscale", styles["h2"]))
     per = enveloppes.get("PER") or {}
-    per_encours = float(per.get("encours_actuel", 0)) if isinstance(per, dict) else 0
     per_versement = float(per.get("versement_annuel_prevu", 0)) if isinstance(per, dict) else 0
     eco_per = per_versement * tmi
     elements.append(
@@ -1521,15 +1510,14 @@ def _page_fiscalite(
 
     # AV abattements
     elements.append(Paragraph("Assurance-vie — Avantages fiscaux", styles["h2"]))
-    av = enveloppes.get("AV_UC") or {}
     abattement = 9200 if "marié" in situation.lower() or "pacs" in situation.lower() else 4600
     av_lines = [
         f"Abattement annuel sur les rachats apres 8 ans : {_eur(abattement)} ({_s(situation)})",
         "Transmission hors droits de succession : jusqu'a 152 500 EUR par beneficiaire (versements avant 70 ans)",
         "Taux d'imposition apres 8 ans : 7.5% IR (au-dela abattement) + 17.2% PS",
     ]
-    for l in av_lines:
-        elements.append(Paragraph(f"  - {_s(l)}", styles["bullet"]))
+    for line in av_lines:
+        elements.append(Paragraph(f"  - {_s(line)}", styles["bullet"]))
 
     elements.append(Spacer(1, 0.4 * cm))
 
@@ -1545,8 +1533,8 @@ def _page_fiscalite(
         "PER : capital transmis aux beneficiaires hors succession si deces avant 70 ans",
         "Anticiper les donations : abattement de 100 000 EUR renouvelable tous les 15 ans",
     ]
-    for l in trans_lines:
-        elements.append(Paragraph(f"  - {_s(l)}", styles["bullet"]))
+    for line in trans_lines:
+        elements.append(Paragraph(f"  - {_s(line)}", styles["bullet"]))
 
     return elements
 
@@ -1778,12 +1766,9 @@ def _generate_charts(
         horizons = [10, 20, 30]
         resultats = projeter_profil(profil, alloc, horizons=horizons)
 
-        annees_full = list(range(0, 31))
         patrimoine_init = float(profil.get("patrimoine_financier_total", 100000))
-        versement = float(profil.get("capacite_epargne_annuelle", 0))
 
         # Build simplified curves from available percentile data
-        p10_curve, med_curve, p90_curve = [patrimoine_init], [patrimoine_init], [patrimoine_init]
         pts = {0: (patrimoine_init, patrimoine_init, patrimoine_init)}
         for h, r in sorted(resultats.items()):
             p10 = getattr(r, "percentile_10", None)
