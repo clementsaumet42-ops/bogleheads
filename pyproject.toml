@@ -8,14 +8,14 @@ version = "0.8.0"
 description = "Outil CGP Boglehead multi-enveloppes fiscales France 2026"
 authors = [{name = "clementsaumet42-ops"}]
 license = {text = "MIT"}
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "openpyxl>=3.1.2",
     "pyyaml>=6.0.1",
     "pandas>=2.2.0",
     "numpy>=1.26",
     "pydantic>=2.0",
-]
+] 
 
 [project.optional-dependencies]
 dev = [
@@ -29,12 +29,12 @@ dev = [
 optim = ["pulp"]
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["." ]
 include = ["src*"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM", "C90"]
@@ -44,7 +44,7 @@ ignore = ["E501", "C901"]
 quote-style = "double"
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.10"
 ignore_missing_imports = true
 strict = false
 
