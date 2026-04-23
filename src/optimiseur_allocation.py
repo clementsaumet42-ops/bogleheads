@@ -497,9 +497,6 @@ def _mode_b_milp(
     solver = pulp.getSolver("PULP_CBC_CMD", msg=False)
     status = prob.solve(solver)
 
-    if pulp.LpStatus[status] not in ("Optimal", "Not Solved"):
-        pass
-
     if pulp.LpStatus[status] == "Optimal":
         ventilation = []
         cout_opt = 0.0
@@ -542,8 +539,8 @@ def _est_eligible(classe: str, enveloppe: str, classe_config: dict) -> bool:
     if "av" in env_lower or "assurance" in env_lower:
         return bool(classe_config.get("eligible_av", True))
     if "pee" in env_lower:
-        # PEE : actions éligibles, pas obligations
-        return classe not in ("monetaire",)
+        # PEE : monétaire non éligible, autres classes acceptées
+        return classe != "monetaire"
     return bool(classe_config.get("eligible_cto", True))
 
 
