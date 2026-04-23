@@ -1,0 +1,24 @@
+cabinet:
+  nom: "Cabinet Saumet Patrimoine"
+  logo_path: "assets/logo_cabinet.png"   # optionnel, fallback texte si absent
+  adresse: "12 Rue de la Paix, 75002 Paris"
+  telephone: "+33 1 23 45 67 89"
+  email: "contact@cabinet-saumet.fr"
+  site_web: "www.cabinet-saumet.fr"
+  numero_orias: "XXXXXXXXXXXX"  # Format : 7 chiffres (ex: 0123456) — à remplacer par votre N° ORIAS
+  mention_conformite: "Conseiller en Investissements Financiers membre de la CNCIF"
+
+style:
+  couleur_primary: "#1a4d8f"
+  couleur_accent:  "#d4a017"
+  couleur_neutral: "#333333"
+  police: "Helvetica"
+  format_page: "A4"
+  marges_cm: 2.0
+
+footer:
+  mention_legale: "Document confidentiel — ne pas diffuser"
+  avertissement_amf: >
+    Les performances passées ne préjugent pas des performances futures.
+    Le présent document ne constitue pas un conseil en investissement
+    personnalisé au sens de la directive MIF II.
