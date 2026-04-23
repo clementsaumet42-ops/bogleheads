@@ -51,3 +51,4 @@ output/*.xls
 # OS
 .DS_Store
 Thumbs.db
+output/*.pdf
