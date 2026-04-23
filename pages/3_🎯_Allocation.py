@@ -5,7 +5,7 @@ from __future__ import annotations
 import streamlit as st
 
 from src.ui.charts import camembert_allocation
-from src.ui.formatters import format_pct, format_ratio_sharpe
+from src.ui.formatters import format_euro, format_pct, format_ratio_sharpe
 
 st.title("🎯 Allocation cible")
 
@@ -139,14 +139,13 @@ with col_right:
     st.subheader("Tableau des poids")
     import pandas as pd
 
+    patrimoine_profil = profil.get("patrimoine_financier_total", 100_000) or 100_000
     df = pd.DataFrame(
         [
             {
                 "Classe d'actifs": k,
                 "Poids": format_pct(v),
-                "Montant estimé (€)": f"{v * (profil.get('patrimoine_financier_total', 100_000) or 100_000):,.0f} €".replace(
-                    ",", "\u202f"
-                ),
+                "Montant estimé (€)": format_euro(v * patrimoine_profil),
             }
             for k, v in sorted(poids_filtres.items(), key=lambda x: -x[1])
         ]

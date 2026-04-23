@@ -20,10 +20,10 @@ import pytest
 
 
 def test_import_app():
-    """app.py doit être importable sans erreur."""
-    # On importe le module sans l'exécuter (évite l'exécution de st.set_page_config)
+    """app.py doit être importable sans erreur (chargement du spec + module)."""
     spec = importlib.util.spec_from_file_location("app_test", "app.py")
     assert spec is not None
+    assert spec.loader is not None
 
 
 # ─── 2. Import des modules de page ────────────────────────────────────────────

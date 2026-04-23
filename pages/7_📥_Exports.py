@@ -145,6 +145,8 @@ Rapport PDF personnalisé **13 pages** :
             )
             st.markdown(pdf_display, unsafe_allow_html=True)
         except Exception:
+            # Aperçu iframe optionnel — l'échec (navigateur sans plugin PDF,
+            # taille base64 trop grande) ne doit pas bloquer le téléchargement.
             pass
 
         if st.button("🔄 Régénérer PDF", use_container_width=True):

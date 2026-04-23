@@ -7,6 +7,8 @@ from pathlib import Path
 import streamlit as st
 import yaml
 
+from src.ui.formatters import format_euro
+
 st.title("👤 Profil client")
 
 _ROOT = Path(__file__).parent.parent
@@ -47,9 +49,9 @@ if mode == "📂 Profil type YAML":
         st.metric("TMI", f"{int(profil_raw.get('tmi', 0) * 100)} %")
     with col2:
         patrimoine = profil_raw.get("patrimoine_financier_total", 0) or 0
-        st.metric("Patrimoine financier", f"{patrimoine:,.0f} €".replace(",", "\u202f"))
+        st.metric("Patrimoine financier", format_euro(patrimoine))
         capacite = profil_raw.get("capacite_epargne_annuelle", 0) or 0
-        st.metric("Épargne annuelle", f"{capacite:,.0f} €".replace(",", "\u202f"))
+        st.metric("Épargne annuelle", format_euro(capacite))
     with col3:
         horizon = profil_raw.get("horizon_placement_ans", "—")
         st.metric("Horizon", f"{horizon} ans")
