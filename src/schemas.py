@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -40,23 +40,23 @@ class ETF(_Lenient):
     nom: str
     emetteur: str
     classe_actifs: str
-    sous_classe: Optional[str] = None
+    sous_classe: str | None = None
     ter: float = Field(ge=0)
     devise: str
     domicile: str
     capitalisant: bool
     eur_hedged: bool
     eligibilite: ETFEligibilite = Field(default_factory=ETFEligibilite)
-    notes: Optional[str] = None
-    methode_replication: Optional[str] = None
-    url_dic_kid: Optional[str] = None
-    date_verification_dic: Optional[str] = None
-    contrats_av_reference: List[str] = Field(default_factory=list)
+    notes: str | None = None
+    methode_replication: str | None = None
+    url_dic_kid: str | None = None
+    date_verification_dic: str | None = None
+    contrats_av_reference: list[str] = Field(default_factory=list)
     frais_entree_typique_pct: float = Field(default=0.0, ge=0)
 
 
 class UniversETFWrapper(_Lenient):
-    univers_etf: List[ETF]
+    univers_etf: list[ETF]
 
 
 # ─── Enveloppes ───────────────────────────────────────────────────────────────
@@ -65,18 +65,18 @@ class UniversETFWrapper(_Lenient):
 class Enveloppe(_Lenient):
     id: str
     nom: str
-    plafond: Optional[Union[int, float]] = None
-    fiscalite_entree: Optional[str] = None
-    fiscalite_courante: Optional[Dict[str, Any]] = None
-    fiscalite_sortie: Optional[Union[str, Dict[str, Any]]] = None
-    avantages: List[str] = Field(default_factory=list)
-    inconvenients: List[str] = Field(default_factory=list)
-    eligible_etf_types: List[str] = Field(default_factory=list)
-    notes: Optional[str] = None
+    plafond: int | float | None = None
+    fiscalite_entree: str | None = None
+    fiscalite_courante: dict[str, Any] | None = None
+    fiscalite_sortie: str | dict[str, Any] | None = None
+    avantages: list[str] = Field(default_factory=list)
+    inconvenients: list[str] = Field(default_factory=list)
+    eligible_etf_types: list[str] = Field(default_factory=list)
+    notes: str | None = None
 
 
 class EnveloppesWrapper(_Lenient):
-    enveloppes: List[Enveloppe]
+    enveloppes: list[Enveloppe]
 
 
 # ─── Profils clients ──────────────────────────────────────────────────────────
@@ -88,7 +88,7 @@ class AllocationCible(_Lenient):
     immobilier_cote: float = Field(default=0.0, ge=0, le=1)
     or_: float = Field(default=0.0, ge=0, le=1, alias="or")
     liquidites: float = Field(default=0.0, ge=0, le=1)
-    commentaire: Optional[str] = None
+    commentaire: str | None = None
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
@@ -106,15 +106,15 @@ class Profil(_Lenient):
     nom: str
     age: int = Field(ge=0, le=120)
     tmi: float = Field(ge=0, le=1)
-    rfr_annuel: Optional[float] = None
+    rfr_annuel: float | None = None
     patrimoine_financier_total: float = Field(default=0.0, ge=0)
     allocation_cible_bogleheads: AllocationCible
-    enveloppes_disponibles: Optional[Dict[str, Any]] = None
+    enveloppes_disponibles: dict[str, Any] | None = None
 
 
 class ProfilsWrapper(_Lenient):
     disclaimer: str
-    profils: List[Profil]
+    profils: list[Profil]
 
 
 # ─── Fiscalité 2026 ───────────────────────────────────────────────────────────
@@ -122,7 +122,7 @@ class ProfilsWrapper(_Lenient):
 
 class PrelevementsSociaux(_Lenient):
     taux_global: float = Field(ge=0, le=1)
-    detail: Optional[Dict[str, float]] = None
+    detail: dict[str, float] | None = None
 
 
 class PFU(_Lenient):
@@ -140,29 +140,29 @@ class Fiscalite2026(_Lenient):
 
 
 class ParamsProjection(_Lenient):
-    classes_actifs: Dict[str, Any]
-    correlations: Optional[Dict[str, Any]] = None
-    simulation: Optional[Dict[str, Any]] = None
-    inflation_annuelle: Optional[float] = None
+    classes_actifs: dict[str, Any]
+    correlations: dict[str, Any] | None = None
+    simulation: dict[str, Any] | None = None
+    inflation_annuelle: float | None = None
 
 
 # ─── Glide paths ──────────────────────────────────────────────────────────────
 
 
 class GlidePath(_Lenient):
-    glide_paths: Dict[str, Any]
-    repartition_actions_defaut: Optional[Dict[str, Any]] = None
-    association_profils: Optional[Dict[str, Any]] = None
+    glide_paths: dict[str, Any]
+    repartition_actions_defaut: dict[str, Any] | None = None
+    association_profils: dict[str, Any] | None = None
 
 
 # ─── Rebalancement / flux ─────────────────────────────────────────────────────
 
 
 class RebalancementFlux(_Lenient):
-    bandes_tolerance: Dict[str, Any]
-    priorites_classes: Optional[List[str]] = None
-    hypothese_plus_value_latente_pct: Optional[float] = None
-    taux_fiscalite_par_enveloppe: Optional[Dict[str, Any]] = None
+    bandes_tolerance: dict[str, Any]
+    priorites_classes: list[str] | None = None
+    hypothese_plus_value_latente_pct: float | None = None
+    taux_fiscalite_par_enveloppe: dict[str, Any] | None = None
 
 
 # ─── Chargement et validation centralisés ────────────────────────────────────
