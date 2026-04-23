@@ -69,4 +69,3 @@ class TestExcelStructure:
 
     def test_20_onglets_crees(self, workbook):
         assert len(workbook.sheetnames) >= 20
-
