@@ -504,6 +504,35 @@ Le Solveur intégré est limité à 200 variables. Pour les portefeuilles comple
 
 ---
 
+## 🌐 Webapp Streamlit (S4)
+
+Lancez l'interface web interactive en une commande :
+
+```bash
+pip install -e ".[web,optim]"
+streamlit run app.py
+```
+
+### Architecture multi-pages
+
+```
+🏠 Accueil → 👤 Profil → 🎯 Allocation → 🏦 Asset Loc → 📈 Monte-Carlo → 🔄 Rebal → 📥 Exports
+```
+
+| Page | Fonctionnalité |
+|---|---|
+| 🏠 Accueil | KPIs (nb profils, enveloppes, ETF) + call-to-action |
+| 👤 Profil client | Formulaire interactif ou chargement YAML — validation Pydantic live |
+| 🎯 Allocation cible | Sliders contraintes (USA max, EM max) → recalcul Markowitz en live |
+| 🏦 Asset Location | Heatmap Plotly classes × enveloppes, comparaison coût optimisé vs naïf |
+| 📈 Monte-Carlo | Fan chart P10/médiane/P90, probabilité d'atteinte de l'objectif |
+| 🔄 Rebalancement | Plan 3 étapes (arbitrages gratuits → flux → ventes), économie fiscale |
+| 📥 Téléchargements | Boutons Excel (22 onglets) et PDF client (13 pages) téléchargeables |
+
+Voir `docs/webapp.md` pour le guide utilisateur complet.
+
+---
+
 ## 🏗️ Architecture
 
 Voir `docs/architecture.md` pour le détail complet.
@@ -567,7 +596,7 @@ YAML configs ──→ src/*.py ──→ excel_builder.py ──→ output/*.xl
 
 ### 🎨 Fonctionnalités — Priorité basse / Nice-to-have
 
-- [ ] **Interface web Streamlit** (`app.py`) : saisie navigateur + téléchargement Excel + PDF.
+- [x] **Interface web Streamlit** (`app.py`) : 7 pages interactives — profil, allocation Markowitz, asset location, Monte-Carlo, rebalancement, exports Excel+PDF. Deploy-ready (Docker). ← **S4 ✅**
 - [ ] **Import / Export de portefeuille existant** (CSV Bourse Direct, Degiro, Fortuneo, Linxea) + comparaison allocation actuelle vs cible Boglehead.
 - [ ] **Mise à jour automatique des données ETF** via GitHub Actions cron (scraping JustETF / AMF, PR automatique, alerte si perte éligibilité PEA).
 - [ ] **Comparateur "Boglehead vs fonds actif"** : démonstration pédagogique de l'écart sur 20-30 ans.
@@ -598,7 +627,7 @@ YAML configs ──→ src/*.py ──→ excel_builder.py ──→ output/*.xl
 | **S2** (2 sem.) | Optimiseur + Projection MC | Gros bond fonctionnel |
 | **S3.6** (1 sem.) | Rebalancement optimal MILP | Cascade fiscale 3 étapes |
 | **[x] S3** (1 sem.) | PDF client 13 pages | `build_pdf.py`, reportlab, matplotlib, 6 exemples |
-| **S4** (2 sem.) | Streamlit | Passage CLI → produit web |
+| **[x] S4** (2 sem.) | Streamlit | **7 pages interactives, Docker, 34 tests** |
 | **S5** (1 sem.) | Import portefeuille + Comparateur | Argumentaire commercial |
 | **S6+** | AV avancée, Succession, Refresh auto | Profondeur métier |
 
