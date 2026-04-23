@@ -203,6 +203,48 @@ class RebalancementFlux(_Lenient):
     taux_fiscalite_par_enveloppe: dict[str, Any] | None = None
 
 
+# ─── PDF Cabinet ─────────────────────────────────────────────────────────────
+
+
+class CabinetInfo(_Lenient):
+    nom: str = "Cabinet Boglehead"
+    logo_path: str | None = None
+    adresse: str | None = None
+    telephone: str | None = None
+    email: str | None = None
+    site_web: str | None = None
+    numero_orias: str | None = None
+    mention_conformite: str | None = None
+
+
+class PDFStyle(_Lenient):
+    couleur_primary: str = "#1a4d8f"
+    couleur_accent: str = "#d4a017"
+    couleur_neutral: str = "#333333"
+    police: str = "Helvetica"
+    format_page: str = "A4"
+    marges_cm: float = Field(default=2.0, ge=0)
+
+
+class PDFFooter(_Lenient):
+    mention_legale: str = "Document confidentiel — ne pas diffuser"
+    avertissement_amf: str = ""
+
+
+class CabinetConfig(_Lenient):
+    cabinet: CabinetInfo = Field(default_factory=CabinetInfo)
+    style: PDFStyle = Field(default_factory=PDFStyle)
+    footer: PDFFooter = Field(default_factory=PDFFooter)
+
+
+class ResultatPDF(_Lenient):
+    chemin: str
+    taille_octets: int
+    nb_pages: int
+    profil_code: str
+    date_generation: str
+
+
 # ─── Chargement et validation centralisés ────────────────────────────────────
 
 _SCHEMAS: dict = {
@@ -213,6 +255,7 @@ _SCHEMAS: dict = {
     "projection_params.yaml": ParamsProjection,
     "glide_paths.yaml": GlidePath,
     "rebalancement_flux.yaml": RebalancementFlux,
+    "pdf_cabinet.yaml": CabinetConfig,
 }
 
 

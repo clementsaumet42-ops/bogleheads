@@ -1,0 +1,28 @@
+# Configuration cabinet — personnalisation du PDF client Boglehead
+# Modifier ce fichier pour adapter les en-têtes et coordonnées sans toucher au code.
+
+cabinet:
+  nom: "Cabinet Saumet Patrimoine"
+  logo_path: "assets/logo_cabinet.png"   # optionnel : fallback texte si absent
+  adresse: "12 Rue de la République, 69002 Lyon"
+  telephone: "+33 4 72 00 00 00"
+  email: "contact@saumet-patrimoine.fr"
+  site_web: "www.saumet-patrimoine.fr"
+  numero_orias: "XXXXXXXXXXXX"
+  mention_conformite: "Conseiller en Investissements Financiers membre de la CNCIF"
+
+style:
+  couleur_primary: "#1a4d8f"
+  couleur_accent:  "#d4a017"
+  couleur_neutral: "#333333"
+  police: "Helvetica"
+  format_page: "A4"
+  marges_cm: 2.0
+
+footer:
+  mention_legale: "Document confidentiel — ne pas diffuser"
+  avertissement_amf: >
+    Les performances passées ne préjugent pas des performances futures.
+    Tout investissement comporte un risque de perte en capital.
+    Ce document est établi à titre informatif et ne constitue pas un conseil
+    en investissement au sens de la Directive MIF II.
