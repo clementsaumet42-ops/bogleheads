@@ -3,7 +3,7 @@ Module d'asset location multi-enveloppes
 Logique de répartition optimale des ETF entre les enveloppes fiscales
 """
 
-from typing import List
+from __future__ import annotations
 
 # Règles de priorité d'asset location Boglehead FR
 PRIORITES_ASSET_LOCATION = {
@@ -75,11 +75,11 @@ def calculer_gain_fiscal_enveloppe(
 
 
 def suggerer_asset_location(
-    etfs: List[dict],
-    enveloppes_dispo: List[str],
+    etfs: list[dict],
+    enveloppes_dispo: list[str],
     allocation_cible: dict,
     patrimoine_total: float,
-) -> List[dict]:
+) -> list[dict]:
     """
     Suggère une répartition ETF × Enveloppe basée sur les règles Boglehead FR.
 
