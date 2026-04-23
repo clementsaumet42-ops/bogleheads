@@ -22,6 +22,7 @@ Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** co
 - 📈 **Projection Monte-Carlo** : simulation de 10 000 trajectoires sur 10/20/30 ans avec probabilité d'atteinte d'objectif
 - 🔄 **Glide path automatique** (lifecycle investing) : évolution de l'allocation selon l'âge avec 6 stratégies paramétrables (Bogle, target-date, conservateur…)
 - 💸 **Rebalancement par flux** (cash flow rebalancing) : rééquilibrage sans vente, zéro fiscalité
+- 🎯 **Rebalancement optimal** (MILP + cascade fiscale) : plan d'action chiffré minimisant le coût fiscal, avec gestion CMP/FIFO, tax-loss harvesting, abattements AV, contraintes PEA/PER
 
 ---
 
@@ -99,7 +100,88 @@ bogleheads/
 
 ---
 
-## 📈 Univers ETF
+## 🎯 Rebalancement Optimal (S3.6)
+
+Module `src/rebalancement_optimal.py` — Plan d'action chiffré en 3 étapes fiscales.
+
+### Cascade de priorités
+
+```
+Étape 1 — GRATUIT (priorité absolue)
+  ├─ Arbitrage intra-enveloppe PEA  (zéro fiscalité)
+  ├─ Arbitrage intra-enveloppe PER  (zéro fiscalité)
+  ├─ Arbitrage intra-enveloppe AV   (zéro fiscalité hors abattement)
+  └─ Arbitrage intra-enveloppe Contrat Cap IS
+
+Étape 2 — FLUX (dilue la dérive sans vendre)
+  └─ Orienter versements vers classes sous-pondérées (rebalancement_flux.py)
+
+Étape 3 — VENTE SI NÉCESSAIRE (optimisée fiscalement)
+  ├─ 3a. AV > 8 ans  : abattement annuel 4 600 € / 9 200 €  (Art. 125-0 A CGI)
+  ├─ 3b. PEA ≥ 5 ans : PS 17,2 % uniquement                 (Art. 150-0 A CGI)
+  ├─ 3c. CTO/IR      : méthode CMP obligatoire               (BOI-RPPM-PVBMI-20-10-20-40)
+  ├─ 3d. CTO/IS      : méthode FIFO + tax-loss harvesting    (PCG + art. 38 CGI)
+  └─ 3e. PER         : sortie interdite sauf cas limitatifs  (Art. L. 224-4 CMF)
+```
+
+### Solveur MILP (PuLP)
+
+Minimise `Σ coût_fiscal(vente) + Σ frais_courtage + pénalité_dérive_résiduelle`
+sous contraintes d'allocation ±5 pp par classe et de blocage légal (PEA < 5 ans, PER).
+
+```bash
+# Activer l'extra optim pour PuLP
+pip install -e ".[optim]"
+```
+
+### Paramétrage par profil (`config/profils_clients.yaml`)
+
+```yaml
+profil_1_cadre:
+  regime_fiscal_detenteur: "IR"   # "IR" (particulier) ou "IS" (personne morale)
+  positions_detaillees:
+    - etf: "CW8"
+      enveloppe: "PEA"
+      quantite: 450
+      prix_revient_moyen: 380.50      # CMP utilisé pour CTO/IR
+      lots:                            # FIFO (CTO/IS) + traçabilité
+        - date_acquisition: "2019-03-15"
+          quantite: 200
+          prix_unitaire: 360.00
+      montant_actuel: 207000
+      date_ouverture_enveloppe: "2018-03-15"
+  abattements_utilises:
+    av_abattement_annuel_restant: 4600  # reset au 1er janvier
+  frais_courtier_par_transaction: 0.0   # 0 € chez Bourse Direct / TR
+```
+
+### Onglet Excel `Plan_Rebalancement`
+
+Généré automatiquement dans `output/portefeuille_bogleheads.xlsx` :
+
+```
+═══ PLAN DE REBALANCEMENT — GÉNÉRÉ LE 2026-04-23 ═══
+Dérive constatée :
+  actions    : +8,2 pp  🔴   RÉDUIRE (surpondéré)
+  obligations: −5,4 pp  🔴   AUGMENTER (sous-pondéré)
+
+ÉTAPE 1 — ARBITRAGES GRATUITS (0 €)
+  ✅ PEA : Vendre 15 000 € CSP1 → Acheter 15 000 € CW8   Coût : 0 €
+
+ÉTAPE 2 — FLUX ENTRANTS (0 €)
+  ➡️ Orienter 9 000 € vers obligations (sur 3 mois)       Coût : 0 €
+
+ÉTAPE 3 — VENTES OPTIMISÉES
+  ⚠️ CTO_perso : Vendre 14 000 € IWDA (méthode CMP)
+     PV réalisée : 1 830 €   Coût fiscal : 0 € (TLH)  ✅
+
+═══ RÉSULTATS ═══
+  Coût fiscal total optimisé        :     0 €
+  Coût fiscal sans optimisation     : 4 280 €
+  ⭐ Économie fiscale               : 4 280 €
+```
+
+---
 
 Le référentiel ETF est défini dans `config/univers_etf.yaml`. Il contient **70 ETF** couvrant toutes les classes d'actifs d'un portefeuille Boglehead.
 
@@ -172,6 +254,7 @@ pytest tests/test_univers_etf.py -v
 | `Projection_MonteCarlo` | Projection patrimoniale Monte-Carlo (10 000 tirages, percentiles 10/50/90) |
 | `Glide_Path` | Trajectoire d'allocation dans le temps (lifecycle investing) |
 | `Rebalancement_Flux` | Outil de rebalancement par flux avec comparaison fiscale |
+| `Plan_Rebalancement` | Plan d'action chiffré (cascade fiscale 3 étapes : arbitrages gratuits → flux → ventes optimisées) |
 
 ---
 
@@ -292,9 +375,9 @@ YAML configs ──→ src/*.py ──→ excel_builder.py ──→ output/*.xl
 - [ ] **Optimisation des versements** (DCA vs Lump-sum) : simulation des deux stratégies pour un apport ponctuel (prime de cession, héritage) + recommandation.
 - [ ] **Tax-loss harvesting** (CTO) : détection des moins-values latentes en fin d'année pour compenser les plus-values.
 - [ ] **Calculateur "sortie PER" optimale** : simulation rente / capital fractionné / capital en une fois selon TMI retraite.
-- [ ] **Rebalancement intelligent** :
+- [x] **Rebalancement intelligent** :
   - [x] Rebalancement par flux (orienter les versements vers les classes sous-pondérées, pas de fiscalité)
-  - Calcul du coût fiscal réel du rebalancement vente/rachat
+  - [x] **Rebalancement optimal (MILP)** : `src/rebalancement_optimal.py` — cascade fiscale 3 étapes, CMP/FIFO, tax-loss harvesting, abattements AV, contraintes PEA/PER. Onglet Excel `Plan_Rebalancement`.
   - Onglet `Alertes` listant les positions à rebalancer
 - [ ] **Optimisation Assurance-Vie avancée** :
   - Abattement annuel 4 600 € / 9 200 € après 8 ans

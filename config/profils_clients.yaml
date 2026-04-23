@@ -69,6 +69,76 @@ profils:
 
     score_risque: 6
 
+    # S3.6 — Rebalancement Optimal
+    regime_fiscal_detenteur: "IR"
+
+    positions_detaillees:
+      - etf: "CW8"
+        enveloppe: "PEA"
+        quantite: 450
+        prix_revient_moyen: 380.50
+        lots:
+          - date_acquisition: "2019-03-15"
+            quantite: 200
+            prix_unitaire: 360.00
+          - date_acquisition: "2022-08-10"
+            quantite: 250
+            prix_unitaire: 396.90
+        montant_actuel: 207000
+        date_ouverture_enveloppe: "2018-03-15"
+
+      - etf: "CSP1"
+        enveloppe: "PEA"
+        quantite: 100
+        prix_revient_moyen: 390.00
+        lots:
+          - date_acquisition: "2020-06-01"
+            quantite: 100
+            prix_unitaire: 390.00
+        montant_actuel: 47000
+        date_ouverture_enveloppe: "2018-03-15"
+
+      - etf: "IWDA"
+        enveloppe: "CTO_perso"
+        quantite: 300
+        prix_revient_moyen: 82.30
+        lots:
+          - date_acquisition: "2021-01-10"
+            quantite: 150
+            prix_unitaire: 78.00
+          - date_acquisition: "2023-04-15"
+            quantite: 150
+            prix_unitaire: 86.60
+        montant_actuel: 28530
+        date_ouverture_enveloppe: null
+
+      - etf: "AGGH"
+        enveloppe: "CTO_perso"
+        quantite: 200
+        prix_revient_moyen: 50.10
+        lots:
+          - date_acquisition: "2021-06-01"
+            quantite: 200
+            prix_unitaire: 50.10
+        montant_actuel: 9600
+        date_ouverture_enveloppe: null
+
+      - etf: "GOVS"
+        enveloppe: "PER"
+        quantite: 500
+        prix_revient_moyen: 95.00
+        lots:
+          - date_acquisition: "2020-09-01"
+            quantite: 500
+            prix_unitaire: 95.00
+        montant_actuel: 50000
+        date_ouverture_enveloppe: null
+
+    abattements_utilises:
+      av_abattement_annuel_restant: 4600
+
+    frais_courtier_par_transaction: 0.0
+
   - id: 2
     code: "PROFIL_2_DIRIGEANT_GG"
     nom: "Cadre Dirigeant Grand Groupe"
