@@ -131,6 +131,84 @@ class AllocationCible(_Lenient):
         return self
 
 
+# ─── S2 — Optimiseur d'allocation ────────────────────────────────────────────
+
+
+class ClasseActifConfig(_Lenient):
+    """Paramètres d'une classe d'actifs pour l'optimiseur."""
+
+    rendement_attendu_annuel: float = Field(ge=0)
+    volatilite_annuelle: float = Field(ge=0)
+    frais_ter_moyen: float = Field(ge=0, default=0.0)
+    eligible_pea: bool = False
+    eligible_per: bool = True
+    eligible_av: bool = True
+    eligible_cto: bool = True
+    dividendes_eleves: bool = False
+
+
+class ProfilAversionRisque(_Lenient):
+    """Profil d'aversion au risque pour l'optimiseur Markowitz."""
+
+    lambda_: float = Field(ge=0, le=1, alias="lambda")
+    actions_min: float = Field(default=0.0, ge=0, le=1)
+    actions_max: float = Field(default=1.0, ge=0, le=1)
+    description: str | None = None
+
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+
+class OptimiseurConfig(_Lenient):
+    """Configuration complète de l'optimiseur d'allocation (config/optimiseur.yaml)."""
+
+    classes_actifs: dict[str, ClasseActifConfig]
+    correlations: dict[str, dict[str, float]] | None = None
+    profils_aversion_risque: dict[str, ProfilAversionRisque]
+    frais_gestion_enveloppes: dict[str, float] = Field(default_factory=dict)
+    taux_sans_risque: float = Field(default=0.025, ge=0)
+
+
+class ContraintesPersonnalisees(_Lenient):
+    """Contraintes personnalisées d'allocation par profil client."""
+
+    exposition_usa_max: float | None = Field(default=None, ge=0, le=1)
+    exposition_em_max: float | None = Field(default=None, ge=0, le=1)
+    exposition_geo_europe_min: float | None = Field(default=None, ge=0, le=1)
+    actions_max: float | None = Field(default=None, ge=0, le=1)
+    actions_min: float | None = Field(default=None, ge=0, le=1)
+    obligations_min: float | None = Field(default=None, ge=0, le=1)
+
+
+class ResultatOptimisation(_Lenient):
+    """Résultat de l'optimisation d'allocation (Mode A)."""
+
+    poids: dict[str, float]
+    rendement_attendu: float
+    volatilite_attendue: float
+    ratio_sharpe: float
+    statut: str = "optimal"  # "optimal", "fallback", "infeasible"
+    message: str | None = None
+
+
+class VentilationEnveloppe(_Lenient):
+    """Ventilation d'une classe d'actifs par enveloppe (Mode B)."""
+
+    classe: str
+    enveloppe: str
+    montant: float = Field(ge=0)
+
+
+class ResultatAssetLocation(_Lenient):
+    """Résultat de l'optimisation d'asset location (Mode B)."""
+
+    ventilation: list[VentilationEnveloppe]
+    cout_annuel_optimise: float
+    cout_annuel_naif: float
+    economie_annuelle: float
+    statut: str = "optimal"
+    message: str | None = None
+
+
 class Profil(_Lenient):
     id: int
     code: str
@@ -141,6 +219,11 @@ class Profil(_Lenient):
     patrimoine_financier_total: float = Field(default=0.0, ge=0)
     allocation_cible_bogleheads: AllocationCible
     enveloppes_disponibles: dict[str, Any] | None = None
+    # S2 — Optimiseur d'allocation
+    profil_aversion_risque: str | None = None  # clé dans optimiseur.yaml
+    contraintes_personnalisees: ContraintesPersonnalisees = Field(
+        default_factory=ContraintesPersonnalisees
+    )
     # S3.6 — rebalancement optimal
     regime_fiscal_detenteur: str = Field(
         default="IR"
@@ -213,6 +296,7 @@ _SCHEMAS: dict = {
     "projection_params.yaml": ParamsProjection,
     "glide_paths.yaml": GlidePath,
     "rebalancement_flux.yaml": RebalancementFlux,
+    "optimiseur.yaml": OptimiseurConfig,
 }
 
 

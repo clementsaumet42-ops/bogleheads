@@ -9,7 +9,7 @@
 
 ## 📋 Description
 
-Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** contenant 17 onglets dédiés à la gestion d'un portefeuille Boglehead en France, avec optimisation multi-enveloppes fiscales (PEA, PER, PEE, CTO, Contrat Cap IS).
+Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** contenant 22 onglets dédiés à la gestion d'un portefeuille Boglehead en France, avec optimisation multi-enveloppes fiscales (PEA, PER, PEE, CTO, Contrat Cap IS).
 
 ### Fonctionnalités
 
@@ -23,6 +23,7 @@ Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** co
 - 🔄 **Glide path automatique** (lifecycle investing) : évolution de l'allocation selon l'âge avec 6 stratégies paramétrables (Bogle, target-date, conservateur…)
 - 💸 **Rebalancement par flux** (cash flow rebalancing) : rééquilibrage sans vente, zéro fiscalité
 - 🎯 **Rebalancement optimal** (MILP + cascade fiscale) : plan d'action chiffré minimisant le coût fiscal, avec gestion CMP/FIFO, tax-loss harvesting, abattements AV, contraintes PEA/PER
+- ⭐ **Optimiseur d'allocation intégré** (Sprint S2) : allocation cible Markowitz (scipy QP) + asset location MILP (pulp) avec contraintes fiscales et profil de risque personnalisé
 
 ---
 
@@ -96,6 +97,88 @@ bogleheads/
 │   └── test_univers_etf.py     ← Tests validation univers ETF (ISIN, PEA, schéma)
 └── output/
     └── .gitkeep
+```
+
+---
+
+## ⭐ Optimiseur d'allocation intégré (S2)
+
+Module `src/optimiseur_allocation.py` — Allocation mathématiquement optimale en deux modes chaînables.
+
+### Mode A — Allocation cible (Markowitz via scipy)
+
+Optimise les poids par classe d'actifs (actions USA, Dev ex-USA, Émergents, Obligations, REIT, Or, Monétaire) en minimisant `variance - λ × rendement_attendu`.
+
+```python
+from src.optimiseur_allocation import calculer_allocation_cible, charger_config_optimiseur
+
+config = charger_config_optimiseur()
+profil = {
+    "profil_aversion_risque": "dynamique",
+    "age": 45,
+    "contraintes_personnalisees": {
+        "exposition_usa_max": 0.50,
+        "exposition_em_max": 0.15,
+    },
+}
+poids = calculer_allocation_cible(profil, config)
+# → {"actions_usa": 0.50, "actions_dev_ex_usa": 0.05, "actions_em": 0.15, ...}
+```
+
+### Mode B — Asset location (MILP via pulp)
+
+Ventile chaque classe entre les enveloppes disponibles en minimisant les frais annuels totaux (TER + frais gestion) sous contraintes de plafonds et d'éligibilité.
+
+```python
+from src.optimiseur_allocation import optimiser_portefeuille_complet
+
+res = optimiser_portefeuille_complet(profil_dict, config)
+# res["resultat_mode_b"]["cout_annuel_optimise"] < res["resultat_mode_b"]["cout_annuel_naif"]
+```
+
+### Configuration (`config/optimiseur.yaml`)
+
+```yaml
+classes_actifs:
+  actions_usa:
+    rendement_attendu_annuel: 0.078
+    volatilite_annuelle: 0.18
+    frais_ter_moyen: 0.0007
+    eligible_pea: true
+
+profils_aversion_risque:
+  defensif:   { lambda: 0.2, actions_max: 0.40 }
+  equilibre:  { lambda: 0.5, actions_min: 0.40, actions_max: 0.70 }
+  dynamique:  { lambda: 0.8, actions_min: 0.70, actions_max: 0.90 }
+  agressif:   { lambda: 1.0, actions_min: 0.85 }
+```
+
+### Profils enrichis (`config/profils_clients.yaml`)
+
+```yaml
+profil_1_cadre:
+  profil_aversion_risque: "dynamique"
+  contraintes_personnalisees:
+    exposition_em_max: 0.15
+    exposition_usa_max: 0.50
+```
+
+### Onglet Excel `Allocation_Optimisee`
+
+Généré automatiquement avec :
+- Mode A : allocation cible + rendement/volatilité/Sharpe attendus
+- Mode B : tableau croisé classe × enveloppe (montants en €)
+- Comparaison coût optimisé vs coût naïf (tout CTO)
+
+### Fallback gracieux
+
+Si `scipy` ou `pulp` sont indisponibles, le module bascule automatiquement sur les heuristiques Boglehead avec un warning log.
+
+```bash
+# Activer l'extra optim pour PuLP
+pip install -e ".[optim]"
+# Installer scipy pour le solveur QP Mode A
+pip install scipy
 ```
 
 ---
@@ -255,6 +338,7 @@ pytest tests/test_univers_etf.py -v
 | `Glide_Path` | Trajectoire d'allocation dans le temps (lifecycle investing) |
 | `Rebalancement_Flux` | Outil de rebalancement par flux avec comparaison fiscale |
 | `Plan_Rebalancement` | Plan d'action chiffré (cascade fiscale 3 étapes : arbitrages gratuits → flux → ventes optimisées) |
+| `Allocation_Optimisee` | ⭐ Allocation cible Markowitz (Mode A) + ventilation MILP par enveloppe (Mode B) + comparaison coût optimisé vs naïf |
 
 ---
 
