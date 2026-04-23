@@ -3,7 +3,6 @@ Module enveloppes fiscales — règles métier
 """
 
 from pathlib import Path
-from typing import Optional
 
 import yaml
 
@@ -17,7 +16,7 @@ def charger_enveloppes(chemin_yaml: str = None) -> list:
     return data["enveloppes"]
 
 
-def get_enveloppe_par_id(enveloppes: list, id_enveloppe: str) -> Optional[dict]:
+def get_enveloppe_par_id(enveloppes: list, id_enveloppe: str) -> dict | None:
     """Retourne une enveloppe par son id."""
     for env in enveloppes:
         if env["id"] == id_enveloppe:
@@ -30,7 +29,7 @@ def verifier_eligibilite_etf(etf: dict, enveloppe_id: str) -> bool:
     return etf.get("eligibilite", {}).get(enveloppe_id, False)
 
 
-def calculer_plafond_restant(enveloppe: dict, encours_actuel: float) -> Optional[float]:
+def calculer_plafond_restant(enveloppe: dict, encours_actuel: float) -> float | None:
     """Calcule le plafond restant pour une enveloppe (None si pas de plafond)."""
     plafond = enveloppe.get("plafond")
     if plafond is None:
