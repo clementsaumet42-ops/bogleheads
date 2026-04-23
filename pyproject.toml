@@ -30,6 +30,7 @@ dev = [
     "pypdf>=4.0",
 ]
 optim = ["pulp", "scipy"]
+web = ["streamlit>=1.30", "plotly>=5.18"]
 
 [tool.setuptools.packages.find]
 where = ["." ]
