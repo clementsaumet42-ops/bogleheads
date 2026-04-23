@@ -7,13 +7,13 @@ Supporte deux types de règles :
 
 Compatible avec src/projection.py pour projeter avec allocation variable.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
-import numpy as np
 import yaml
 
 # Import pour interop avec projection
@@ -25,6 +25,7 @@ _CONFIG_DIR = Path(__file__).parent.parent / "config"
 @dataclass
 class GlidePath:
     """Représente une règle de glide path (trajectoire d'allocation)."""
+
     nom: str
     description: str
     type: Literal["formule", "points"]
@@ -75,8 +76,13 @@ def _evaluer_formule_glide(formule: str, age: int) -> float:
     import operator as op
 
     ops_autorisees = {
-        ast.Add: op.add, ast.Sub: op.sub, ast.Mult: op.mul, ast.Div: op.truediv,
-        ast.Mod: op.mod, ast.USub: op.neg, ast.UAdd: op.pos,
+        ast.Add: op.add,
+        ast.Sub: op.sub,
+        ast.Mult: op.mul,
+        ast.Div: op.truediv,
+        ast.Mod: op.mod,
+        ast.USub: op.neg,
+        ast.UAdd: op.pos,
     }
     fonctions_autorisees = {"max": max, "min": min, "abs": abs}
 
@@ -129,8 +135,15 @@ def _construire_allocation(kwargs: dict[str, float]) -> AllocationClasses:
     normalise = {mapping_alias.get(k, k): v for k, v in kwargs.items()}
     # Filtrer uniquement les champs connus de AllocationClasses
     champs_valides = {
-        "actions_monde", "actions_usa", "actions_europe", "actions_emergents",
-        "obligations", "monetaire", "or_", "immobilier", "matieres_premieres",
+        "actions_monde",
+        "actions_usa",
+        "actions_europe",
+        "actions_emergents",
+        "obligations",
+        "monetaire",
+        "or_",
+        "immobilier",
+        "matieres_premieres",
     }
     return AllocationClasses(**{k: v for k, v in normalise.items() if k in champs_valides})
 

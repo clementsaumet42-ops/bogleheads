@@ -7,15 +7,19 @@ Avantage : aucune fiscalité déclenchée.
 
 Compatible avec src/projection.py et src/glide_path.py.
 """
+
 from __future__ import annotations
-from dataclasses import dataclass, field
+
+from dataclasses import dataclass
 from pathlib import Path
+
 import yaml
 
 
 @dataclass
 class EtatPortefeuille:
     """Répartition actuelle du portefeuille par classe d'actifs (en €)."""
+
     actions_monde: float = 0.0
     actions_usa: float = 0.0
     actions_europe: float = 0.0
@@ -53,36 +57,39 @@ class EtatPortefeuille:
 @dataclass
 class Ecart:
     """Écart entre poids actuel et poids cible d'une classe."""
+
     classe: str
     poids_actuel: float
     poids_cible: float
     montant_actuel: float
     montant_cible: float
-    ecart_pct: float          # poids_cible - poids_actuel (peut être négatif si surpondéré)
-    ecart_montant: float      # montant_cible - montant_actuel
-    sous_pondere: bool        # True si ecart_pct > 0
-    hors_bandes: bool         # True si dépasse les tolérances de Swedroe
+    ecart_pct: float  # poids_cible - poids_actuel (peut être négatif si surpondéré)
+    ecart_montant: float  # montant_cible - montant_actuel
+    sous_pondere: bool  # True si ecart_pct > 0
+    hors_bandes: bool  # True si dépasse les tolérances de Swedroe
 
 
 @dataclass
 class RepartitionFlux:
     """Répartition recommandée d'un versement entre les classes."""
+
     versement_total: float
-    repartition: dict[str, float]          # {classe: montant à verser}
-    ecarts_residuels: dict[str, float]     # écart restant après versement
-    allocation_finale: dict[str, float]    # nouveaux poids après versement
+    repartition: dict[str, float]  # {classe: montant à verser}
+    ecarts_residuels: dict[str, float]  # écart restant après versement
+    allocation_finale: dict[str, float]  # nouveaux poids après versement
     classes_rebalancees: list[str]
     classes_encore_hors_bandes: list[str]
-    recommandation: str                    # texte explicatif
-    necessite_vente: bool                  # True si flux insuffisant → vente conseillée
+    recommandation: str  # texte explicatif
+    necessite_vente: bool  # True si flux insuffisant → vente conseillée
 
 
 @dataclass
 class ComparaisonFiscale:
     """Comparaison du coût fiscal rebalancement par flux vs par vente."""
-    cout_fiscal_vente: float       # € d'impôts en cas de rebalancement par vente
-    cout_fiscal_flux: float        # € d'impôts en cas de rebalancement par flux (= 0)
-    economie_fiscale: float        # différence
+
+    cout_fiscal_vente: float  # € d'impôts en cas de rebalancement par vente
+    cout_fiscal_flux: float  # € d'impôts en cas de rebalancement par flux (= 0)
+    economie_fiscale: float  # différence
     hypothese_pv_latente_pct: float
     enveloppe_consideree: str
 
@@ -96,7 +103,7 @@ def charger_config(
 
 def calculer_ecarts(
     portefeuille: EtatPortefeuille,
-    allocation_cible: dict[str, float],    # {classe: poids_cible ∈ [0,1]}
+    allocation_cible: dict[str, float],  # {classe: poids_cible ∈ [0,1]}
     config: dict | None = None,
 ) -> list[Ecart]:
     """
@@ -117,21 +124,22 @@ def calculer_ecarts(
         montant_actuel = montants_actuels.get(classe, 0.0)
         montant_cible = total * p_cible
         ecart_pct = p_cible - p_actuel
-        hors_bandes = (
-            abs(ecart_pct) > tol_abs
-            or (p_cible > 0 and abs(ecart_pct) / p_cible > tol_rel)
+        hors_bandes = abs(ecart_pct) > tol_abs or (
+            p_cible > 0 and abs(ecart_pct) / p_cible > tol_rel
         )
-        ecarts.append(Ecart(
-            classe=classe,
-            poids_actuel=p_actuel,
-            poids_cible=p_cible,
-            montant_actuel=montant_actuel,
-            montant_cible=montant_cible,
-            ecart_pct=ecart_pct,
-            ecart_montant=montant_cible - montant_actuel,
-            sous_pondere=ecart_pct > 0,
-            hors_bandes=hors_bandes,
-        ))
+        ecarts.append(
+            Ecart(
+                classe=classe,
+                poids_actuel=p_actuel,
+                poids_cible=p_cible,
+                montant_actuel=montant_actuel,
+                montant_cible=montant_cible,
+                ecart_pct=ecart_pct,
+                ecart_montant=montant_cible - montant_actuel,
+                sous_pondere=ecart_pct > 0,
+                hors_bandes=hors_bandes,
+            )
+        )
 
     ecarts.sort(key=lambda e: abs(e.ecart_pct), reverse=True)
     return ecarts
@@ -212,8 +220,7 @@ def repartir_versement(
 
     # État final
     montants_finaux = {
-        c: portefeuille.as_dict()[c] + repartition[c]
-        for c in portefeuille.as_dict()
+        c: portefeuille.as_dict()[c] + repartition[c] for c in portefeuille.as_dict()
     }
     total_final = sum(montants_finaux.values())
     allocation_finale = {c: m / total_final for c, m in montants_finaux.items()}
@@ -286,10 +293,7 @@ def simuler_versements_recurrents(
     for _ in range(nb_mois):
         rep = repartir_versement(etat, allocation_cible, versement_mensuel, cfg)
         # Mise à jour de l'état
-        nouveaux = {
-            c: etat.as_dict()[c] + rep.repartition[c]
-            for c in etat.as_dict()
-        }
+        nouveaux = {c: etat.as_dict()[c] + rep.repartition[c] for c in etat.as_dict()}
         etat = EtatPortefeuille(**nouveaux)
         historique.append(rep)
     return historique
@@ -308,7 +312,7 @@ def comparer_cout_fiscal(
     cfg = config or charger_config()
     pv_pct = cfg["hypothese_plus_value_latente_pct"]
     taux_table = cfg["taux_fiscalite_par_enveloppe"]
-    taux = taux_table.get(enveloppe, 0.314)   # défaut : PFU CTO perso
+    taux = taux_table.get(enveloppe, 0.314)  # défaut : PFU CTO perso
 
     cout_vente = montant_a_arbitrer * pv_pct * taux
     return ComparaisonFiscale(

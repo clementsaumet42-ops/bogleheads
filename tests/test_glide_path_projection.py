@@ -1,5 +1,7 @@
 """Tests d'intégration — glide path + Monte-Carlo"""
+
 import numpy as np
+
 from src.glide_path import charger_glide_paths
 from src.projection import simuler_monte_carlo_glide_path
 
@@ -7,14 +9,22 @@ from src.projection import simuler_monte_carlo_glide_path
 def test_projection_avec_glide_path_reproductible():
     gp = charger_glide_paths()["bogle_classique"]
     r1 = simuler_monte_carlo_glide_path(
-        capital_initial=100_000, versement_annuel=5_000,
-        age_debut=35, horizon_annees=30,
-        glide_path=gp, nb_tirages=1000, seed=42,
+        capital_initial=100_000,
+        versement_annuel=5_000,
+        age_debut=35,
+        horizon_annees=30,
+        glide_path=gp,
+        nb_tirages=1000,
+        seed=42,
     )
     r2 = simuler_monte_carlo_glide_path(
-        capital_initial=100_000, versement_annuel=5_000,
-        age_debut=35, horizon_annees=30,
-        glide_path=gp, nb_tirages=1000, seed=42,
+        capital_initial=100_000,
+        versement_annuel=5_000,
+        age_debut=35,
+        horizon_annees=30,
+        glide_path=gp,
+        nb_tirages=1000,
+        seed=42,
     )
     assert np.allclose(r1.trajectoires, r2.trajectoires)
 
@@ -27,9 +37,12 @@ def test_glide_path_plus_conservateur_mediane_plus_basse_mais_p10_plus_haute():
     gp_conservateur = gps["conservateur"]
 
     kwargs = dict(
-        capital_initial=100_000, versement_annuel=0,
-        age_debut=50, horizon_annees=30,
-        nb_tirages=2000, seed=7,
+        capital_initial=100_000,
+        versement_annuel=0,
+        age_debut=50,
+        horizon_annees=30,
+        nb_tirages=2000,
+        seed=7,
     )
     r_a = simuler_monte_carlo_glide_path(glide_path=gp_agressif, **kwargs)
     r_c = simuler_monte_carlo_glide_path(glide_path=gp_conservateur, **kwargs)

@@ -1,13 +1,14 @@
 """Tests unitaires — projection patrimoniale Monte-Carlo"""
+
 import numpy as np
-import pytest
+
 from src.projection import (
     AllocationClasses,
     ParametresProjection,
-    charger_params,
-    simuler_monte_carlo,
     calculer_capital_net_impots,
+    charger_params,
     probabilite_atteindre_objectif,
+    simuler_monte_carlo,
 )
 
 

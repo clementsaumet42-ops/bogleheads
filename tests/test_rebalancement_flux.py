@@ -1,11 +1,12 @@
 import pytest
+
 from src.rebalancement_flux import (
     EtatPortefeuille,
     calculer_ecarts,
+    charger_config,
+    comparer_cout_fiscal,
     repartir_versement,
     simuler_versements_recurrents,
-    comparer_cout_fiscal,
-    charger_config,
 )
 
 
@@ -53,7 +54,7 @@ def test_repartition_verse_sur_sous_ponderee():
 def test_aucune_vente():
     """Le rebalancement par flux ne doit JAMAIS produire de montant négatif."""
     p = EtatPortefeuille(actions_monde=80_000, obligations=20_000)
-    cible = {"actions_monde": 0.5, "obligations": 0.5}   # obligs très sous-pondérées
+    cible = {"actions_monde": 0.5, "obligations": 0.5}  # obligs très sous-pondérées
     rep = repartir_versement(p, cible, 5_000)
     for montant in rep.repartition.values():
         assert montant >= 0

@@ -1,7 +1,7 @@
 """Tests unitaires — chargement et validation des profils clients"""
+
 import pytest
-from pathlib import Path
-import yaml
+
 from src.allocation import charger_profils, get_profil_par_id, valider_allocation
 
 
@@ -36,9 +36,7 @@ def test_champs_obligatoires(profils_data):
     ]
     for profil in profils_data["profils"]:
         for champ in champs_requis:
-            assert champ in profil, (
-                f"Champ '{champ}' manquant dans profil {profil.get('id')}"
-            )
+            assert champ in profil, f"Champ '{champ}' manquant dans profil {profil.get('id')}"
 
 
 def test_allocation_somme_a_100(profils_data):
@@ -84,23 +82,19 @@ def test_score_risque_plage(profils_data):
     """Vérifie que les scores de risque sont dans la plage SRRI [1, 7]."""
     for profil in profils_data["profils"]:
         score = profil.get("score_risque")
-        assert 1 <= score <= 7, (
-            f"Score de risque invalide: {score} pour profil {profil['id']}"
-        )
+        assert 1 <= score <= 7, f"Score de risque invalide: {score} pour profil {profil['id']}"
 
 
 def test_horizons_positifs(profils_data):
     """Vérifie que les horizons de placement sont positifs."""
     for profil in profils_data["profils"]:
-        assert profil["horizon_placement_ans"] > 0, (
-            f"Horizon invalide pour profil {profil['id']}"
-        )
+        assert profil["horizon_placement_ans"] > 0, f"Horizon invalide pour profil {profil['id']}"
 
 
 def test_allocations_actions_croissantes_inversement_age(profils_data):
     """Vérifie la tendance générale : plus on est jeune, plus les actions dominent."""
     profils = profils_data["profils"]
-    jeune = next(p for p in profils if p["id"] == 5)   # 32 ans, 85% actions
+    jeune = next(p for p in profils if p["id"] == 5)  # 32 ans, 85% actions
     senior = next(p for p in profils if p["id"] == 6)  # 62 ans, 35% actions
     assert jeune["allocation_cible_bogleheads"]["actions"] > 0.70
     assert senior["allocation_cible_bogleheads"]["actions"] < 0.50

@@ -1,11 +1,12 @@
 """Tests unitaires — module glide path (lifecycle investing)"""
+
 import pytest
+
 from src.glide_path import (
-    GlidePath,
-    charger_glide_paths,
-    glide_path_pour_profil,
     _evaluer_formule_glide,
     _interpoler_points,
+    charger_glide_paths,
+    glide_path_pour_profil,
 )
 
 

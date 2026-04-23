@@ -2,7 +2,6 @@
 Module de rebalancement Boglehead
 Calcul des bandes de tolérance et du coût fiscal d'arbitrage
 """
-from typing import Dict, Optional
 
 
 def calculer_derive_allocation(

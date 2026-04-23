@@ -7,9 +7,10 @@ Simule l'évolution d'un portefeuille Boglehead sur 10/20/30 ans en tenant compt
 - de la fiscalité de sortie par enveloppe
 - de la variabilité des rendements (tirages gaussiens corrélés par classe d'actifs)
 """
+
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -93,17 +94,20 @@ class AllocationClasses:
 
     def as_array(self) -> np.ndarray:
         """Retourne l'allocation sous forme de tableau NumPy (même ordre que _CLASSES)."""
-        return np.array([
-            self.actions_monde,
-            self.actions_usa,
-            self.actions_europe,
-            self.actions_emergents,
-            self.obligations,
-            self.monetaire,
-            self.or_,
-            self.immobilier,
-            self.matieres_premieres,
-        ], dtype=float)
+        return np.array(
+            [
+                self.actions_monde,
+                self.actions_usa,
+                self.actions_europe,
+                self.actions_emergents,
+                self.obligations,
+                self.monetaire,
+                self.or_,
+                self.immobilier,
+                self.matieres_premieres,
+            ],
+            dtype=float,
+        )
 
     @property
     def classes(self) -> list[str]:
@@ -148,7 +152,7 @@ def charger_params(
         # Chercher d'abord depuis la racine du projet
         racine = Path(__file__).parent.parent
         chemin = racine / chemin
-    with open(chemin, "r", encoding="utf-8") as f:
+    with open(chemin, encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -189,8 +193,6 @@ def _construire_matrice_covariance(params_marche: dict) -> tuple[np.ndarray, np.
 
             # Chercher dans les corrélations du YAML (format: "actions_obligations" etc.)
             corr_val = None
-            yaml_corr_key = f"{key_i}_{key_j}"
-            yaml_corr_key_rev = f"{key_j}_{key_i}"
             # Simplification YAML : "actions" = actions_monde, "obligations" = obligations
             # Mapper les clés du YAML vers les classes
             _yaml_corr_map = {
@@ -321,9 +323,7 @@ def simuler_monte_carlo(
     probabilite_objectif = None
     annee_mediane_atteinte_objectif = None
     if params.objectif_capital is not None:
-        probabilite_objectif = probabilite_atteindre_objectif(
-            trajectoires, params.objectif_capital
-        )
+        probabilite_objectif = probabilite_atteindre_objectif(trajectoires, params.objectif_capital)
         # Année médiane : première année où la médiane dépasse l'objectif
         for annee in range(T + 1):
             if capital_median_par_annee[annee] >= params.objectif_capital:
@@ -400,7 +400,7 @@ def simuler_monte_carlo_glide_path(
     versement_annuel: float,
     age_debut: int,
     horizon_annees: int,
-    glide_path: "GlidePath",  # type: ignore[name-defined]  # évite import circulaire
+    glide_path: GlidePath,  # type: ignore[name-defined]  # évite import circulaire
     nb_tirages: int = 10_000,
     seed: int | None = 42,
     params_marche: dict | None = None,

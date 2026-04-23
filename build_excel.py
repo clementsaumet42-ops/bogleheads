@@ -3,8 +3,10 @@
 Point d'entrée — génère output/portefeuille_bogleheads.xlsx
 Usage : python build_excel.py
 """
+
 import sys
 from pathlib import Path
+
 from src.excel_builder import generer_excel
 
 

@@ -1,13 +1,13 @@
 """Tests unitaires — calculs fiscaux"""
+
 import pytest
-from pathlib import Path
-import yaml
+
 from src.fiscalite import (
-    charger_params_fiscaux,
-    calculer_pfu,
-    calculer_is,
-    calculer_base_taxable_contrat_cap_is,
     avantage_fiscal_pea,
+    calculer_base_taxable_contrat_cap_is,
+    calculer_is,
+    calculer_pfu,
+    charger_params_fiscaux,
 )
 
 
@@ -94,4 +94,6 @@ def test_pfu_total_egale_314(params):
     """Vérifie que PFU total = 31,4%."""
     assert params["pfu"]["taux_total_avec_ps"] == pytest.approx(0.314)
     # Et que 12.8 + 18.6 = 31.4
-    assert params["pfu"]["taux_ir"] + params["prelevements_sociaux"]["taux_global"] == pytest.approx(0.314)
+    assert params["pfu"]["taux_ir"] + params["prelevements_sociaux"][
+        "taux_global"
+    ] == pytest.approx(0.314)
