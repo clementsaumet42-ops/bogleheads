@@ -1,10 +1,16 @@
 import openpyxl
-from openpyxl.styles import Font
+
 from src.excel.styles import (
-    COULEUR_SUBHEADER, COULEUR_LIGHT_GREY,
-    _fill, _font, _align, _thin_border,
-    style_header, style_subheader, style_data,
-    set_col_width, ajouter_disclaimer, titre_section,
+    COULEUR_SUBHEADER,
+    _align,
+    _fill,
+    _font,
+    _thin_border,
+    ajouter_disclaimer,
+    set_col_width,
+    style_header,
+    style_subheader,
+    titre_section,
 )
 
 
@@ -21,8 +27,16 @@ def creer_onglet_enveloppes(wb: openpyxl.Workbook, enveloppes: list):
 
     row = ajouter_disclaimer(ws, 2, 1, 8)
 
-    headers = ["ID Enveloppe", "Nom complet", "Plafond (€)", "Fiscalité sortie (résumé)",
-               "Avantages clés", "Inconvénients", "ETF éligibles", "Notes CGP"]
+    headers = [
+        "ID Enveloppe",
+        "Nom complet",
+        "Plafond (€)",
+        "Fiscalité sortie (résumé)",
+        "Avantages clés",
+        "Inconvénients",
+        "ETF éligibles",
+        "Notes CGP",
+    ]
     row = titre_section(ws, row, "📋 TABLEAU RÉCAPITULATIF DES ENVELOPPES", 1, 8)
     for i, h in enumerate(headers, 1):
         style_subheader(ws.cell(row=row, column=i, value=h))
@@ -77,10 +91,22 @@ def creer_onglet_enveloppes(wb: openpyxl.Workbook, enveloppes: list):
     row += 1
     row = titre_section(ws, row, "🎯 ORDRE DE PRIORITÉ D'UTILISATION (BOGLEHEAD FR)", 1, 8)
     priorites = [
-        ("1️⃣", "PEE", "TOUJOURS saturer l'abondement employeur en PREMIER — TRI immédiat imbattable"),
-        ("2️⃣", "PEA", "Priorité croissance long terme — exonération IR après 5 ans — plafond 150 000 €"),
+        (
+            "1️⃣",
+            "PEE",
+            "TOUJOURS saturer l'abondement employeur en PREMIER — TRI immédiat imbattable",
+        ),
+        (
+            "2️⃣",
+            "PEA",
+            "Priorité croissance long terme — exonération IR après 5 ans — plafond 150 000 €",
+        ),
         ("3️⃣", "PER", "Si TMI actuelle > TMI retraite estimée — déduction fiscale à l'entrée"),
-        ("4️⃣", "Contrat Cap IS", "Si holding IS — pour les ETF capitalisants — pas de mark-to-market"),
+        (
+            "4️⃣",
+            "Contrat Cap IS",
+            "Si holding IS — pour les ETF capitalisants — pas de mark-to-market",
+        ),
         ("5️⃣", "CTO perso", "Surplus d'épargne — liquidité maximale — PFU 31,4%"),
         ("⚠️", "CTO IS", "PIÈGE : mark-to-market annuel — préférer contrat cap IS pour les ETF"),
     ]
@@ -88,7 +114,9 @@ def creer_onglet_enveloppes(wb: openpyxl.Workbook, enveloppes: list):
         ws.cell(row=row, column=1, value=prio).font = _font(bold=True, size=12)
         ws.cell(row=row, column=2, value=env_id).font = _font(bold=True, color=COULEUR_SUBHEADER)
         ws.merge_cells(start_row=row, start_column=3, end_row=row, end_column=8)
-        ws.cell(row=row, column=3, value=explication).alignment = _align("left", "center", wrap=True)
+        ws.cell(row=row, column=3, value=explication).alignment = _align(
+            "left", "center", wrap=True
+        )
         ws.row_dimensions[row].height = 20
         row += 1
 

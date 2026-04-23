@@ -1,14 +1,23 @@
 import openpyxl
 from openpyxl.styles import Font
 from openpyxl.worksheet.table import Table, TableStyleInfo
-from src.fiscalite import calculer_pfu, avantage_fiscal_pea, calculer_avantage_per, calculer_is
+
 from src.excel.styles import (
-    COULEURS_CLASSES, COULEUR_HEADER, COULEUR_SUBHEADER, COULEUR_AVERTISSEMENT, COULEUR_OK,
-    COULEUR_DANGER, COULEUR_LIGHT_GREY,
-    _fill, _font, _align, _thin_border,
-    style_header, style_subheader, style_data,
-    set_col_width, ajouter_disclaimer, titre_section,
+    COULEUR_AVERTISSEMENT,
+    COULEUR_HEADER,
+    COULEUR_LIGHT_GREY,
+    COULEURS_CLASSES,
+    _align,
+    _fill,
+    _font,
+    _thin_border,
+    ajouter_disclaimer,
+    set_col_width,
+    style_header,
+    style_subheader,
+    titre_section,
 )
+from src.fiscalite import avantage_fiscal_pea, calculer_avantage_per, calculer_pfu
 
 
 # ─── Onglet 9 : Profils Types ────────────────────────────────────────
@@ -27,16 +36,23 @@ def creer_onglet_profils_types(wb: openpyxl.Workbook, profils: dict):
     row = titre_section(ws, row, "📋 TABLEAU DES 6 PROFILS TYPES", 1, 11)
 
     headers = [
-        "#", "Code", "Profil", "Âge", "TMI", "RFR (€)",
-        "Patrimoine Fin. (€)", "Actions", "Obligations", "Score Risque", "Objectif principal"
+        "#",
+        "Code",
+        "Profil",
+        "Âge",
+        "TMI",
+        "RFR (€)",
+        "Patrimoine Fin. (€)",
+        "Actions",
+        "Obligations",
+        "Score Risque",
+        "Objectif principal",
     ]
     for i, h in enumerate(headers, 1):
         style_subheader(ws.cell(row=row, column=i, value=h))
     row += 1
 
-    profil_colors = [
-        "BDD7EE", "C6EFCE", "FFEB9C", "FCE4D6", "E2EFDA", "F2F2F2"
-    ]
+    profil_colors = ["BDD7EE", "C6EFCE", "FFEB9C", "FCE4D6", "E2EFDA", "F2F2F2"]
     for idx, profil in enumerate(profils.get("profils", [])):
         bg = profil_colors[idx % len(profil_colors)]
         alloc = profil.get("allocation_cible_bogleheads", {})
@@ -76,7 +92,7 @@ def creer_onglet_profils_types(wb: openpyxl.Workbook, profils: dict):
 
     row += 1
     row = titre_section(ws, row, "⚠️ DISCLAIMER LÉGAL", 1, 11)
-    ws.merge_cells(start_row=row, start_column=1, end_row=row+2, end_column=11)
+    ws.merge_cells(start_row=row, start_column=1, end_row=row + 2, end_column=11)
     disclaimer_text = profils.get("disclaimer", "Ces profils sont fictifs et illustratifs.")
     ws.cell(row=row, column=1, value=disclaimer_text)
     ws.cell(row=row, column=1).font = _font(italic=True, size=9, color=COULEUR_AVERTISSEMENT)
@@ -118,7 +134,7 @@ def creer_onglet_profil_individuel(
         ("Nom", profil.get("nom")),
         ("Âge", f"{profil.get('age')} ans"),
         ("Situation", profil.get("situation_familiale")),
-        ("TMI", f"{profil.get('tmi', 0)*100:.0f}%"),
+        ("TMI", f"{profil.get('tmi', 0) * 100:.0f}%"),
         ("RFR annuel", profil.get("rfr_annuel", 0)),
         ("Patrimoine financier", profil.get("patrimoine_financier_total", 0)),
         ("Capacité épargne / an", profil.get("capacite_epargne_annuelle", 0)),
@@ -126,7 +142,10 @@ def creer_onglet_profil_individuel(
         ("Score de risque (SRRI)", f"{profil.get('score_risque')} / 7"),
         ("CEHR applicable", "✅ Oui" if profil.get("cehr_applicable") else "❌ Non"),
         ("CDHR applicable", "✅ Oui" if profil.get("cdhr_applicable") else "❌ Non"),
-        ("Holding IS", "✅ Oui" if profil.get("particularites_fiscales", {}).get("holding_is") else "❌ Non"),
+        (
+            "Holding IS",
+            "✅ Oui" if profil.get("particularites_fiscales", {}).get("holding_is") else "❌ Non",
+        ),
     ]
     for i in range(0, len(infos), 2):
         lbl1, val1 = infos[i]
@@ -189,7 +208,17 @@ def creer_onglet_profil_individuel(
 
     # ── Enveloppes ──
     row = titre_section(ws, row, "🏦 ENVELOPPES DISPONIBLES ET ENCOURS", 1, 9, bg="843C0C")
-    headers = ["Enveloppe", "Encours actuel (€)", "Plafond (€)", "Plafond restant (€)", "Versements prévus/an", "Avantage fiscal", "", "", ""]
+    headers = [
+        "Enveloppe",
+        "Encours actuel (€)",
+        "Plafond (€)",
+        "Plafond restant (€)",
+        "Versements prévus/an",
+        "Avantage fiscal",
+        "",
+        "",
+        "",
+    ]
     for i, h in enumerate(headers, 1):
         style_subheader(ws.cell(row=row, column=i, value=h))
     row += 1
@@ -198,12 +227,19 @@ def creer_onglet_profil_individuel(
     env_labels_map = {
         "PEA": "Exonération IR après 5 ans (18,6% PS seulement)",
         "PER": "Déduction TMI actuelle à l'entrée",
-        "PEE": f"Abondement {env_dispo.get('PEE', {}).get('abondement_employeur_pct', 0)*100 if env_dispo.get('PEE') else 0:.0f}% + exonération IR",
+        "PEE": f"Abondement {env_dispo.get('PEE', {}).get('abondement_employeur_pct', 0) * 100 if env_dispo.get('PEE') else 0:.0f}% + exonération IR",
         "CTO_perso": "Liquidité totale — PFU 31,4%",
         "CTO_IS": "IS 15/25% — attention MTM annuel",
         "Contrat_Cap_IS": "Pas de MTM — base forfaitaire IS × TME",
     }
-    env_plafonds = {"PEA": 150000, "PER": None, "PEE": None, "CTO_perso": None, "CTO_IS": None, "Contrat_Cap_IS": None}
+    env_plafonds = {
+        "PEA": 150000,
+        "PER": None,
+        "PEE": None,
+        "CTO_perso": None,
+        "CTO_IS": None,
+        "Contrat_Cap_IS": None,
+    }
     for env_key, avantage in env_labels_map.items():
         env_data = env_dispo.get(env_key)
         if env_data is None:
@@ -213,18 +249,31 @@ def creer_onglet_profil_individuel(
         plafond = env_plafonds.get(env_key)
         plafond_restant = max(0, plafond - encours) if plafond else "—"
 
-        row_data = [env_key, encours, plafond or "—", plafond_restant, versements, avantage, "", "", ""]
+        row_data = [
+            env_key,
+            encours,
+            plafond or "—",
+            plafond_restant,
+            versements,
+            avantage,
+            "",
+            "",
+            "",
+        ]
         for j, val in enumerate(row_data, 1):
             cell = ws.cell(row=row, column=j, value=val)
             cell.border = _thin_border()
             cell.font = _font(size=9)
-            if j == 2 and isinstance(val, (int, float)):
-                cell.number_format = "#,##0 €"
-            elif j == 3 and isinstance(val, (int, float)):
-                cell.number_format = "#,##0 €"
-            elif j == 4 and isinstance(val, (int, float)):
-                cell.number_format = "#,##0 €"
-            elif j == 5 and isinstance(val, (int, float)):
+            if (
+                j == 2
+                and isinstance(val, (int, float))
+                or j == 3
+                and isinstance(val, (int, float))
+                or j == 4
+                and isinstance(val, (int, float))
+                or j == 5
+                and isinstance(val, (int, float))
+            ):
                 cell.number_format = "#,##0 €"
         row += 1
 
@@ -235,29 +284,45 @@ def creer_onglet_profil_individuel(
     # PFU sur 10 000€ gain
     gain_exemple = 10000
     pfu = calculer_pfu(gain_exemple, params_fiscaux)
-    ws.cell(row=row, column=1, value=f"PFU sur {gain_exemple:,}€ de gain (CTO)").font = _font(bold=True)
-    ws.cell(row=row, column=2, value=f"IR: {pfu['ir']:.0f}€ + PS: {pfu['ps']:.0f}€ = {pfu['total_impots']:.0f}€")
-    ws.cell(row=row, column=3, value=f"Net: {pfu['net']:.0f}€ ({pfu['taux_effectif']*100:.1f}%)")
+    ws.cell(row=row, column=1, value=f"PFU sur {gain_exemple:,}€ de gain (CTO)").font = _font(
+        bold=True
+    )
+    ws.cell(
+        row=row,
+        column=2,
+        value=f"IR: {pfu['ir']:.0f}€ + PS: {pfu['ps']:.0f}€ = {pfu['total_impots']:.0f}€",
+    )
+    ws.cell(row=row, column=3, value=f"Net: {pfu['net']:.0f}€ ({pfu['taux_effectif'] * 100:.1f}%)")
     row += 1
 
     # PEA après 5 ans
     pea_avantage = avantage_fiscal_pea(gain_exemple, params_fiscaux, apres_5_ans=True)
     ws.cell(row=row, column=1, value="Avantage PEA après 5 ans (vs CTO)").font = _font(bold=True)
-    ws.cell(row=row, column=2, value=f"Économie: {pea_avantage['economie']:.0f}€ par {gain_exemple:,}€ de gain")
-    ws.cell(row=row, column=3, value=f"PS seulement: {pea_avantage['taux_effectif_pea']*100:.1f}%")
+    ws.cell(
+        row=row,
+        column=2,
+        value=f"Économie: {pea_avantage['economie']:.0f}€ par {gain_exemple:,}€ de gain",
+    )
+    ws.cell(
+        row=row, column=3, value=f"PS seulement: {pea_avantage['taux_effectif_pea'] * 100:.1f}%"
+    )
     row += 1
 
     # Avantage PER
     tmi = profil.get("tmi", 0.30)
     horizon = profil.get("horizon_placement_ans", 20)
     per_res = calculer_avantage_per(10000, tmi, 0.30, 0.06, horizon, params_fiscaux)
-    ws.cell(row=row, column=1, value=f"Avantage PER (TMI {tmi*100:.0f}% → 30% à retraite)").font = _font(bold=True)
+    ws.cell(
+        row=row, column=1, value=f"Avantage PER (TMI {tmi * 100:.0f}% → 30% à retraite)"
+    ).font = _font(bold=True)
     ws.cell(row=row, column=2, value=f"PER net sur {horizon}ans: {per_res['capital_per_net']:.0f}€")
     ws.cell(row=row, column=3, value=f"vs CTO net: {per_res['capital_cto_net']:.0f}€")
     ws.cell(row=row, column=4, value=f"Avantage: {per_res['avantage_per']:.0f}€")
     row += 2
 
-    ws.cell(row=row, column=1, value=f"💬 {alloc.get('commentaire', '')}").font = _font(italic=True, size=9)
+    ws.cell(row=row, column=1, value=f"💬 {alloc.get('commentaire', '')}").font = _font(
+        italic=True, size=9
+    )
     ws.cell(row=row, column=1).fill = _fill("FFF2CC")
     ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=9)
     ws.row_dimensions[row].height = 30
@@ -284,9 +349,16 @@ def creer_onglet_comparatif_profils(wb: openpyxl.Workbook, profils: dict, params
     row = titre_section(ws, row, "🔢 GAIN FISCAL ESTIMÉ PAR PROFIL (HORIZON COMPLET)", 1, 10)
 
     headers = [
-        "Profil", "Nom", "Patrimoine (€)", "Horizon (ans)", "TMI",
-        "Capital naïf CTO (€)", "Capital optimisé (€)", "Gain fiscal (€)",
-        "Gain (%)", "Enveloppe clé"
+        "Profil",
+        "Nom",
+        "Patrimoine (€)",
+        "Horizon (ans)",
+        "TMI",
+        "Capital naïf CTO (€)",
+        "Capital optimisé (€)",
+        "Gain fiscal (€)",
+        "Gain (%)",
+        "Enveloppe clé",
     ]
     for i, h in enumerate(headers, 1):
         style_subheader(ws.cell(row=row, column=i, value=h))
@@ -318,8 +390,9 @@ def creer_onglet_comparatif_profils(wb: openpyxl.Workbook, profils: dict, params
         per_encours = (env_dispo.get("PER") or {}).get("encours_actuel", 0) or 0
         pee_encours = (env_dispo.get("PEE") or {}).get("encours_actuel", 0) or 0
         is_encours = (
-            (env_dispo.get("Contrat_Cap_IS") or {}).get("encours_actuel", 0) or 0
-            + (env_dispo.get("CTO_IS") or {}).get("encours_actuel", 0) or 0
+            (env_dispo.get("Contrat_Cap_IS") or {}).get("encours_actuel", 0)
+            or 0 + (env_dispo.get("CTO_IS") or {}).get("encours_actuel", 0)
+            or 0
         )
         cto_encours = (env_dispo.get("CTO_perso") or {}).get("encours_actuel", 0) or 0
         total_env = pea_encours + per_encours + pee_encours + is_encours + cto_encours
@@ -376,7 +449,9 @@ def creer_onglet_comparatif_profils(wb: openpyxl.Workbook, profils: dict, params
             cell.fill = _fill(bg)
             cell.font = _font(size=9, bold=(j <= 2))
             cell.border = _thin_border()
-            cell.alignment = _align("center" if j in (1, 4, 5, 9) else "right" if j in (3, 6, 7, 8) else "left")
+            cell.alignment = _align(
+                "center" if j in (1, 4, 5, 9) else "right" if j in (3, 6, 7, 8) else "left"
+            )
             if j in (3, 6, 7, 8):
                 cell.number_format = "#,##0"
             elif j == 5:

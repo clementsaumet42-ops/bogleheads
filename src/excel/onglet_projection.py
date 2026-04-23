@@ -1,17 +1,29 @@
 import openpyxl
-from openpyxl.styles import Font
 from openpyxl.chart import LineChart, Reference
-from openpyxl.chart.series import SeriesLabel
+
+from src.excel.styles import (
+    COULEUR_DANGER,
+    COULEUR_LIGHT_BLUE,
+    COULEUR_LIGHT_GREY,
+    COULEUR_OK,
+    COULEUR_SUBHEADER,
+    _align,
+    _fill,
+    _font,
+    ajouter_disclaimer,
+    set_col_width,
+    style_data,
+    style_header,
+    style_subheader,
+    titre_section,
+)
 from src.projection import (
-    AllocationClasses, ParametresProjection,
-    charger_params as charger_params_projection,
+    AllocationClasses,
+    ParametresProjection,
     simuler_monte_carlo,
 )
-from src.excel.styles import (
-    COULEUR_HEADER, COULEUR_SUBHEADER, COULEUR_OK, COULEUR_DANGER, COULEUR_LIGHT_BLUE, COULEUR_LIGHT_GREY,
-    _fill, _font, _align,
-    style_header, style_subheader, style_data,
-    set_col_width, ajouter_disclaimer, titre_section,
+from src.projection import (
+    charger_params as charger_params_projection,
 )
 
 
@@ -72,7 +84,9 @@ def _creer_onglet_projection_monte_carlo(wb: openpyxl.Workbook, profil_ref: dict
     # ── Titre principal ──────────────────────────────────────────────
     row = 1
     ws.merge_cells(f"A{row}:I{row}")
-    c = ws.cell(row=row, column=1, value="📈 PROJECTION PATRIMONIALE MONTE-CARLO — BOGLEHEAD FR 2026")
+    c = ws.cell(
+        row=row, column=1, value="📈 PROJECTION PATRIMONIALE MONTE-CARLO — BOGLEHEAD FR 2026"
+    )
     style_header(c, size=14)
     ws.row_dimensions[row].height = 32
     row += 1
@@ -83,11 +97,11 @@ def _creer_onglet_projection_monte_carlo(wb: openpyxl.Workbook, profil_ref: dict
     # Description méthodologique
     ws.merge_cells(f"A{row}:I{row}")
     desc = (
-        "Simulation de {:,} trajectoires sur 10, 20 et 30 ans. "
+        f"Simulation de {nb_tirages:,} trajectoires sur 10, 20 et 30 ans. "
         "Rendements réels nets d'inflation (sources : Dimson-Marsh-Staunton, JST). "
         "Rebalancement annuel vers l'allocation cible. "
         "⚠️ Pour recalculer, relancer : python build_excel.py"
-    ).format(nb_tirages)
+    )
     c = ws.cell(row=row, column=1, value=desc)
     c.fill = _fill(COULEUR_LIGHT_BLUE)
     c.font = _font(size=9, italic=True)
@@ -174,7 +188,9 @@ def _creer_onglet_projection_monte_carlo(wb: openpyxl.Workbook, profil_ref: dict
 
     # Allocation cible
     row += 1
-    ws.cell(row=row, column=1, value="Allocation cible par classe").font = _font(bold=True, color=COULEUR_SUBHEADER)
+    ws.cell(row=row, column=1, value="Allocation cible par classe").font = _font(
+        bold=True, color=COULEUR_SUBHEADER
+    )
     row += 1
     alloc_arr = allocation.as_array()
     for i, (cls_name, pct) in enumerate(zip(allocation.classes, alloc_arr)):
@@ -301,7 +317,7 @@ def _creer_onglet_projection_monte_carlo(wb: openpyxl.Workbook, profil_ref: dict
     chart.width = 22
 
     # Colonnes B, C, D = P10, Médiane, P90
-    for col_idx, label in [(2, "P10"), (3, "Médiane (P50)"), (4, "P90")]:
+    for col_idx, _label in [(2, "P10"), (3, "Médiane (P50)"), (4, "P90")]:
         data_ref = Reference(ws, min_col=col_idx, min_row=data_start_row - 1, max_row=data_end_row)
         chart.add_data(data_ref, titles_from_data=True)
 

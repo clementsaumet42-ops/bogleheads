@@ -14,6 +14,7 @@ CONFIG_DIR = ROOT / "config"
 
 # ─── Base config ─────────────────────────────────────────────────────────────
 
+
 class _Lenient(BaseModel):
     """Base model that allows extra fields (forward-compat)."""
 
@@ -21,6 +22,7 @@ class _Lenient(BaseModel):
 
 
 # ─── ETF / Univers ETF ────────────────────────────────────────────────────────
+
 
 class ETFEligibilite(_Lenient):
     PEA: bool = False
@@ -59,6 +61,7 @@ class UniversETFWrapper(_Lenient):
 
 # ─── Enveloppes ───────────────────────────────────────────────────────────────
 
+
 class Enveloppe(_Lenient):
     id: str
     nom: str
@@ -78,6 +81,7 @@ class EnveloppesWrapper(_Lenient):
 
 # ─── Profils clients ──────────────────────────────────────────────────────────
 
+
 class AllocationCible(_Lenient):
     actions: float = Field(ge=0, le=1)
     obligations: float = Field(default=0.0, ge=0, le=1)
@@ -89,18 +93,10 @@ class AllocationCible(_Lenient):
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
     @model_validator(mode="after")
-    def somme_proche_de_1(self) -> "AllocationCible":
-        total = (
-            self.actions
-            + self.obligations
-            + self.immobilier_cote
-            + self.or_
-            + self.liquidites
-        )
+    def somme_proche_de_1(self) -> AllocationCible:
+        total = self.actions + self.obligations + self.immobilier_cote + self.or_ + self.liquidites
         if not (0.99 <= total <= 1.01):
-            raise ValueError(
-                f"La somme des allocations doit être ≈ 1, obtenu {total:.4f}"
-            )
+            raise ValueError(f"La somme des allocations doit être ≈ 1, obtenu {total:.4f}")
         return self
 
 
@@ -123,6 +119,7 @@ class ProfilsWrapper(_Lenient):
 
 # ─── Fiscalité 2026 ───────────────────────────────────────────────────────────
 
+
 class PrelevementsSociaux(_Lenient):
     taux_global: float = Field(ge=0, le=1)
     detail: Optional[Dict[str, float]] = None
@@ -141,6 +138,7 @@ class Fiscalite2026(_Lenient):
 
 # ─── Paramètres de projection ─────────────────────────────────────────────────
 
+
 class ParamsProjection(_Lenient):
     classes_actifs: Dict[str, Any]
     correlations: Optional[Dict[str, Any]] = None
@@ -150,6 +148,7 @@ class ParamsProjection(_Lenient):
 
 # ─── Glide paths ──────────────────────────────────────────────────────────────
 
+
 class GlidePath(_Lenient):
     glide_paths: Dict[str, Any]
     repartition_actions_defaut: Optional[Dict[str, Any]] = None
@@ -157,6 +156,7 @@ class GlidePath(_Lenient):
 
 
 # ─── Rebalancement / flux ─────────────────────────────────────────────────────
+
 
 class RebalancementFlux(_Lenient):
     bandes_tolerance: Dict[str, Any]

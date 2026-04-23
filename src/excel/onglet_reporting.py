@@ -1,10 +1,19 @@
 import datetime
+
 import openpyxl
 from openpyxl.styles import Font
+
 from src.excel.styles import (
-    COULEUR_HEADER, COULEUR_SUBHEADER, COULEUR_LIGHT_GREY,
-    _fill, _font, _align, _thin_border,
-    style_header, style_subheader, set_col_width, ajouter_disclaimer, titre_section,
+    COULEUR_HEADER,
+    COULEUR_LIGHT_GREY,
+    _fill,
+    _font,
+    _thin_border,
+    ajouter_disclaimer,
+    set_col_width,
+    style_header,
+    style_subheader,
+    titre_section,
 )
 
 
@@ -27,9 +36,13 @@ def creer_onglet_reporting(wb: openpyxl.Workbook, profil: dict = None):
     if profil:
         row = titre_section(ws, row, f"👤 SYNTHÈSE — {profil.get('nom', 'Client')}", 1, 8)
         ws.cell(row=row, column=1, value="Patrimoine financier total").font = _font(bold=True)
-        ws.cell(row=row, column=2, value=profil.get("patrimoine_financier_total", 0)).number_format = "#,##0 €"
+        ws.cell(
+            row=row, column=2, value=profil.get("patrimoine_financier_total", 0)
+        ).number_format = "#,##0 €"
         ws.cell(row=row, column=3, value="Capacité d'épargne annuelle").font = _font(bold=True)
-        ws.cell(row=row, column=4, value=profil.get("capacite_epargne_annuelle", 0)).number_format = "#,##0 €"
+        ws.cell(
+            row=row, column=4, value=profil.get("capacite_epargne_annuelle", 0)
+        ).number_format = "#,##0 €"
         row += 1
         ws.cell(row=row, column=1, value="Horizon de placement").font = _font(bold=True)
         ws.cell(row=row, column=2, value=f"{profil.get('horizon_placement_ans', 0)} ans")
@@ -38,7 +51,16 @@ def creer_onglet_reporting(wb: openpyxl.Workbook, profil: dict = None):
         row += 2
 
         row = titre_section(ws, row, "🏦 RÉPARTITION PAR ENVELOPPE", 1, 8)
-        headers = ["Enveloppe", "Encours actuel (€)", "Versements prévus/an (€)", "Plafond restant (€)", "Avantage fiscal clé", "", "", ""]
+        headers = [
+            "Enveloppe",
+            "Encours actuel (€)",
+            "Versements prévus/an (€)",
+            "Plafond restant (€)",
+            "Avantage fiscal clé",
+            "",
+            "",
+            "",
+        ]
         for i, h in enumerate(headers, 1):
             style_subheader(ws.cell(row=row, column=i, value=h))
         row += 1
@@ -66,11 +88,14 @@ def creer_onglet_reporting(wb: openpyxl.Workbook, profil: dict = None):
             row_data = [label, encours, versements, plafond_restant, avantage, "", "", ""]
             for j, val in enumerate(row_data, 1):
                 cell = ws.cell(row=row, column=j, value=val)
-                if j == 2 and isinstance(val, (int, float)):
-                    cell.number_format = "#,##0 €"
-                elif j == 3 and isinstance(val, (int, float)):
-                    cell.number_format = "#,##0 €"
-                elif j == 4 and isinstance(val, (int, float)):
+                if (
+                    j == 2
+                    and isinstance(val, (int, float))
+                    or j == 3
+                    and isinstance(val, (int, float))
+                    or j == 4
+                    and isinstance(val, (int, float))
+                ):
                     cell.number_format = "#,##0 €"
                 cell.border = _thin_border()
             row += 1

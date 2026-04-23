@@ -1,18 +1,28 @@
 import openpyxl
-from openpyxl.styles import Font
 from openpyxl.formatting.rule import CellIsRule
+from openpyxl.styles import Font
+
+from src.excel.styles import (
+    COULEUR_HEADER,
+    COULEUR_LIGHT_BLUE,
+    COULEUR_LIGHT_GREY,
+    COULEUR_SUBHEADER,
+    _align,
+    _fill,
+    _font,
+    _thin_border,
+    set_col_width,
+    style_header,
+    titre_section,
+)
 from src.rebalancement_flux import (
     EtatPortefeuille,
+    comparer_cout_fiscal,
     repartir_versement,
     simuler_versements_recurrents,
-    comparer_cout_fiscal,
-    charger_config as charger_cfg_flux,
 )
-from src.excel.styles import (
-    COULEUR_HEADER, COULEUR_SUBHEADER, COULEUR_LIGHT_BLUE, COULEUR_LIGHT_GREY,
-    _fill, _font, _align, _thin_border,
-    style_header,
-    set_col_width, titre_section,
+from src.rebalancement_flux import (
+    charger_config as charger_cfg_flux,
 )
 
 
@@ -56,12 +66,20 @@ def _creer_onglet_rebalancement_flux(wb: openpyxl.Workbook, profil_ref: dict):
     row += 1
 
     # ── Section 2 — Saisie du portefeuille actuel ─────────────────────
-    row = titre_section(ws, row, "📋 SECTION 2 — PORTEFEUILLE ACTUEL (cellules jaunes = saisissables)",
-                        col_end=NB_COLS)
+    row = titre_section(
+        ws,
+        row,
+        "📋 SECTION 2 — PORTEFEUILLE ACTUEL (cellules jaunes = saisissables)",
+        col_end=NB_COLS,
+    )
 
     headers_s2 = [
-        "Classe d'actifs", "Montant actuel (€)", "Poids actuel %",
-        "Poids cible %", "Écart %", "Écart €",
+        "Classe d'actifs",
+        "Montant actuel (€)",
+        "Poids actuel %",
+        "Poids cible %",
+        "Écart %",
+        "Écart €",
     ]
     for j, h in enumerate(headers_s2, 1):
         c = ws.cell(row=row, column=j, value=h)
@@ -79,15 +97,40 @@ def _creer_onglet_rebalancement_flux(wb: openpyxl.Workbook, profil_ref: dict):
     matieres = float(alloc_profil.get("matieres_premieres", 0.02))
 
     classes_info = [
-        ("Actions Monde",      "actions_monde",      round(patrimoine * actions_total * 0.50), round(actions_total * 0.50, 4)),
-        ("Actions USA",        "actions_usa",         round(patrimoine * actions_total * 0.25), round(actions_total * 0.25, 4)),
-        ("Actions Europe",     "actions_europe",      round(patrimoine * actions_total * 0.15), round(actions_total * 0.15, 4)),
-        ("Actions Émergents",  "actions_emergents",   round(patrimoine * actions_total * 0.10), round(actions_total * 0.10, 4)),
-        ("Obligations",        "obligations",         round(patrimoine * obligs_total),         round(obligs_total, 4)),
-        ("Monétaire",          "monetaire",           round(patrimoine * monetaire_total),       round(monetaire_total, 4)),
-        ("Or",                 "or_",                 round(patrimoine * or_total),              round(or_total, 4)),
-        ("Immobilier",         "immobilier",          round(patrimoine * immo_total),            round(immo_total, 4)),
-        ("Matières premières", "matieres_premieres",  round(patrimoine * matieres),              round(matieres, 4)),
+        (
+            "Actions Monde",
+            "actions_monde",
+            round(patrimoine * actions_total * 0.50),
+            round(actions_total * 0.50, 4),
+        ),
+        (
+            "Actions USA",
+            "actions_usa",
+            round(patrimoine * actions_total * 0.25),
+            round(actions_total * 0.25, 4),
+        ),
+        (
+            "Actions Europe",
+            "actions_europe",
+            round(patrimoine * actions_total * 0.15),
+            round(actions_total * 0.15, 4),
+        ),
+        (
+            "Actions Émergents",
+            "actions_emergents",
+            round(patrimoine * actions_total * 0.10),
+            round(actions_total * 0.10, 4),
+        ),
+        ("Obligations", "obligations", round(patrimoine * obligs_total), round(obligs_total, 4)),
+        ("Monétaire", "monetaire", round(patrimoine * monetaire_total), round(monetaire_total, 4)),
+        ("Or", "or_", round(patrimoine * or_total), round(or_total, 4)),
+        ("Immobilier", "immobilier", round(patrimoine * immo_total), round(immo_total, 4)),
+        (
+            "Matières premières",
+            "matieres_premieres",
+            round(patrimoine * matieres),
+            round(matieres, 4),
+        ),
     ]
 
     data_start_row = row
@@ -111,8 +154,7 @@ def _creer_onglet_rebalancement_flux(wb: openpyxl.Workbook, profil_ref: dict):
         c_montant.border = _thin_border()
         c_montant.alignment = _align("right")
 
-        c_poids = ws.cell(row=r, column=3,
-                          value=f"={col_montant}{r}/({total_ref})")
+        c_poids = ws.cell(row=r, column=3, value=f"={col_montant}{r}/({total_ref})")
         c_poids.number_format = "0.0%"
         c_poids.border = _thin_border()
         c_poids.alignment = _align("center")
@@ -123,14 +165,14 @@ def _creer_onglet_rebalancement_flux(wb: openpyxl.Workbook, profil_ref: dict):
         c_cible.border = _thin_border()
         c_cible.alignment = _align("center")
 
-        c_ecart = ws.cell(row=r, column=5,
-                          value=f"={col_cible}{r}-{col_poids_act}{r}")
+        c_ecart = ws.cell(row=r, column=5, value=f"={col_cible}{r}-{col_poids_act}{r}")
         c_ecart.number_format = "+0.0%;-0.0%;0.0%"
         c_ecart.border = _thin_border()
         c_ecart.alignment = _align("center")
 
-        c_ecart_e = ws.cell(row=r, column=6,
-                            value=f"=({col_cible}{r}-{col_poids_act}{r})*({total_ref})")
+        c_ecart_e = ws.cell(
+            row=r, column=6, value=f"=({col_cible}{r}-{col_poids_act}{r})*({total_ref})"
+        )
         c_ecart_e.number_format = "#,##0 €"
         c_ecart_e.border = _thin_border()
         c_ecart_e.alignment = _align("right")
@@ -145,8 +187,9 @@ def _creer_onglet_rebalancement_flux(wb: openpyxl.Workbook, profil_ref: dict):
     c_tot_lbl.fill = _fill(COULEUR_LIGHT_GREY)
     c_tot_lbl.border = _thin_border()
 
-    c_tot_montant = ws.cell(row=row, column=2,
-                            value=f"=SUM({col_montant}{data_start_row}:{col_montant}{row - 1})")
+    c_tot_montant = ws.cell(
+        row=row, column=2, value=f"=SUM({col_montant}{data_start_row}:{col_montant}{row - 1})"
+    )
     c_tot_montant.number_format = "#,##0 €"
     c_tot_montant.font = _font(bold=True)
     c_tot_montant.border = _thin_border()
@@ -157,8 +200,9 @@ def _creer_onglet_rebalancement_flux(wb: openpyxl.Workbook, profil_ref: dict):
     c_tot_pct.border = _thin_border()
     c_tot_pct.alignment = _align("center")
 
-    c_tot_cible = ws.cell(row=row, column=4,
-                           value=f"=SUM({col_cible}{data_start_row}:{col_cible}{row - 1})")
+    c_tot_cible = ws.cell(
+        row=row, column=4, value=f"=SUM({col_cible}{data_start_row}:{col_cible}{row - 1})"
+    )
     c_tot_cible.number_format = "0.0%"
     c_tot_cible.font = _font(bold=True)
     c_tot_cible.border = _thin_border()
@@ -174,26 +218,21 @@ def _creer_onglet_rebalancement_flux(wb: openpyxl.Workbook, profil_ref: dict):
     row += 2
 
     # Mise en forme conditionnelle sur la colonne Écart %
-    ecart_range = f"{col_ecart_pct}{data_start_row}:{col_ecart_pct}{data_start_row + len(classes_info) - 1}"
-    ws.conditional_formatting.add(
-        ecart_range,
-        CellIsRule(operator="greaterThan", formula=["0.05"],
-                   fill=_fill(ROUGE_NOK))
+    ecart_range = (
+        f"{col_ecart_pct}{data_start_row}:{col_ecart_pct}{data_start_row + len(classes_info) - 1}"
     )
     ws.conditional_formatting.add(
-        ecart_range,
-        CellIsRule(operator="lessThan", formula=["-0.05"],
-                   fill=_fill(ROUGE_NOK))
+        ecart_range, CellIsRule(operator="greaterThan", formula=["0.05"], fill=_fill(ROUGE_NOK))
     )
     ws.conditional_formatting.add(
-        ecart_range,
-        CellIsRule(operator="between", formula=["-0.05", "0.05"],
-                   fill=_fill(VERT_OK))
+        ecart_range, CellIsRule(operator="lessThan", formula=["-0.05"], fill=_fill(ROUGE_NOK))
+    )
+    ws.conditional_formatting.add(
+        ecart_range, CellIsRule(operator="between", formula=["-0.05", "0.05"], fill=_fill(VERT_OK))
     )
 
     # ── Section 3 — Versement disponible ─────────────────────────────
-    row = titre_section(ws, row, "💶 SECTION 3 — VERSEMENT À RÉPARTIR",
-                        col_end=NB_COLS)
+    row = titre_section(ws, row, "💶 SECTION 3 — VERSEMENT À RÉPARTIR", col_end=NB_COLS)
     ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=3)
     c_lbl = ws.cell(row=row, column=1, value="Versement à répartir (€) :")
     c_lbl.font = _font(bold=True)
@@ -207,12 +246,14 @@ def _creer_onglet_rebalancement_flux(wb: openpyxl.Workbook, profil_ref: dict):
     row += 2
 
     # ── Section 4 — Répartition recommandée (calculée en Python) ──────
-    row = titre_section(ws, row, "📊 SECTION 4 — RÉPARTITION RECOMMANDÉE (calculée au build)",
-                        col_end=NB_COLS)
+    row = titre_section(
+        ws, row, "📊 SECTION 4 — RÉPARTITION RECOMMANDÉE (calculée au build)", col_end=NB_COLS
+    )
 
     ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=NB_COLS)
     c_note = ws.cell(
-        row=row, column=1,
+        row=row,
+        column=1,
         value=(
             "ℹ️ Cette répartition est calculée en Python au build. "
             "Pour recalculer après avoir modifié vos données, relancez python build_excel.py."
@@ -232,8 +273,11 @@ def _creer_onglet_rebalancement_flux(wb: openpyxl.Workbook, profil_ref: dict):
     rep = repartir_versement(portefeuille, allocation_cible_dict, versement_defaut, cfg)
 
     headers_s4 = [
-        "Classe d'actifs", "Montant à verser (€)", "Nouveau poids %",
-        "Nouvel écart %", "Statut",
+        "Classe d'actifs",
+        "Montant à verser (€)",
+        "Nouveau poids %",
+        "Nouvel écart %",
+        "Statut",
     ]
     for j, h in enumerate(headers_s4, 1):
         c = ws.cell(row=row, column=j, value=h)
@@ -266,11 +310,16 @@ def _creer_onglet_rebalancement_flux(wb: openpyxl.Workbook, profil_ref: dict):
     row += 1
 
     # ── Section 5 — Comparaison fiscale ──────────────────────────────
-    row = titre_section(ws, row, "💰 SECTION 5 — COMPARAISON FISCALE (vente vs flux)",
-                        col_end=NB_COLS)
+    row = titre_section(
+        ws, row, "💰 SECTION 5 — COMPARAISON FISCALE (vente vs flux)", col_end=NB_COLS
+    )
 
     headers_s5 = [
-        "Enveloppe", "Montant à arbitrer", "Coût fiscal VENTE", "Coût fiscal FLUX", "Économie",
+        "Enveloppe",
+        "Montant à arbitrer",
+        "Coût fiscal VENTE",
+        "Coût fiscal FLUX",
+        "Économie",
     ]
     for j, h in enumerate(headers_s5, 1):
         c = ws.cell(row=row, column=j, value=h)
@@ -297,8 +346,7 @@ def _creer_onglet_rebalancement_flux(wb: openpyxl.Workbook, profil_ref: dict):
     row += 1
 
     # ── Section 6 — Horizon de rattrapage ─────────────────────────────
-    row = titre_section(ws, row, "📅 SECTION 6 — HORIZON DE RATTRAPAGE",
-                        col_end=NB_COLS)
+    row = titre_section(ws, row, "📅 SECTION 6 — HORIZON DE RATTRAPAGE", col_end=NB_COLS)
 
     versement_mensuel = 500.0
     nb_mois_max = 60
@@ -334,11 +382,12 @@ def _creer_onglet_rebalancement_flux(wb: openpyxl.Workbook, profil_ref: dict):
     row += 2
 
     # ── Section 7 — Recommandation ────────────────────────────────────
-    row = titre_section(ws, row, "💡 SECTION 7 — RECOMMANDATION",
-                        col_end=NB_COLS)
+    row = titre_section(ws, row, "💡 SECTION 7 — RECOMMANDATION", col_end=NB_COLS)
 
-    reco_bg = VERT_OK if "✅" in rep.recommandation else (
-        ROUGE_NOK if "⚠️" in rep.recommandation else ORANGE_WARN
+    reco_bg = (
+        VERT_OK
+        if "✅" in rep.recommandation
+        else (ROUGE_NOK if "⚠️" in rep.recommandation else ORANGE_WARN)
     )
     ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=NB_COLS)
     c_reco = ws.cell(row=row, column=1, value=rep.recommandation)

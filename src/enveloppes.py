@@ -1,16 +1,18 @@
 """
 Module enveloppes fiscales — règles métier
 """
-import yaml
+
 from pathlib import Path
 from typing import Optional
+
+import yaml
 
 
 def charger_enveloppes(chemin_yaml: str = None) -> list:
     """Charge les enveloppes depuis le fichier YAML."""
     if chemin_yaml is None:
         chemin_yaml = Path(__file__).parent.parent / "config" / "enveloppes.yaml"
-    with open(chemin_yaml, "r", encoding="utf-8") as f:
+    with open(chemin_yaml, encoding="utf-8") as f:
         data = yaml.safe_load(f)
     return data["enveloppes"]
 

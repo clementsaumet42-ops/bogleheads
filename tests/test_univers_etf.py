@@ -1,6 +1,8 @@
 """Tests de validation — univers ETF Boglehead FR"""
-import pytest
+
 from pathlib import Path
+
+import pytest
 import yaml
 
 
@@ -8,7 +10,7 @@ import yaml
 def etfs():
     """Charge la liste des ETF depuis le fichier YAML."""
     yaml_path = Path(__file__).parent.parent / "config" / "univers_etf.yaml"
-    with open(yaml_path, "r", encoding="utf-8") as f:
+    with open(yaml_path, encoding="utf-8") as f:
         data = yaml.safe_load(f)
     return data["univers_etf"]
 
@@ -16,6 +18,7 @@ def etfs():
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _isin_checksum_valid(isin: str) -> bool:
     """
@@ -61,6 +64,7 @@ def _isin_checksum_valid(isin: str) -> bool:
 # Tests
 # ---------------------------------------------------------------------------
 
+
 def test_tous_les_isin_valides(etfs):
     """Vérifie que chaque ISIN respecte le format et le checksum Luhn."""
     invalids = []
@@ -95,9 +99,7 @@ def test_coherence_pea_classe_actifs(etfs):
     for etf in etfs:
         cls = etf.get("classe_actifs", "")
         if cls in classes_non_pea and etf.get("eligibilite", {}).get("PEA"):
-            violations.append(
-                f"{etf.get('ticker')} ({cls}): PEA=True interdit pour cette classe"
-            )
+            violations.append(f"{etf.get('ticker')} ({cls}): PEA=True interdit pour cette classe")
     assert not violations, "Violations PEA/classe_actifs :\n" + "\n".join(violations)
 
 
@@ -107,9 +109,20 @@ def test_coherence_pea_domicile(etfs):
     (France, Irlande, Luxembourg, Allemagne, Pays-Bas, Suède, etc.).
     """
     ue_eee = {
-        "France", "Irlande", "Luxembourg", "Allemagne", "Pays-Bas",
-        "Suède", "Danemark", "Belgique", "Espagne", "Italie",
-        "Finlande", "Autriche", "Portugal", "Pologne",
+        "France",
+        "Irlande",
+        "Luxembourg",
+        "Allemagne",
+        "Pays-Bas",
+        "Suède",
+        "Danemark",
+        "Belgique",
+        "Espagne",
+        "Italie",
+        "Finlande",
+        "Autriche",
+        "Portugal",
+        "Pologne",
     }
     violations = []
     for etf in etfs:
@@ -127,21 +140,28 @@ def test_dic_renseigne_ou_null(etfs):
     Vérifie que chaque ETF possède un champ url_dic_kid (URL ou null explicite,
     pas absent du tout).
     """
-    missing = [
-        etf.get("ticker", "?")
-        for etf in etfs
-        if "url_dic_kid" not in etf
-    ]
+    missing = [etf.get("ticker", "?") for etf in etfs if "url_dic_kid" not in etf]
     assert not missing, f"url_dic_kid absent pour : {missing}"
 
 
 def test_schema_minimum(etfs):
     """Vérifie que tous les champs obligatoires sont présents pour chaque ETF."""
     champs_obligatoires = [
-        "isin", "ticker", "nom", "emetteur", "classe_actifs",
-        "ter", "devise", "domicile", "capitalisant", "eligibilite",
-        "methode_replication", "url_dic_kid", "date_verification_dic",
-        "contrats_av_reference", "frais_entree_typique_pct",
+        "isin",
+        "ticker",
+        "nom",
+        "emetteur",
+        "classe_actifs",
+        "ter",
+        "devise",
+        "domicile",
+        "capitalisant",
+        "eligibilite",
+        "methode_replication",
+        "url_dic_kid",
+        "date_verification_dic",
+        "contrats_av_reference",
+        "frais_entree_typique_pct",
     ]
     eligibilite_champs = ["PEA", "PER", "PEE", "CTO_perso", "CTO_IS", "Contrat_Cap_IS", "AV_UC"]
 
@@ -161,7 +181,10 @@ def test_schema_minimum(etfs):
 def test_methode_replication_valeurs_valides(etfs):
     """Vérifie que methode_replication est l'une des valeurs autorisées."""
     valeurs_valides = {
-        "physique", "synthetique_swap", "synthetique_swap_unfunded", "physique_optimisee"
+        "physique",
+        "synthetique_swap",
+        "synthetique_swap_unfunded",
+        "physique_optimisee",
     }
     invalids = []
     for etf in etfs:
@@ -184,9 +207,7 @@ def test_ter_positif(etfs):
 def test_contrats_av_reference_est_liste(etfs):
     """Vérifie que contrats_av_reference est une liste (vide ou non)."""
     invalids = [
-        etf.get("ticker")
-        for etf in etfs
-        if not isinstance(etf.get("contrats_av_reference"), list)
+        etf.get("ticker") for etf in etfs if not isinstance(etf.get("contrats_av_reference"), list)
     ]
     assert not invalids, f"contrats_av_reference n'est pas une liste pour : {invalids}"
 
@@ -233,9 +254,5 @@ def test_moteur_charge_univers(etfs):
 
 def test_frais_entree_positif_ou_nul(etfs):
     """Vérifie que frais_entree_typique_pct >= 0."""
-    invalids = [
-        etf.get("ticker")
-        for etf in etfs
-        if etf.get("frais_entree_typique_pct", 0) < 0
-    ]
+    invalids = [etf.get("ticker") for etf in etfs if etf.get("frais_entree_typique_pct", 0) < 0]
     assert not invalids, f"Frais d'entrée négatifs : {invalids}"

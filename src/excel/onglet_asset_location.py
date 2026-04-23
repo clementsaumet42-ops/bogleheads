@@ -1,14 +1,26 @@
 import openpyxl
 from openpyxl.styles import Font
+
 from src.excel.styles import (
-    COULEURS_CLASSES, COULEUR_SUBHEADER, COULEUR_LIGHT_GREY,
-    _fill, _font, _align, _thin_border,
-    style_header, style_subheader, set_col_width, ajouter_disclaimer, titre_section,
+    COULEUR_LIGHT_GREY,
+    COULEUR_SUBHEADER,
+    COULEURS_CLASSES,
+    _align,
+    _fill,
+    _font,
+    _thin_border,
+    ajouter_disclaimer,
+    set_col_width,
+    style_header,
+    style_subheader,
+    titre_section,
 )
 
 
 # ─── Onglet 6 : Asset Location Matrice ──────────────────────────────
-def creer_onglet_asset_location(wb: openpyxl.Workbook, etfs: list, enveloppes: list, profil: dict = None):
+def creer_onglet_asset_location(
+    wb: openpyxl.Workbook, etfs: list, enveloppes: list, profil: dict = None
+):
     ws = wb.create_sheet("Asset_Location_Matrice")
     ws.sheet_view.showGridLines = False
 
@@ -55,13 +67,37 @@ def creer_onglet_asset_location(wb: openpyxl.Workbook, etfs: list, enveloppes: l
     # Légende
     row = titre_section(ws, row, "🔑 RÈGLES D'ASSET LOCATION BOGLEHEAD FR", 1, 9)
     regles_al = [
-        ("Actions mondiales (PEA éligible)", "PEA en PRIORITÉ → CTO → PER", "Économie IR 12,8% sur la totalité des gains"),
-        ("Actions hors PEA (ETF physiques)", "PER → CTO perso → Contrat Cap IS", "PER = déduction entrée, CTO = liquidité"),
-        ("Obligations / Fixed Income", "PER → Contrat Cap IS → CTO IS", "Rendement fixe mieux dans enveloppe défiscalisée"),
+        (
+            "Actions mondiales (PEA éligible)",
+            "PEA en PRIORITÉ → CTO → PER",
+            "Économie IR 12,8% sur la totalité des gains",
+        ),
+        (
+            "Actions hors PEA (ETF physiques)",
+            "PER → CTO perso → Contrat Cap IS",
+            "PER = déduction entrée, CTO = liquidité",
+        ),
+        (
+            "Obligations / Fixed Income",
+            "PER → Contrat Cap IS → CTO IS",
+            "Rendement fixe mieux dans enveloppe défiscalisée",
+        ),
         ("Or (ETCs)", "CTO perso → PER", "ETCs non éligibles PEA — CTO simple"),
-        ("REITs / Immobilier coté", "PER → CTO perso", "Dividendes imposables — mieux dans enveloppe"),
-        ("Monétaire / Liquidités", "CTO IS → CTO perso", "Faible rendement — hors enveloppes précieuses"),
-        ("ETF actions IS (holding)", "Contrat Cap IS > CTO IS", "Éviter le mark-to-market annuel (art. 209-0 A CGI)"),
+        (
+            "REITs / Immobilier coté",
+            "PER → CTO perso",
+            "Dividendes imposables — mieux dans enveloppe",
+        ),
+        (
+            "Monétaire / Liquidités",
+            "CTO IS → CTO perso",
+            "Faible rendement — hors enveloppes précieuses",
+        ),
+        (
+            "ETF actions IS (holding)",
+            "Contrat Cap IS > CTO IS",
+            "Éviter le mark-to-market annuel (art. 209-0 A CGI)",
+        ),
     ]
     ws.cell(row=row, column=1, value="Classe d'actifs").font = _font(bold=True)
     ws.cell(row=row, column=2, value="Enveloppe recommandée").font = _font(bold=True)

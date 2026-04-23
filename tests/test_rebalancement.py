@@ -43,22 +43,28 @@ class TestCalculerDeriveAllocation:
 class TestCalculerCoutFiscalArbitrage:
     def test_intra_pea_gratuit(self):
         result = calculer_cout_fiscal_arbitrage(
-            montant_cede=10000, prix_revient=6000,
-            enveloppe_id="PEA", params_fiscaux=PARAMS_FISCAUX,
+            montant_cede=10000,
+            prix_revient=6000,
+            enveloppe_id="PEA",
+            params_fiscaux=PARAMS_FISCAUX,
         )
         assert result["cout_fiscal"] == 0.0
 
     def test_moins_value_gratuite(self):
         result = calculer_cout_fiscal_arbitrage(
-            montant_cede=5000, prix_revient=8000,
-            enveloppe_id="CTO_perso", params_fiscaux=PARAMS_FISCAUX,
+            montant_cede=5000,
+            prix_revient=8000,
+            enveloppe_id="CTO_perso",
+            params_fiscaux=PARAMS_FISCAUX,
         )
         assert result["cout_fiscal"] == 0.0
 
     def test_cto_pfu_correct(self):
         result = calculer_cout_fiscal_arbitrage(
-            montant_cede=10000, prix_revient=6000,
-            enveloppe_id="CTO_perso", params_fiscaux=PARAMS_FISCAUX,
+            montant_cede=10000,
+            prix_revient=6000,
+            enveloppe_id="CTO_perso",
+            params_fiscaux=PARAMS_FISCAUX,
         )
         pv = 4000
         expected = pv * (0.128 + 0.186)
@@ -66,15 +72,19 @@ class TestCalculerCoutFiscalArbitrage:
 
     def test_per_arbitrage_gratuit(self):
         result = calculer_cout_fiscal_arbitrage(
-            montant_cede=20000, prix_revient=10000,
-            enveloppe_id="PER", params_fiscaux=PARAMS_FISCAUX,
+            montant_cede=20000,
+            prix_revient=10000,
+            enveloppe_id="PER",
+            params_fiscaux=PARAMS_FISCAUX,
         )
         assert result["cout_fiscal"] == 0.0
 
     def test_structure_resultat(self):
         result = calculer_cout_fiscal_arbitrage(
-            montant_cede=10000, prix_revient=7000,
-            enveloppe_id="CTO_perso", params_fiscaux=PARAMS_FISCAUX,
+            montant_cede=10000,
+            prix_revient=7000,
+            enveloppe_id="CTO_perso",
+            params_fiscaux=PARAMS_FISCAUX,
         )
         for key in ["plus_value", "cout_fiscal", "net_apres_impots", "taux_effectif"]:
             assert key in result

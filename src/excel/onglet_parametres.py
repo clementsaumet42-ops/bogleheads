@@ -1,11 +1,18 @@
 import openpyxl
 from openpyxl.styles import Font
+
 from src.excel.styles import (
-    COULEUR_HEADER, COULEUR_SUBHEADER, COULEUR_AVERTISSEMENT, COULEUR_OK,
-    COULEUR_LIGHT_GREY, COULEUR_LIGHT_BLUE,
-    _fill, _font, _align, _thin_border,
-    style_header, style_subheader, style_data,
-    set_col_width, ajouter_disclaimer, titre_section,
+    COULEUR_AVERTISSEMENT,
+    COULEUR_LIGHT_GREY,
+    COULEUR_OK,
+    _fill,
+    _font,
+    ajouter_disclaimer,
+    set_col_width,
+    style_data,
+    style_header,
+    style_subheader,
+    titre_section,
 )
 
 
@@ -29,7 +36,7 @@ def creer_onglet_parametres_client(wb: openpyxl.Workbook, profil: dict = None):
             ("Nom / Référence", profil.get("nom", "—")),
             ("Âge", profil.get("age", "—")),
             ("Situation familiale", profil.get("situation_familiale", "—")),
-            ("TMI (Taux Marginal d'Imposition)", f"{profil.get('tmi', 0)*100:.0f}%"),
+            ("TMI (Taux Marginal d'Imposition)", f"{profil.get('tmi', 0) * 100:.0f}%"),
             ("RFR annuel estimé", profil.get("rfr_annuel", 0)),
             ("Régime fiscal", profil.get("regime_fiscal", "—")),
             ("CEHR applicable", "Oui" if profil.get("cehr_applicable") else "Non"),
@@ -69,7 +76,9 @@ def creer_onglet_parametres_client(wb: openpyxl.Workbook, profil: dict = None):
         ws.row_dimensions[row].height = 20
         row += 1
         for i, obj in enumerate(profil.get("objectifs_secondaires", []), 1):
-            ws.cell(row=row, column=1, value=f"Objectif secondaire {i}").fill = _fill(COULEUR_LIGHT_GREY)
+            ws.cell(row=row, column=1, value=f"Objectif secondaire {i}").fill = _fill(
+                COULEUR_LIGHT_GREY
+            )
             ws.cell(row=row, column=2, value=obj)
             row += 1
     else:
@@ -120,9 +129,19 @@ def creer_onglet_fiscalite(wb: openpyxl.Workbook, params_fiscaux: dict):
     row += 1
     pfu_data = [
         ("IR (Impôt sur le Revenu)", "12,8%", "Dividendes + Plus-values", "Taux fixe PFU"),
-        ("Prélèvements Sociaux (PS)", "18,6%", "Dividendes + Plus-values + PEA sortie", "CSG 12,1% + CRDS 0,5% + Solidarité 6%"),
+        (
+            "Prélèvements Sociaux (PS)",
+            "18,6%",
+            "Dividendes + Plus-values + PEA sortie",
+            "CSG 12,1% + CRDS 0,5% + Solidarité 6%",
+        ),
         ("PFU TOTAL", "31,4%", "CTO personnel par défaut", "12,8% + 18,6%"),
-        ("Option barème IR", "TMI + 18,6%", "Sur option — si TMI < 12,8%", "Abattement 40% dividendes si option barème"),
+        (
+            "Option barème IR",
+            "TMI + 18,6%",
+            "Sur option — si TMI < 12,8%",
+            "Abattement 40% dividendes si option barème",
+        ),
     ]
     for data in pfu_data:
         for j, val in enumerate(data, 1):
@@ -133,18 +152,82 @@ def creer_onglet_fiscalite(wb: openpyxl.Workbook, params_fiscaux: dict):
     row += 1
     # ── Enveloppes fiscalité sortie ──
     row = titre_section(ws, row, "🏦 FISCALITÉ PAR ENVELOPPE (SORTIE)", 1, 7)
-    headers = ["Enveloppe", "IR sortie", "PS sortie", "Total sortie", "Avantage vs CTO", "Plafond versement", "Remarque clé"]
+    headers = [
+        "Enveloppe",
+        "IR sortie",
+        "PS sortie",
+        "Total sortie",
+        "Avantage vs CTO",
+        "Plafond versement",
+        "Remarque clé",
+    ]
     for i, h in enumerate(headers, 1):
         style_subheader(ws.cell(row=row, column=i, value=h))
     row += 1
     env_data = [
-        ("CTO personnel", "12,8% (PFU)", "18,6%", "31,4%", "Référence", "Illimité", "Scénario de référence"),
-        ("PEA (après 5 ans)", "0% (exonéré)", "18,6%", "18,6%", "−12,8% vs CTO", "150 000 €", "PRIORITÉ — 12,8% économisés"),
-        ("PEA (avant 5 ans)", "12,8%", "18,6%", "31,4%", "Aucun", "150 000 €", "Équivalent CTO avant 5 ans"),
-        ("PER (retraite)", "TMI retraite", "18,6% gains", "Variable", "Transfert fiscal", "Illimité", "Déduction à l'entrée = avantage si TMI baisse"),
-        ("PEE", "0% (exonéré)", "18,6%", "18,6%", "−12,8% vs CTO", "Illimité", "Abondement employeur = TRI immédiat"),
-        ("Contrat cap IS", "IS 15/25%", "N/A (IS)", "15-25%", "vs CTO IS MTM", "Illimité", "Pas de mark-to-market = avantage majeur IS"),
-        ("CTO IS", "IS 15/25% + MTM", "N/A (IS)", "15-25%*", "* MTM pénalisant", "Illimité", "⚠️ Mark-to-market annuel sur OPCVM"),
+        (
+            "CTO personnel",
+            "12,8% (PFU)",
+            "18,6%",
+            "31,4%",
+            "Référence",
+            "Illimité",
+            "Scénario de référence",
+        ),
+        (
+            "PEA (après 5 ans)",
+            "0% (exonéré)",
+            "18,6%",
+            "18,6%",
+            "−12,8% vs CTO",
+            "150 000 €",
+            "PRIORITÉ — 12,8% économisés",
+        ),
+        (
+            "PEA (avant 5 ans)",
+            "12,8%",
+            "18,6%",
+            "31,4%",
+            "Aucun",
+            "150 000 €",
+            "Équivalent CTO avant 5 ans",
+        ),
+        (
+            "PER (retraite)",
+            "TMI retraite",
+            "18,6% gains",
+            "Variable",
+            "Transfert fiscal",
+            "Illimité",
+            "Déduction à l'entrée = avantage si TMI baisse",
+        ),
+        (
+            "PEE",
+            "0% (exonéré)",
+            "18,6%",
+            "18,6%",
+            "−12,8% vs CTO",
+            "Illimité",
+            "Abondement employeur = TRI immédiat",
+        ),
+        (
+            "Contrat cap IS",
+            "IS 15/25%",
+            "N/A (IS)",
+            "15-25%",
+            "vs CTO IS MTM",
+            "Illimité",
+            "Pas de mark-to-market = avantage majeur IS",
+        ),
+        (
+            "CTO IS",
+            "IS 15/25% + MTM",
+            "N/A (IS)",
+            "15-25%*",
+            "* MTM pénalisant",
+            "Illimité",
+            "⚠️ Mark-to-market annuel sur OPCVM",
+        ),
     ]
     for i, data in enumerate(env_data):
         bg = COULEUR_LIGHT_GREY if i % 2 == 0 else None
@@ -166,9 +249,24 @@ def creer_onglet_fiscalite(wb: openpyxl.Workbook, params_fiscaux: dict):
         style_subheader(ws.cell(row=row, column=i, value=h))
     row += 1
     is_data = [
-        ("0 → 42 500 €", "15% (taux réduit)", "CA < 10M€, capital ≥75% pers. physiques", "42 500 € × 15% = 6 375 € IS"),
-        ("Au-delà de 42 500 €", "25% (taux normal)", "Sur la fraction > 42 500 €", "57 500 € × 25% = 14 375 € IS"),
-        ("Exemple 100 000 € bénéfice", "→ IS = 20 750 €", "Taux effectif = 20,75%", "42 500×15% + 57 500×25%"),
+        (
+            "0 → 42 500 €",
+            "15% (taux réduit)",
+            "CA < 10M€, capital ≥75% pers. physiques",
+            "42 500 € × 15% = 6 375 € IS",
+        ),
+        (
+            "Au-delà de 42 500 €",
+            "25% (taux normal)",
+            "Sur la fraction > 42 500 €",
+            "57 500 € × 25% = 14 375 € IS",
+        ),
+        (
+            "Exemple 100 000 € bénéfice",
+            "→ IS = 20 750 €",
+            "Taux effectif = 20,75%",
+            "42 500×15% + 57 500×25%",
+        ),
     ]
     for data in is_data:
         for j, val in enumerate(data, 1):
@@ -202,11 +300,19 @@ def creer_onglet_fiscalite(wb: openpyxl.Workbook, params_fiscaux: dict):
     row += 1
     ws.cell(row=row, column=1, value="IS sur base forfaitaire").font = _font(bold=True)
     ws.cell(row=row, column=2, value="31 500 € × 15% = 4 725 € IS/an (vs MTM CTO IS)")
-    ws.cell(row=row, column=3, value="⚠️ TME = taux en vigueur à la SOUSCRIPTION — vérifier avec assureur")
+    ws.cell(
+        row=row,
+        column=3,
+        value="⚠️ TME = taux en vigueur à la SOUSCRIPTION — vérifier avec assureur",
+    )
     ws.merge_cells(start_row=row, start_column=3, end_row=row, end_column=7)
     row += 1
-    ws.cell(row=row, column=1, value="Absence de mark-to-market").font = _font(bold=True, color=COULEUR_OK)
-    ws.cell(row=row, column=2, value="✅ Avantage MAJEUR vs CTO IS : pas de taxation des PV latentes")
+    ws.cell(row=row, column=1, value="Absence de mark-to-market").font = _font(
+        bold=True, color=COULEUR_OK
+    )
+    ws.cell(
+        row=row, column=2, value="✅ Avantage MAJEUR vs CTO IS : pas de taxation des PV latentes"
+    )
     ws.merge_cells(start_row=row, start_column=2, end_row=row, end_column=7)
     row += 1
 

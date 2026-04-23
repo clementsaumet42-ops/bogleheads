@@ -1,9 +1,16 @@
 import openpyxl
 from openpyxl.worksheet.table import Table, TableStyleInfo
+
 from src.excel.styles import (
     COULEURS_CLASSES,
-    _fill, _font, _align, _thin_border,
-    style_header, style_subheader, set_col_width, ajouter_disclaimer,
+    _align,
+    _fill,
+    _font,
+    _thin_border,
+    ajouter_disclaimer,
+    set_col_width,
+    style_header,
+    style_subheader,
 )
 
 
@@ -21,9 +28,20 @@ def creer_onglet_univers_etf(wb: openpyxl.Workbook, etfs: list):
     ajouter_disclaimer(ws, 2, 1, 14)
 
     headers = [
-        "ISIN", "Ticker", "Nom", "Émetteur", "Classe d'actifs", "Sous-classe",
-        "TER (%)", "Devise", "Capitalisant", "EUR-Hedgé",
-        "PEA", "PER", "CTO", "Notes",
+        "ISIN",
+        "Ticker",
+        "Nom",
+        "Émetteur",
+        "Classe d'actifs",
+        "Sous-classe",
+        "TER (%)",
+        "Devise",
+        "Capitalisant",
+        "EUR-Hedgé",
+        "PEA",
+        "PER",
+        "CTO",
+        "Notes",
     ]
     for i, h in enumerate(headers, 1):
         style_subheader(ws.cell(row=3, column=i, value=h))
@@ -57,7 +75,9 @@ def creer_onglet_univers_etf(wb: openpyxl.Workbook, etfs: list):
             cell = ws.cell(row=row, column=j, value=val)
             cell.fill = _fill(bg)
             cell.font = _font(size=9)
-            cell.alignment = _align("center" if j in (7, 8, 9, 10, 11, 12, 13) else "left", wrap=True)
+            cell.alignment = _align(
+                "center" if j in (7, 8, 9, 10, 11, 12, 13) else "left", wrap=True
+            )
             cell.border = _thin_border()
             if j == 7:  # TER
                 cell.number_format = "0.00%"
@@ -81,4 +101,4 @@ def creer_onglet_univers_etf(wb: openpyxl.Workbook, etfs: list):
     for i, w in enumerate(widths, 1):
         set_col_width(ws, i, w)
     ws.freeze_panes = "A4"
-    ws.auto_filter.ref = f"A3:N{len(etfs)+3}"
+    ws.auto_filter.ref = f"A3:N{len(etfs) + 3}"

@@ -1,8 +1,8 @@
-import yaml
-import openpyxl
-from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
 from pathlib import Path
+
+import yaml
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from openpyxl.utils import get_column_letter
 
 ROOT = Path(__file__).parent.parent.parent
 
@@ -43,7 +43,7 @@ BLEU_CIEL = COULEUR_LIGHT_BLUE
 
 # ─── Helpers de style ───────────────────────────────────────────────
 def load_yaml(filename: str) -> dict:
-    with open(ROOT / "config" / filename, "r", encoding="utf-8") as f:
+    with open(ROOT / "config" / filename, encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -99,9 +99,7 @@ def ajouter_disclaimer(ws, row: int, col_start=1, col_end=10) -> int:
         "Tout conseil doit être personnalisé par un CIF/CGP agréé AMF. "
         "Paramètres fiscaux indicatifs — valider avec votre expert-comptable."
     )
-    ws.merge_cells(
-        start_row=row, start_column=col_start, end_row=row, end_column=col_end
-    )
+    ws.merge_cells(start_row=row, start_column=col_start, end_row=row, end_column=col_end)
     cell = ws.cell(row=row, column=col_start, value=disclaimer)
     cell.fill = _fill("FFF2CC")
     cell.font = Font(bold=True, color=COULEUR_AVERTISSEMENT, size=9, italic=True)
@@ -111,9 +109,7 @@ def ajouter_disclaimer(ws, row: int, col_start=1, col_end=10) -> int:
 
 
 def titre_section(ws, row: int, texte: str, col_start=1, col_end=8, bg=COULEUR_SUBHEADER) -> int:
-    ws.merge_cells(
-        start_row=row, start_column=col_start, end_row=row, end_column=col_end
-    )
+    ws.merge_cells(start_row=row, start_column=col_start, end_row=row, end_column=col_end)
     cell = ws.cell(row=row, column=col_start, value=texte)
     cell.fill = _fill(bg)
     cell.font = Font(bold=True, color="FFFFFF", size=11)

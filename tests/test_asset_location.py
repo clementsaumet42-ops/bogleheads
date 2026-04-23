@@ -14,38 +14,53 @@ PARAMS_FISCAUX = {
 class TestCalculerGainFiscal:
     def test_pea_moins_impots_que_cto(self):
         result_pea = calculer_gain_fiscal_enveloppe(
-            etf={}, enveloppe_id="PEA",
-            montant=10000, horizon_ans=10,
-            rendement_annuel=0.07, params_fiscaux=PARAMS_FISCAUX,
+            etf={},
+            enveloppe_id="PEA",
+            montant=10000,
+            horizon_ans=10,
+            rendement_annuel=0.07,
+            params_fiscaux=PARAMS_FISCAUX,
         )
         result_cto = calculer_gain_fiscal_enveloppe(
-            etf={}, enveloppe_id="CTO_perso",
-            montant=10000, horizon_ans=10,
-            rendement_annuel=0.07, params_fiscaux=PARAMS_FISCAUX,
+            etf={},
+            enveloppe_id="CTO_perso",
+            montant=10000,
+            horizon_ans=10,
+            rendement_annuel=0.07,
+            params_fiscaux=PARAMS_FISCAUX,
         )
         assert result_pea["capital_net"] > result_cto["capital_net"]
 
     def test_avantage_pea_positif(self):
         result = calculer_gain_fiscal_enveloppe(
-            etf={}, enveloppe_id="PEA",
-            montant=10000, horizon_ans=10,
-            rendement_annuel=0.07, params_fiscaux=PARAMS_FISCAUX,
+            etf={},
+            enveloppe_id="PEA",
+            montant=10000,
+            horizon_ans=10,
+            rendement_annuel=0.07,
+            params_fiscaux=PARAMS_FISCAUX,
         )
         assert result["avantage_vs_cto"] > 0
 
     def test_cto_avantage_zero(self):
         result = calculer_gain_fiscal_enveloppe(
-            etf={}, enveloppe_id="CTO_perso",
-            montant=10000, horizon_ans=10,
-            rendement_annuel=0.07, params_fiscaux=PARAMS_FISCAUX,
+            etf={},
+            enveloppe_id="CTO_perso",
+            montant=10000,
+            horizon_ans=10,
+            rendement_annuel=0.07,
+            params_fiscaux=PARAMS_FISCAUX,
         )
         assert result["avantage_vs_cto"] == pytest.approx(0.0)
 
     def test_structure_resultat(self):
         result = calculer_gain_fiscal_enveloppe(
-            etf={}, enveloppe_id="PEA",
-            montant=10000, horizon_ans=5,
-            rendement_annuel=0.05, params_fiscaux=PARAMS_FISCAUX,
+            etf={},
+            enveloppe_id="PEA",
+            montant=10000,
+            horizon_ans=5,
+            rendement_annuel=0.05,
+            params_fiscaux=PARAMS_FISCAUX,
         )
         for key in ["enveloppe", "montant_initial", "capital_brut", "impots", "capital_net"]:
             assert key in result
@@ -79,7 +94,11 @@ class TestSuggererAssetLocation:
 
     def test_etf_non_eligible_exclue(self):
         etfs = [
-            {"isin": "TEST", "nom": "ETF non-eligible", "eligibilite": {"PEA": False, "CTO_perso": False}},
+            {
+                "isin": "TEST",
+                "nom": "ETF non-eligible",
+                "eligibilite": {"PEA": False, "CTO_perso": False},
+            },
         ]
         suggestions = suggerer_asset_location(
             etfs=etfs,

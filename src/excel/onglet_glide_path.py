@@ -1,21 +1,31 @@
 import openpyxl
+from openpyxl.chart import AreaChart
+from openpyxl.chart import Reference as _Ref
+from openpyxl.drawing.fill import (
+    PatternFillProperties,  # noqa: F401 (imported for side-effects in chart rendering)
+)
 from openpyxl.styles import Font
-from openpyxl.chart import AreaChart, Reference as _Ref
-from openpyxl.drawing.fill import PatternFillProperties  # noqa: F401 (imported for side-effects in chart rendering)
 from openpyxl.utils import get_column_letter
+
+from src.excel.styles import (
+    COULEUR_HEADER,
+    COULEUR_LIGHT_GREY,
+    COULEUR_SUBHEADER,
+    _align,
+    _fill,
+    _font,
+    set_col_width,
+    style_subheader,
+)
+from src.glide_path import charger_glide_paths, glide_path_pour_profil
 from src.projection import (
     AllocationClasses,
     ParametresProjection,
-    charger_params as charger_params_projection,
     simuler_monte_carlo,
     simuler_monte_carlo_glide_path,
 )
-from src.glide_path import charger_glide_paths, glide_path_pour_profil
-from src.excel.styles import (
-    COULEUR_HEADER, COULEUR_SUBHEADER, COULEUR_LIGHT_GREY,
-    _fill, _font, _align,
-    style_subheader,
-    set_col_width,
+from src.projection import (
+    charger_params as charger_params_projection,
 )
 
 
@@ -115,10 +125,18 @@ def _creer_onglet_glide_path(wb: openpyxl.Workbook, profil_ref: dict):
     row += 1
 
     headers = [
-        "Année", "Âge",
-        "Actions %", "Obligations %", "Monétaire %", "Immobilier %",
-        "Actions Monde %", "Actions USA %", "Actions Europe %", "Actions Émergents %",
-        "Défensif total %", "Offensif total %",
+        "Année",
+        "Âge",
+        "Actions %",
+        "Obligations %",
+        "Monétaire %",
+        "Immobilier %",
+        "Actions Monde %",
+        "Actions USA %",
+        "Actions Europe %",
+        "Actions Émergents %",
+        "Défensif total %",
+        "Offensif total %",
     ]
     for j, h in enumerate(headers, 1):
         c = ws.cell(row=row, column=j, value=h)
@@ -134,7 +152,9 @@ def _creer_onglet_glide_path(wb: openpyxl.Workbook, profil_ref: dict):
 
     for idx, (age, alloc) in enumerate(trajectoire):
         bg = COULEUR_LIGHT_GREY if idx % 2 == 0 else None
-        actions_pct = (alloc.actions_monde + alloc.actions_usa + alloc.actions_europe + alloc.actions_emergents) * 100
+        actions_pct = (
+            alloc.actions_monde + alloc.actions_usa + alloc.actions_europe + alloc.actions_emergents
+        ) * 100
         vals = [
             annee_base + idx,
             age,
@@ -146,7 +166,17 @@ def _creer_onglet_glide_path(wb: openpyxl.Workbook, profil_ref: dict):
             round(alloc.actions_usa * 100, 1),
             round(alloc.actions_europe * 100, 1),
             round(alloc.actions_emergents * 100, 1),
-            round((alloc.obligations + alloc.monetaire + alloc.immobilier + alloc.or_ + alloc.matieres_premieres) * 100, 1),
+            round(
+                (
+                    alloc.obligations
+                    + alloc.monetaire
+                    + alloc.immobilier
+                    + alloc.or_
+                    + alloc.matieres_premieres
+                )
+                * 100,
+                1,
+            ),
             round(actions_pct, 1),
         ]
         for j, val in enumerate(vals, 1):
@@ -155,7 +185,7 @@ def _creer_onglet_glide_path(wb: openpyxl.Workbook, profil_ref: dict):
             if bg:
                 c.fill = _fill(bg)
             if j in (3, 4, 5, 6, 7, 8, 9, 10, 11, 12):
-                c.number_format = "0.0\"%\""
+                c.number_format = '0.0"%"'
         ws.row_dimensions[row].height = 14
         row += 1
 
@@ -173,7 +203,7 @@ def _creer_onglet_glide_path(wb: openpyxl.Workbook, profil_ref: dict):
     chart.width = 24
 
     col_labels = {3: "Actions", 4: "Obligations", 5: "Monétaire", 6: "Immobilier"}
-    for col_idx, label in col_labels.items():
+    for col_idx, _label in col_labels.items():
         data_ref = _Ref(ws, min_col=col_idx, min_row=traj_data_start - 1, max_row=traj_data_end)
         chart.add_data(data_ref, titles_from_data=True)
 
@@ -189,7 +219,9 @@ def _creer_onglet_glide_path(wb: openpyxl.Workbook, profil_ref: dict):
     ws.add_chart(chart, f"{chart_anchor_col}{traj_data_start}")
 
     # ── Section 5 — Comparaison Monte-Carlo fixe vs glide path ───────
-    c = ws.cell(row=row, column=1, value="📈 COMPARAISON MONTE-CARLO : ALLOCATION FIXE vs GLIDE PATH")
+    c = ws.cell(
+        row=row, column=1, value="📈 COMPARAISON MONTE-CARLO : ALLOCATION FIXE vs GLIDE PATH"
+    )
     c.font = Font(bold=True, color="FFFFFF", size=11)
     c.fill = _fill(COULEUR_HEADER)
     c.alignment = _align("left", "center")

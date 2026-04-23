@@ -1,22 +1,24 @@
-import openpyxl
 from pathlib import Path
-from src.excel.styles import ROOT, load_yaml
-from src.excel.onglet_parametres import creer_onglet_parametres_client, creer_onglet_fiscalite
-from src.excel.onglet_enveloppes import creer_onglet_enveloppes
-from src.excel.onglet_univers_etf import creer_onglet_univers_etf
+
+import openpyxl
+
 from src.excel.onglet_allocation import creer_onglet_allocation_cible
 from src.excel.onglet_asset_location import creer_onglet_asset_location
-from src.excel.onglet_rebalancement import creer_onglet_rebalancement
-from src.excel.onglet_reporting import creer_onglet_reporting
-from src.excel.onglet_profils import (
-    creer_onglet_profils_types,
-    creer_onglet_profil_individuel,
-    creer_onglet_comparatif_profils,
-)
-from src.excel.onglet_tuto_solveur import creer_onglet_tuto_solveur
-from src.excel.onglet_projection import _creer_onglet_projection_monte_carlo
+from src.excel.onglet_enveloppes import creer_onglet_enveloppes
 from src.excel.onglet_glide_path import _creer_onglet_glide_path
+from src.excel.onglet_parametres import creer_onglet_fiscalite, creer_onglet_parametres_client
+from src.excel.onglet_profils import (
+    creer_onglet_comparatif_profils,
+    creer_onglet_profil_individuel,
+    creer_onglet_profils_types,
+)
+from src.excel.onglet_projection import _creer_onglet_projection_monte_carlo
+from src.excel.onglet_rebalancement import creer_onglet_rebalancement
 from src.excel.onglet_rebalancement_flux import _creer_onglet_rebalancement_flux
+from src.excel.onglet_reporting import creer_onglet_reporting
+from src.excel.onglet_tuto_solveur import creer_onglet_tuto_solveur
+from src.excel.onglet_univers_etf import creer_onglet_univers_etf
+from src.excel.styles import ROOT, load_yaml
 
 
 def generer_excel(chemin_sortie: str = None):

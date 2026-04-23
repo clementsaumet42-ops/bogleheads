@@ -1,15 +1,17 @@
 """
 Module allocation cible Boglehead
 """
-import yaml
+
 from pathlib import Path
+
+import yaml
 
 
 def charger_profils(chemin_yaml: str = None) -> dict:
     """Charge les profils clients depuis le fichier YAML."""
     if chemin_yaml is None:
         chemin_yaml = Path(__file__).parent.parent / "config" / "profils_clients.yaml"
-    with open(chemin_yaml, "r", encoding="utf-8") as f:
+    with open(chemin_yaml, encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 

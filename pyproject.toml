@@ -38,6 +38,7 @@ target-version = "py39"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM", "C90"]
+ignore = ["E501", "C901"]
 
 [tool.ruff.format]
 quote-style = "double"

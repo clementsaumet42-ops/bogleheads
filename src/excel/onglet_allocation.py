@@ -1,10 +1,18 @@
 import openpyxl
 from openpyxl.styles import Font
+
 from src.excel.styles import (
-    COULEURS_CLASSES, COULEUR_HEADER, COULEUR_SUBHEADER, COULEUR_LIGHT_GREY,
-    _fill, _font, _align, _thin_border,
-    style_header, style_subheader, style_data,
-    set_col_width, ajouter_disclaimer, titre_section,
+    COULEUR_HEADER,
+    COULEUR_LIGHT_GREY,
+    _align,
+    _fill,
+    _font,
+    _thin_border,
+    ajouter_disclaimer,
+    set_col_width,
+    style_header,
+    style_subheader,
+    titre_section,
 )
 
 
@@ -22,7 +30,15 @@ def creer_onglet_allocation_cible(wb: openpyxl.Workbook, profil: dict = None):
 
     row = 4
     row = titre_section(ws, row, "📊 ALLOCATION CIBLE PAR CLASSE D'ACTIFS", 1, 7)
-    headers = ["Classe d'actifs", "Allocation cible (%)", "Montant (€)", "ETF de référence", "Enveloppe prioritaire", "Justification", "Couleur"]
+    headers = [
+        "Classe d'actifs",
+        "Allocation cible (%)",
+        "Montant (€)",
+        "ETF de référence",
+        "Enveloppe prioritaire",
+        "Justification",
+        "Couleur",
+    ]
     for i, h in enumerate(headers, 1):
         style_subheader(ws.cell(row=row, column=i, value=h))
     row += 1
@@ -85,7 +101,9 @@ def creer_onglet_allocation_cible(wb: openpyxl.Workbook, profil: dict = None):
             ws.row_dimensions[row].height = 30
             row += 1
     else:
-        ws.cell(row=row, column=1, value="ℹ️ Sélectionner un profil client pour afficher l'allocation.")
+        ws.cell(
+            row=row, column=1, value="ℹ️ Sélectionner un profil client pour afficher l'allocation."
+        )
 
     # Règles Boglehead
     row += 1

@@ -2,15 +2,17 @@
 Module de calcul fiscal — Boglehead FR 2026
 Règles fiscales : PFU, PS, CEHR, CDHR, IS, Contrat Capitalisation IS
 """
-import yaml
+
 from pathlib import Path
+
+import yaml
 
 
 def charger_params_fiscaux(chemin_yaml: str = None) -> dict:
     """Charge les paramètres fiscaux depuis le fichier YAML."""
     if chemin_yaml is None:
         chemin_yaml = Path(__file__).parent.parent / "config" / "fiscalite_2026.yaml"
-    with open(chemin_yaml, "r", encoding="utf-8") as f:
+    with open(chemin_yaml, encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 

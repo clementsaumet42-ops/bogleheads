@@ -4,15 +4,13 @@ import pytest
 from pydantic import ValidationError
 
 from src.schemas import (
-    AllocationCible,
     ETF,
-    ETFEligibilite,
-    Enveloppe,
+    AllocationCible,
     EnveloppesWrapper,
+    ETFEligibilite,
     Fiscalite2026,
     GlidePath,
     ParamsProjection,
-    Profil,
     ProfilsWrapper,
     RebalancementFlux,
     UniversETFWrapper,
@@ -144,7 +142,13 @@ class TestProfils:
         data = charger_et_valider("profils_clients.yaml")
         for profil in data.profils:
             alloc = profil.allocation_cible_bogleheads
-            total = alloc.actions + alloc.obligations + alloc.immobilier_cote + alloc.or_ + alloc.liquidites
+            total = (
+                alloc.actions
+                + alloc.obligations
+                + alloc.immobilier_cote
+                + alloc.or_
+                + alloc.liquidites
+            )
             assert abs(total - 1.0) < 0.02, f"Profil {profil.id}: total={total}"
 
 

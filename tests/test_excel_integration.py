@@ -1,6 +1,5 @@
 """Integration test: generate Excel file and verify structure."""
 
-import os
 from pathlib import Path
 
 import openpyxl

@@ -2,8 +2,8 @@
 Module d'asset location multi-enveloppes
 Logique de répartition optimale des ETF entre les enveloppes fiscales
 """
-from typing import List, Dict, Optional
 
+from typing import List
 
 # Règles de priorité d'asset location Boglehead FR
 PRIORITES_ASSET_LOCATION = {
