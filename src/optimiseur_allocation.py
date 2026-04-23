@@ -634,14 +634,26 @@ def _cout_naif(
     montants_cible: dict[str, float],
     config: dict,
 ) -> float:
-    """Coût annuel du scénario naïf (tout en CTO)."""
-    classes_config = config.get("classes_actifs", {})
+    """
+    Coût annuel du scénario naïf = tout placé en AV gestion pilotée.
+
+    Représente le statu quo réel d'un épargnant français non accompagné :
+    assurance-vie en gestion pilotée (frais gestion UC ~0,8 % + TER moyen
+    des UC ~1,5 % au lieu des ~0,1-0,3 % des ETF passifs Boglehead).
+
+    Le scénario naïf représente ce que paie un épargnant français moyen
+    aujourd'hui (AV gestion pilotée). L'économie affichée quantifie la valeur
+    ajoutée du conseil Boglehead : ETF passifs (~0,2 % TER) en enveloppes à
+    frais réduits (PEA 0 %, CTO 0,1 %) au lieu d'AV pilotée (~2,3 % tout
+    compris).
+    """
     frais_gestion = config.get("frais_gestion_enveloppes", FRAIS_GESTION_DEFAUT)
-    fg_cto = frais_gestion.get("CTO", 0.001)
+    fg_av = frais_gestion.get("AV", 0.008)
+    # TER moyen des UC en gestion pilotée (pas des ETF passifs) : ~1,5 %
+    ter_gestion_pilotee = config.get("ter_gestion_pilotee_naif", 0.015)
     cout = 0.0
     for c in classes:
-        ter = classes_config.get(c, {}).get("frais_ter_moyen", 0.001)
-        cout += (fg_cto + ter) * montants_cible.get(c, 0.0)
+        cout += (fg_av + ter_gestion_pilotee) * montants_cible.get(c, 0.0)
     return cout
 
 
