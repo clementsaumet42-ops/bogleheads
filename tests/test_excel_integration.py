@@ -33,7 +33,7 @@ class TestExcelStructure:
         "Reporting_Client",
     ]
 
-    def test_fichier_cree(self):
+    def test_fichier_cree(self, workbook):
         assert OUTPUT_PATH.exists()
         assert OUTPUT_PATH.stat().st_size > 0
 
