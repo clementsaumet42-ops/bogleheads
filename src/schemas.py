@@ -79,6 +79,37 @@ class EnveloppesWrapper(_Lenient):
     enveloppes: list[Enveloppe]
 
 
+# ─── Rebalancement Optimal — positions détaillées & lots ─────────────────────
+
+
+class Lot(_Lenient):
+    """Lot d'acquisition d'un ETF (pour méthode FIFO CTO/IS ou traçabilité)."""
+
+    date_acquisition: str  # ISO 8601 : "YYYY-MM-DD"
+    quantite: float = Field(ge=0)
+    prix_unitaire: float = Field(ge=0)
+
+
+class PositionDetaillee(_Lenient):
+    """Position détaillée d'un ETF dans une enveloppe, avec lots et prix de revient."""
+
+    etf: str  # ticker
+    enveloppe: str  # ex. "PEA", "CTO_perso", "AV", "PER"
+    quantite: float = Field(ge=0)
+    prix_revient_moyen: float = Field(ge=0)  # CMP — pour CTO/IR et calcul PV
+    lots: list[Lot] = Field(default_factory=list)  # pour FIFO (CTO/IS) et traçabilité
+    montant_actuel: float = Field(ge=0)  # valeur de marché actuelle en €
+    date_ouverture_enveloppe: str | None = None  # pour tests PEA ≥5 ans, AV ≥8 ans
+
+
+class AbattementsUtilises(_Lenient):
+    """Suivi des abattements annuels utilisés (reset au 1er janvier)."""
+
+    av_abattement_annuel_restant: float = Field(
+        default=4600.0, ge=0
+    )  # 4 600 € (célibataire) ou 9 200 € (couple)
+
+
 # ─── Profils clients ──────────────────────────────────────────────────────────
 
 
@@ -110,6 +141,13 @@ class Profil(_Lenient):
     patrimoine_financier_total: float = Field(default=0.0, ge=0)
     allocation_cible_bogleheads: AllocationCible
     enveloppes_disponibles: dict[str, Any] | None = None
+    # S3.6 — rebalancement optimal
+    regime_fiscal_detenteur: str = Field(
+        default="IR"
+    )  # "IR" (particulier) ou "IS" (personne morale)
+    positions_detaillees: list[PositionDetaillee] = Field(default_factory=list)
+    abattements_utilises: AbattementsUtilises = Field(default_factory=AbattementsUtilises)
+    frais_courtier_par_transaction: float = Field(default=0.0, ge=0)  # € par transaction
 
 
 class ProfilsWrapper(_Lenient):

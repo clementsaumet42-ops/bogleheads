@@ -7,6 +7,7 @@ from src.excel.onglet_asset_location import creer_onglet_asset_location
 from src.excel.onglet_enveloppes import creer_onglet_enveloppes
 from src.excel.onglet_glide_path import _creer_onglet_glide_path
 from src.excel.onglet_parametres import creer_onglet_fiscalite, creer_onglet_parametres_client
+from src.excel.onglet_plan_rebalancement import creer_onglet_plan_rebalancement
 from src.excel.onglet_profils import (
     creer_onglet_comparatif_profils,
     creer_onglet_profil_individuel,
@@ -82,6 +83,9 @@ def generer_excel(chemin_sortie: str = None):
 
     print("  → Onglet Rebalancement_Flux")
     _creer_onglet_rebalancement_flux(wb, profil_ref)
+
+    print("  → Onglet Plan_Rebalancement")
+    creer_onglet_plan_rebalancement(wb, profil_ref)
 
     wb.properties.title = "Boglehead FR — Outil CGP Multi-Enveloppes 2026"
     wb.properties.subject = "Allocation Boglehead multi-enveloppes — France 2026"
