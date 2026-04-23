@@ -337,7 +337,7 @@ def _resoudre_milp(
     def _cout_fiscal_pos(pos: Position, var: pulp.LpVariable) -> pulp.LpAffineExpression:
         """Linéarisation du coût fiscal (approximation affine)."""
         if pos.plus_value_latente <= 0:
-            return 0.0  # type: ignore[return-value]
+            return pulp.lpSum([])  # expression zéro compatible PuLP
         # Taux marginal de PV sur le montant vendu
         pv_pct = pos.plus_value_latente / pos.montant_actuel if pos.montant_actuel > 0 else 0.0
         if pos.enveloppe in ENVELOPPES_GRATUITES:
@@ -352,10 +352,12 @@ def _resoudre_milp(
             taux = TAUX_PFU
         return var * pv_pct * taux
 
-    # Fonction objectif : Σ coût_fiscal + Σ frais_courtage + pénalité dérive résiduelle
+    # Fonction objectif : Σ coût_fiscal + Σ frais_courtage (proxy linéaire) + pénalité dérive
+    # Note : frais_courtage est modélisé comme coût linéaire par unité vendue
+    # (approximation d'un coût fixe, préserve la linéarité du MILP)
     objectif = pulp.lpSum(
         _cout_fiscal_pos(pos, ventes_vars[f"{pos.etf}__{pos.enveloppe}"])
-        + frais_courtage * (ventes_vars[f"{pos.etf}__{pos.enveloppe}"] >= 1)
+        + (frais_courtage / max(pos.montant_actuel, 1)) * ventes_vars[f"{pos.etf}__{pos.enveloppe}"]
         for pos in positions
         if f"{pos.etf}__{pos.enveloppe}" in ventes_vars
     )
@@ -456,18 +458,36 @@ def etape1_arbitrages_gratuits(
 
     enveloppes = {p.enveloppe for p in positions if p.enveloppe in ENVELOPPES_GRATUITES}
 
+    # Identifier les classes surpondérées et sous-pondérées
+    classes_surponderes = {
+        k: (allocation_actuelle.get(k, 0.0) - v)
+        for k, v in allocation_cible.items()
+        if k != "commentaire" and (allocation_actuelle.get(k, 0.0) - v) > bande_pp
+    }
+    classes_sous_ponderees = [
+        k
+        for k, v in allocation_cible.items()
+        if k != "commentaire" and (v - allocation_actuelle.get(k, 0.0)) > bande_pp
+    ]
+
+    if not classes_surponderes or not classes_sous_ponderees:
+        return arbitrages
+
     for env in sorted(enveloppes):
         pos_env = [p for p in positions if p.enveloppe == env]
         if not pos_env:
             continue
 
         for pos in pos_env:
-            derive = allocation_actuelle.get("actions", 0.0) - allocation_cible.get("actions", 0.0)
-            if abs(derive) < bande_pp:
-                continue
+            # Chercher la classe surpondérée qui correspond à cet ETF
+            # (simplification : on associe chaque position à la première classe surpondérée)
+            if not classes_surponderes:
+                break
+            classe_sur = next(iter(classes_surponderes))
+            derive = classes_surponderes[classe_sur]
+            classe_cible = classes_sous_ponderees[0] if classes_sous_ponderees else "obligations"
 
-            # Exemple : si la position contribue à une classe surpondérée
-            if derive > bande_pp and pos.montant_actuel > 0:
+            if pos.montant_actuel > 0:
                 montant = min(pos.montant_actuel, abs(derive) * patrimoine_total)
                 if montant < 100:
                     continue
@@ -476,13 +496,13 @@ def etape1_arbitrages_gratuits(
                     {
                         "enveloppe": env,
                         "vendre_etf": pos.etf,
-                        "acheter_classe": "obligations",
+                        "acheter_classe": classe_cible,
                         "montant": round(montant, 2),
                         "cout_fiscal": 0.0,
                         "impact_pp": round(impact_pp * 100, 2),
                         "detail": (
                             f"✅ {env} : Vendre {montant:.0f} € {pos.etf} → "
-                            f"acheter obligations    Coût : 0 €"
+                            f"acheter {classe_cible}    Coût : 0 €"
                         ),
                     }
                 )

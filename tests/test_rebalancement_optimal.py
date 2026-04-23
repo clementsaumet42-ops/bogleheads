@@ -1,7 +1,7 @@
 """
 Tests pour src/rebalancement_optimal.py — Sprint S3.6.
 
-≥ 15 tests couvrant :
+19 tests couvrant :
   - Cascade gratuit → flux → vente
   - CMP sur CTO/IR avec 3 lots
   - FIFO sur CTO/IS avec 3 lots

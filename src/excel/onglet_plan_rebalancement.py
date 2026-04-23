@@ -11,6 +11,8 @@ Affiche l'économie fiscale réalisée vs scénario naïf.
 
 from __future__ import annotations
 
+from typing import Any
+
 import openpyxl
 from openpyxl.styles import Font
 
@@ -55,7 +57,7 @@ def _cell_merge(ws, row: int, col_start: int, col_end: int, value, bg=None, bold
     return c
 
 
-def _ligne_donnee(ws, row: int, cols_vals: list[tuple[int, any]], bg=None, bold=False):
+def _ligne_donnee(ws, row: int, cols_vals: list[tuple[int, Any]], bg=None, bold=False):
     for col, val in cols_vals:
         c = ws.cell(row=row, column=col, value=val)
         c.font = _font(bold=bold)
