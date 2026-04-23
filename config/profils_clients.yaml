@@ -69,6 +69,13 @@ profils:
 
     score_risque: 6
 
+    # S2 — Optimiseur d'allocation
+    profil_aversion_risque: "dynamique"
+    contraintes_personnalisees:
+      exposition_em_max: 0.15
+      exposition_usa_max: 0.50     # limite sur-concentration USA
+      exposition_geo_europe_min: 0.25  # minimum zone Europe
+
     # S3.6 — Rebalancement Optimal
     regime_fiscal_detenteur: "IR"
 
@@ -199,6 +206,12 @@ profils:
       - "Diversification hors employeur"
 
     score_risque: 5
+
+    # S2 — Optimiseur d'allocation
+    profil_aversion_risque: "equilibre"
+    contraintes_personnalisees:
+      exposition_em_max: 0.12
+      exposition_usa_max: 0.45
 
   - id: 3
     code: "PROFIL_3_DIRIGEANT_PME"
@@ -381,6 +394,11 @@ profils:
       - "CTO pour le surplus"
 
     score_risque: 7
+
+    # S2 — Optimiseur d'allocation
+    profil_aversion_risque: "agressif"
+    contraintes_personnalisees:
+      exposition_em_max: 0.20
 
   - id: 6
     code: "PROFIL_6_PRE_RETRAITE"

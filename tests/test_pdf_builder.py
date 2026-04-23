@@ -70,9 +70,7 @@ def pdf_profil_1(profil_1: dict, cabinet_config, tmp_path_factory: pytest.TempPa
 
 
 class TestGenerationPDF:
-    def test_pdf_cree_taille_pages(
-        self, profil_1: dict, cabinet_config, tmp_path: Path
-    ) -> None:
+    def test_pdf_cree_taille_pages(self, profil_1: dict, cabinet_config, tmp_path: Path) -> None:
         """Le PDF est créé, fait > 50 Ko et contient exactement 13 pages."""
         from src.pdf_builder import generer_pdf
 
@@ -92,9 +90,7 @@ class TestGenerationPDF:
         reader = PdfReader(str(pdf_profil_1))
         assert len(reader.pages) == 13
 
-    def test_resultat_pdf_metadata(
-        self, profil_1: dict, cabinet_config, tmp_path: Path
-    ) -> None:
+    def test_resultat_pdf_metadata(self, profil_1: dict, cabinet_config, tmp_path: Path) -> None:
         """ResultatPDF contient les métadonnées correctes."""
         from src.pdf_builder import generer_pdf
         from src.schemas import ResultatPDF
@@ -114,9 +110,7 @@ class TestGenerationPDF:
 
 
 class TestFallbackLogo:
-    def test_logo_absent_pas_erreur(
-        self, profil_1: dict, tmp_path: Path
-    ) -> None:
+    def test_logo_absent_pas_erreur(self, profil_1: dict, tmp_path: Path) -> None:
         """Génération sans erreur si logo_path absent ou fichier inexistant."""
         from src.pdf_builder import generer_pdf
         from src.schemas import CabinetConfig, CabinetInfo, PDFStyle
@@ -130,9 +124,7 @@ class TestFallbackLogo:
         assert out.exists()
         assert result.nb_pages == 13
 
-    def test_logo_chemin_invalide_fallback_texte(
-        self, profil_1: dict, tmp_path: Path
-    ) -> None:
+    def test_logo_chemin_invalide_fallback_texte(self, profil_1: dict, tmp_path: Path) -> None:
         """Logo avec chemin inexistant → fallback texte, pas d'erreur."""
         from src.pdf_builder import generer_pdf
         from src.schemas import CabinetConfig, CabinetInfo
@@ -150,25 +142,19 @@ class TestFallbackLogo:
 
 
 class TestTousProfils:
-    def test_profil_1_genere(
-        self, profil_1: dict, cabinet_config, tmp_path: Path
-    ) -> None:
+    def test_profil_1_genere(self, profil_1: dict, cabinet_config, tmp_path: Path) -> None:
         from src.pdf_builder import generer_pdf
 
         result = generer_pdf(profil_1, cabinet_config, str(tmp_path / "p1.pdf"))
         assert result.nb_pages == 13
 
-    def test_profil_2_genere(
-        self, profil_2: dict, cabinet_config, tmp_path: Path
-    ) -> None:
+    def test_profil_2_genere(self, profil_2: dict, cabinet_config, tmp_path: Path) -> None:
         from src.pdf_builder import generer_pdf
 
         result = generer_pdf(profil_2, cabinet_config, str(tmp_path / "p2.pdf"))
         assert result.nb_pages == 13
 
-    def test_profil_3_genere(
-        self, profil_3: dict, cabinet_config, tmp_path: Path
-    ) -> None:
+    def test_profil_3_genere(self, profil_3: dict, cabinet_config, tmp_path: Path) -> None:
         from src.pdf_builder import generer_pdf
 
         result = generer_pdf(profil_3, cabinet_config, str(tmp_path / "p3.pdf"))
@@ -195,9 +181,9 @@ class TestContenuPDF:
         reader = PdfReader(str(pdf_profil_1))
         full_text = " ".join(page.extract_text() or "" for page in reader.pages)
         # Patrimoine 500000 -> "500 000" ou "500000" ou "500"
-        assert any(
-            s in full_text for s in ["500 000", "500000", "500"]
-        ), "Le patrimoine total doit apparaître dans le PDF"
+        assert any(s in full_text for s in ["500 000", "500000", "500"]), (
+            "Le patrimoine total doit apparaître dans le PDF"
+        )
 
     def test_allocation_cible_presente(self, pdf_profil_1: Path, profil_1: dict) -> None:
         """L'allocation cible (% actions) est mentionnée dans le PDF."""
@@ -283,9 +269,7 @@ class TestStyle:
 
 
 class TestReproductibilite:
-    def test_meme_entree_meme_sortie(
-        self, profil_1: dict, cabinet_config, tmp_path: Path
-    ) -> None:
+    def test_meme_entree_meme_sortie(self, profil_1: dict, cabinet_config, tmp_path: Path) -> None:
         """Même profil + date figée → même contenu logique (pages, texte, images).
 
         Note : reportlab embed un timestamp PDF, le binaire peut différer d'une

@@ -9,7 +9,7 @@
 
 ## 📋 Description
 
-Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** contenant 17 onglets dédiés à la gestion d'un portefeuille Boglehead en France, avec optimisation multi-enveloppes fiscales (PEA, PER, PEE, CTO, Contrat Cap IS). Il génère également un **PDF client 13 pages** personnalisable aux couleurs du cabinet.
+Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** contenant 22 onglets dédiés à la gestion d'un portefeuille Boglehead en France, avec optimisation multi-enveloppes fiscales (PEA, PER, PEE, CTO, Contrat Cap IS). Il génère également un **PDF client 13 pages** personnalisable aux couleurs du cabinet.
 
 ### Fonctionnalités
 
@@ -23,6 +23,7 @@ Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** co
 - 🔄 **Glide path automatique** (lifecycle investing) : évolution de l'allocation selon l'âge avec 6 stratégies paramétrables (Bogle, target-date, conservateur…)
 - 💸 **Rebalancement par flux** (cash flow rebalancing) : rééquilibrage sans vente, zéro fiscalité
 - 🎯 **Rebalancement optimal** (MILP + cascade fiscale) : plan d'action chiffré minimisant le coût fiscal, avec gestion CMP/FIFO, tax-loss harvesting, abattements AV, contraintes PEA/PER
+- ⭐ **Optimiseur d'allocation intégré** (Sprint S2) : allocation cible Markowitz (scipy QP) + asset location MILP (pulp) avec contraintes fiscales et profil de risque personnalisé
 - 📄 **PDF client 13 pages** : rapport patrimonial professionnel avec graphiques matplotlib (camembert patrimoine, projection Monte-Carlo), personnalisable via `config/pdf_cabinet.yaml`
 
 ---
@@ -51,51 +52,6 @@ python build_excel.py
 ```
 
 Le fichier est généré dans `output/portefeuille_bogleheads.xlsx`.
-
-### Générer le PDF client (13 pages)
-
-```bash
-# Tous les profils
-python build_pdf.py
-
-# Un seul profil (par code ou par id)
-python build_pdf.py --profil PROFIL_1_CADRE_SUP
-python build_pdf.py --profil 1
-
-# Cabinet personnalisé
-python build_pdf.py --cabinet config/pdf_cabinet.yaml --output output/
-```
-
-Les PDFs sont générés dans `output/<PROFIL_CODE>_<YYYYMMDD>.pdf`. Des exemples sont disponibles dans `examples/`.
-
-**Structure du PDF (13 pages)** :
-| # | Page | Contenu |
-|---|---|---|
-| 1 | Couverture | Logo cabinet, nom client, date |
-| 2 | Synthèse exécutive | Patrimoine total, allocation, actions clés |
-| 3 | Profil client | Situation, objectifs, horizon, TMI |
-| 4 | Patrimoine actuel | Tableau enveloppes × classes + camembert |
-| 5 | Philosophie Boglehead | Les 3 principes ETF passifs |
-| 6 | Allocation cible | Résultat optimisé, bornes par classe |
-| 7 | Asset location | Matrice classes × enveloppes, logique fiscale |
-| 8 | Univers ETF | ~15 ETF sélectionnés : ISIN, TER, éligibilité |
-| 9 | Projection Monte-Carlo | Graphique 30 ans médiane + P10/P90 |
-| 10 | Plan de rebalancement | Cascade gratuit / flux / vente optimisée |
-| 11 | Fiscalité & transmission | TMI, abattements AV, PER, succession |
-| 12 | Suivi recommandé | Calendrier trimestriel, KPIs, alertes |
-| 13 | Mentions légales | Hypothèses, avertissements AMF, glossaire |
-
-**Personnalisation cabinet** (`config/pdf_cabinet.yaml`) :
-```yaml
-cabinet:
-  nom: "Cabinet Saumet Patrimoine"
-  logo_path: "assets/logo_cabinet.png"  # optionnel
-  adresse: "12 Rue de la République, Lyon"
-  numero_orias: "XXXXXXXXXXXX"
-style:
-  couleur_primary: "#1a4d8f"
-  couleur_accent:  "#d4a017"
-```
 
 ### Lancer les tests
 
@@ -142,6 +98,88 @@ bogleheads/
 │   └── test_univers_etf.py     ← Tests validation univers ETF (ISIN, PEA, schéma)
 └── output/
     └── .gitkeep
+```
+
+---
+
+## ⭐ Optimiseur d'allocation intégré (S2)
+
+Module `src/optimiseur_allocation.py` — Allocation mathématiquement optimale en deux modes chaînables.
+
+### Mode A — Allocation cible (Markowitz via scipy)
+
+Optimise les poids par classe d'actifs (actions USA, Dev ex-USA, Émergents, Obligations, REIT, Or, Monétaire) en minimisant `variance - λ × rendement_attendu`.
+
+```python
+from src.optimiseur_allocation import calculer_allocation_cible, charger_config_optimiseur
+
+config = charger_config_optimiseur()
+profil = {
+    "profil_aversion_risque": "dynamique",
+    "age": 45,
+    "contraintes_personnalisees": {
+        "exposition_usa_max": 0.50,
+        "exposition_em_max": 0.15,
+    },
+}
+poids = calculer_allocation_cible(profil, config)
+# → {"actions_usa": 0.50, "actions_dev_ex_usa": 0.05, "actions_em": 0.15, ...}
+```
+
+### Mode B — Asset location (MILP via pulp)
+
+Ventile chaque classe entre les enveloppes disponibles en minimisant les frais annuels totaux (TER + frais gestion) sous contraintes de plafonds et d'éligibilité.
+
+```python
+from src.optimiseur_allocation import optimiser_portefeuille_complet
+
+res = optimiser_portefeuille_complet(profil_dict, config)
+# res["resultat_mode_b"]["cout_annuel_optimise"] < res["resultat_mode_b"]["cout_annuel_naif"]
+```
+
+### Configuration (`config/optimiseur.yaml`)
+
+```yaml
+classes_actifs:
+  actions_usa:
+    rendement_attendu_annuel: 0.078
+    volatilite_annuelle: 0.18
+    frais_ter_moyen: 0.0007
+    eligible_pea: true
+
+profils_aversion_risque:
+  defensif:   { lambda: 0.2, actions_max: 0.40 }
+  equilibre:  { lambda: 0.5, actions_min: 0.40, actions_max: 0.70 }
+  dynamique:  { lambda: 0.8, actions_min: 0.70, actions_max: 0.90 }
+  agressif:   { lambda: 1.0, actions_min: 0.85 }
+```
+
+### Profils enrichis (`config/profils_clients.yaml`)
+
+```yaml
+profil_1_cadre:
+  profil_aversion_risque: "dynamique"
+  contraintes_personnalisees:
+    exposition_em_max: 0.15
+    exposition_usa_max: 0.50
+```
+
+### Onglet Excel `Allocation_Optimisee`
+
+Généré automatiquement avec :
+- Mode A : allocation cible + rendement/volatilité/Sharpe attendus
+- Mode B : tableau croisé classe × enveloppe (montants en €)
+- Comparaison coût optimisé vs coût naïf (tout CTO)
+
+### Fallback gracieux
+
+Si `scipy` ou `pulp` sont indisponibles, le module bascule automatiquement sur les heuristiques Boglehead avec un warning log.
+
+```bash
+# Activer l'extra optim pour PuLP
+pip install -e ".[optim]"
+# Installer scipy pour le solveur QP Mode A
+pip install scipy
 ```
 
 ---
@@ -301,6 +339,7 @@ pytest tests/test_univers_etf.py -v
 | `Glide_Path` | Trajectoire d'allocation dans le temps (lifecycle investing) |
 | `Rebalancement_Flux` | Outil de rebalancement par flux avec comparaison fiscale |
 | `Plan_Rebalancement` | Plan d'action chiffré (cascade fiscale 3 étapes : arbitrages gratuits → flux → ventes optimisées) |
+| `Allocation_Optimisee` | ⭐ Allocation cible Markowitz (Mode A) + ventilation MILP par enveloppe (Mode B) + comparaison coût optimisé vs naïf |
 
 ---
 
@@ -355,6 +394,52 @@ Le Solveur intégré est limité à 200 variables. Pour les portefeuilles comple
 - Algorithmes CBC, GLPK, Gurobi
 
 → Voir `docs/tuto_solveur.md` pour le tutoriel complet avec exemple Profil 3.
+
+### Générer le PDF client (13 pages)
+
+```bash
+# Tous les profils
+python build_pdf.py
+
+# Un seul profil (par code ou par id)
+python build_pdf.py --profil PROFIL_1_CADRE_SUP
+python build_pdf.py --profil 1
+
+# Cabinet personnalisé
+python build_pdf.py --cabinet config/pdf_cabinet.yaml --output output/
+```
+
+Les PDFs sont générés dans `output/<PROFIL_CODE>_<YYYYMMDD>.pdf`. Des exemples sont disponibles dans `examples/`.
+
+**Structure du PDF (13 pages)** :
+| # | Page | Contenu |
+|---|---|---|
+| 1 | Couverture | Logo cabinet, nom client, date |
+| 2 | Synthèse exécutive | Patrimoine total, allocation, actions clés |
+| 3 | Profil client | Situation, objectifs, horizon, TMI |
+| 4 | Patrimoine actuel | Tableau enveloppes × classes + camembert |
+| 5 | Philosophie Boglehead | Les 3 principes ETF passifs |
+| 6 | Allocation cible | Résultat optimisé, bornes par classe |
+| 7 | Asset location | Matrice classes × enveloppes, logique fiscale |
+| 8 | Univers ETF | ~15 ETF sélectionnés : ISIN, TER, éligibilité |
+| 9 | Projection Monte-Carlo | Graphique 30 ans médiane + P10/P90 |
+| 10 | Plan de rebalancement | Cascade gratuit / flux / vente optimisée |
+| 11 | Fiscalité & transmission | TMI, abattements AV, PER, succession |
+| 12 | Suivi recommandé | Calendrier trimestriel, KPIs, alertes |
+| 13 | Mentions légales | Hypothèses, avertissements AMF, glossaire |
+
+**Personnalisation cabinet** (`config/pdf_cabinet.yaml`) :
+```yaml
+cabinet:
+  nom: "Cabinet Saumet Patrimoine"
+  logo_path: "assets/logo_cabinet.png"  # optionnel
+  adresse: "12 Rue de la République, Lyon"
+  numero_orias: "XXXXXXXXXXXX"
+style:
+  couleur_primary: "#1a4d8f"
+  couleur_accent:  "#d4a017"
+```
+
 
 ---
 
