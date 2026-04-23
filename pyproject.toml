@@ -26,7 +26,7 @@ dev = [
     "types-PyYAML",
     "pre-commit",
 ]
-optim = ["pulp"]
+optim = ["pulp", "scipy"]
 
 [tool.setuptools.packages.find]
 where = ["." ]
