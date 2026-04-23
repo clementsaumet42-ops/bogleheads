@@ -46,6 +46,8 @@ htmlcov/
 # Output Excel files
 output/*.xlsx
 output/*.xls
+# Output PDF files (use examples/ for committed examples)
+output/*.pdf
 !output/.gitkeep
 
 # OS

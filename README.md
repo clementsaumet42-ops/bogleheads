@@ -266,7 +266,98 @@ Dérive constatée :
 
 ---
 
-Le référentiel ETF est défini dans `config/univers_etf.yaml`. Il contient **70 ETF** couvrant toutes les classes d'actifs d'un portefeuille Boglehead.
+## 📄 PDF client 13 pages (S3)
+
+Module `src/pdf_builder.py` — Génération d'un livrable PDF professionnel remis au client par le CGP.
+
+### Générer les PDFs
+
+```bash
+# Tous les profils
+python build_pdf.py
+
+# Un seul profil
+python build_pdf.py --profil PROFIL_1_CADRE_SUP
+```
+
+Sortie : `output/<code_profil>_<YYYYMMDD>.pdf`
+
+### Structure du PDF — 13 pages
+
+| # | Page | Contenu |
+|---|---|---|
+| 1 | Couverture | Logo cabinet (ou fallback texte), nom client, date |
+| 2 | Synthèse exécutive | Patrimoine total, allocation actuelle vs cible, économie fiscale, 3 actions clés |
+| 3 | Profil client | Situation, objectifs, horizon, TMI, contraintes |
+| 4 | Patrimoine actuel | Tableau par enveloppe + **graphique camembert matplotlib** |
+| 5 | Philosophie Boglehead | 3 principes : ETF passifs, diversification, low-cost |
+| 6 | Allocation cible | Output `calculer_allocation_cible()` (S2), bornes et justification |
+| 7 | Asset location | Matrice classes × enveloppes via S2 Mode B, logique fiscale |
+| 8 | Univers ETF | 15 ETF : ISIN, TER, éligibilité PEA/AV (depuis `univers_etf.yaml`) |
+| 9 | Projection Monte-Carlo | **Graphique matplotlib** 30 ans médiane + P10/P90 |
+| 10 | Plan de rebalancement | 3 étapes : gratuit → flux → vente (S3.6 si dispo, sinon fallback) |
+| 11 | Fiscalité & transmission | TMI, abattements AV, PER déduction, transmission |
+| 12 | Suivi recommandé | Calendrier trimestriel, KPIs, alertes |
+| 13 | Mentions légales & annexes | Hypothèses, avertissement AMF, glossaire |
+
+### API principale
+
+```python
+from src.pdf_builder import generer_pdf, charger_config_pdf
+from src.schemas import charger_et_valider
+
+config_pdf = charger_config_pdf()  # charge config/pdf_cabinet.yaml
+profils = charger_et_valider("profils_clients.yaml")
+profil = profils.profils[0]
+
+resultat = generer_pdf(profil, config_pdf, "output/profil1.pdf")
+# ResultatPDF(chemin=..., taille_octets=110000, nb_pages=13, ...)
+```
+
+### Configuration cabinet (`config/pdf_cabinet.yaml`)
+
+```yaml
+cabinet:
+  nom: "Cabinet Saumet Patrimoine"
+  logo_path: "assets/logo_cabinet.png"   # optionnel, fallback texte si absent
+  numero_orias: "XXXXXXXXXXXX"
+  mention_conformite: "CIF membre de la CNCIF"
+
+style:
+  couleur_primary: "#1a4d8f"
+  couleur_accent:  "#d4a017"
+  marges_cm: 2.0
+
+footer:
+  mention_legale: "Document confidentiel — ne pas diffuser"
+```
+
+### Exemples committés
+
+6 PDFs exemple dans `examples/` (un par profil, 13 pages, 100–120 Ko chacun) :
+
+```
+examples/
+├── PROFIL_1_CADRE_SUP_exemple.pdf
+├── PROFIL_2_DIRIGEANT_GG_exemple.pdf
+├── PROFIL_3_DIRIGEANT_PME_exemple.pdf
+├── PROFIL_4_PROFESSION_LIBERALE_exemple.pdf
+├── PROFIL_5_JEUNE_CADRE_exemple.pdf
+└── PROFIL_6_PRE_RETRAITE_exemple.pdf
+```
+
+### Fallbacks gracieux
+
+| Situation | Comportement |
+|---|---|
+| Logo absent / chemin invalide | Affichage du nom du cabinet en texte |
+| S2 optimiseur indisponible | Allocation indicative depuis le profil YAML |
+| S3.6 rebalancement_optimal absent | Fallback sur `src.rebalancement` classique |
+| `src.projection` indisponible | Monte-Carlo interne simplifié |
+
+---
+
+ Il contient **70 ETF** couvrant toutes les classes d'actifs d'un portefeuille Boglehead.
 
 ### Classes d'actifs couvertes
 
@@ -472,7 +563,7 @@ YAML configs ──→ src/*.py ──→ excel_builder.py ──→ output/*.xl
   - Droits de succession selon lien de parenté
   - Stratégies : donation-partage, démembrement, AV avant 70 ans
   - Simulation transmission pour chaque profil type
-- [ ] **Reporting client PDF** (`reportlab` ou `weasyprint`) : rapport prêt à remettre, logo CGP personnalisable.
+- [x] **Reporting client PDF** (`reportlab`) : rapport 13 pages prêt à remettre, logo CGP personnalisable, graphiques matplotlib, fallbacks gracieux.
 
 ### 🎨 Fonctionnalités — Priorité basse / Nice-to-have
 
@@ -505,8 +596,9 @@ YAML configs ──→ src/*.py ──→ excel_builder.py ──→ output/*.xl
 |---|---|---|
 | **S1** (1-2 sem.) | Qualité code | `pyproject.toml`, CI, LICENSE, découpage `excel_builder.py` |
 | **S2** (2 sem.) | Optimiseur + Projection MC | Gros bond fonctionnel |
-| **S3** (1 sem.) | Glide path + Rebalancement par flux | Différenciation CGP |
-| **S4** (2 sem.) | Streamlit + PDF | Passage CLI → produit |
+| **S3.6** (1 sem.) | Rebalancement optimal MILP | Cascade fiscale 3 étapes |
+| **[x] S3** (1 sem.) | PDF client 13 pages | `build_pdf.py`, reportlab, matplotlib, 6 exemples |
+| **S4** (2 sem.) | Streamlit | Passage CLI → produit web |
 | **S5** (1 sem.) | Import portefeuille + Comparateur | Argumentaire commercial |
 | **S6+** | AV avancée, Succession, Refresh auto | Profondeur métier |
 

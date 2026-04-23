@@ -286,6 +286,62 @@ class RebalancementFlux(_Lenient):
     taux_fiscalite_par_enveloppe: dict[str, Any] | None = None
 
 
+# ─── S3 — PDF client ─────────────────────────────────────────────────────────
+
+
+class CabinetInfo(_Lenient):
+    """Informations sur le cabinet CGP."""
+
+    nom: str
+    logo_path: str | None = None
+    adresse: str | None = None
+    telephone: str | None = None
+    email: str | None = None
+    site_web: str | None = None
+    numero_orias: str | None = None
+    mention_conformite: str | None = None
+
+
+class PDFStyle(_Lenient):
+    """Style graphique du PDF client."""
+
+    couleur_primary: str = "#1a4d8f"
+    couleur_accent: str = "#d4a017"
+    couleur_neutral: str = "#333333"
+    police: str = "Helvetica"
+    format_page: str = "A4"
+    marges_cm: float = Field(default=2.0, ge=0)
+
+
+class PDFFooter(_Lenient):
+    """Pied de page du PDF client."""
+
+    mention_legale: str = "Document confidentiel — ne pas diffuser"
+    avertissement_amf: str = (
+        "Les performances passées ne préjugent pas des performances futures. "
+        "Le présent document ne constitue pas un conseil en investissement "
+        "personnalisé au sens de la directive MIF II."
+    )
+
+
+class CabinetConfig(_Lenient):
+    """Configuration complète du cabinet (config/pdf_cabinet.yaml)."""
+
+    cabinet: CabinetInfo
+    style: PDFStyle = Field(default_factory=PDFStyle)
+    footer: PDFFooter = Field(default_factory=PDFFooter)
+
+
+class ResultatPDF(_Lenient):
+    """Résultat de la génération d'un PDF client."""
+
+    chemin: str
+    taille_octets: int
+    nb_pages: int
+    profil_id: int
+    date_generation: str
+
+
 # ─── Chargement et validation centralisés ────────────────────────────────────
 
 _SCHEMAS: dict = {
@@ -297,6 +353,7 @@ _SCHEMAS: dict = {
     "glide_paths.yaml": GlidePath,
     "rebalancement_flux.yaml": RebalancementFlux,
     "optimiseur.yaml": OptimiseurConfig,
+    "pdf_cabinet.yaml": CabinetConfig,
 }
 
 
