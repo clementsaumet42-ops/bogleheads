@@ -516,18 +516,14 @@ def _page_couverture(
                 pass
 
     if not logo_shown:
-        elements.append(
-            Paragraph(_s(cfg.cabinet.nom), styles["title_cover"])
-        )
+        elements.append(Paragraph(_s(cfg.cabinet.nom), styles["title_cover"]))
         elements.append(Spacer(1, 0.3 * cm))
 
     # Decorative line
     elements.append(HRFlowable(width=CONTENT_W, thickness=3, color=accent, spaceAfter=20))
 
     elements.append(Spacer(1, 1 * cm))
-    elements.append(
-        Paragraph("Etude patrimoniale Boglehead", styles["title_cover"])
-    )
+    elements.append(Paragraph("Etude patrimoniale Boglehead", styles["title_cover"]))
     elements.append(Spacer(1, 0.5 * cm))
 
     client_nom = _s(profil.get("nom", "Client"))
@@ -638,9 +634,7 @@ def _page_synthese(
         if v:
             alloc_data.append([_s(labels_fr.get(k, k)), _pct(v)])
     if len(alloc_data) > 1:
-        elements.append(
-            _zebra_table(alloc_data, [CONTENT_W * 0.6, CONTENT_W * 0.4], primary)
-        )
+        elements.append(_zebra_table(alloc_data, [CONTENT_W * 0.6, CONTENT_W * 0.4], primary))
     elements.append(Spacer(1, 0.4 * cm))
 
     # 3 actions cles
@@ -741,9 +735,7 @@ def _page_profil_client(
     )
     score = profil.get("score_risque")
     if score is not None:
-        elements.append(
-            Paragraph(f"Score de risque : {score} / 10", styles["body"])
-        )
+        elements.append(Paragraph(f"Score de risque : {score} / 10", styles["body"]))
 
     # Contraintes fiscales
     elements.append(Spacer(1, 0.3 * cm))
@@ -1006,7 +998,11 @@ def _get_alloc_justif(key: str, v: float, age: int, horizon: int) -> str:
     if key == "actions":
         return f"Moteur de croissance long terme ({horizon} ans)"
     if key == "obligations":
-        return "Stabilisation et decorrelation actions" if v > 0.10 else "Profil offensif, obligations reduites"
+        return (
+            "Stabilisation et decorrelation actions"
+            if v > 0.10
+            else "Profil offensif, obligations reduites"
+        )
     if key == "immobilier_cote":
         return "Diversification via REIT, decorrelation partielle" if v > 0 else "Non alloue"
     if key == "or":
@@ -1047,12 +1043,54 @@ def _page_asset_location(
 
     # Preference matrix (star ratings)
     matrix: dict[str, dict[str, str]] = {
-        "Actions PEA": {"PEA": "***", "PER": "**", "PEE": "*", "AV_UC": "*", "CTO_perso": ".", "CTO_IS": "."},
-        "Actions hors PEA": {"PEA": ".", "PER": "***", "PEE": ".", "AV_UC": "**", "CTO_perso": "*", "CTO_IS": "**"},
-        "Obligations": {"PEA": ".", "PER": "***", "PEE": ".", "AV_UC": "**", "CTO_perso": "*", "CTO_IS": "**"},
-        "REIT": {"PEA": "*", "PER": "***", "PEE": ".", "AV_UC": "**", "CTO_perso": "**", "CTO_IS": "*"},
-        "Or/ETC": {"PEA": ".", "PER": "**", "PEE": ".", "AV_UC": "*", "CTO_perso": "***", "CTO_IS": "*"},
-        "Monetaire": {"PEA": ".", "PER": ".", "PEE": ".", "AV_UC": "*", "CTO_perso": "**", "CTO_IS": "***"},
+        "Actions PEA": {
+            "PEA": "***",
+            "PER": "**",
+            "PEE": "*",
+            "AV_UC": "*",
+            "CTO_perso": ".",
+            "CTO_IS": ".",
+        },
+        "Actions hors PEA": {
+            "PEA": ".",
+            "PER": "***",
+            "PEE": ".",
+            "AV_UC": "**",
+            "CTO_perso": "*",
+            "CTO_IS": "**",
+        },
+        "Obligations": {
+            "PEA": ".",
+            "PER": "***",
+            "PEE": ".",
+            "AV_UC": "**",
+            "CTO_perso": "*",
+            "CTO_IS": "**",
+        },
+        "REIT": {
+            "PEA": "*",
+            "PER": "***",
+            "PEE": ".",
+            "AV_UC": "**",
+            "CTO_perso": "**",
+            "CTO_IS": "*",
+        },
+        "Or/ETC": {
+            "PEA": ".",
+            "PER": "**",
+            "PEE": ".",
+            "AV_UC": "*",
+            "CTO_perso": "***",
+            "CTO_IS": "*",
+        },
+        "Monetaire": {
+            "PEA": ".",
+            "PER": ".",
+            "PEE": ".",
+            "AV_UC": "*",
+            "CTO_perso": "**",
+            "CTO_IS": "***",
+        },
     }
 
     header = ["Classe d'actifs"] + displayed_envs
@@ -1071,7 +1109,9 @@ def _page_asset_location(
     col_widths = [w * CONTENT_W / total_w for w in col_widths]
 
     elements.append(
-        Paragraph("Matrice asset location (*** = optimal, * = acceptable, . = deconseille)", styles["h2"])
+        Paragraph(
+            "Matrice asset location (*** = optimal, * = acceptable, . = deconseille)", styles["h2"]
+        )
     )
     elements.append(_zebra_table(data, col_widths, primary))
     elements.append(Spacer(1, 0.4 * cm))
@@ -1085,7 +1125,9 @@ def _page_asset_location(
             {"ticker": "CW8", "classe": "Actions", "sous_classe": "Monde developpé"},
             {"ticker": "OBLI", "classe": "Obligations", "sous_classe": "Europe"},
         ]
-        suggestions = suggerer_asset_location(etfs_fictifs, env_actives or ["PEA", "CTO_perso"], alloc)
+        suggestions = suggerer_asset_location(
+            etfs_fictifs, env_actives or ["PEA", "CTO_perso"], alloc
+        )
         if suggestions:
             elements.append(Paragraph("Recommandations module asset location", styles["h2"]))
             for s in suggestions[:3]:
@@ -1134,7 +1176,9 @@ def _page_univers_etf(
         univers = charger_et_valider("univers_etf.yaml")
         for etf in univers.univers_etf:
             elig = etf.eligibilite.model_dump() if hasattr(etf.eligibilite, "model_dump") else {}
-            eligible_in_active = any(elig.get(e, False) for e in env_actives) if env_actives else True
+            eligible_in_active = (
+                any(elig.get(e, False) for e in env_actives) if env_actives else True
+            )
             if eligible_in_active:
                 etfs_filtered.append(
                     {
@@ -1146,7 +1190,8 @@ def _page_univers_etf(
                         "domicile": etf.domicile,
                         "eligibilite": ", ".join(
                             k for k, v in elig.items() if v and k in env_actives
-                        ) or ", ".join(k for k, v in elig.items() if v)[:30],
+                        )
+                        or ", ".join(k for k, v in elig.items() if v)[:30],
                     }
                 )
     except Exception:
@@ -1185,7 +1230,8 @@ def _page_univers_etf(
         if len(etfs_filtered) > 15:
             elements.append(
                 Paragraph(
-                    f"... et {len(etfs_filtered) - 15} autres ETF non affiches.", styles["body_small"]
+                    f"... et {len(etfs_filtered) - 15} autres ETF non affiches.",
+                    styles["body_small"],
                 )
             )
     else:
@@ -1208,7 +1254,13 @@ def _page_univers_etf(
         elements.append(
             _zebra_table(
                 default_etfs,
-                [CONTENT_W * 0.20, CONTENT_W * 0.13, CONTENT_W * 0.35, CONTENT_W * 0.12, CONTENT_W * 0.20],
+                [
+                    CONTENT_W * 0.20,
+                    CONTENT_W * 0.13,
+                    CONTENT_W * 0.35,
+                    CONTENT_W * 0.12,
+                    CONTENT_W * 0.20,
+                ],
                 primary,
             )
         )
@@ -1284,20 +1336,32 @@ def _page_projection(
     # Results table
     if proj_data:
         elements.append(Paragraph("Resultats par horizon", styles["h2"]))
-        res_data = [["Horizon", "P10 (pessimiste)", "Mediane (P50)", "P90 (optimiste)", "Proba objectif"]]
+        res_data = [
+            ["Horizon", "P10 (pessimiste)", "Mediane (P50)", "P90 (optimiste)", "Proba objectif"]
+        ]
         for h, r in sorted(proj_data.items()):
             try:
                 p10 = _eur(r.percentile_10) if hasattr(r, "percentile_10") else "N/A"
                 med = _eur(r.mediane) if hasattr(r, "mediane") else "N/A"
                 p90 = _eur(r.percentile_90) if hasattr(r, "percentile_90") else "N/A"
-                proba = _pct(r.probabilite_objectif) if hasattr(r, "probabilite_objectif") and r.probabilite_objectif is not None else "N/A"
+                proba = (
+                    _pct(r.probabilite_objectif)
+                    if hasattr(r, "probabilite_objectif") and r.probabilite_objectif is not None
+                    else "N/A"
+                )
                 res_data.append([f"{h} ans", p10, med, p90, proba])
             except Exception:
                 res_data.append([f"{h} ans", "N/A", "N/A", "N/A", "N/A"])
         elements.append(
             _zebra_table(
                 res_data,
-                [CONTENT_W * 0.12, CONTENT_W * 0.22, CONTENT_W * 0.22, CONTENT_W * 0.22, CONTENT_W * 0.22],
+                [
+                    CONTENT_W * 0.12,
+                    CONTENT_W * 0.22,
+                    CONTENT_W * 0.22,
+                    CONTENT_W * 0.22,
+                    CONTENT_W * 0.22,
+                ],
                 primary,
             )
         )
@@ -1557,10 +1621,16 @@ def _page_suivi(
     elements.append(Paragraph("Calendrier de suivi trimestriel", styles["h2"]))
     cal_data = [
         ["Periode", "Actions recommandees"],
-        ["T1 (Janv-Mars)", "Bilan annuel allocation | Optimisation fiscale PER | Declaration revenus"],
+        [
+            "T1 (Janv-Mars)",
+            "Bilan annuel allocation | Optimisation fiscale PER | Declaration revenus",
+        ],
         ["T2 (Avr-Juin)", "Verification derive allocation | Ajustement versements PEE/PER"],
         ["T3 (Juil-Sep)", "Rebalancement si derive >5pp | Revue frais ETF | Bilan mi-annee"],
-        ["T4 (Oct-Dec)", "Versements PER avant fin annee | Planification fiscale | Rebalancement final"],
+        [
+            "T4 (Oct-Dec)",
+            "Versements PER avant fin annee | Planification fiscale | Rebalancement final",
+        ],
     ]
     elements.append(_zebra_table(cal_data, [CONTENT_W * 0.28, CONTENT_W * 0.72], primary))
     elements.append(Spacer(1, 0.4 * cm))
@@ -1706,18 +1776,37 @@ def _page_mentions_legales(
     glossaire = [
         ("ETF (Exchange-Traded Fund)", "Fonds indiciel cote en bourse, a frais reduits."),
         ("TER (Total Expense Ratio)", "Frais totaux annuels d'un ETF, exprimes en %."),
-        ("PEA (Plan d'Epargne en Actions)", "Enveloppe fiscale avantageuse pour les actions europeennes, plafond 150 000 EUR."),
-        ("PER (Plan d'Epargne Retraite)", "Enveloppe retraite avec deduction des versements du revenu imposable."),
-        ("PFU (Prelevement Forfaitaire Unique)", "Flat tax de 30% sur les revenus du capital (12.8% IR + 17.2% PS)."),
-        ("TMI (Tranche Marginale d'Imposition)", "Taux d'imposition de la derniere tranche de revenus (0, 11, 30, 41, 45%)."),
-        ("Rebalancement", "Remise a niveau periodique de l'allocation cible apres derive des marches."),
-        ("Monte-Carlo", "Methode de simulation probabiliste par tirage aleatoire de scenarios de marche."),
-        ("Asset Location", "Optimisation du placement de chaque actif dans l'enveloppe fiscale la plus avantageuse."),
+        (
+            "PEA (Plan d'Epargne en Actions)",
+            "Enveloppe fiscale avantageuse pour les actions europeennes, plafond 150 000 EUR.",
+        ),
+        (
+            "PER (Plan d'Epargne Retraite)",
+            "Enveloppe retraite avec deduction des versements du revenu imposable.",
+        ),
+        (
+            "PFU (Prelevement Forfaitaire Unique)",
+            "Flat tax de 30% sur les revenus du capital (12.8% IR + 17.2% PS).",
+        ),
+        (
+            "TMI (Tranche Marginale d'Imposition)",
+            "Taux d'imposition de la derniere tranche de revenus (0, 11, 30, 41, 45%).",
+        ),
+        (
+            "Rebalancement",
+            "Remise a niveau periodique de l'allocation cible apres derive des marches.",
+        ),
+        (
+            "Monte-Carlo",
+            "Methode de simulation probabiliste par tirage aleatoire de scenarios de marche.",
+        ),
+        (
+            "Asset Location",
+            "Optimisation du placement de chaque actif dans l'enveloppe fiscale la plus avantageuse.",
+        ),
     ]
     glos_data = [["Terme", "Definition"]] + [[_s(t), _s(d)] for t, d in glossaire]
-    elements.append(
-        _zebra_table(glos_data, [CONTENT_W * 0.32, CONTENT_W * 0.68], primary)
-    )
+    elements.append(_zebra_table(glos_data, [CONTENT_W * 0.32, CONTENT_W * 0.68], primary))
 
     # No PageBreak on last page
     return elements
@@ -1854,19 +1943,19 @@ def _build_doc(
     )
 
     pages = [
-        _page_couverture(profil, cfg, styles),           # 1
-        _page_synthese(profil, cfg, styles),              # 2
-        _page_profil_client(profil, cfg, styles),         # 3
+        _page_couverture(profil, cfg, styles),  # 1
+        _page_synthese(profil, cfg, styles),  # 2
+        _page_profil_client(profil, cfg, styles),  # 3
         _page_patrimoine(profil, cfg, styles, pie_path),  # 4
-        _page_philosophie(cfg, styles),                   # 5
-        _page_allocation_cible(profil, cfg, styles),      # 6
-        _page_asset_location(profil, cfg, styles),        # 7
-        _page_univers_etf(profil, cfg, styles),           # 8
-        _page_projection(profil, cfg, styles, mc_path),   # 9
-        _page_rebalancement(profil, cfg, styles),         # 10
-        _page_fiscalite(profil, cfg, styles),             # 11
-        _page_suivi(profil, cfg, styles),                 # 12
-        _page_mentions_legales(profil, cfg, styles),      # 13
+        _page_philosophie(cfg, styles),  # 5
+        _page_allocation_cible(profil, cfg, styles),  # 6
+        _page_asset_location(profil, cfg, styles),  # 7
+        _page_univers_etf(profil, cfg, styles),  # 8
+        _page_projection(profil, cfg, styles, mc_path),  # 9
+        _page_rebalancement(profil, cfg, styles),  # 10
+        _page_fiscalite(profil, cfg, styles),  # 11
+        _page_suivi(profil, cfg, styles),  # 12
+        _page_mentions_legales(profil, cfg, styles),  # 13
     ]
 
     story: list = []

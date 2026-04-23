@@ -1,0 +1,208 @@
+# Configuration de l'optimiseur d'allocation — Sprint S2
+# Rendements, risques et corrélations par classe d'actifs (long terme)
+# Source : données historiques long terme, calibrées pour un investisseur Boglehead FR 2026
+
+classes_actifs:
+  actions_usa:
+    rendement_attendu_annuel: 0.078
+    volatilite_annuelle: 0.18
+    frais_ter_moyen: 0.0007
+    eligible_pea: true
+    eligible_per: true
+    eligible_av: true
+    eligible_cto: true
+    dividendes_eleves: false
+
+  actions_dev_ex_usa:
+    rendement_attendu_annuel: 0.065
+    volatilite_annuelle: 0.17
+    frais_ter_moyen: 0.0012
+    eligible_pea: true
+    eligible_per: true
+    eligible_av: true
+    eligible_cto: true
+    dividendes_eleves: false
+
+  actions_em:
+    rendement_attendu_annuel: 0.085
+    volatilite_annuelle: 0.24
+    frais_ter_moyen: 0.0018
+    eligible_pea: true   # via synthétique swap
+    eligible_per: true
+    eligible_av: true
+    eligible_cto: true
+    dividendes_eleves: false
+
+  obligations_agg_monde:
+    rendement_attendu_annuel: 0.030
+    volatilite_annuelle: 0.06
+    frais_ter_moyen: 0.0010
+    eligible_pea: false  # obligations US/mondiales non éligibles PEA
+    eligible_per: true
+    eligible_av: true
+    eligible_cto: true
+    dividendes_eleves: false
+
+  obligations_euro:
+    rendement_attendu_annuel: 0.025
+    volatilite_annuelle: 0.05
+    frais_ter_moyen: 0.0008
+    eligible_pea: false
+    eligible_per: true
+    eligible_av: true
+    eligible_cto: true
+    dividendes_eleves: false
+
+  reit:
+    rendement_attendu_annuel: 0.060
+    volatilite_annuelle: 0.19
+    frais_ter_moyen: 0.0030
+    eligible_pea: false
+    eligible_per: true
+    eligible_av: true
+    eligible_cto: true
+    dividendes_eleves: true  # REIT distribue beaucoup → hors CTO recommandé
+
+  or_matieres:
+    rendement_attendu_annuel: 0.040
+    volatilite_annuelle: 0.20
+    frais_ter_moyen: 0.0040
+    eligible_pea: false
+    eligible_per: true
+    eligible_av: true
+    eligible_cto: true
+    dividendes_eleves: false
+
+  monetaire:
+    rendement_attendu_annuel: 0.028
+    volatilite_annuelle: 0.005
+    frais_ter_moyen: 0.0000
+    eligible_pea: false
+    eligible_per: false
+    eligible_av: true
+    eligible_cto: true
+    dividendes_eleves: false
+
+# Matrice de corrélation (simplifiée, symétrique — long terme)
+# Ordre : actions_usa, actions_dev_ex_usa, actions_em, obligations_agg_monde,
+#         obligations_euro, reit, or_matieres, monetaire
+correlations:
+  actions_usa:
+    actions_usa: 1.00
+    actions_dev_ex_usa: 0.85
+    actions_em: 0.70
+    obligations_agg_monde: -0.10
+    obligations_euro: -0.08
+    reit: 0.60
+    or_matieres: 0.05
+    monetaire: -0.05
+
+  actions_dev_ex_usa:
+    actions_usa: 0.85
+    actions_dev_ex_usa: 1.00
+    actions_em: 0.75
+    obligations_agg_monde: -0.05
+    obligations_euro: -0.03
+    reit: 0.55
+    or_matieres: 0.08
+    monetaire: -0.03
+
+  actions_em:
+    actions_usa: 0.70
+    actions_dev_ex_usa: 0.75
+    actions_em: 1.00
+    obligations_agg_monde: -0.08
+    obligations_euro: -0.05
+    reit: 0.45
+    or_matieres: 0.15
+    monetaire: -0.04
+
+  obligations_agg_monde:
+    actions_usa: -0.10
+    actions_dev_ex_usa: -0.05
+    actions_em: -0.08
+    obligations_agg_monde: 1.00
+    obligations_euro: 0.80
+    reit: 0.10
+    or_matieres: 0.25
+    monetaire: 0.30
+
+  obligations_euro:
+    actions_usa: -0.08
+    actions_dev_ex_usa: -0.03
+    actions_em: -0.05
+    obligations_agg_monde: 0.80
+    obligations_euro: 1.00
+    reit: 0.08
+    or_matieres: 0.20
+    monetaire: 0.35
+
+  reit:
+    actions_usa: 0.60
+    actions_dev_ex_usa: 0.55
+    actions_em: 0.45
+    obligations_agg_monde: 0.10
+    obligations_euro: 0.08
+    reit: 1.00
+    or_matieres: 0.10
+    monetaire: -0.02
+
+  or_matieres:
+    actions_usa: 0.05
+    actions_dev_ex_usa: 0.08
+    actions_em: 0.15
+    obligations_agg_monde: 0.25
+    obligations_euro: 0.20
+    reit: 0.10
+    or_matieres: 1.00
+    monetaire: 0.05
+
+  monetaire:
+    actions_usa: -0.05
+    actions_dev_ex_usa: -0.03
+    actions_em: -0.04
+    obligations_agg_monde: 0.30
+    obligations_euro: 0.35
+    reit: -0.02
+    or_matieres: 0.05
+    monetaire: 1.00
+
+# Profils d'aversion au risque (paramètre λ dans la fonction Markowitz)
+# λ ∈ [0, 1] : 0 = minimise uniquement la variance, 1 = maximise uniquement le rendement
+profils_aversion_risque:
+  defensif:
+    lambda: 0.2
+    actions_max: 0.40
+    actions_min: 0.00
+    description: "Profil défensif — protection du capital, horizon court"
+
+  equilibre:
+    lambda: 0.5
+    actions_min: 0.40
+    actions_max: 0.70
+    description: "Profil équilibré — compromis rendement/risque"
+
+  dynamique:
+    lambda: 0.8
+    actions_min: 0.70
+    actions_max: 0.90
+    description: "Profil dynamique — croissance long terme"
+
+  agressif:
+    lambda: 1.0
+    actions_min: 0.85
+    actions_max: 1.00
+    description: "Profil agressif — maximisation du rendement attendu"
+
+# Frais de gestion par enveloppe (annuels, en fraction du montant géré)
+frais_gestion_enveloppes:
+  PEA: 0.000          # Courtiers en ligne : frais quasi-nuls
+  PER: 0.007          # PER assurance : ~0,50-0,90% de frais UC + gestionnaire
+  AV: 0.008           # Assurance-vie UC : ~0,60-1,00% selon contrat
+  CTO: 0.001          # CTO : droits de garde ~0,10%
+  PEE: 0.004          # PEE : frais tiers gestionnaire ~0,40%
+  Contrat_Cap_IS: 0.008  # Contrat cap IS : identique AV
+  CTO_IS: 0.001
+
+# Taux sans risque de référence (pour calcul du Sharpe)
+taux_sans_risque: 0.025   # OAT 10 ans France 2026

@@ -82,9 +82,7 @@ def main() -> None:
         filtre = args.profil.strip()
         # Essayer par code puis par id
         profils_filtres = [
-            p
-            for p in profils
-            if str(p.get("code")) == filtre or str(p.get("id")) == filtre
+            p for p in profils if str(p.get("code")) == filtre or str(p.get("id")) == filtre
         ]
         if not profils_filtres:
             print(f"❌ Profil '{filtre}' non trouvé.", file=sys.stderr)
@@ -103,8 +101,7 @@ def main() -> None:
             result = generer_pdf(profil, config, str(chemin_sortie))
             taille_kb = result.taille_octets // 1024
             print(
-                f"  ✅ {nom:40s} → {chemin_sortie.name}  "
-                f"({result.nb_pages} pages, {taille_kb} Ko)"
+                f"  ✅ {nom:40s} → {chemin_sortie.name}  ({result.nb_pages} pages, {taille_kb} Ko)"
             )
         except Exception as exc:  # noqa: BLE001
             print(f"  ❌ {nom}: ERREUR — {exc}", file=sys.stderr)

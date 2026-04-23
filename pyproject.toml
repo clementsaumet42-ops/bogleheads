@@ -29,7 +29,7 @@ dev = [
     "pre-commit",
     "pypdf>=4.0",
 ]
-optim = ["pulp"]
+optim = ["pulp", "scipy"]
 
 [tool.setuptools.packages.find]
 where = ["." ]
