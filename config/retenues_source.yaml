@@ -1,0 +1,107 @@
+# Matrice des retenues à la source sur dividendes selon couple (pays émetteur × domicile ETF)
+# Version: 2025-01
+# Sources:
+#   - OCDE - Modèle de convention fiscale et base des traités bilatéraux
+#   - JP Morgan Withholding Tax Handbook 2024
+#   - Handbook Withholding Tax, JP Morgan 2024
+#   - Lazard Cross-border investment taxation guide 2023
+#   - EUR-Lex: traités fiscaux bilatéraux
+
+version: "2025-01"
+date_mise_a_jour: "2025-01-01"
+sources:
+  - "OCDE - Base des traités fiscaux bilatéraux, mise à jour 2024"
+  - "JP Morgan Withholding Tax Handbook 2024"
+  - "Lazard Cross-border investment taxation guide 2023"
+  - "EUR-Lex — traités fiscaux bilatéraux signés par la France"
+  - "Fiches pays IBFD (International Bureau of Fiscal Documentation)"
+
+# Taux retenue source applicable sur dividendes reçus par un ETF domicilié X depuis pays émetteur Y
+# Format: [pays_emetteur][domicile_etf] = taux effectif après traités
+# Note: ces taux sont des estimations standards. Des taux plus élevés peuvent s'appliquer
+# si la procédure de réclamation de traité n'est pas initiée.
+matrice:
+  # ─── PAYS DÉVELOPPÉS ───────────────────────────────────────────────────────
+  US:
+    IE: 0.15  # traité US-IE 1997 — taux réduit standard dividendes portefeuille
+    LU: 0.15  # traité US-LU 1996 — identique IE
+    FR: 0.15  # traité US-FR 1994 (amendé 2009) — identique
+    # Sans traité (défaut): 30% US FATCA. Taux réduit conditionnel à statut "Qualified Intermediary"
+  UK:
+    IE: 0.00  # UK n'applique pas de retenue à la source sur dividendes sortants (depuis UK Corporate Tax Act 2009)
+    LU: 0.00  # idem
+    FR: 0.00  # idem
+  DE:
+    IE: 0.15  # traité DE-IE (via UE Parent-Subsidiary Directive exemption possible pour ≥10%)
+    LU: 0.15  # traité DE-LU
+    FR: 0.15  # traité DE-FR — taux standard 15% portefeuille
+  CH:
+    IE: 0.15  # traité CH-IE 1966 amendé — taux réduit 15% (défaut 35%)
+    LU: 0.15  # traité CH-LU — identique
+    FR: 0.15  # traité CH-FR 1966 — taux 15% portefeuille
+  JP:
+    IE: 0.15  # traité JP-IE 1974 amendé 2017 — taux 15% dividendes portefeuille
+    LU: 0.15  # traité JP-LU 1992 amendé — taux 15%
+    FR: 0.10  # traité JP-FR 1995 amendé 2016 — taux réduit 10% portefeuille
+  FR:
+    IE: 0.128  # prélèvement libératoire 12.8% (PFU IR) — pas de retenue à la source standard sur distributions OPCVM FR vers IE
+    LU: 0.128  # idem
+    FR: 0.00   # pas de double imposition interne France→France
+  AU:
+    IE: 0.15  # traité AU-IE 1983 amendé — taux 15% dividendes portefeuille
+    LU: 0.15  # traité AU-LU — taux 15%
+    FR: 0.15  # traité AU-FR 2006 — taux 15% portefeuille
+  CA:
+    IE: 0.15  # traité CA-IE 2003 — taux 15% dividendes portefeuille
+    LU: 0.15  # traité CA-LU — taux 15%
+    FR: 0.15  # traité CA-FR 1975 amendé — taux 15% portefeuille
+  NL:
+    IE: 0.15  # traité NL-IE via UE — Directive mère-filiale peut exonérer (≥10%). Portefeuille: 15%
+    LU: 0.15  # traité NL-LU
+    FR: 0.15  # traité NL-FR 1973
+  IT:
+    IE: 0.15  # traité IT-IE 1971 amendé — taux 15% portefeuille
+    LU: 0.15  # traité IT-LU
+    FR: 0.15  # traité IT-FR 1989
+  ES:
+    IE: 0.15  # traité ES-IE 1994 — taux 15% portefeuille
+    LU: 0.15  # traité ES-LU
+    FR: 0.15  # traité ES-FR 1995
+  SE:
+    IE: 0.15  # traité SE-IE 1986 amendé — taux 15% portefeuille
+    LU: 0.15  # traité SE-LU
+    FR: 0.15  # traité SE-FR 1990
+  # ─── PAYS ÉMERGENTS ────────────────────────────────────────────────────────
+  CN:
+    IE: 0.10  # traité CN-IE 2000 — taux 10% dividendes portefeuille
+    LU: 0.10  # traité CN-LU 1986 amendé — taux 10%
+    FR: 0.10  # traité CN-FR 1984 amendé — taux 10% portefeuille
+  HK:
+    IE: 0.00  # Hong Kong n'applique pas de retenue sur dividendes (pas d'impôt sur dividendes HK)
+    LU: 0.00  # idem
+    FR: 0.00  # traité HK-FR 2010 — HK exonère les dividendes sortants
+  KR:
+    IE: 0.15  # traité KR-IE 1990 — taux 15% dividendes portefeuille
+    LU: 0.15  # traité KR-LU — taux 15%
+    FR: 0.15  # traité KR-FR 1979 amendé — taux 15%
+  IN:
+    IE: 0.10  # traité IN-IE 2001 — taux 10% dividendes portefeuille (réduit de 15%)
+    LU: 0.10  # traité IN-LU 1986 — taux 10%
+    FR: 0.10  # traité IN-FR 1992 — taux 10% portefeuille
+  BR:
+    IE: 0.15  # Brésil n'a pas de traité avec l'Irlande — taux domestique 15%
+    LU: 0.15  # Brésil n'a pas de traité avec le Luxembourg — taux domestique 15%
+    FR: 0.15  # traité BR-FR 1971 — taux 15% dividendes portefeuille
+  TW:
+    IE: 0.21  # Taiwan n'a pas de traité fiscal officiel avec l'Irlande — taux standard 21%
+    LU: 0.21  # Taiwan n'a pas de traité avec LU — taux standard 21%
+    FR: 0.10  # accord fiscal informel TW-FR — estimation 10%, à vérifier
+
+notes:
+  - "Les taux sont des taux de traité standards pour dividendes 'de portefeuille' (participation < 10%). Des taux plus bas peuvent s'appliquer pour participations substantielles (≥10-25% selon traité)."
+  - "Pour les ETF domiciliés en Irlande, le traité US-IE de 1997 est parmi les plus favorables — il réduit la retenue US de 30% à 15% sur dividendes de portefeuille."
+  - "La Directive UE mère-filiale (2011/96/UE) peut exonérer les dividendes intra-UE pour participations ≥10%, mais les ETF (participations dispersées < 10% par définition) ne bénéficient généralement pas de cette exemption."
+  - "Les taux effectifs réels peuvent différer légèrement selon la procédure administrative de réclamation du traité mise en place par l'émetteur de l'ETF (certains utilisent un 'Authorized Participant' qui réclame directement)."
+  - "Taiwan (TW): situation fiscale complexe due à l'absence de reconnaissance diplomatique formelle. Les taux varient selon les arrangements pratiques mis en place."
+  - "Chine (CN): le taux de 10% est le taux de traité standard. Attention aux entreprises chinoises cotées à HK (H-Shares) — peuvent bénéficier du régime HK (0%)."
+  - "Ce fichier est un modèle de référence. Le calcul auto du taux effectif par ETF (pondéré par l'allocation géographique) est prévu en S8.2b."

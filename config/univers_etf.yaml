@@ -26,6 +26,27 @@ univers_etf:
   - Linxea Spirit 2
   - Lucya Cardif
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: -0.0003  # source: justETF.com CW8, données 2024
+  tracking_difference_3y: -0.0008  # source: justETF.com CW8, période 2021-2024
+  tracking_difference_5y: null  # source: "à compléter — fonds < 5 ans sur certaines périodes"
+  taux_retenue_source_effectif: 0.0075  # estimation: ~65% US×15% + 35% autres, source: DICI Amundi 2024
+  securities_lending: false  # source: DICI CW8, synthétique swap — pas de prêt de titres
+  revenu_sec_lending_bps_estim: null
+  spread_moyen_bps: 2.0  # source: Bourse Direct snapshot 2024-12
+  volume_quotidien_m_eur: 15.0  # source: justETF.com CW8, moyenne 30j 2024
+  alternatives_ecartees:
+    - ticker: WLD
+      isin: FR0011869353
+      raison: "Ancienne gamme Lyxor — TER 0.45% vs 0.38%, TD légèrement moins favorable sur 3y"
+    - ticker: XMWO
+      isin: LU0378818131
+      raison: "Domicile LU vs FR — swap unfunded complexité structurelle, AUM 5x inférieur"
+    - ticker: PANX
+      isin: FR0011550177
+      raison: "Nasdaq-100 uniquement vs MSCI World — concentration US tech trop élevée pour allocation core"
 - isin: FR0011869353
   ticker: WLD
   nom: Lyxor PEA MSCI World UCITS ETF
@@ -51,6 +72,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B4L5Y983
   ticker: IWDA
   nom: iShares Core MSCI World UCITS ETF (Acc)
@@ -78,6 +111,27 @@ univers_etf:
   - Linxea Spirit 2
   - Lucya Cardif
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: -0.0005  # source: justETF.com IWDA, données 2024
+  tracking_difference_3y: -0.0012  # source: justETF.com IWDA, période 2021-2024
+  tracking_difference_5y: -0.0010  # source: justETF.com IWDA, période 2019-2024
+  taux_retenue_source_effectif: 0.0075  # source: estimation ~65% US × 15% traité IE-US, DICI iShares 2024
+  securities_lending: true  # source: rapport annuel iShares 2023
+  revenu_sec_lending_bps_estim: 1.5  # bps/an, source: rapport annuel iShares IWDA 2023
+  spread_moyen_bps: 2.5  # source: Bourse Direct / IB snapshot 2024-12
+  volume_quotidien_m_eur: 45.0  # source: justETF.com IWDA, moyenne 30j 2024
+  alternatives_ecartees:
+    - ticker: CW8
+      isin: IE0031442068
+      raison: "Éligible PEA mais via swap synthétique — IWDA préférable en CTO pour réplication physique"
+    - ticker: VWCE
+      isin: IE00BK5BQT80
+      raison: "FTSE All-World inclut émergents (10%) — MSCI World seul plus pur pour compléter avec IEEM séparé"
+    - ticker: LCUW
+      isin: IE0007J05YL2
+      raison: "TER 0.07% attractif mais AUM beaucoup plus faible, liquidité inférieure, historique court"
 - isin: LU1681043599
   ticker: LCWD
   nom: Amundi MSCI World UCITS ETF (Acc) — CTO
@@ -103,6 +157,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B3RBWM25
   ticker: VWRL
   nom: Vanguard FTSE All-World UCITS ETF (Dist)
@@ -129,6 +195,18 @@ univers_etf:
   contrats_av_reference:
   - Linxea Spirit 2
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BK5BQT80
   ticker: VWCE
   nom: Vanguard FTSE All-World UCITS ETF (Acc)
@@ -156,6 +234,27 @@ univers_etf:
   - Linxea Spirit 2
   - Lucya Cardif
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: -0.0002  # source: justETF.com VWCE, données 2024
+  tracking_difference_3y: -0.0006  # source: justETF.com VWCE, période 2021-2024
+  tracking_difference_5y: -0.0005  # source: justETF.com VWCE, période 2019-2024
+  taux_retenue_source_effectif: 0.0070  # source: estimation pondération FTSE All-World × traités, DICI Vanguard 2024
+  securities_lending: true  # source: rapport annuel Vanguard 2023
+  revenu_sec_lending_bps_estim: 1.2  # bps/an, source: rapport annuel Vanguard VWCE 2023
+  spread_moyen_bps: 3.0  # source: IB snapshot 2024-12
+  volume_quotidien_m_eur: 30.0  # source: justETF.com VWCE, moyenne 30j 2024
+  alternatives_ecartees:
+    - ticker: IWDA
+      isin: IE00B4L5Y983
+      raison: "MSCI World sans émergents — nécessite d'ajouter IEEM séparément, complexité gestion supérieure"
+    - ticker: SSAC
+      isin: IE00B3YLTY66
+      raison: "iShares ACWI — même concept mais AUM légèrement inférieur, TER identique, pas d'avantage différenciant"
+    - ticker: FWRA
+      isin: IE00BD45KH83
+      raison: "Invesco FTSE All-World — TER 0.15% légèrement inférieur mais AUM 6x plus petit, liquidité moindre"
 - isin: LU0378818131
   ticker: XMWO
   nom: Xtrackers MSCI World Swap UCITS ETF 1C
@@ -182,6 +281,18 @@ univers_etf:
   contrats_av_reference:
   - Linxea Spirit 2
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: FR0011550185
   ticker: ESE
   nom: BNP Paribas Easy S&P 500 UCITS ETF EUR — PEA éligible
@@ -208,6 +319,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: LU0312348583
   ticker: '500'
   nom: Amundi S&P 500 UCITS ETF (C)
@@ -235,6 +358,18 @@ univers_etf:
   frais_entree_typique_pct: 0.0
   notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (LU0312348589). Corps ISIN
     à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B5BMR087
   ticker: CSP1
   nom: iShares Core S&P 500 UCITS ETF (Acc)
@@ -262,6 +397,27 @@ univers_etf:
   - Linxea Spirit 2
   - Lucya Cardif
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: -0.0003  # source: justETF.com CSP1, données 2024
+  tracking_difference_3y: -0.0008  # source: justETF.com CSP1, période 2021-2024
+  tracking_difference_5y: -0.0007  # source: justETF.com CSP1, période 2019-2024
+  taux_retenue_source_effectif: 0.0075  # source: S&P 500 = 100% US × 15% traité IE-US, DICI iShares 2024
+  securities_lending: true  # source: rapport annuel iShares 2023
+  revenu_sec_lending_bps_estim: 2.0  # bps/an, source: rapport annuel iShares CSP1 2023
+  spread_moyen_bps: 1.5  # source: Bourse Direct / IB snapshot 2024-12
+  volume_quotidien_m_eur: 80.0  # source: justETF.com CSP1, moyenne 30j 2024 — très liquide
+  alternatives_ecartees:
+    - ticker: ESE
+      isin: FR0011550185
+      raison: "S&P 500 PEA via swap — IWDA préférable en CTO pour réplication physique, ESE surtout utile en PEA"
+    - ticker: "500"
+      isin: LU0312348583
+      raison: "Amundi S&P 500 LU — TER identique 0.15% mais AUM 4x inférieur, moins liquide"
+    - ticker: LYPS
+      isin: FR0007072012
+      raison: "Version PEA uniquement via swap, pas adapté CTO — domicile France vs Irlande pour CTO"
 - isin: IE0032077012
   ticker: NASD
   nom: Invesco EQQQ Nasdaq-100 UCITS ETF
@@ -287,6 +443,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: LU0908500753
   ticker: ESE600
   nom: Amundi MSCI Europe UCITS ETF (C)
@@ -313,6 +481,18 @@ univers_etf:
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
   notes_verification: ISIN confirmé dans la base Amundi mais noter que les ETFs Amundi/Lyxor ont été fusionnés
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B53QG562
   ticker: EXSA
   nom: iShares STOXX Europe 600 UCITS ETF (Acc)
@@ -338,6 +518,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: LU0392494562
   ticker: C50
   nom: Amundi MSCI EMU UCITS ETF — PEA éligible
@@ -364,6 +556,18 @@ univers_etf:
   contrats_av_reference:
   - Linxea Spirit 2
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B95PGT31
   ticker: XMJP
   nom: Xtrackers MSCI Japan UCITS ETF (Acc)
@@ -389,6 +593,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B52MJD48
   ticker: XPXJ
   nom: Xtrackers MSCI Pacific ex Japan UCITS ETF
@@ -414,6 +630,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BF4RFH31
   ticker: WSML
   nom: iShares MSCI World Small Cap UCITS ETF (Acc)
@@ -439,6 +667,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B3VVMM84
   ticker: IUS3
   nom: iShares Russell 2000 UCITS ETF (Acc)
@@ -464,6 +704,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B02KXM00
   ticker: IEUS
   nom: iShares MSCI Europe Small Cap UCITS ETF
@@ -489,6 +741,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BP3QZD73
   ticker: IWVL
   nom: iShares Edge MSCI World Value Factor UCITS ETF
@@ -514,6 +778,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BP3QZB59
   ticker: IWQU
   nom: iShares Edge MSCI World Quality Factor UCITS ETF
@@ -541,6 +817,18 @@ univers_etf:
   frais_entree_typique_pct: 0.0
   notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (IE00BP3QZB51). Corps ISIN
     à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BP3QZC66
   ticker: IWMO
   nom: iShares Edge MSCI World Momentum Factor UCITS ETF
@@ -568,6 +856,18 @@ univers_etf:
   frais_entree_typique_pct: 0.0
   notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (IE00BP3QZC68). Corps ISIN
     à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B8FHGS14
   ticker: MVOL
   nom: iShares Edge MSCI World Minimum Volatility UCITS ETF
@@ -593,6 +893,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B4L5YC18
   ticker: IEEM
   nom: iShares Core MSCI Emerging Markets IMI UCITS ETF
@@ -619,6 +931,18 @@ univers_etf:
   contrats_av_reference:
   - Linxea Spirit 2
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: FR0013412012
   ticker: PAEEM
   nom: Amundi MSCI Emerging Markets UCITS ETF — PEA éligible
@@ -644,6 +968,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BJ0KDR00
   ticker: XMEM
   nom: Xtrackers MSCI Emerging Markets Swap UCITS ETF
@@ -669,6 +1005,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BQT3WG13
   ticker: CIND
   nom: iShares MSCI India UCITS ETF (Acc)
@@ -694,6 +1042,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B02KXK85
   ticker: FXC
   nom: iShares China Large Cap UCITS ETF
@@ -719,6 +1079,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B4WXJJ64
   ticker: GOVS
   nom: iShares Core € Govt Bond UCITS ETF (Acc)
@@ -745,6 +1117,18 @@ univers_etf:
   contrats_av_reference:
   - Linxea Spirit 2
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B3FH7618
   ticker: IBCI
   nom: iShares € Govt Bond 1-3yr UCITS ETF
@@ -770,6 +1154,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B1FZS798
   ticker: IBCM
   nom: iShares € Govt Bond 3-7yr UCITS ETF
@@ -795,6 +1191,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B1FZS913
   ticker: IBCL
   nom: iShares € Govt Bond 7-10yr UCITS ETF
@@ -820,6 +1228,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BSKRJZ44
   ticker: IBCX
   nom: iShares € Govt Bond 20+yr UCITS ETF
@@ -845,6 +1265,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B3F81R35
   ticker: IEAA
   nom: iShares Core € Corp Bond UCITS ETF (Acc)
@@ -871,6 +1303,18 @@ univers_etf:
   contrats_av_reference:
   - Linxea Spirit 2
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B66F4759
   ticker: IHYG
   nom: iShares € High Yield Corp Bond UCITS ETF
@@ -896,6 +1340,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: LU1650490474
   ticker: AGGH
   nom: iShares Core Global Aggregate Bond UCITS ETF EUR Hdg
@@ -922,6 +1378,18 @@ univers_etf:
   contrats_av_reference:
   - Linxea Spirit 2
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BDFGJ445
   ticker: IBTM
   nom: iShares $ Treasury Bond 7-10yr UCITS ETF EUR Hdg
@@ -949,6 +1417,18 @@ univers_etf:
   frais_entree_typique_pct: 0.0
   notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (IE00BDFGJ444). Corps ISIN
     à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B7LFXY77
   ticker: ITPS
   nom: iShares $ TIPS UCITS ETF EUR Hdg
@@ -974,6 +1454,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: FR0010371401
   ticker: C40
   nom: Lyxor EUR 2-10Y Inflation Expectations UCITS ETF
@@ -1000,6 +1492,18 @@ univers_etf:
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
   notes_verification: ISIN potentiellement expiré — vérifier sur le site Amundi (ex-Lyxor) si actif ou remplacé
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B4613386
   ticker: SEML
   nom: iShares J.P. Morgan EM Local Govt Bond UCITS ETF
@@ -1025,6 +1529,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B2NPKV68
   ticker: SEMB
   nom: iShares J.P. Morgan EM Bond UCITS ETF (USD Hedged)
@@ -1050,6 +1566,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B83YJG36
   ticker: IWDP
   nom: iShares Developed Markets Property Yield UCITS ETF
@@ -1075,6 +1603,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B1FZS350
   ticker: EPRE
   nom: SPDR FTSE EPRA Europe ex UK Real Estate UCITS ETF
@@ -1101,6 +1641,18 @@ univers_etf:
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
   notes_verification: ISIN à confirmer via le site SPDR State Street — vérification manuelle requise
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B1FZSF77
   ticker: XREA
   nom: Xtrackers FTSE Developed Europe Real Estate UCITS ETF
@@ -1127,6 +1679,18 @@ univers_etf:
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
   notes_verification: ISIN à confirmer via le site DWS Xtrackers — vérification manuelle requise
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: FR0013416716
   ticker: GOLD
   nom: Amundi Physical Gold ETC
@@ -1152,6 +1716,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B4ND3602
   ticker: IGLN
   nom: iShares Physical Gold ETC
@@ -1177,6 +1753,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: DE000A0S9GB0
   ticker: XGLD
   nom: Xtrackers Physical Gold ETC (EUR)
@@ -1202,6 +1790,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: DE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BZ1NCS44
   ticker: CMOD
   nom: iShares Diversified Commodity Swap UCITS ETF
@@ -1227,6 +1827,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BYMLZY58
   ticker: LYTR
   nom: Invesco Bloomberg Commodity UCITS ETF
@@ -1254,6 +1866,18 @@ univers_etf:
   frais_entree_typique_pct: 0.0
   notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (IE00BYMLZY52). Corps ISIN
     à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B1FZS467
   ticker: INFR
   nom: iShares Global Infrastructure UCITS ETF
@@ -1279,6 +1903,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: FR0010510800
   ticker: CSH
   nom: Lyxor Smart Overnight Return UCITS ETF
@@ -1304,6 +1940,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: LU2082999306
   ticker: XEON
   nom: Xtrackers EUR Overnight Rate Swap UCITS ETF
@@ -1329,6 +1977,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B4L5YX21
   ticker: IH20
   nom: iShares Global Water UCITS ETF
@@ -1354,6 +2014,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B1XNHC34
   ticker: INRG
   nom: iShares Global Clean Energy UCITS ETF
@@ -1379,6 +2051,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B76VTN11
   ticker: IHCG
   nom: iShares Global Healthcare UCITS ETF
@@ -1404,6 +2088,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BGV5VN51
   ticker: WTAI
   nom: WisdomTree Artificial Intelligence UCITS ETF
@@ -1429,6 +2125,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BZ0PKT83
   ticker: HTEC
   nom: ROBO Global Healthcare Technology and Innovation UCITS ETF
@@ -1454,6 +2162,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B3YLTY66
   ticker: SSAC
   nom: iShares MSCI ACWI UCITS ETF (Acc)
@@ -1480,6 +2200,27 @@ univers_etf:
   contrats_av_reference:
   - Linxea Spirit 2
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: -0.0003  # source: justETF.com SSAC, données 2024
+  tracking_difference_3y: -0.0007  # source: justETF.com SSAC, période 2021-2024
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: 0.0075  # source: estimation pondération MSCI ACWI × traités, DICI iShares 2024
+  securities_lending: true  # source: rapport annuel iShares 2023
+  revenu_sec_lending_bps_estim: 1.0  # bps/an, source: rapport annuel iShares SSAC 2023
+  spread_moyen_bps: 3.5  # source: IB snapshot 2024-12
+  volume_quotidien_m_eur: 25.0  # source: justETF.com SSAC, moyenne 30j 2024
+  alternatives_ecartees:
+    - ticker: VWCE
+      isin: IE00BK5BQT80
+      raison: "FTSE All-World vs MSCI ACWI — légère différence d'indice (petites caps incluses dans FTSE), AUM VWCE supérieur"
+    - ticker: FWRA
+      isin: IE00BD45KH83
+      raison: "TER 0.15% vs 0.20% mais AUM 8x plus petit — risque de clôture de fonds plus élevé"
+    - ticker: LCUW
+      isin: IE0007J05YL2
+      raison: "TER 0.07% très attractif mais historique trop court (<3 ans) pour validation TD long terme"
 - isin: IE00BD45KH83
   ticker: FWRA
   nom: Invesco FTSE All-World UCITS ETF (Acc)
@@ -1506,6 +2247,18 @@ univers_etf:
   contrats_av_reference:
   - Linxea Spirit 2
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE0007J05YL2
   ticker: LCUW
   nom: Amundi Prime All Country World UCITS ETF (Acc)
@@ -1534,6 +2287,18 @@ univers_etf:
   frais_entree_typique_pct: 0.0
   notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (IE0007J05YL7). Corps ISIN
     à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: FR0007072012
   ticker: LYPS
   nom: Lyxor PEA S&P 500 UCITS ETF
@@ -1561,6 +2326,18 @@ univers_etf:
   frais_entree_typique_pct: 0.0
   notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (FR0007072015). Corps ISIN
     à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: FR0013412285
   ticker: PUST
   nom: Amundi PEA S&P 500 ESG UCITS ETF
@@ -1586,6 +2363,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: FR0011550177
   ticker: PANX
   nom: Amundi PEA Nasdaq-100 UCITS ETF
@@ -1611,6 +2400,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: LU0690964092
   ticker: XBAE
   nom: Xtrackers Global Government Bond EUR Hedged UCITS ETF
@@ -1636,6 +2437,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BGYWFS63
   ticker: XZEB
   nom: Xtrackers EUR Corporate Bond UCITS ETF
@@ -1661,6 +2474,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BYX2JD69
   ticker: SUWU
   nom: iShares MSCI World SRI UCITS ETF (Acc)
@@ -1686,6 +2511,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: LU1861134382
   ticker: LCUI
   nom: Amundi MSCI World Climate Paris Aligned PAB UCITS ETF
@@ -1711,6 +2548,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B8GKDB10
   ticker: VHYL
   nom: Vanguard FTSE All-World High Dividend Yield UCITS ETF
@@ -1736,6 +2585,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B3F81409
   ticker: IDVY
   nom: iShares Euro Dividend UCITS ETF
@@ -1761,6 +2622,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00BFXR7892
   ticker: XDBC
   nom: Xtrackers Physical Silver ETC
@@ -1786,6 +2659,18 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: DE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
 - isin: IE00B6R52259
   ticker: SSAC.MI
   nom: iShares MSCI ACWI UCITS ETF (Acc)
@@ -1811,3 +2696,15 @@ univers_etf:
   date_verification_dic: '2026-04-24'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b

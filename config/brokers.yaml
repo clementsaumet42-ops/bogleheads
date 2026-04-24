@@ -1,0 +1,270 @@
+# Brokers disponibles en France pour particuliers et CGP — données 2025
+# Sources: grilles tarifaires officielles, sites brokers
+
+brokers:
+
+- id: bourse_direct
+  nom: "Bourse Direct"
+  # FRAIS ORDRES
+  frais_courtage_actions_euronext_eur: 0.99  # source: https://www.boursedirect.fr/fr/tarifs — forfait min
+  frais_courtage_actions_euronext_pct: null  # forfaitaire sous 5800€
+  frais_courtage_actions_us_eur: 2.50  # source: grille tarifaire Bourse Direct 2025
+  frais_courtage_actions_us_pct: null
+  minimum_ordre_eur: 0
+  # FRAIS CHANGE
+  frais_change_devise_pct: 0.0025  # source: grille tarifaire Bourse Direct 2025 — 0.25%
+  # FRAIS DE GARDE
+  frais_garde_annuel_eur: 0  # source: grille tarifaire 2025 — 0€/an
+  frais_inactivite_annuel_eur: 0
+  # ÉLIGIBILITÉ ENVELOPPES
+  pea_disponible: true
+  pea_pme_disponible: true
+  cto_disponible: true
+  per_disponible: true
+  av_disponible: false  # broker ≠ assureur, pas d'AV propre
+  # QUALITÉ
+  plateforme_qualite: 3  # /5 — interface fonctionnelle mais datée
+  fiscalite_ifu_automatique: true
+  reporting_qualite: 3
+  support_client_score: 3
+  # META
+  agrement: "PSI agréé AMF/ACPR, n°11944"
+  annees_existence: 25
+  actionnariat: "Viel & Cie"
+  sources:
+    - "https://www.boursedirect.fr/fr/tarifs"
+    - "Grille tarifaire Bourse Direct 2025"
+
+- id: fortuneo
+  nom: "Fortuneo"
+  frais_courtage_actions_euronext_eur: 0.99  # source: https://www.fortuneo.fr/tarifs — forfait min
+  frais_courtage_actions_euronext_pct: null
+  frais_courtage_actions_us_eur: 4.00  # source: grille tarifaire Fortuneo 2025
+  frais_courtage_actions_us_pct: null
+  minimum_ordre_eur: 0
+  frais_change_devise_pct: 0.0025  # source: grille tarifaire 2025
+  frais_garde_annuel_eur: 0
+  frais_inactivite_annuel_eur: 0
+  pea_disponible: true
+  pea_pme_disponible: true
+  cto_disponible: true
+  per_disponible: false
+  av_disponible: false  # Fortuneo Vie est une entité séparée, non couplé au broker
+  plateforme_qualite: 4
+  fiscalite_ifu_automatique: true
+  reporting_qualite: 4
+  support_client_score: 4
+  agrement: "PSI agréé AMF/ACPR"
+  annees_existence: 22
+  actionnariat: "Crédit Mutuel Arkéa"
+  sources:
+    - "https://www.fortuneo.fr/tarifs"
+    - "Grille tarifaire Fortuneo 2025"
+
+- id: boursorama
+  nom: "Boursorama Banque"
+  frais_courtage_actions_euronext_eur: 1.99  # source: https://www.boursobank.com/bourse/tarifs — Welcome 1.99€
+  frais_courtage_actions_euronext_pct: null
+  frais_courtage_actions_us_eur: 3.99  # source: grille tarifaire Boursorama 2025
+  frais_courtage_actions_us_pct: null
+  minimum_ordre_eur: 0
+  frais_change_devise_pct: 0.0025  # source: grille tarifaire 2025
+  frais_garde_annuel_eur: 0
+  frais_inactivite_annuel_eur: 0
+  pea_disponible: true
+  pea_pme_disponible: true
+  cto_disponible: true
+  per_disponible: false
+  av_disponible: false  # Boursorama Vie = filiale assurance, pas même entité PSI
+  plateforme_qualite: 4
+  fiscalite_ifu_automatique: true
+  reporting_qualite: 4
+  support_client_score: 3
+  agrement: "PSI agréé AMF/ACPR"
+  annees_existence: 28
+  actionnariat: "Société Générale"
+  sources:
+    - "https://www.boursobank.com/bourse/tarifs"
+    - "Grille tarifaire Boursorama 2025"
+
+- id: saxo_banque
+  nom: "Saxo Banque"
+  frais_courtage_actions_euronext_eur: 3.00  # source: https://www.home.saxo/fr-fr/rates-and-conditions — Classic
+  frais_courtage_actions_euronext_pct: 0.0008  # min 3€, source: grille Classic 2025
+  frais_courtage_actions_us_eur: null
+  frais_courtage_actions_us_pct: 0.0008  # USD 3.00 min, source: grille Classic 2025
+  minimum_ordre_eur: 0
+  frais_change_devise_pct: 0.0060  # source: grille Classic Saxo 2025 — 0.60% change devise
+  frais_garde_annuel_eur: 0
+  frais_inactivite_annuel_eur: 100  # source: Saxo 2025 — inactivity fee si < 1 ordre/an
+  pea_disponible: true
+  pea_pme_disponible: true
+  cto_disponible: true
+  per_disponible: false
+  av_disponible: false
+  plateforme_qualite: 5
+  fiscalite_ifu_automatique: true
+  reporting_qualite: 5
+  support_client_score: 4
+  agrement: "PSI agréé AMF/ACPR, agrément bancaire ACPR"
+  annees_existence: 30
+  actionnariat: "Geely Group (Chine, 51.5%)"
+  sources:
+    - "https://www.home.saxo/fr-fr/rates-and-conditions"
+    - "Grille tarifaire Saxo Classic 2025"
+
+- id: interactive_brokers
+  nom: "Interactive Brokers"
+  frais_courtage_actions_euronext_eur: null
+  frais_courtage_actions_euronext_pct: 0.0005  # source: https://www.interactivebrokers.fr/fr/trading/commissions.php — Tiered min 1.25€
+  frais_courtage_actions_us_eur: null
+  frais_courtage_actions_us_pct: 0.00035  # source: IBKR Tiered min USD 0.35
+  minimum_ordre_eur: 0
+  frais_change_devise_pct: 0.00002  # source: IBKR FX conversion — quasi nul
+  frais_garde_annuel_eur: 0
+  frais_inactivite_annuel_eur: 0  # source: IBKR 2025 — plus de frais inactivité depuis 2021
+  pea_disponible: false  # IBKR ne propose pas de PEA en France
+  pea_pme_disponible: false
+  cto_disponible: true
+  per_disponible: false
+  av_disponible: false
+  plateforme_qualite: 5
+  fiscalite_ifu_automatique: false  # IFU partiel, nécessite traitement manuel pour déclaration France
+  reporting_qualite: 5
+  support_client_score: 3
+  agrement: "PSI agréé AMF/ACPR, SIPC membre (USA)"
+  annees_existence: 47
+  actionnariat: "Cotée NASDAQ (IBKR)"
+  sources:
+    - "https://www.interactivebrokers.fr/fr/trading/commissions.php"
+    - "Grille tarifaire IBKR Tiered 2025"
+
+- id: degiro
+  nom: "DEGIRO"
+  frais_courtage_actions_euronext_eur: 3.90  # source: https://www.degiro.fr/tarifs — Basic
+  frais_courtage_actions_euronext_pct: 0.0005  # min 3.90€, source: grille DEGIRO 2025
+  frais_courtage_actions_us_eur: null
+  frais_courtage_actions_us_pct: 0.0005  # USD 0.50 min, source: grille 2025
+  minimum_ordre_eur: 0
+  frais_change_devise_pct: 0.0025  # source: DEGIRO 2025 — frais change devise
+  frais_garde_annuel_eur: 0
+  frais_inactivite_annuel_eur: 0
+  pea_disponible: false  # DEGIRO ne propose pas de PEA
+  pea_pme_disponible: false
+  cto_disponible: true
+  per_disponible: false
+  av_disponible: false
+  plateforme_qualite: 4
+  fiscalite_ifu_automatique: false  # pas d'IFU fourni par DEGIRO, déclaration manuelle
+  reporting_qualite: 3
+  support_client_score: 3
+  agrement: "PSI agréé AMF, filiale flatexDEGIRO Bank AG"
+  annees_existence: 12
+  actionnariat: "flatexDEGIRO AG (Allemagne)"
+  sources:
+    - "https://www.degiro.fr/tarifs"
+    - "Grille tarifaire DEGIRO 2025"
+
+- id: trade_republic
+  nom: "Trade Republic"
+  frais_courtage_actions_euronext_eur: 1.00  # source: https://traderepublic.com/fr-fr — forfait 1€ par ordre
+  frais_courtage_actions_euronext_pct: null
+  frais_courtage_actions_us_eur: 1.00  # source: grille Trade Republic 2025 — forfait 1€
+  frais_courtage_actions_us_pct: null
+  minimum_ordre_eur: 1
+  frais_change_devise_pct: 0.0000  # source: Trade Republic 2025 — pas de frais change EUR/USD
+  frais_garde_annuel_eur: 0
+  frais_inactivite_annuel_eur: 0
+  pea_disponible: false  # Trade Republic ne propose pas de PEA en France
+  pea_pme_disponible: false
+  cto_disponible: true
+  per_disponible: false
+  av_disponible: false
+  plateforme_qualite: 4
+  fiscalite_ifu_automatique: false  # pas d'IFU automatique, déclaration manuelle
+  reporting_qualite: 3
+  support_client_score: 3
+  agrement: "PSI agréé BaFin (Allemagne), passeport européen"
+  annees_existence: 7
+  actionnariat: "Trade Republic Bank GmbH (privé)"
+  sources:
+    - "https://traderepublic.com/fr-fr"
+    - "Grille tarifaire Trade Republic 2025"
+
+- id: bforbank
+  nom: "BforBank"
+  frais_courtage_actions_euronext_eur: 0.99  # source: https://www.bforbank.com/bourse/tarifs
+  frais_courtage_actions_euronext_pct: null
+  frais_courtage_actions_us_eur: 3.90  # source: grille BforBank 2025
+  frais_courtage_actions_us_pct: null
+  minimum_ordre_eur: 0
+  frais_change_devise_pct: 0.0025  # source: grille BforBank 2025
+  frais_garde_annuel_eur: 0
+  frais_inactivite_annuel_eur: 0
+  pea_disponible: true
+  pea_pme_disponible: false
+  cto_disponible: true
+  per_disponible: false
+  av_disponible: false
+  plateforme_qualite: 3
+  fiscalite_ifu_automatique: true
+  reporting_qualite: 3
+  support_client_score: 3
+  agrement: "PSI agréé AMF/ACPR, filiale Crédit Agricole"
+  annees_existence: 14
+  actionnariat: "Crédit Agricole"
+  sources:
+    - "https://www.bforbank.com/bourse/tarifs"
+    - "Grille tarifaire BforBank 2025"
+
+- id: credit_agricole_investore_integrale
+  nom: "Crédit Agricole Investore Integrale"
+  frais_courtage_actions_euronext_eur: 3.99  # source: Crédit Agricole grille Integrale 2025
+  frais_courtage_actions_euronext_pct: 0.0009  # min 3.99€, source: grille 2025
+  frais_courtage_actions_us_eur: null
+  frais_courtage_actions_us_pct: 0.0020  # source: grille 2025
+  minimum_ordre_eur: 0
+  frais_change_devise_pct: 0.0030  # source: grille CA 2025
+  frais_garde_annuel_eur: 0
+  frais_inactivite_annuel_eur: 0
+  pea_disponible: true
+  pea_pme_disponible: true
+  cto_disponible: true
+  per_disponible: true
+  av_disponible: false
+  plateforme_qualite: 3
+  fiscalite_ifu_automatique: true
+  reporting_qualite: 3
+  support_client_score: 4
+  agrement: "PSI agréé AMF/ACPR, banque de plein exercice"
+  annees_existence: 30
+  actionnariat: "Crédit Agricole SA"
+  sources:
+    - "https://investissement.credit-agricole.fr/"
+    - "Grille tarifaire Crédit Agricole Integrale 2025"
+
+- id: societe_generale_bourse
+  nom: "Société Générale Bourse"
+  frais_courtage_actions_euronext_eur: 3.99  # source: Société Générale grille bourse 2025
+  frais_courtage_actions_euronext_pct: 0.00125  # min 3.99€, source: grille 2025
+  frais_courtage_actions_us_eur: null
+  frais_courtage_actions_us_pct: 0.00125  # USD min 6.00, source: grille 2025
+  minimum_ordre_eur: 0
+  frais_change_devise_pct: 0.0020  # source: grille SG 2025
+  frais_garde_annuel_eur: 0
+  frais_inactivite_annuel_eur: 0
+  pea_disponible: true
+  pea_pme_disponible: true
+  cto_disponible: true
+  per_disponible: false
+  av_disponible: false
+  plateforme_qualite: 3
+  fiscalite_ifu_automatique: true
+  reporting_qualite: 3
+  support_client_score: 3
+  agrement: "PSI agréé AMF/ACPR, banque de plein exercice"
+  annees_existence: 40
+  actionnariat: "Société Générale SA"
+  sources:
+    - "https://bourse.societegenerale.fr/"
+    - "Grille tarifaire Société Générale Bourse 2025"
