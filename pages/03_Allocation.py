@@ -404,6 +404,63 @@ with st.expander("ℹ️ Hypothèses de calcul et sources"):
     else:
         st.info("Métadonnées non disponibles.")
 
+# ─── Explication pédagogique (S8.1 — preuve bout-en-bout) ────────────────────
+
+st.divider()
+st.subheader("🎓 Comprendre cette allocation")
+
+try:
+    from src.pedagogie import expliquer_allocation
+    from src.pedagogie.scripts import rendre_script
+    from src.ui.explications import bloc_script_restitution, expander_explication
+
+    nom_client = nom if isinstance(nom, str) else "Client"
+    contexte_ped = {
+        "nom_client": nom_client,
+        "profil": aversion,
+        "patrimoine_total": str(patrimoine_profil),
+    }
+
+    explications_alloc = expliquer_allocation(
+        poids=poids,
+        profil=aversion,
+        mode=mode,
+        contexte=contexte_ped,
+    )
+
+    if explications_alloc:
+        expander_explication(explications_alloc[0])
+
+    # Script de restitution — première explication disponible selon le mode
+    try:
+        if mode == "simple":
+            poids_acwi = poids.get("actions_monde", poids.get("actions", 0.0))
+            script_cle = "allocation.mode_simple_acwi"
+            script_vars = {
+                "poids_acwi": poids_acwi,
+                "ter": sum(
+                    poids.get(c, 0.0)
+                    * _config_cached["classes_actifs"].get(c, {}).get("frais_ter_moyen", 0.001)
+                    for c in poids
+                ),
+                "profil_final": aversion,
+            }
+        else:
+            poids_oblig = poids.get("obligations_monde", poids.get("obligations", 0.0))
+            script_cle = "allocation.obligations"
+            script_vars = {
+                "poids_obligations": poids_oblig,
+                "profil_final": aversion,
+            }
+
+        script_rendu = rendre_script(script_cle, script_vars)
+        bloc_script_restitution(script_rendu)
+    except Exception:
+        pass
+
+except Exception:
+    pass
+
 # ─── Sauvegarde en session ────────────────────────────────────────────────────
 
 st.divider()
