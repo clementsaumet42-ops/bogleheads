@@ -160,4 +160,4 @@ st.caption(
 )
 
 if st.button("🔄 ← Rebalancement"):
-    st.switch_page("pages/06_Rebalancement.py")
+    st.switch_page("pages/07_Rebalancement.py")

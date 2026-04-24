@@ -40,10 +40,10 @@ _pages = {
     "🏠 Accueil": "pages/01_Accueil.py",
     "👤 Profil client": "pages/02_Profil.py",
     "🎯 Allocation cible": "pages/03_Allocation.py",
-    "🏦 Asset Location": "pages/04_Asset_Location.py",
-    "📈 Projection Monte-Carlo": "pages/05_Monte_Carlo.py",
-    "🔄 Rebalancement": "pages/06_Rebalancement.py",
-    "📥 Téléchargements": "pages/07_Exports.py",
+    "🏦 Asset Location": "pages/05_Asset_Location.py",
+    "📈 Projection Monte-Carlo": "pages/06_Monte_Carlo.py",
+    "🔄 Rebalancement": "pages/07_Rebalancement.py",
+    "📥 Téléchargements": "pages/08_Exports.py",
 }
 
 # ─── Sidebar commune ──────────────────────────────────────────────────────────

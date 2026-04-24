@@ -478,4 +478,4 @@ if st.session_state.get("resultat_optim") is None or st.button("🔄 Recalculer 
     st.success("✅ Résultat sauvegardé en session.")
 
 if st.button("🏦 Optimiser l'asset location →", type="primary"):
-    st.switch_page("pages/04_Asset_Location.py")
+    st.switch_page("pages/05_Asset_Location.py")

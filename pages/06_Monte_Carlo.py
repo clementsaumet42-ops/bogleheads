@@ -201,7 +201,7 @@ st.divider()
 col1, col2 = st.columns(2)
 with col1:
     if st.button("🏦 ← Asset Location", use_container_width=True):
-        st.switch_page("pages/04_Asset_Location.py")
+        st.switch_page("pages/05_Asset_Location.py")
 with col2:
     if st.button("🔄 Rebalancement →", type="primary", use_container_width=True):
-        st.switch_page("pages/06_Rebalancement.py")
+        st.switch_page("pages/07_Rebalancement.py")
