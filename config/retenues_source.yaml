@@ -44,8 +44,8 @@ matrice:
     LU: 0.15  # traité JP-LU 1992 amendé — taux 15%
     FR: 0.10  # traité JP-FR 1995 amendé 2016 — taux réduit 10% portefeuille
   FR:
-    IE: 0.128  # prélèvement libératoire 12.8% (PFU IR) — pas de retenue à la source standard sur distributions OPCVM FR vers IE
-    LU: 0.128  # idem
+    IE: 0.128  # 12.8% PFU (prélèvement forfaitaire unique) appliqué à la source par l'émetteur français sur dividendes distribués; s'applique aux ETF FR domiciliés (ex: Amundi FR) distribués à un ETF IE (rare en pratique)
+    LU: 0.128  # idem — taux PFU 12.8% à la source pour émetteur FR vers domicile LU
     FR: 0.00   # pas de double imposition interne France→France
   AU:
     IE: 0.15  # traité AU-IE 1983 amendé — taux 15% dividendes portefeuille
@@ -95,7 +95,7 @@ matrice:
   TW:
     IE: 0.21  # Taiwan n'a pas de traité fiscal officiel avec l'Irlande — taux standard 21%
     LU: 0.21  # Taiwan n'a pas de traité avec LU — taux standard 21%
-    FR: 0.10  # accord fiscal informel TW-FR — estimation 10%, à vérifier
+    FR: 0.10  # accord fiscal informel TW-FR — estimation 10% (voir note Taiwan dans section notes)
 
 notes:
   - "Les taux sont des taux de traité standards pour dividendes 'de portefeuille' (participation < 10%). Des taux plus bas peuvent s'appliquer pour participations substantielles (≥10-25% selon traité)."

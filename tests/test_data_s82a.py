@@ -208,7 +208,7 @@ def test_loader_echoue_proprement_sur_source_manquante():
     """16. Si un contrat AV n'a pas de sources, le validator Pydantic doit échouer."""
     from pydantic import ValidationError
     from src.schemas import ContratAV
-    with pytest.raises(ValidationError, match="source"):
+    with pytest.raises(ValidationError, match="au moins une source obligatoire"):
         ContratAV(
             id="test_sans_source",
             nom="Test",
