@@ -169,7 +169,11 @@ def optimiser_allocation_mode_a(
     else:
         classes_exclues = {"actions_monde_acwi"}
 
-    classes = [c for c in CLASSES_ACTIFS_ORDRE if c in config["classes_actifs"] and c not in classes_exclues]
+    classes = [
+        c
+        for c in CLASSES_ACTIFS_ORDRE
+        if c in config["classes_actifs"] and c not in classes_exclues
+    ]
     n = len(classes)
 
     profils_ar = config.get("profils_aversion_risque", {})
@@ -292,14 +296,18 @@ def optimiser_allocation_mode_a(
             }
         else:
             logger.warning("scipy SLSQP n'a pas convergé : %s", result.message)
-            return _fallback_allocation_mode_a(classes, config, profil_aversion, contraintes, rf, mode=mode)
+            return _fallback_allocation_mode_a(
+                classes, config, profil_aversion, contraintes, rf, mode=mode
+            )
 
     except ImportError:
         warnings.warn(
             "scipy non disponible — fallback heuristique Mode A",
             stacklevel=2,
         )
-        return _fallback_allocation_mode_a(classes, config, profil_aversion, contraintes, rf, mode=mode)
+        return _fallback_allocation_mode_a(
+            classes, config, profil_aversion, contraintes, rf, mode=mode
+        )
 
 
 def _fallback_allocation_mode_a(
@@ -358,10 +366,38 @@ def _fallback_allocation_mode_a(
         },
     }
     allocations_ref_simple = {
-        "defensif":  {"actions_monde_acwi": 0.25, "obligations_agg_monde": 0.30, "obligations_euro": 0.25, "reit": 0.05, "or_matieres": 0.10, "monetaire": 0.05},
-        "equilibre": {"actions_monde_acwi": 0.55, "obligations_agg_monde": 0.20, "obligations_euro": 0.13, "reit": 0.05, "or_matieres": 0.05, "monetaire": 0.02},
-        "dynamique": {"actions_monde_acwi": 0.75, "obligations_agg_monde": 0.12, "obligations_euro": 0.05, "reit": 0.04, "or_matieres": 0.03, "monetaire": 0.01},
-        "agressif":  {"actions_monde_acwi": 0.90, "obligations_agg_monde": 0.04, "obligations_euro": 0.01, "reit": 0.03, "or_matieres": 0.02, "monetaire": 0.00},
+        "defensif": {
+            "actions_monde_acwi": 0.25,
+            "obligations_agg_monde": 0.30,
+            "obligations_euro": 0.25,
+            "reit": 0.05,
+            "or_matieres": 0.10,
+            "monetaire": 0.05,
+        },
+        "equilibre": {
+            "actions_monde_acwi": 0.55,
+            "obligations_agg_monde": 0.20,
+            "obligations_euro": 0.13,
+            "reit": 0.05,
+            "or_matieres": 0.05,
+            "monetaire": 0.02,
+        },
+        "dynamique": {
+            "actions_monde_acwi": 0.75,
+            "obligations_agg_monde": 0.12,
+            "obligations_euro": 0.05,
+            "reit": 0.04,
+            "or_matieres": 0.03,
+            "monetaire": 0.01,
+        },
+        "agressif": {
+            "actions_monde_acwi": 0.90,
+            "obligations_agg_monde": 0.04,
+            "obligations_euro": 0.01,
+            "reit": 0.03,
+            "or_matieres": 0.02,
+            "monetaire": 0.00,
+        },
     }
     ref_dict = allocations_ref_simple if mode == "simple" else allocations_ref
     ref = ref_dict.get(profil_aversion, ref_dict["equilibre"])
