@@ -17,7 +17,6 @@ dependencies = [
     "pydantic>=2.0",
     "reportlab>=4.0",
     "matplotlib>=3.7",
-    "cryptography>=42",
 ] 
 
 [project.optional-dependencies]
@@ -33,6 +32,7 @@ dev = [
 ]
 optim = ["pulp", "scipy"]
 web = ["streamlit>=1.30", "plotly>=5.18"]
+cif = ["cryptography>=42.0"]
 
 [tool.setuptools.packages.find]
 where = ["." ]

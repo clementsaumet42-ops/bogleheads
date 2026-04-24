@@ -9,9 +9,16 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 
-from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+try:
+    from cryptography.fernet import Fernet
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
+    _CRYPTO_AVAILABLE = True
+    _CRYPTO_IMPORT_ERROR: ImportError | None = None
+except ImportError as _import_err:  # pragma: no cover
+    _CRYPTO_AVAILABLE = False
+    _CRYPTO_IMPORT_ERROR = _import_err
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +27,11 @@ VERSION_APP = "0.8.0"
 
 
 def _derive_key(passphrase: str) -> bytes:
+    if not _CRYPTO_AVAILABLE:  # pragma: no cover
+        raise ImportError(
+            "Le module 'cryptography' est requis pour utiliser JournalConseils. "
+            "Installez-le avec : pip install 'bogleheads-fr[cif]'"
+        ) from _CRYPTO_IMPORT_ERROR
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
