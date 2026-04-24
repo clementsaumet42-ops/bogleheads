@@ -1786,3 +1786,28 @@ univers_etf:
   date_verification_dic: '2026-04-22'
   contrats_av_reference: []
   frais_entree_typique_pct: 0.0
+- isin: IE00B6R52259
+  ticker: SSAC.MI
+  nom: iShares MSCI ACWI UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: actions_monde_acwi
+  sous_classe: MSCI ACWI (DM + EM)
+  ter: 0.0020
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: CTO/AV — MSCI ACWI physique, TER 0.20%.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-24'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0

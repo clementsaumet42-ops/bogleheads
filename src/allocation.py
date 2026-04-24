@@ -26,9 +26,9 @@ def get_profil_par_id(profils_data: dict, profil_id: int) -> dict:
 def valider_allocation(allocation: dict) -> bool:
     """
     Valide que l'allocation cible somme à 100%.
-    Ignore la clé 'commentaire'.
+    Ignore les clés 'commentaire' et les clés préfixées par '_'.
     """
-    valeurs = {k: v for k, v in allocation.items() if k != "commentaire"}
+    valeurs = {k: v for k, v in allocation.items() if k != "commentaire" and not k.startswith("_")}
     total = sum(valeurs.values())
     return abs(total - 1.0) < 0.001
 
@@ -36,21 +36,23 @@ def valider_allocation(allocation: dict) -> bool:
 def allocation_bogleheads_par_age(age: int) -> dict:
     """
     Règle d'allocation Boglehead simplifiée basée sur l'âge.
-    Règle heuristique : % obligations ≈ age - 10 (à adapter selon profil risque).
+    Règle heuristique : % obligations ≈ clip((age-10)/100, 5%, 60%).
+    Somme garantie = 1.0.
     """
     pct_obligations = max(0.05, min(0.60, (age - 10) / 100))
-    pct_actions = max(0.30, 1.0 - pct_obligations - 0.10)
     pct_or = 0.05
     pct_immo = 0.05
-    pct_liquidites = max(0.02, 1.0 - pct_actions - pct_obligations - pct_or - pct_immo)
+    pct_liquidites = 0.05
+    pct_actions = 1.0 - (pct_obligations + pct_or + pct_immo + pct_liquidites)
 
-    # Normalisation
     total = pct_actions + pct_obligations + pct_immo + pct_or + pct_liquidites
+    assert abs(total - 1.0) < 1e-9, f"Invariant violé : total={total}"
+
     return {
-        "actions": round(pct_actions / total, 3),
-        "obligations": round(pct_obligations / total, 3),
-        "immobilier_cote": round(pct_immo / total, 3),
-        "or": round(pct_or / total, 3),
-        "liquidites": round(pct_liquidites / total, 3),
-        "commentaire": f"Allocation automatique basée sur l'âge ({age} ans)",
+        "actions": round(pct_actions, 3),
+        "obligations": round(pct_obligations, 3),
+        "immobilier_cote": round(pct_immo, 3),
+        "or": round(pct_or, 3),
+        "liquidites": round(pct_liquidites, 3),
+        "_commentaire": f"Allocation automatique basée sur l'âge ({age} ans)",
     }

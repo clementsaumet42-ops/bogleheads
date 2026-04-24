@@ -37,13 +37,13 @@ for _key, _val in _DEFAULTS.items():
 # ─── Navigation multi-pages ───────────────────────────────────────────────────
 
 _pages = {
-    "🏠 Accueil": "pages/1_🏠_Accueil.py",
-    "👤 Profil client": "pages/2_👤_Profil.py",
-    "🎯 Allocation cible": "pages/3_🎯_Allocation.py",
-    "🏦 Asset Location": "pages/4_🏦_Asset_Location.py",
-    "📈 Projection Monte-Carlo": "pages/5_📈_Monte_Carlo.py",
-    "🔄 Rebalancement": "pages/6_🔄_Rebalancement.py",
-    "📥 Téléchargements": "pages/7_📥_Exports.py",
+    "🏠 Accueil": "pages/01_Accueil.py",
+    "👤 Profil client": "pages/02_Profil.py",
+    "🎯 Allocation cible": "pages/03_Allocation.py",
+    "🏦 Asset Location": "pages/04_Asset_Location.py",
+    "📈 Projection Monte-Carlo": "pages/05_Monte_Carlo.py",
+    "🔄 Rebalancement": "pages/06_Rebalancement.py",
+    "📥 Téléchargements": "pages/07_Exports.py",
 }
 
 # ─── Sidebar commune ──────────────────────────────────────────────────────────
@@ -78,7 +78,7 @@ with st.sidebar:
 
 # Streamlit affiche automatiquement la page active via le dossier pages/.
 # Ce fichier sert uniquement de point d'entrée et de sidebar commune.
-# La vraie page d'accueil est pages/1_🏠_Accueil.py.
+# La vraie page d'accueil est pages/01_Accueil.py.
 
 # Redirection vers la page d'accueil si l'utilisateur arrive sur app.py directement
 # (comportement natif Streamlit : affiche la première page du dossier pages/)

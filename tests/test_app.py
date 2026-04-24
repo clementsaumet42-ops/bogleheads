@@ -32,13 +32,13 @@ def test_import_app():
 @pytest.mark.parametrize(
     "page_file",
     [
-        "pages/1_🏠_Accueil.py",
-        "pages/2_👤_Profil.py",
-        "pages/3_🎯_Allocation.py",
-        "pages/4_🏦_Asset_Location.py",
-        "pages/5_📈_Monte_Carlo.py",
-        "pages/6_🔄_Rebalancement.py",
-        "pages/7_📥_Exports.py",
+        "pages/01_Accueil.py",
+        "pages/02_Profil.py",
+        "pages/03_Allocation.py",
+        "pages/04_Asset_Location.py",
+        "pages/05_Monte_Carlo.py",
+        "pages/06_Rebalancement.py",
+        "pages/07_Exports.py",
     ],
 )
 def test_page_file_exists(page_file):
@@ -252,7 +252,7 @@ def test_cache_data_sur_charger_kpis():
     """La fonction _charger_kpis de la page Accueil doit utiliser @st.cache_data."""
     from pathlib import Path
 
-    source = Path("pages/1_🏠_Accueil.py").read_text(encoding="utf-8")
+    source = Path("pages/01_Accueil.py").read_text(encoding="utf-8")
     assert "st.cache_data" in source, "La page Accueil doit utiliser @st.cache_data"
 
 
@@ -260,7 +260,7 @@ def test_cache_data_sur_allocation():
     """La page Allocation doit utiliser @st.cache_data sur le calcul Markowitz."""
     from pathlib import Path
 
-    source = Path("pages/3_🎯_Allocation.py").read_text(encoding="utf-8")
+    source = Path("pages/03_Allocation.py").read_text(encoding="utf-8")
     assert "st.cache_data" in source
 
 
@@ -268,7 +268,7 @@ def test_cache_data_sur_monte_carlo():
     """La page Monte-Carlo doit utiliser @st.cache_data sur la simulation."""
     from pathlib import Path
 
-    source = Path("pages/5_📈_Monte_Carlo.py").read_text(encoding="utf-8")
+    source = Path("pages/05_Monte_Carlo.py").read_text(encoding="utf-8")
     assert "st.cache_data" in source
 
 
@@ -287,7 +287,7 @@ def test_streamlit_config_contient_theme():
     from pathlib import Path
 
     content = Path(".streamlit/config.toml").read_text(encoding="utf-8")
-    assert "#1a4d8f" in content
+    assert "#1B3A5B" in content
     assert "[theme]" in content
 
 

@@ -14,7 +14,7 @@ profil = st.session_state.get("profil_actif")
 if not profil:
     st.warning("⚠️ Aucun profil chargé. Veuillez d'abord configurer un profil client.")
     if st.button("👤 Aller au profil client"):
-        st.switch_page("pages/2_👤_Profil.py")
+        st.switch_page("pages/02_Profil.py")
     st.stop()
 
 nom = profil.get("nom", "—") if isinstance(profil, dict) else getattr(profil, "nom", "—")
@@ -266,7 +266,7 @@ st.divider()
 col1, col2 = st.columns(2)
 with col1:
     if st.button("📈 ← Monte-Carlo", use_container_width=True):
-        st.switch_page("pages/5_📈_Monte_Carlo.py")
+        st.switch_page("pages/05_Monte_Carlo.py")
 with col2:
     if st.button("📥 Téléchargements →", type="primary", use_container_width=True):
-        st.switch_page("pages/7_📥_Exports.py")
+        st.switch_page("pages/07_Exports.py")

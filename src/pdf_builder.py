@@ -384,6 +384,10 @@ def _page_couverture(
             logo_abs = Path(__file__).parent.parent / logo_path
         if logo_abs.exists():
             try:
+                from PIL import Image as PILImage
+
+                with PILImage.open(str(logo_abs)):
+                    pass
                 img = Image(str(logo_abs), width=5 * cm, height=2 * cm)
                 img.hAlign = "CENTER"
                 elems.append(img)
