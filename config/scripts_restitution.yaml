@@ -1,0 +1,151 @@
+# config/scripts_restitution.yaml
+# Scripts de restitution EC→client — paramétrables via variables Python {format_map}
+# Tous les textes sont en français, ton expert-comptable / CIF : précis, chiffré, sourcé.
+# Sources centralisées (complémentaires à src/cif/references_legales.py)
+
+sources:
+  boglehead_3_principes: "Bogle, J. (2017). The Little Book of Common Sense Investing. Wiley."
+  grable_lytton_1999: "Grable, J. E., & Lytton, R. H. (1999). Financial Services Review, 8(3), 163-181"
+  amf_profilage: "AMF Position-recommandation 2019-03 (adéquation MIF II)"
+  mif2_adequation: "Art. 54-55 Règlement délégué (UE) 2017/565 (MIF II)"
+  art_125_0a_cgi: "Art. 125-0 A Code général des impôts (AV)"
+  art_163_qd_cgi: "Art. 163 quinquies D CGI (PEA)"
+  art_200a_cgi: "Art. 200 A CGI (PFU — prélèvement forfaitaire unique)"
+  art_150_0a_cgi: "Art. 150-0 A CGI (plus-values mobilières)"
+  art_150_0d_cgi: "Art. 150-0 D CGI (report des moins-values, 10 ans)"
+  art_990i_cgi: "Art. 990 I CGI (transmission assurance-vie hors succession)"
+  art_163_qv_cgi: "Art. 163 quatervicies CGI (déduction versements PER)"
+  markowitz_1952: "Markowitz, H. (1952). Portfolio Selection. Journal of Finance, 7(1), 77-91"
+  sharpe_1991: "Sharpe, W. (1991). The Arithmetic of Active Management. Financial Analysts Journal, 47(1), 7-9"
+  kahneman_tversky_1979: "Kahneman, D. & Tversky, A. (1979). Prospect Theory. Econometrica, 47(2), 263-291"
+
+scripts:
+  profilage:
+    introduction: |
+      M. {nom_client}, nous avons croisé trois angles pour fixer votre profil de risque :
+      votre ressenti déclaré, un questionnaire scientifique (Grable-Lytton, α=0,77)
+      et votre réaction à des scénarios concrets de perte.
+      Cette approche est conforme à la recommandation AMF 2019-03 et à la directive MIF II.
+
+    convergence_claire: |
+      Les trois prismes convergent sur "{profil_final}". Je m'appuie sur ce profil pour
+      construire votre allocation, avec une marge de sécurité en cas de stress de marché.
+      Cette convergence renforce la fiabilité du profil et réduit le risque d'allocation inadaptée.
+
+    divergence_detectee: |
+      Vous vous déclarez "{profil_declare}" mais face au scénario "krach -40 %" vous vendriez.
+      Je cale donc votre profil sur "{profil_final}" pour éviter la panique réelle en cas de crise.
+      La théorie des perspectives (Kahneman & Tversky) montre que la douleur d'une perte
+      est deux fois plus forte que le plaisir d'un gain équivalent.
+
+    risque_comportemental: |
+      Le risque comportemental est le principal ennemi du rendement long terme.
+      Un portefeuille légèrement sous-optimal mais que vous conservez en crise
+      bat un portefeuille optimal que vous liquidez au pire moment.
+
+  allocation:
+    mode_simple_acwi: |
+      On part sur {poids_acwi:.0%} MSCI ACWI parce que c'est le plus large indice monde :
+      ~60 % US, ~28 % développé hors US, ~12 % émergents, capi-pondéré.
+      Vous ne pariez pas sur une région — vous suivez le marché mondial à {ter:.2%} de frais.
+      Un seul ETF, une seule ligne, un rééquilibrage simple.
+
+    obligations: |
+      {poids_obligations:.0%} en obligations monde agrégées : amortit la volatilité,
+      décorrélées des actions en régime de crise "risk-off".
+      Idéalement logées en assurance-vie pour bénéficier de l'abattement annuel
+      de 9 200 € (couple) sur les intérêts — quasi-exonération à votre TMI.
+
+    alternative_ecartee_all_us: |
+      L'alternative "100 % US" donne +0,3 % d'espérance historiquement mais +4 % de volatilité
+      et un risque de change concentré. On l'écarte pour un profil {profil_final}.
+      La surperformance US 2009-2024 est un biais de récence — pas une loi de la finance.
+
+    explication_markowitz: |
+      L'optimisation Markowitz (variance moyenne) détermine les poids qui maximisent
+      le ratio rendement/risque (Sharpe) dans les bornes de votre profil.
+      Formule : maximiser E[R_p] − λ × σ²_p, avec λ = aversion au risque {profil_final}.
+
+  etf:
+    pourquoi_cet_etf: |
+      {ticker} : TER {ter:.2%}, AUM {aum_mds:.1f} Mds€, réplication {replication},
+      domicile {domicile}. Éligible {enveloppes_eligibles}.
+      Ces quatre critères objectifs (coût, taille, méthode, fiscalité) guident le choix
+      — pas la performance passée, qui ne préjuge pas de l'avenir.
+
+    pourquoi_pas_alternative: |
+      On a regardé {ticker_ecarte} : {raison_ecartee}.
+      Le TER et l'éligibilité enveloppes sont les deux critères décisifs pour l'optimisation
+      fiscale de votre patrimoine.
+
+    impact_ter_long_terme: |
+      Sur 100 000 € investis et 20 ans, {ter_ecart:.2%} de frais annuels en moins
+      représentent {gain_eur:,.0f} € de capital supplémentaire.
+      La gestion passive surperforme mécaniquement en moyenne après frais (Sharpe, 1991).
+
+    domicile_irlande: |
+      Domicile Irlande (IE) : convention fiscale France/Irlande optimisée —
+      retenue à la source réduite sur dividendes US (15 % au lieu de 30 %).
+      Avantage structurel vs ETF domicilié en France pour les actions mondiales.
+
+  asset_location:
+    obligations_en_av: |
+      Obligations en assurance-vie > 8 ans : les coupons sont taxés à la sortie,
+      l'abattement annuel de 9 200 € (couple) les rend quasi exonérés.
+      Gain estimé : {gain_annuel_eur:.0f} €/an vs CTO au PFU 30 %.
+
+    actions_en_pea: |
+      Actions éligibles PEA dans le PEA : après 5 ans, exonération d'IR (PS 17,2 % seulement).
+      Gain fiscal annuel estimé : {gain_annuel_eur:.0f} €/an vs CTO au PFU 30 %.
+      Plafond 150 000 € — ouvrir le PEA tôt pour faire courir le délai de 5 ans.
+
+    per_levier_fiscal: |
+      Versements PER déductibles du revenu imposable (plafond 35 194 € en 2026).
+      À votre TMI {tmi:.0%} : {gain_deduction_eur:.0f} € d'économie IR immédiate.
+      Avantage si TMI à l'entrée > TMI estimée à la retraite.
+
+    cto_residuel: |
+      Le CTO accueille les actifs non éligibles PEA (hors UE) et les positions
+      excédant les plafonds. PFU 30 % à la cession — optimiser par tax-loss harvesting.
+
+  fiscalite:
+    cto_pfu: |
+      Sur votre CTO, PFU 12,8 % + PS 17,2 % = 30 % "flat tax" (Art. 200 A CGI).
+      Option barème IR activable si TMI < 12,8 % — à vérifier sur votre situation.
+      Les moins-values sont reportables 10 ans : priorité aux cessions en moins-value
+      pour réduire l'assiette taxable (tax-loss harvesting).
+
+    pea_apres_5_ans: |
+      Après 5 ans de détention, plus-values exonérées d'IR. Seuls les PS 17,2 % s'appliquent
+      (Art. 163 quinquies D CGI). Gain vs CTO : {gain_eur:.0f} € sur {gain_horizon_ans} ans.
+      Ne jamais retirer avant 5 ans sauf cas légaux (licenciement, invalidité).
+
+    av_abattement: |
+      AV > 8 ans : abattement annuel 4 600 € (célibataire) / 9 200 € (couple) sur les gains,
+      puis PFL 7,5 % + PS 17,2 % (Art. 125-0 A CGI).
+      La transmission hors succession ajoute 152 500 € d'abattement par bénéficiaire.
+
+    per_deduction_entree: |
+      Versement PER {montant:.0f} € déductible → économie IR {economie_ir:.0f} € (TMI {tmi:.0%}).
+      À la sortie retraite : imposition IR (souvent TMI réduite) + PS.
+      Levier d'autant plus puissant que le différentiel TMI entrée/sortie est élevé.
+
+  rebalancement:
+    etape_1_gratuit: |
+      Étape 1 : arbitrages gratuits sur AV/PEA — coût fiscal zéro, on commence toujours là.
+      Les arbitrages internes à une AV ne déclenchent aucune imposition (Art. 125-0 A CGI).
+      Montant réalloué : {montant_eur:.0f} €.
+
+    etape_2_flux: |
+      Étape 2 : vos versements à venir ({flux_mensuel_eur:.0f} €/mois) sont orientés
+      vers les classes sous-pondérées. Rééquilibrage progressif sans vente, sans impôt.
+      Cette technique de "cashflow rebalancing" est fiscalement neutre.
+
+    etape_3_ventes: |
+      Étape 3 : ventes CTO en dernier recours. Priorité aux lignes en moins-value
+      pour compenser fiscalement (tax-loss harvesting, Art. 150-0 D CGI).
+      Coût fiscal net estimé : {cout_fiscal_eur:.0f} €.
+
+    periodicite_recommandee: |
+      Rebalancement recommandé : une fois par an (janvier), ou si un écart dépasse ±5 %
+      de la cible. Trop fréquent = frais + impôts inutiles. Trop rare = dérive du profil.
