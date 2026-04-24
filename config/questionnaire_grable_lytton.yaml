@@ -1,0 +1,104 @@
+# Questionnaire Grable & Lytton (1999) — 13 questions, scores 1-4
+# Référence: Grable J.E. & Lytton R.H. (1999), Financial risk tolerance revisited
+version: "1999"
+nb_questions: 13
+score_min: 13
+score_max: 47
+categories:
+  tres_faible: {min: 13, max: 18}
+  faible: {min: 19, max: 22}
+  moyenne: {min: 23, max: 28}
+  elevee: {min: 29, max: 32}
+  tres_elevee: {min: 33, max: 47}
+questions:
+  - id: 1
+    texte: "En général, comment décririez-vous votre attitude envers le risque financier ?"
+    options:
+      1: "Je suis très prudent(e) et préfère éviter tout risque"
+      2: "Je préfère la prudence mais accepte un risque limité"
+      3: "J'accepte un risque modéré pour un rendement potentiellement plus élevé"
+      4: "Je suis prêt(e) à prendre des risques importants pour maximiser mes gains"
+  - id: 2
+    texte: "Supposons que vous héritez soudainement de 100 000 €. Que feriez-vous ?"
+    options:
+      1: "Je le déposerais sur un livret d'épargne garanti"
+      2: "Je le placerais dans un fonds diversifié défensif"
+      3: "Je le répartirais entre épargne garantie et investissements"
+      4: "Je l'investirais principalement en actions pour maximiser le rendement"
+  - id: 3
+    texte: "Votre portefeuille perd 20% en un mois. Quelle est votre réaction ?"
+    options:
+      1: "Je vends tout immédiatement"
+      2: "Je vends une partie pour limiter les pertes"
+      3: "Je conserve et attends la reprise"
+      4: "J'achète davantage pour profiter de la baisse"
+  - id: 4
+    texte: "Quel rendement annuel serait satisfaisant pour vous, compte tenu du risque ?"
+    options:
+      1: "0 à 3% (très faible risque)"
+      2: "3 à 6% (faible risque)"
+      3: "6 à 10% (risque modéré)"
+      4: "Plus de 10% (risque élevé)"
+  - id: 5
+    texte: "Si vous deviez investir 10 000 €, quelle option préféreriez-vous ?"
+    options:
+      1: "Dépôt bancaire garanti à 2%"
+      2: "Fonds obligataire avec risque faible"
+      3: "Fonds mixte actions/obligations"
+      4: "Actions d'entreprises à fort potentiel"
+  - id: 6
+    texte: "Quel énoncé décrit le mieux votre situation financière ?"
+    options:
+      1: "J'ai peu d'économies et ne peux pas me permettre de pertes"
+      2: "J'ai quelques économies mais les pertes m'inquiéteraient"
+      3: "J'ai des économies suffisantes et pourrais supporter des pertes temporaires"
+      4: "J'ai des économies importantes et les fluctuations ne m'inquiètent pas"
+  - id: 7
+    texte: "Comment réagissez-vous face à l'incertitude financière ?"
+    options:
+      1: "L'incertitude me stresse énormément"
+      2: "Je préfère éviter l'incertitude"
+      3: "Je peux gérer une certaine incertitude"
+      4: "J'aime les situations à fort potentiel même incertaines"
+  - id: 8
+    texte: "Horizon d'investissement préféré ?"
+    options:
+      1: "Moins d'1 an"
+      2: "1 à 3 ans"
+      3: "3 à 10 ans"
+      4: "Plus de 10 ans"
+  - id: 9
+    texte: "Quelle est votre priorité principale ?"
+    options:
+      1: "Préserver mon capital à tout prix"
+      2: "Limiter les pertes avant tout"
+      3: "Équilibrer rendement et sécurité"
+      4: "Maximiser le rendement à long terme"
+  - id: 10
+    texte: "Face à une opportunité d'investissement risquée mais potentiellement très rentable ?"
+    options:
+      1: "Je refuse systématiquement"
+      2: "J'investis une très petite somme"
+      3: "J'investis une partie raisonnable"
+      4: "J'investis massivement si convaincu(e)"
+  - id: 11
+    texte: "Votre niveau d'aisance avec la volatilité des marchés ?"
+    options:
+      1: "Je surveille chaque variation et cela m'inquiète"
+      2: "Les fortes variations m'inquiètent"
+      3: "Je comprends que c'est normal à long terme"
+      4: "La volatilité ne me dérange pas du tout"
+  - id: 12
+    texte: "Si vos investissements perdaient 30% en 6 mois, que feriez-vous ?"
+    options:
+      1: "Je vendrais tout pour éviter de nouvelles pertes"
+      2: "Je vendrais la moitié"
+      3: "Je ne ferais rien et attendrais"
+      4: "J'investirais davantage"
+  - id: 13
+    texte: "Quelle description correspond le mieux à votre profil ?"
+    options:
+      1: "Épargnant prudent qui privilégie la sécurité"
+      2: "Investisseur modéré qui cherche la stabilité"
+      3: "Investisseur équilibré à l'aise avec la volatilité"
+      4: "Investisseur dynamique qui recherche la performance"
