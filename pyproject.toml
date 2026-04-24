@@ -28,6 +28,7 @@ dev = [
     "types-PyYAML",
     "pre-commit",
     "pypdf>=4.0",
+    "hypothesis>=6.0",
 ]
 optim = ["pulp", "scipy"]
 web = ["streamlit>=1.30", "plotly>=5.18"]

@@ -25,7 +25,7 @@ class TestValiderAllocation:
             "obligations": 0.30,
             "or": 0.05,
             "liquidites": 0.05,
-            "commentaire": "Test",
+            "_commentaire": "Test",
         }
         assert valider_allocation(alloc) is True
 
@@ -48,7 +48,7 @@ class TestAllocationParAge:
     def test_somme_proche_1(self):
         for age in [20, 30, 45, 60, 75]:
             alloc = allocation_bogleheads_par_age(age)
-            total = sum(v for k, v in alloc.items() if k != "commentaire")
+            total = sum(v for k, v in alloc.items() if not k.startswith("_"))
             assert abs(total - 1.0) < 0.01, f"age={age}, total={total}"
 
     def test_toutes_classes_presentes(self):
@@ -58,8 +58,8 @@ class TestAllocationParAge:
 
     def test_commentaire_present(self):
         alloc = allocation_bogleheads_par_age(40)
-        assert "commentaire" in alloc
-        assert "40" in alloc["commentaire"]
+        assert "_commentaire" in alloc
+        assert "40" in alloc["_commentaire"]
 
 
 class TestChargerProfils:

@@ -30,6 +30,7 @@ CONFIG_DIR = ROOT / "config"
 # ─── Constantes ───────────────────────────────────────────────────────────────
 
 CLASSES_ACTIFS_ORDRE = [
+    "actions_monde_acwi",
     "actions_usa",
     "actions_dev_ex_usa",
     "actions_em",
@@ -40,7 +41,7 @@ CLASSES_ACTIFS_ORDRE = [
     "monetaire",
 ]
 
-CLASSES_ACTIONS = {"actions_usa", "actions_dev_ex_usa", "actions_em"}
+CLASSES_ACTIONS = {"actions_usa", "actions_dev_ex_usa", "actions_em", "actions_monde_acwi"}
 CLASSES_OBLIGATIONS = {"obligations_agg_monde", "obligations_euro"}
 
 # Taux sans risque par défaut (OAT 10 ans France 2026)
@@ -119,11 +120,24 @@ def _ratio_sharpe(rendement: float, volatilite: float, rf: float) -> float:
 # ─── Mode A : Optimisation d'allocation cible ─────────────────────────────────
 
 
+def _valider_invariants_allocation(poids: dict[str, float], tol: float = 1e-6) -> None:
+    """Vérifie que les poids somment à 1 et sont dans [0, 1]."""
+    total = sum(v for k, v in poids.items() if not k.startswith("_"))
+    if abs(total - 1.0) > tol:
+        raise ValueError(f"Invariant violé : Σ poids = {total:.6f} ≠ 1.0")
+    for k, v in poids.items():
+        if k.startswith("_"):
+            continue
+        if v < -tol or v > 1.0 + tol:
+            raise ValueError(f"Invariant violé : poids[{k}] = {v:.6f} hors [0,1]")
+
+
 def optimiser_allocation_mode_a(
     profil_aversion: str,
     config: dict,
     contraintes: dict | None = None,
     age: int | None = None,
+    mode: str | None = None,
 ) -> dict:
     """
     Mode A — Optimisation Markowitz de l'allocation cible.
@@ -146,7 +160,16 @@ def optimiser_allocation_mode_a(
                      ratio_sharpe, statut, message.
     """
     contraintes = contraintes or {}
-    classes = [c for c in CLASSES_ACTIFS_ORDRE if c in config["classes_actifs"]]
+
+    if mode is None:
+        mode = config.get("mode_granularite_actions_defaut", "simple")
+
+    if mode == "simple":
+        classes_exclues = {"actions_usa", "actions_dev_ex_usa", "actions_em"}
+    else:
+        classes_exclues = {"actions_monde_acwi"}
+
+    classes = [c for c in CLASSES_ACTIFS_ORDRE if c in config["classes_actifs"] and c not in classes_exclues]
     n = len(classes)
 
     profils_ar = config.get("profils_aversion_risque", {})
@@ -255,6 +278,7 @@ def optimiser_allocation_mode_a(
             # Normaliser pour que la somme soit exactement 1
             w_opt = w_opt / w_opt.sum() if w_opt.sum() > 1e-10 else w_opt
             poids = {c: float(w_opt[i]) for i, c in enumerate(classes)}
+            _valider_invariants_allocation(poids)
             rend = _rendement_attendu(w_opt, classes, config)
             vol = _volatilite_attendue(w_opt, cov)
             sharpe = _ratio_sharpe(rend, vol, rf)
@@ -268,14 +292,14 @@ def optimiser_allocation_mode_a(
             }
         else:
             logger.warning("scipy SLSQP n'a pas convergé : %s", result.message)
-            return _fallback_allocation_mode_a(classes, config, profil_aversion, contraintes, rf)
+            return _fallback_allocation_mode_a(classes, config, profil_aversion, contraintes, rf, mode=mode)
 
     except ImportError:
         warnings.warn(
             "scipy non disponible — fallback heuristique Mode A",
             stacklevel=2,
         )
-        return _fallback_allocation_mode_a(classes, config, profil_aversion, contraintes, rf)
+        return _fallback_allocation_mode_a(classes, config, profil_aversion, contraintes, rf, mode=mode)
 
 
 def _fallback_allocation_mode_a(
@@ -284,6 +308,7 @@ def _fallback_allocation_mode_a(
     profil_aversion: str,
     contraintes: dict,
     rf: float,
+    mode: str = "simple",
 ) -> dict:
     """
     Fallback heuristique quand scipy est indisponible ou que l'optimiseur ne converge pas.
@@ -332,7 +357,15 @@ def _fallback_allocation_mode_a(
             "monetaire": 0.00,
         },
     }
-    ref = allocations_ref.get(profil_aversion, allocations_ref["equilibre"])
+    allocations_ref_simple = {
+        "defensif":  {"actions_monde_acwi": 0.25, "obligations_agg_monde": 0.30, "obligations_euro": 0.25, "reit": 0.05, "or_matieres": 0.10, "monetaire": 0.05},
+        "equilibre": {"actions_monde_acwi": 0.55, "obligations_agg_monde": 0.20, "obligations_euro": 0.13, "reit": 0.05, "or_matieres": 0.05, "monetaire": 0.02},
+        "dynamique": {"actions_monde_acwi": 0.75, "obligations_agg_monde": 0.12, "obligations_euro": 0.05, "reit": 0.04, "or_matieres": 0.03, "monetaire": 0.01},
+        "agressif":  {"actions_monde_acwi": 0.90, "obligations_agg_monde": 0.04, "obligations_euro": 0.01, "reit": 0.03, "or_matieres": 0.02, "monetaire": 0.00},
+    }
+    ref = (allocations_ref_simple if mode == "simple" else allocations_ref).get(
+        profil_aversion, (allocations_ref_simple if mode == "simple" else allocations_ref)["equilibre"]
+    )
 
     # Appliquer contraintes personnalisées par projection
     poids = {c: ref.get(c, 0.0) for c in classes}
@@ -359,6 +392,7 @@ def _fallback_allocation_mode_a(
     if total > 1e-10:
         poids = {c: v / total for c, v in poids.items()}
 
+    _valider_invariants_allocation(poids)
     w = np.array([poids.get(c, 0.0) for c in classes])
     cov = _construire_matrice_covariance(classes, config)
     rend = _rendement_attendu(w, classes, config)
@@ -563,6 +597,7 @@ def _fallback_asset_location(
     frais_gestion = config.get("frais_gestion_enveloppes", FRAIS_GESTION_DEFAUT)
 
     priorites = {
+        "actions_monde_acwi": ["PEA", "PER", "AV", "CTO"],
         "actions_usa": ["PEA", "PER", "AV", "CTO"],
         "actions_dev_ex_usa": ["PEA", "PER", "AV", "CTO"],
         "actions_em": ["PEA", "PER", "AV", "CTO"],
@@ -706,7 +741,9 @@ def calculer_allocation_cible(
         contraintes=contraintes,
         age=age,
     )
-    return resultat["poids"]
+    poids = resultat["poids"]
+    _valider_invariants_allocation(poids)
+    return poids
 
 
 def optimiser_portefeuille_complet(

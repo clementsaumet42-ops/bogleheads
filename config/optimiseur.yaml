@@ -2,6 +2,23 @@
 # Rendements, risques et corrélations par classe d'actifs (long terme)
 # Source : données historiques long terme, calibrées pour un investisseur Boglehead FR 2026
 
+# Bloc métadonnées — sources et hypothèses de calcul
+hypotheses_meta:
+  base: "Rendements nominaux annualisés en EUR, horizon d'investissement 15 ans"
+  inflation_attendue: 0.020   # 2 % zone Euro long terme BCE
+  sources:
+    - "Research Affiliates Capital Market Assumptions 2026-Q1"
+    - "JPM Long-Term Capital Market Assumptions 2026"
+    - "Vanguard Capital Markets Model 2026"
+    - "BlackRock Investment Institute 2026 Outlook"
+  date_maj: "2026-04-24"
+  devise_reference: "EUR"
+  juridiction: "France"
+  avertissement: >
+    Les rendements attendus sont des espérances mathématiques long terme.
+    Les performances passées ne préjugent pas des performances futures.
+    Aucune garantie de rendement n'est fournie.
+
 classes_actifs:
   actions_usa:
     rendement_attendu_annuel: 0.078
@@ -83,6 +100,17 @@ classes_actifs:
     eligible_cto: true
     dividendes_eleves: false
 
+  actions_monde_acwi:
+    rendement_attendu_annuel: 0.072   # moyenne pondérée ACWI
+    volatilite_annuelle: 0.165
+    frais_ter_moyen: 0.0022           # WPEA 0.25%, VWCE 0.22%, SSAC 0.20%
+    eligible_pea: true                # via ETF synthétique (WPEA, EWLD)
+    eligible_per: true
+    eligible_av: true
+    eligible_cto: true
+    dividendes_eleves: false
+    description: "MSCI ACWI / FTSE All-World — une seule ligne monde, ~60% US / ~28% dev ex-US / ~12% EM, capi-pondéré"
+
 # Matrice de corrélation (simplifiée, symétrique — long terme)
 # Ordre : actions_usa, actions_dev_ex_usa, actions_em, obligations_agg_monde,
 #         obligations_euro, reit, or_matieres, monetaire
@@ -96,6 +124,7 @@ correlations:
     reit: 0.60
     or_matieres: 0.05
     monetaire: -0.05
+    actions_monde_acwi: 0.95
 
   actions_dev_ex_usa:
     actions_usa: 0.85
@@ -106,6 +135,7 @@ correlations:
     reit: 0.55
     or_matieres: 0.08
     monetaire: -0.03
+    actions_monde_acwi: 0.92
 
   actions_em:
     actions_usa: 0.70
@@ -116,6 +146,7 @@ correlations:
     reit: 0.45
     or_matieres: 0.15
     monetaire: -0.04
+    actions_monde_acwi: 0.82
 
   obligations_agg_monde:
     actions_usa: -0.10
@@ -126,6 +157,7 @@ correlations:
     reit: 0.10
     or_matieres: 0.25
     monetaire: 0.30
+    actions_monde_acwi: -0.09
 
   obligations_euro:
     actions_usa: -0.08
@@ -136,6 +168,7 @@ correlations:
     reit: 0.08
     or_matieres: 0.20
     monetaire: 0.35
+    actions_monde_acwi: -0.07
 
   reit:
     actions_usa: 0.60
@@ -146,6 +179,7 @@ correlations:
     reit: 1.00
     or_matieres: 0.10
     monetaire: -0.02
+    actions_monde_acwi: 0.58
 
   or_matieres:
     actions_usa: 0.05
@@ -156,6 +190,7 @@ correlations:
     reit: 0.10
     or_matieres: 1.00
     monetaire: 0.05
+    actions_monde_acwi: 0.08
 
   monetaire:
     actions_usa: -0.05
@@ -166,6 +201,18 @@ correlations:
     reit: -0.02
     or_matieres: 0.05
     monetaire: 1.00
+    actions_monde_acwi: -0.04
+
+  actions_monde_acwi:
+    actions_usa: 0.95
+    actions_dev_ex_usa: 0.92
+    actions_em: 0.82
+    actions_monde_acwi: 1.00
+    obligations_agg_monde: -0.09
+    obligations_euro: -0.07
+    reit: 0.58
+    or_matieres: 0.08
+    monetaire: -0.04
 
 # Profils d'aversion au risque (paramètre λ dans la fonction Markowitz)
 # λ ∈ [0, 1] : 0 = minimise uniquement la variance, 1 = maximise uniquement le rendement
@@ -206,3 +253,6 @@ frais_gestion_enveloppes:
 
 # Taux sans risque de référence (pour calcul du Sharpe)
 taux_sans_risque: 0.025   # OAT 10 ans France 2026
+
+# Mode de granularité des actions (simple = ACWI 1 ligne, granulaire = US + Dev ex-US + EM)
+mode_granularite_actions_defaut: "simple"
