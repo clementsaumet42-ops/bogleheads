@@ -149,3 +149,46 @@ scripts:
     periodicite_recommandee: |
       Rebalancement recommandé : une fois par an (janvier), ou si un écart dépasse ±5 %
       de la cible. Trop fréquent = frais + impôts inutiles. Trop rare = dérive du profil.
+
+  audit:
+    introduction: |
+      M. {nom_client}, cet audit a passé votre portefeuille ({patrimoine_total} €) au crible
+      des 5 leviers d'optimisation : tracking difference, retenues à la source, distribuant
+      vs capitalisant, frais de contrat AV et frais broker.
+      Résultat : {gain_annuel_eur} €/an d'économies activables, soit {gain_30ans_eur} €
+      capitalisés sur {horizon_ans} ans à 4 %.
+
+    concept_bps: |
+      Un point de base (bps) = 0,01 %/an — l'unité standard des frais en gestion de patrimoine.
+      Sur {montant_eur} €, {bps} bps d'économie = {gain_annuel_eur} €/an.
+      Capitalisés sur {horizon_ans} ans : {gain_capitalise_eur} €.
+      C'est pourquoi chaque fraction de coût compte sur longue période (Bogle, 2017).
+
+    opportunite_td: |
+      Sur {ticker_actuel} (tracking difference {td_actuel_bps:.1f} bps/an), le marché propose
+      {ticker_cible} avec une TD de {td_cible_bps:.1f} bps : delta = {delta_bps:.1f} bps/an.
+      Sur votre encours de {montant_eur} €, ça représente {gain_annuel_eur} €/an
+      — soit {gain_30ans_eur} € sur 30 ans. Le switch est fiscalement neutre en AV/PEA.
+
+    opportunite_withholding: |
+      Votre ETF {ticker_actuel} est domicilié {domicile_actuel} : retenue à la source
+      {retenue_actuelle_bps:.1f} bps/an. La version {domicile_cible} divise cette retenue
+      à {retenue_cible_bps:.1f} bps — gain {delta_bps:.1f} bps/an sur {montant_eur} €.
+      La convention fiscale France/Irlande est ici votre alliée (OCDE, traité bilatéral).
+
+    opportunite_av: |
+      Votre contrat {contrat_actuel} facture {frais_actuel_pct:.2%} de frais UC/an.
+      {contrat_cible} facture {frais_cible_pct:.2%} — différence {delta_bps:.1f} bps/an.
+      Sur votre encours AV de {montant_av_eur} €, c'est {gain_annuel_eur} €/an perdus.
+      Un transfert AV est une décision complexe — on analyse ensemble les contraintes fiscales.
+
+    opportunite_broker: |
+      Votre broker {broker_actuel} coûte {cout_actuel_eur} €/an pour votre profil d'ordres.
+      {broker_cible} revient à {cout_cible_eur} €/an — économie nette : {gain_annuel_eur} €/an.
+      Ce changement est le plus rapide à activer ({delai_jours} jours, sans impact fiscal).
+
+    plan_action: |
+      Voici le plan d'action que je vous propose, classé par gain décroissant :
+      {nb_opportunites} opportunités identifiées, {nb_haute_confiance} à haute confiance.
+      Total : {gain_annuel_eur} €/an soit {gain_30ans_eur} € sur {horizon_ans} ans.
+      Chaque ligne est documentée avec la formule, les contraintes et les sources.

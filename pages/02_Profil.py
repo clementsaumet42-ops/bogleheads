@@ -225,4 +225,4 @@ if st.session_state.get("profil_actif"):
             st.switch_page("pages/03_Allocation.py")
     with col2:
         if st.button("📈 Projection Monte-Carlo", use_container_width=True):
-            st.switch_page("pages/05_Monte_Carlo.py")
+            st.switch_page("pages/06_Monte_Carlo.py")
