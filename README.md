@@ -77,7 +77,7 @@ bogleheads/
 │   ├── glide_paths.yaml        ← Règles de glide paths
 │   └── rebalancement_flux.yaml ← Bandes + fiscalité par enveloppe
 ├── src/
-│   ├── fiscalite.py            ← Calculs PFU, IS, PEA, PER, CEHR, CDHR
+│   ├── fiscalite/              ← Package fiscal exhaustif (13 modules)
 │   ├── enveloppes.py           ← Règles métier enveloppes
 │   ├── allocation.py           ← Allocation cible Boglehead
 │   ├── asset_location.py       ← Optimisation asset location
@@ -180,6 +180,170 @@ pip install -e ".[optim]"
 # Installer scipy pour le solveur QP Mode A
 pip install scipy
 ```
+
+---
+
+## 💰 Moteur Fiscal Exhaustif (S7)
+
+Module `src/fiscalite/` — Moteur fiscal complet avec cascade détaillée et sources juridiques.
+
+### Architecture du package
+
+Le package `src/fiscalite/` est organisé en modules spécialisés :
+
+```
+src/fiscalite/
+├── __init__.py              ← API publique + backward compatibility
+├── constantes.py            ← Taux PS 18.6%, PFU 12.8%, barème IR 2026, etc.
+├── cascade.py               ← Pydantic models (ResultatFiscal, LigneCalcul)
+├── prelevements_sociaux.py  ← PS 18.6% (Art. L.136-8 CSS)
+├── tmi.py                   ← Barème IR, quotient familial, décote
+├── pfu.py                   ← PFU avec CEHR et CDHR
+├── pea.py                   ← PEA et PEA-PME (durées 0-2/2-5/>5 ans)
+├── per.py                   ← PER (déduction, sortie capital/rente)
+├── assurance_vie.py         ← AV (complexité date 27/09/2017, seuils, abattements)
+├── cto_ir.py                ← CTO particulier (PFU ou barème)
+├── cto_is.py                ← CTO société IS + détection MTM
+├── contrat_cap_is.py        ← Contrat capitalisation IS (Art. 238 septies E)
+└── is_calc.py               ← IS 15%/25% (Art. 219 CGI)
+```
+
+### Cascade fiscale avec sources juridiques
+
+Chaque calcul retourne un objet `ResultatFiscal` avec :
+
+```python
+from src.fiscalite import calculer_fiscalite_operation, ResultatFiscal
+
+operation = {
+    "type": "retrait_pea",
+    "montant_brut": 20000,
+    "gains": 10000,
+    "duree_detention": 6.0,
+}
+
+profil = {"situation": "celibataire", "rfr": 50000, "tmi": 0.30}
+
+result: ResultatFiscal = calculer_fiscalite_operation(operation, profil)
+
+# Cascade détaillée ligne par ligne
+for ligne in result.cascade:
+    print(f"{ligne.libelle}: {ligne.montant:.2f} € ({ligne.source})")
+
+# Articles cités
+print(result.articles_cites)  # ['Art. 150-0 A CGI', 'Art. L.136-8 CSS']
+
+# Avertissements
+print(result.avertissements)  # ['PEA > 5 ans : exonération IR']
+```
+
+### Enveloppes fiscales couvertes
+
+#### PEA / PEA-PME
+- Durée < 2 ans : IR au TMI + PS 18.6%
+- Durée 2-5 ans : IR 12.8% + PS 18.6%
+- Durée > 5 ans : Exonération IR, PS 18.6% uniquement
+- Cas force majeure : exonération totale
+- Plafonds : 150k€ (PEA) + 225k€ (PEA-PME), cumul max 225k€
+
+#### Assurance Vie
+- < 4 ans : PFU 12.8% + PS, pas d'abattement
+- 4-8 ans : PFU 12.8% + PS, abattement 4 600€/9 200€
+- > 8 ans : complexité date 27/09/2017
+  - Avant 27/09/2017 : PFL 7.5% ou barème
+  - Après 27/09/2017 : 7.5% si encours < 150k€/300k€, sinon 12.8%
+- Fonds euro : PS déjà prélevés annuellement
+- AV Luxembourg : fiscalité française identique
+
+#### PER
+- Entrée : déduction 10% revenus (plafond 4 399€ à 35 194€)
+- Sortie capital :
+  - Versements déduits : IR au TMI sur tout + PS sur gains
+  - Versements non déduits : IR au TMI sur gains + PS sur gains
+- Sortie rente : RVTO selon âge
+- 6 cas déblocage anticipé (Art. L.224-4 CMF)
+
+#### CTO Particulier (IR)
+- PFU par défaut : 12.8% + 18.6% = 31.4%
+- Option barème : TMI + 18.6% PS (abattement 40% sur dividendes)
+- Option irrévocable pour l'année fiscale
+
+#### CTO Société IS
+- **Piège Mark-to-Market** (Art. 209-0 A CGI)
+  - OPCVM détenus à > 90% par sociétés IS
+  - Imposition des PV latentes CHAQUE ANNÉE
+  - Détection automatique : `detecter_piege_mtm()`
+- Alternative : Contrat de capitalisation IS
+
+#### Contrat Capitalisation IS
+- Base taxable : 105% × TME × prime (Art. 238 septies E)
+- IS sur base forfaitaire annuelle
+- Régularisation à la cession
+- Avantageux si rendement > TME
+
+### CEHR et CDHR
+
+#### CEHR (Art. 223 sexies CGI)
+- Célibataire : 3% (RFR 250-500k), 4% (RFR > 500k)
+- Couple : 3% (RFR 500k-1M), 4% (RFR > 1M)
+
+#### CDHR (Art. 223 terdecies CGI, LF 2025)
+- Plancher 20% d'imposition effective sur RFR
+- S'applique si RFR > 250k€ (célibataire) ou 500k€ (couple)
+- Complète CEHR pour atteindre le plancher
+
+### Pages Streamlit
+
+#### 12_Simulateur_Fiscal.py
+Simule une opération fiscale avec cascade détaillée :
+- Sélection type d'opération (CTO, PEA, AV, PER)
+- Paramètres de l'opération
+- Affichage cascade, articles cités, avertissements
+
+#### 13_Comparateur_Enveloppes.py
+Compare PEA vs CTO vs AV vs PER sur un horizon donné :
+- Tableau comparatif capital net
+- Graphique interactif
+- Insights automatiques
+
+#### 14_Alertes_Fiscales.py
+Détecte les pièges fiscaux :
+- Mark-to-Market OPCVM à l'IS
+- PEA < 5 ans (pas d'avantage)
+- AV < 8 ans (pas d'abattement)
+- Plafonds PEA/PEA-PME
+
+### Tests
+
+**342 tests unitaires** (274 baseline + 68 nouveaux) :
+
+```bash
+pytest tests/test_fiscalite*.py -v
+```
+
+Couverture :
+- `test_fiscalite_constantes.py` : constantes (TAUX_PS, PFU, IS)
+- `test_fiscalite_tmi.py` : barème IR, quotient familial, décote
+- `test_fiscalite_pea.py` : durées PEA, plafonds, cas force majeure
+- `test_fiscalite_av.py` : AV complexe (15 tests)
+- `test_fiscalite_cto_is.py` : détection MTM, comparatif contrat cap
+- `test_fiscalite_contrat_cap_is.py` : base forfaitaire, avantage
+- `test_fiscalite_cehr_cdhr.py` : CEHR tranches, CDHR plancher 20%
+
+### Configuration
+
+Fichier enrichi `config/fiscalite/2026.yaml` avec sources juridiques complètes.
+
+### Backward Compatibility
+
+L'ancienne API `src/fiscalite.py` est entièrement préservée :
+
+```python
+from src.fiscalite import charger_params_fiscaux, calculer_pfu, calculer_is
+# Fonctionne exactement comme avant
+```
+
+Tous les tests existants passent sans modification.
 
 ---
 
