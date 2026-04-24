@@ -63,8 +63,7 @@ class TestSchemasPydanticS3:
     def test_cabinet_config_from_yaml(self, config_pdf):
         """CabinetConfig est correctement chargé depuis pdf_cabinet.yaml."""
         assert isinstance(config_pdf, CabinetConfig)
-        assert config_pdf.cabinet.nom is not None
-        assert len(config_pdf.cabinet.nom) > 0
+        assert config_pdf.cabinet.nom
 
     def test_cabinet_info_fields(self, config_pdf):
         """CabinetInfo contient les champs requis."""
@@ -318,8 +317,7 @@ class TestReproductibilite:
 class TestGetHelper:
     def test_get_attribut_simple(self, config_pdf):
         """_get récupère un attribut simple."""
-        assert _get(config_pdf, "cabinet.nom") is not None
-        assert len(_get(config_pdf, "cabinet.nom")) > 0
+        assert _get(config_pdf, "cabinet.nom")
 
     def test_get_attribut_inexistant_retourne_default(self, config_pdf):
         """_get retourne le défaut si l'attribut n'existe pas."""
