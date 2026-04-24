@@ -411,7 +411,7 @@ class ContratAV(_Lenient):
     sources: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def sources_non_vides(self) -> "ContratAV":
+    def sources_non_vides(self) -> ContratAV:
         if not self.sources:
             raise ValueError(f"Contrat '{self.id}': au moins une source obligatoire")
         return self
@@ -481,18 +481,14 @@ class RetenuesSourceConfig(_Lenient):
     notes: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def valider_matrice(self) -> "RetenuesSourceConfig":
+    def valider_matrice(self) -> RetenuesSourceConfig:
         domiciles_valides = {"IE", "LU", "FR"}
         for pays_emetteur, domiciles in self.matrice.items():
             if not _ISO2_PATTERN.match(pays_emetteur):
-                raise ValueError(
-                    f"Pays émetteur invalide (doit être ISO-2): '{pays_emetteur}'"
-                )
+                raise ValueError(f"Pays émetteur invalide (doit être ISO-2): '{pays_emetteur}'")
             for domicile, taux in domiciles.items():
                 if not _ISO2_PATTERN.match(domicile):
-                    raise ValueError(
-                        f"Domicile invalide (doit être ISO-2): '{domicile}'"
-                    )
+                    raise ValueError(f"Domicile invalide (doit être ISO-2): '{domicile}'")
                 if domicile not in domiciles_valides:
                     raise ValueError(
                         f"Domicile '{domicile}' non supporté. Valeurs: {domiciles_valides}"

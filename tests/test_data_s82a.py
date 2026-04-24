@@ -7,8 +7,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from src.schemas import charger_et_valider, AssuranceVieConfig, BrokersConfig, RetenuesSourceConfig
-
+from src.schemas import AssuranceVieConfig, BrokersConfig, RetenuesSourceConfig, charger_et_valider
 
 # ─── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -57,11 +56,8 @@ def test_chaque_etf_a_domicile_iso_valide(etfs):
     violations = []
     for etf in etfs:
         domicile_iso = etf.get("domicile_iso")
-        if domicile_iso is not None:
-            if domicile_iso not in domiciles_valides:
-                violations.append(
-                    f"{etf.get('ticker')}: domicile_iso='{domicile_iso}' non reconnu"
-                )
+        if domicile_iso is not None and domicile_iso not in domiciles_valides:
+            violations.append(f"{etf.get('ticker')}: domicile_iso='{domicile_iso}' non reconnu")
     assert not violations, "domicile_iso invalides:\n" + "\n".join(violations)
 
 
@@ -82,11 +78,10 @@ def test_tracking_difference_dans_fourchette(etfs):
     violations = []
     for etf in etfs:
         td3 = etf.get("tracking_difference_3y")
-        if td3 is not None:
-            if not (-0.01 <= td3 <= 0.005):
-                violations.append(
-                    f"{etf.get('ticker')}: tracking_difference_3y={td3} hors fourchette [-0.01, +0.005]"
-                )
+        if td3 is not None and not (-0.01 <= td3 <= 0.005):
+            violations.append(
+                f"{etf.get('ticker')}: tracking_difference_3y={td3} hors fourchette [-0.01, +0.005]"
+            )
     assert not violations, "TD 3y suspects:\n" + "\n".join(violations)
 
 
@@ -122,7 +117,8 @@ def test_contrats_av_frais_uc_coherent(contrats_av_raw):
 def test_contrats_av_sources_non_vides(contrats_av_raw):
     """8. Chaque contrat AV a ≥ 1 source listée."""
     violations = [
-        c.get("id") for c in contrats_av_raw
+        c.get("id")
+        for c in contrats_av_raw
         if not c.get("sources") or len(c.get("sources", [])) == 0
     ]
     assert not violations, f"Contrats sans source: {violations}"
@@ -140,9 +136,7 @@ def test_brokers_charge_sans_erreur():
 
 def test_brokers_min_10_entrees(brokers_raw):
     """10. Au moins 10 brokers dans le fichier."""
-    assert len(brokers_raw) >= 10, (
-        f"Seulement {len(brokers_raw)} brokers (minimum 10 requis)"
-    )
+    assert len(brokers_raw) >= 10, f"Seulement {len(brokers_raw)} brokers (minimum 10 requis)"
 
 
 def test_brokers_eligibilite_coherent(brokers_raw):
@@ -170,7 +164,20 @@ def test_retenues_source_charge_sans_erreur():
 def test_retenues_source_matrice_complete(retenues_raw):
     """13. Au moins 12 pays émetteurs développés × 3 domiciles dans la matrice."""
     matrice = retenues_raw.get("matrice", {})
-    pays_developpes_requis = {"US", "UK", "DE", "CH", "JP", "FR", "AU", "CA", "NL", "IT", "ES", "SE"}
+    pays_developpes_requis = {
+        "US",
+        "UK",
+        "DE",
+        "CH",
+        "JP",
+        "FR",
+        "AU",
+        "CA",
+        "NL",
+        "IT",
+        "ES",
+        "SE",
+    }
     domiciles_requis = {"IE", "LU", "FR"}
     manquants = []
     for pays in pays_developpes_requis:
@@ -199,15 +206,15 @@ def test_retenues_source_cas_us_ie_est_15pct(retenues_raw):
     matrice = retenues_raw.get("matrice", {})
     taux_us_ie = matrice.get("US", {}).get("IE")
     assert taux_us_ie is not None, "matrice[US][IE] absent"
-    assert taux_us_ie == 0.15, (
-        f"Traité US-IE doit être 0.15 (15%), obtenu {taux_us_ie}"
-    )
+    assert taux_us_ie == 0.15, f"Traité US-IE doit être 0.15 (15%), obtenu {taux_us_ie}"
 
 
 def test_loader_echoue_proprement_sur_source_manquante():
     """16. Si un contrat AV n'a pas de sources, le validator Pydantic doit échouer."""
     from pydantic import ValidationError
+
     from src.schemas import ContratAV
+
     with pytest.raises(ValidationError, match="au moins une source obligatoire"):
         ContratAV(
             id="test_sans_source",
