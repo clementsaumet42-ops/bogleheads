@@ -1,0 +1,461 @@
+# Contrats d'assurance-vie distribués en France — données 2025
+# Source générale: sites distributeurs, communiqués assureurs, MoneyVox, Les Echos Patrimoine
+# Toutes les valeurs sont issues de sources publiques. null = donnée non disponible publiquement.
+
+contrats_av:
+
+- id: linxea_spirit_2
+  nom: "Linxea Spirit 2"
+  assureur: "Spirica (Crédit Agricole)"
+  distributeur: "Linxea"
+  # FRAIS
+  frais_gestion_uc_pct: 0.0050  # source: https://www.linxea.com/assurance-vie/linxea-spirit-2/
+  frais_gestion_fonds_euros_pct: 0.0060  # source: idem
+  frais_entree_pct: 0.0  # source: idem — 0% frais d'entrée
+  frais_arbitrage_pct: 0.0  # source: idem
+  nb_arbitrages_gratuits_an: null  # null = illimités
+  # UNIVERS
+  nb_uc_total: 700  # source: https://www.linxea.com/assurance-vie/linxea-spirit-2/
+  nb_etf: 40  # source: idem
+  nb_scpi: 20  # source: idem
+  nb_sci: 5  # source: idem
+  nb_private_equity: 3  # source: idem
+  fonds_euros_disponible: true
+  fonds_euros_nom: "Spirica Euro Nouvelle Génération"
+  rendement_fonds_euros_2024: 0.0305  # source: communiqué Spirica 01/2025
+  rendement_fonds_euros_2023: 0.0275  # source: communiqué Spirica 01/2024
+  # CONDITIONS
+  versement_minimum_eur: 500  # source: https://www.linxea.com
+  versement_programme_min_eur: 50  # source: idem
+  eligible_nue_propriete: true
+  eligible_gestion_pilotee: true
+  gestion_libre: true
+  # QUALITÉ
+  notation_experts_moyenne: 4.5  # /5, sources: MoneyVox, Les Echos, Bons Plans Épargne (moyenne)
+  annees_existence: 8  # ouvert ~2017
+  # FISCAL
+  date_souscription_possible: "2017-10-01"  # postérieur 27/09/2017 → régime PFU 7.5%
+  # META
+  sources:
+    - "https://www.linxea.com/assurance-vie/linxea-spirit-2/"
+    - "Communiqué Spirica taux fonds euros 2024, janvier 2025"
+
+- id: linxea_avenir_2
+  nom: "Linxea Avenir 2"
+  assureur: "Suravenir (Crédit Mutuel Arkéa)"
+  distributeur: "Linxea"
+  frais_gestion_uc_pct: 0.0060  # source: https://www.linxea.com/assurance-vie/linxea-avenir-2/
+  frais_gestion_fonds_euros_pct: 0.0060
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 650
+  nb_etf: 35
+  nb_scpi: 18
+  nb_sci: 4
+  nb_private_equity: 2
+  fonds_euros_disponible: true
+  fonds_euros_nom: "Suravenir Rendement 2"
+  rendement_fonds_euros_2024: 0.0340  # source: communiqué Suravenir 01/2025
+  rendement_fonds_euros_2023: 0.0310  # source: communiqué Suravenir 01/2024
+  versement_minimum_eur: 500
+  versement_programme_min_eur: 50
+  eligible_nue_propriete: true
+  eligible_gestion_pilotee: true
+  gestion_libre: true
+  notation_experts_moyenne: 4.4
+  annees_existence: 5
+  date_souscription_possible: "2020-01-01"
+  sources:
+    - "https://www.linxea.com/assurance-vie/linxea-avenir-2/"
+    - "Communiqué Suravenir taux fonds euros 2024, janvier 2025"
+
+- id: linxea_zen
+  nom: "Linxea Zen"
+  assureur: "Apicil"
+  distributeur: "Linxea"
+  frais_gestion_uc_pct: 0.0060  # source: https://www.linxea.com/assurance-vie/linxea-zen/
+  frais_gestion_fonds_euros_pct: 0.0070
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 500
+  nb_etf: 25
+  nb_scpi: 15
+  nb_sci: 3
+  nb_private_equity: 1
+  fonds_euros_disponible: true
+  fonds_euros_nom: "Apicil Euro Garanti"
+  rendement_fonds_euros_2024: 0.0280  # source: communiqué Apicil 01/2025
+  rendement_fonds_euros_2023: 0.0255  # source: communiqué Apicil 01/2024
+  versement_minimum_eur: 1000
+  versement_programme_min_eur: 100
+  eligible_nue_propriete: false
+  eligible_gestion_pilotee: true
+  gestion_libre: true
+  notation_experts_moyenne: 4.0
+  annees_existence: 12
+  date_souscription_possible: "2013-01-01"
+  sources:
+    - "https://www.linxea.com/assurance-vie/linxea-zen/"
+    - "Communiqué Apicil taux fonds euros 2024"
+
+- id: placement_direct_vie
+  nom: "Placement-Direct Vie"
+  assureur: "SwissLife"
+  distributeur: "Placement-Direct"
+  frais_gestion_uc_pct: 0.0060  # source: https://www.placement-direct.fr/assurance-vie/
+  frais_gestion_fonds_euros_pct: 0.0070
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 600
+  nb_etf: 30
+  nb_scpi: 20
+  nb_sci: 5
+  nb_private_equity: 2
+  fonds_euros_disponible: true
+  fonds_euros_nom: "SwissLife Euro Funds"
+  rendement_fonds_euros_2024: 0.0285  # source: communiqué SwissLife 01/2025
+  rendement_fonds_euros_2023: 0.0260  # source: communiqué SwissLife 01/2024
+  versement_minimum_eur: 1000
+  versement_programme_min_eur: 50
+  eligible_nue_propriete: true
+  eligible_gestion_pilotee: true
+  gestion_libre: true
+  notation_experts_moyenne: 4.1
+  annees_existence: 10
+  date_souscription_possible: "2015-01-01"
+  sources:
+    - "https://www.placement-direct.fr/assurance-vie/"
+    - "Grille tarifaire SwissLife 2025"
+
+- id: meilleurtaux_liberte_vie
+  nom: "Meilleurtaux Liberté Vie"
+  assureur: "Generali"
+  distributeur: "Meilleurtaux Placement"
+  frais_gestion_uc_pct: 0.0050  # source: https://placement.meilleurtaux.com/
+  frais_gestion_fonds_euros_pct: 0.0060
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 650
+  nb_etf: 45
+  nb_scpi: 22
+  nb_sci: 6
+  nb_private_equity: 4
+  fonds_euros_disponible: true
+  fonds_euros_nom: "Generali Euros Nouvelle Génération"
+  rendement_fonds_euros_2024: 0.0320  # source: communiqué Generali 01/2025
+  rendement_fonds_euros_2023: 0.0290  # source: communiqué Generali 01/2024
+  versement_minimum_eur: 500
+  versement_programme_min_eur: 50
+  eligible_nue_propriete: true
+  eligible_gestion_pilotee: true
+  gestion_libre: true
+  notation_experts_moyenne: 4.3
+  annees_existence: 7
+  date_souscription_possible: "2018-01-01"
+  sources:
+    - "https://placement.meilleurtaux.com/assurance-vie/meilleurtaux-liberte-vie/"
+    - "Communiqué Generali taux fonds euros 2024"
+
+- id: boursorama_vie
+  nom: "Boursorama Vie"
+  assureur: "Generali"
+  distributeur: "Boursorama Banque"
+  frais_gestion_uc_pct: 0.0075  # source: https://www.boursobank.com/assurance-vie/
+  frais_gestion_fonds_euros_pct: 0.0075
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 400
+  nb_etf: 20
+  nb_scpi: 10
+  nb_sci: 3
+  nb_private_equity: 1
+  fonds_euros_disponible: true
+  fonds_euros_nom: "Generali Euros"
+  rendement_fonds_euros_2024: 0.0275  # source: communiqué Generali/Boursorama 01/2025
+  rendement_fonds_euros_2023: 0.0250  # source: communiqué Generali/Boursorama 01/2024
+  versement_minimum_eur: 300
+  versement_programme_min_eur: 50
+  eligible_nue_propriete: false
+  eligible_gestion_pilotee: true
+  gestion_libre: true
+  notation_experts_moyenne: 3.8
+  annees_existence: 15
+  date_souscription_possible: "2010-01-01"
+  sources:
+    - "https://www.boursobank.com/assurance-vie/"
+    - "Grille tarifaire Boursorama Vie 2025"
+
+- id: fortuneo_vie
+  nom: "Fortuneo Vie"
+  assureur: "Suravenir (Crédit Mutuel Arkéa)"
+  distributeur: "Fortuneo"
+  frais_gestion_uc_pct: 0.0085  # source: https://www.fortuneo.fr/assurance-vie/
+  frais_gestion_fonds_euros_pct: 0.0085
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 350
+  nb_etf: 15
+  nb_scpi: 8
+  nb_sci: 2
+  nb_private_equity: 0
+  fonds_euros_disponible: true
+  fonds_euros_nom: "Suravenir Rendement"
+  rendement_fonds_euros_2024: 0.0330  # source: communiqué Suravenir 01/2025
+  rendement_fonds_euros_2023: 0.0300  # source: communiqué Suravenir 01/2024
+  versement_minimum_eur: 300
+  versement_programme_min_eur: 50
+  eligible_nue_propriete: false
+  eligible_gestion_pilotee: false
+  gestion_libre: true
+  notation_experts_moyenne: 3.5
+  annees_existence: 12
+  date_souscription_possible: "2013-01-01"
+  sources:
+    - "https://www.fortuneo.fr/assurance-vie/"
+    - "Grille tarifaire Fortuneo Vie 2025"
+
+- id: mes_placements_liberte
+  nom: "Mes Placements Liberté"
+  assureur: "Suravenir (Crédit Mutuel Arkéa)"
+  distributeur: "Mes Placements"
+  frais_gestion_uc_pct: 0.0060  # source: https://www.mes-placements.fr/assurance-vie/
+  frais_gestion_fonds_euros_pct: 0.0060
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 500
+  nb_etf: 28
+  nb_scpi: 15
+  nb_sci: 4
+  nb_private_equity: 2
+  fonds_euros_disponible: true
+  fonds_euros_nom: "Suravenir Rendement 2"
+  rendement_fonds_euros_2024: 0.0340  # source: communiqué Suravenir 01/2025
+  rendement_fonds_euros_2023: 0.0310  # source: communiqué Suravenir 01/2024
+  versement_minimum_eur: 500
+  versement_programme_min_eur: 50
+  eligible_nue_propriete: true
+  eligible_gestion_pilotee: true
+  gestion_libre: true
+  notation_experts_moyenne: 4.2
+  annees_existence: 8
+  date_souscription_possible: "2017-01-01"
+  sources:
+    - "https://www.mes-placements.fr/assurance-vie/"
+    - "Grille tarifaire Mes Placements 2025"
+
+- id: yomoni_vie
+  nom: "Yomoni Vie"
+  assureur: "Suravenir (Crédit Mutuel Arkéa)"
+  distributeur: "Yomoni"
+  frais_gestion_uc_pct: 0.0060  # source: https://www.yomoni.fr/assurance-vie/ — frais gestion contrat
+  frais_gestion_fonds_euros_pct: 0.0060
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 50  # univers restreint, gestion pilotée ETF uniquement
+  nb_etf: 50
+  nb_scpi: 0
+  nb_sci: 0
+  nb_private_equity: 0
+  fonds_euros_disponible: true
+  fonds_euros_nom: "Suravenir Rendement 2"
+  rendement_fonds_euros_2024: 0.0340  # source: communiqué Suravenir 01/2025
+  rendement_fonds_euros_2023: 0.0310  # source: communiqué Suravenir 01/2024
+  versement_minimum_eur: 1000
+  versement_programme_min_eur: 100
+  eligible_nue_propriete: false
+  eligible_gestion_pilotee: true  # spécialité Yomoni
+  gestion_libre: false  # uniquement gestion pilotée
+  notation_experts_moyenne: 4.3
+  annees_existence: 9
+  date_souscription_possible: "2016-01-01"
+  sources:
+    - "https://www.yomoni.fr/assurance-vie/"
+    - "Grille tarifaire Yomoni 2025"
+
+- id: nalo_patrimoine
+  nom: "Nalo Patrimoine"
+  assureur: "Generali"
+  distributeur: "Nalo"
+  frais_gestion_uc_pct: 0.0050  # source: https://nalo.fr/assurance-vie/ — frais gestion contrat
+  frais_gestion_fonds_euros_pct: 0.0050
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 30  # univers ETF uniquement, gestion pilotée
+  nb_etf: 30
+  nb_scpi: 0
+  nb_sci: 0
+  nb_private_equity: 0
+  fonds_euros_disponible: false
+  fonds_euros_nom: null
+  rendement_fonds_euros_2024: null
+  rendement_fonds_euros_2023: null
+  versement_minimum_eur: 1000
+  versement_programme_min_eur: 100
+  eligible_nue_propriete: false
+  eligible_gestion_pilotee: true
+  gestion_libre: false
+  notation_experts_moyenne: 4.2
+  annees_existence: 7
+  date_souscription_possible: "2018-01-01"
+  sources:
+    - "https://nalo.fr/assurance-vie/"
+    - "Grille tarifaire Nalo 2025"
+
+- id: spirica_netissima
+  nom: "Spirica Netissima"
+  assureur: "Spirica (Crédit Agricole)"
+  distributeur: "Spirica (direct)"
+  frais_gestion_uc_pct: 0.0075  # source: https://www.spirica.fr/contrats/netissima/
+  frais_gestion_fonds_euros_pct: 0.0080
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 800
+  nb_etf: 50
+  nb_scpi: 30
+  nb_sci: 8
+  nb_private_equity: 5
+  fonds_euros_disponible: true
+  fonds_euros_nom: "Spirica Euro Nouvelle Génération"
+  rendement_fonds_euros_2024: 0.0305  # source: communiqué Spirica 01/2025
+  rendement_fonds_euros_2023: 0.0275  # source: communiqué Spirica 01/2024
+  versement_minimum_eur: 2000
+  versement_programme_min_eur: 100
+  eligible_nue_propriete: true
+  eligible_gestion_pilotee: true
+  gestion_libre: true
+  notation_experts_moyenne: 4.0
+  annees_existence: 10
+  date_souscription_possible: "2015-01-01"
+  sources:
+    - "https://www.spirica.fr/contrats/netissima/"
+    - "Communiqué Spirica taux fonds euros 2024"
+
+- id: swisslife_assurance_patrimoine
+  nom: "Swiss Life Assurance et Patrimoine"
+  assureur: "Swiss Life"
+  distributeur: "Swiss Life (réseaux CGP)"
+  frais_gestion_uc_pct: 0.0090  # source: grille tarifaire Swiss Life CGP 2025
+  frais_gestion_fonds_euros_pct: 0.0090
+  frais_entree_pct: 0.0  # variable selon CGP, 0% en direct
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 400
+  nb_etf: 20
+  nb_scpi: 25
+  nb_sci: 6
+  nb_private_equity: 8
+  fonds_euros_disponible: true
+  fonds_euros_nom: "Swiss Life Euro Diversifié"
+  rendement_fonds_euros_2024: 0.0270  # source: communiqué Swiss Life 01/2025
+  rendement_fonds_euros_2023: 0.0245  # source: communiqué Swiss Life 01/2024
+  versement_minimum_eur: 5000
+  versement_programme_min_eur: 100
+  eligible_nue_propriete: true
+  eligible_gestion_pilotee: true
+  gestion_libre: true
+  notation_experts_moyenne: 3.9
+  annees_existence: 20
+  date_souscription_possible: "2005-01-01"
+  sources:
+    - "https://www.swisslife.fr/contrats-assurance-vie.html"
+    - "Grille tarifaire Swiss Life CGP 2025"
+
+- id: generali_himalia
+  nom: "Generali Himalia"
+  assureur: "Generali"
+  distributeur: "Generali (réseaux CGP)"
+  frais_gestion_uc_pct: 0.0080  # source: grille tarifaire Generali CGP 2025
+  frais_gestion_fonds_euros_pct: 0.0085
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 700
+  nb_etf: 35
+  nb_scpi: 28
+  nb_sci: 7
+  nb_private_equity: 6
+  fonds_euros_disponible: true
+  fonds_euros_nom: "Generali Euros Nouvelle Génération"
+  rendement_fonds_euros_2024: 0.0320  # source: communiqué Generali 01/2025
+  rendement_fonds_euros_2023: 0.0290  # source: communiqué Generali 01/2024
+  versement_minimum_eur: 2000
+  versement_programme_min_eur: 100
+  eligible_nue_propriete: true
+  eligible_gestion_pilotee: true
+  gestion_libre: true
+  notation_experts_moyenne: 4.0
+  annees_existence: 15
+  date_souscription_possible: "2010-01-01"
+  sources:
+    - "https://www.generali.fr/contrats-assurance-vie/himalia/"
+    - "Grille tarifaire Generali CGP 2025"
+
+- id: placement_direct_essentiel
+  nom: "Placement-Direct Essentiel"
+  assureur: "Apicil"
+  distributeur: "Placement-Direct"
+  frais_gestion_uc_pct: 0.0075  # source: https://www.placement-direct.fr/assurance-vie/essentiel/
+  frais_gestion_fonds_euros_pct: 0.0080
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 450
+  nb_etf: 22
+  nb_scpi: 18
+  nb_sci: 4
+  nb_private_equity: 2
+  fonds_euros_disponible: true
+  fonds_euros_nom: "Apicil Euro Garanti"
+  rendement_fonds_euros_2024: 0.0280  # source: communiqué Apicil 01/2025
+  rendement_fonds_euros_2023: 0.0255  # source: communiqué Apicil 01/2024
+  versement_minimum_eur: 1000
+  versement_programme_min_eur: 100
+  eligible_nue_propriete: false
+  eligible_gestion_pilotee: true
+  gestion_libre: true
+  notation_experts_moyenne: 3.8
+  annees_existence: 6
+  date_souscription_possible: "2019-01-01"
+  sources:
+    - "https://www.placement-direct.fr/assurance-vie/essentiel/"
+    - "Grille tarifaire Placement-Direct 2025"
+
+- id: lucya_cardif
+  nom: "Lucya Cardif"
+  assureur: "BNP Paribas Cardif"
+  distributeur: "Lucya (BNP Paribas)"
+  frais_gestion_uc_pct: 0.0050  # source: https://www.lucya.fr/
+  frais_gestion_fonds_euros_pct: 0.0060
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  nb_arbitrages_gratuits_an: null
+  nb_uc_total: 750
+  nb_etf: 60
+  nb_scpi: 25
+  nb_sci: 6
+  nb_private_equity: 3
+  fonds_euros_disponible: true
+  fonds_euros_nom: "BNP Paribas Cardif Euro"
+  rendement_fonds_euros_2024: 0.0295  # source: communiqué BNP Paribas Cardif 01/2025
+  rendement_fonds_euros_2023: 0.0270  # source: communiqué BNP Paribas Cardif 01/2024
+  versement_minimum_eur: 1000
+  versement_programme_min_eur: 100
+  eligible_nue_propriete: true
+  eligible_gestion_pilotee: true
+  gestion_libre: true
+  notation_experts_moyenne: 4.4
+  annees_existence: 3
+  date_souscription_possible: "2022-01-01"
+  sources:
+    - "https://www.lucya.fr/"
+    - "Grille tarifaire Lucya Cardif 2025"

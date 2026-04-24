@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
 
@@ -342,6 +343,163 @@ class ResultatPDF(_Lenient):
     date_generation: str
 
 
+# ─── S8.2a — ETF enrichi ──────────────────────────────────────────────────────
+
+
+class AlternativeEcartee(_Lenient):
+    """Alternative ETF écartée avec justification."""
+
+    ticker: str
+    isin: str
+    raison: str
+
+
+class ETFEnrichi(ETF):
+    """Extension de ETF avec les champs S8.2a (tracking difference, liquidité, alternatives)."""
+
+    domicile_iso: str | None = None  # ISO-3166-1 alpha-2: IE, FR, LU, DE, etc.
+    distribuant_capitalisant: str | None = None  # ACC | DIST
+    tracking_difference_1y: float | None = None  # TD 1 an (négatif = sous-performance indice net)
+    tracking_difference_3y: float | None = None  # TD 3 ans
+    tracking_difference_5y: float | None = None  # TD 5 ans
+    taux_retenue_source_effectif: float | None = Field(default=None, ge=0, le=1)
+    securities_lending: bool | None = None
+    revenu_sec_lending_bps_estim: float | None = Field(default=None, ge=0)
+    spread_moyen_bps: float | None = Field(default=None, ge=0)
+    volume_quotidien_m_eur: float | None = Field(default=None, ge=0)
+    alternatives_ecartees: list[AlternativeEcartee] = Field(default_factory=list)
+
+
+# ─── S8.2a — Contrats d'assurance-vie ────────────────────────────────────────
+
+
+class ContratAV(_Lenient):
+    """Contrat d'assurance-vie français."""
+
+    id: str
+    nom: str
+    assureur: str
+    distributeur: str
+    # Frais
+    frais_gestion_uc_pct: float = Field(ge=0, le=0.05)
+    frais_gestion_fonds_euros_pct: float = Field(ge=0, le=0.05)
+    frais_entree_pct: float = Field(default=0.0, ge=0, le=0.10)
+    frais_arbitrage_pct: float = Field(default=0.0, ge=0, le=0.05)
+    nb_arbitrages_gratuits_an: int | None = None  # null = illimité
+    # Univers
+    nb_uc_total: int = Field(ge=0)
+    nb_etf: int = Field(default=0, ge=0)
+    nb_scpi: int = Field(default=0, ge=0)
+    nb_sci: int = Field(default=0, ge=0)
+    nb_private_equity: int = Field(default=0, ge=0)
+    fonds_euros_disponible: bool = True
+    fonds_euros_nom: str | None = None
+    rendement_fonds_euros_2024: float | None = Field(default=None, ge=0, le=0.20)
+    rendement_fonds_euros_2023: float | None = Field(default=None, ge=0, le=0.20)
+    # Conditions
+    versement_minimum_eur: float = Field(ge=0)
+    versement_programme_min_eur: float = Field(default=0.0, ge=0)
+    eligible_nue_propriete: bool = False
+    eligible_gestion_pilotee: bool = False
+    gestion_libre: bool = True
+    # Qualité
+    notation_experts_moyenne: float | None = Field(default=None, ge=0, le=5)
+    annees_existence: int = Field(default=0, ge=0)
+    # Fiscal
+    date_souscription_possible: str | None = None  # ISO 8601
+    # Meta
+    sources: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def sources_non_vides(self) -> ContratAV:
+        if not self.sources:
+            raise ValueError(f"Contrat '{self.id}': au moins une source obligatoire")
+        return self
+
+
+class AssuranceVieConfig(_Lenient):
+    """Root model pour contrats_av.yaml."""
+
+    contrats_av: list[ContratAV]
+
+
+# ─── S8.2a — Brokers ─────────────────────────────────────────────────────────
+
+
+class Broker(_Lenient):
+    """Broker disponible en France."""
+
+    id: str
+    nom: str
+    # Frais ordres
+    frais_courtage_actions_euronext_eur: float | None = Field(default=None, ge=0)
+    frais_courtage_actions_euronext_pct: float | None = Field(default=None, ge=0, le=0.05)
+    frais_courtage_actions_us_eur: float | None = Field(default=None, ge=0)
+    frais_courtage_actions_us_pct: float | None = Field(default=None, ge=0, le=0.05)
+    minimum_ordre_eur: float = Field(default=0.0, ge=0)
+    # Frais change
+    frais_change_devise_pct: float = Field(default=0.0, ge=0, le=0.05)
+    # Frais garde
+    frais_garde_annuel_eur: float = Field(default=0.0, ge=0)
+    frais_inactivite_annuel_eur: float = Field(default=0.0, ge=0)
+    # Éligibilité enveloppes
+    pea_disponible: bool = False
+    pea_pme_disponible: bool = False
+    cto_disponible: bool = True
+    per_disponible: bool = False
+    av_disponible: bool = False
+    # Qualité
+    plateforme_qualite: int | None = Field(default=None, ge=1, le=5)
+    fiscalite_ifu_automatique: bool = False
+    reporting_qualite: int | None = Field(default=None, ge=1, le=5)
+    support_client_score: int | None = Field(default=None, ge=1, le=5)
+    # Meta
+    agrement: str | None = None
+    annees_existence: int = Field(default=0, ge=0)
+    actionnariat: str | None = None
+    sources: list[str] = Field(default_factory=list)
+
+
+class BrokersConfig(_Lenient):
+    """Root model pour brokers.yaml."""
+
+    brokers: list[Broker]
+
+
+# ─── S8.2a — Retenues à la source ────────────────────────────────────────────
+
+_ISO2_PATTERN = re.compile(r"^[A-Z]{2}$")
+
+
+class RetenuesSourceConfig(_Lenient):
+    """Matrice des retenues à la source sur dividendes (pays émetteur × domicile ETF)."""
+
+    version: str
+    date_mise_a_jour: str | None = None
+    sources: list[str] = Field(default_factory=list)
+    matrice: dict[str, dict[str, float]]
+    notes: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def valider_matrice(self) -> RetenuesSourceConfig:
+        domiciles_valides = {"IE", "LU", "FR"}
+        for pays_emetteur, domiciles in self.matrice.items():
+            if not _ISO2_PATTERN.match(pays_emetteur):
+                raise ValueError(f"Pays émetteur invalide (doit être ISO-2): '{pays_emetteur}'")
+            for domicile, taux in domiciles.items():
+                if not _ISO2_PATTERN.match(domicile):
+                    raise ValueError(f"Domicile invalide (doit être ISO-2): '{domicile}'")
+                if domicile not in domiciles_valides:
+                    raise ValueError(
+                        f"Domicile '{domicile}' non supporté. Valeurs: {domiciles_valides}"
+                    )
+                if not (0.0 <= taux <= 0.35):
+                    raise ValueError(
+                        f"Taux {pays_emetteur}→{domicile}={taux} hors bornes [0, 0.35]"
+                    )
+        return self
+
+
 # ─── Chargement et validation centralisés ────────────────────────────────────
 
 _SCHEMAS: dict = {
@@ -354,6 +512,10 @@ _SCHEMAS: dict = {
     "rebalancement_flux.yaml": RebalancementFlux,
     "optimiseur.yaml": OptimiseurConfig,
     "pdf_cabinet.yaml": CabinetConfig,
+    # S8.2a — nouvelles configs
+    "contrats_av.yaml": AssuranceVieConfig,
+    "brokers.yaml": BrokersConfig,
+    "retenues_source.yaml": RetenuesSourceConfig,
 }
 
 
