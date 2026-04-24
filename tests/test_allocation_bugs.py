@@ -1,12 +1,11 @@
 """
 Tests unitaires ciblés pour les bugs d'allocation remontés.
 """
+
 from __future__ import annotations
 
-import pytest
 from src.allocation import allocation_bogleheads_par_age, valider_allocation
 from src.optimiseur_allocation import (
-    CLASSES_ACTIONS,
     charger_config_optimiseur,
     optimiser_allocation_mode_a,
 )
@@ -66,9 +65,16 @@ class TestFallbackFlaggedVisible:
         assert res["statut"] in ("optimal", "fallback")
 
     def test_fallback_contient_message(self):
-        from src.optimiseur_allocation import _fallback_allocation_mode_a
-        from src.optimiseur_allocation import CLASSES_ACTIFS_ORDRE
-        classes = [c for c in CLASSES_ACTIFS_ORDRE if c in _CONFIG["classes_actifs"] and c != "actions_usa" and c != "actions_dev_ex_usa" and c != "actions_em"]
+        from src.optimiseur_allocation import CLASSES_ACTIFS_ORDRE, _fallback_allocation_mode_a
+
+        classes = [
+            c
+            for c in CLASSES_ACTIFS_ORDRE
+            if c in _CONFIG["classes_actifs"]
+            and c != "actions_usa"
+            and c != "actions_dev_ex_usa"
+            and c != "actions_em"
+        ]
         res = _fallback_allocation_mode_a(classes, _CONFIG, "equilibre", {}, 0.025, mode="simple")
         assert res["statut"] == "fallback"
         assert res["message"] is not None

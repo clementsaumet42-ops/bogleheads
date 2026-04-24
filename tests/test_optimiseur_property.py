@@ -2,17 +2,18 @@
 Tests property-based de l'optimiseur d'allocation.
 Vérifie que l'allocation est toujours valide pour tout profil/âge/contrainte.
 """
+
 from __future__ import annotations
 
 import pytest
 
 pytest.importorskip("hypothesis")
 
-from hypothesis import given, settings, strategies as st
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 from src.optimiseur_allocation import (
     CLASSES_ACTIONS,
-    calculer_allocation_cible,
     charger_config_optimiseur,
     optimiser_allocation_mode_a,
 )

@@ -92,7 +92,7 @@ if mode == "granulaire":
 else:
     # Mode simple : pas de sliders USA/EM
     usa_max = 100  # non pertinent en mode simple
-    em_max = 50   # non pertinent en mode simple
+    em_max = 50  # non pertinent en mode simple
     col1, col2 = st.columns([1, 2])
     with col1:
         aversion_options = ["defensif", "equilibre", "dynamique", "agressif"]
@@ -153,11 +153,12 @@ statut = resultat.get("statut", "—")
 
 st.divider()
 
-from src.optimiseur_allocation import CLASSES_ACTIONS, charger_config_optimiseur as _charger_cfg
+from src.optimiseur_allocation import CLASSES_ACTIONS  # noqa: E402
+from src.optimiseur_allocation import charger_config_optimiseur as _charger_cfg  # noqa: E402
 
 _config_cached = _charger_cfg()
 profil_ar = _config_cached.get("profils_aversion_risque", {}).get(aversion, {})
-from src.ui.health_check import afficher_health_check
+from src.ui.health_check import afficher_health_check  # noqa: E402
 
 afficher_health_check(poids, profil_ar, statut, mode)
 
@@ -175,8 +176,10 @@ ref_av_pilotee = 0.045  # rendement net moyen AV gestion pilotée ~4.5%
 ecart_rendt = rendement_val - ref_av_pilotee
 ecart_vol_cac = 0.22  # volatilité historique CAC40
 contexte_sharpe = (
-    "Excellent (> 0,5)" if sharpe_val > 0.5
-    else "Bon (> 0,3)" if sharpe_val > 0.3
+    "Excellent (> 0,5)"
+    if sharpe_val > 0.5
+    else "Bon (> 0,3)"
+    if sharpe_val > 0.3
     else "Satisfaisant (< 0,3)"
 )
 
@@ -267,7 +270,8 @@ try:
     horizon = 20
     ter_av_pilotee = 0.023  # ~2.3% tout compris (UC + gestion)
     ter_conseille = sum(
-        poids.get(c, 0.0) * _config_cached["classes_actifs"].get(c, {}).get("frais_ter_moyen", 0.001)
+        poids.get(c, 0.0)
+        * _config_cached["classes_actifs"].get(c, {}).get("frais_ter_moyen", 0.001)
         for c in poids
     )
     rendement_net_av = ref_av_pilotee
@@ -384,8 +388,10 @@ with st.expander("ℹ️ Hypothèses de calcul et sources"):
             f"**Inflation attendue :** {meta.get('inflation_attendue', 0.02):.1%} "
             f"(zone Euro long terme BCE)"
         )
-        st.markdown(f"**Devise de référence :** {meta.get('devise_reference', 'EUR')} "
-                    f"| **Juridiction :** {meta.get('juridiction', 'France')}")
+        st.markdown(
+            f"**Devise de référence :** {meta.get('devise_reference', 'EUR')} "
+            f"| **Juridiction :** {meta.get('juridiction', 'France')}"
+        )
         st.markdown(f"**Date de mise à jour :** {meta.get('date_maj', '—')}")
         sources = meta.get("sources", [])
         if sources:

@@ -1,4 +1,5 @@
 """Composant health check pour les pages de calcul."""
+
 from __future__ import annotations
 
 
@@ -64,7 +65,11 @@ def afficher_health_check(
                     unsafe_allow_html=True,
                 )
 
-            mode_label = "ACWI — 1 ligne monde pondérée par capitalisation" if mode == "simple" else "Granulaire — US / Dev ex-US / EM"
+            mode_label = (
+                "ACWI — 1 ligne monde pondérée par capitalisation"
+                if mode == "simple"
+                else "Granulaire — US / Dev ex-US / EM"
+            )
             st.markdown(
                 f"<span style='color:#1B3A5B'>ⓘ</span> Mode {mode_label}",
                 unsafe_allow_html=True,

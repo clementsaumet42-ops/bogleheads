@@ -1,4 +1,5 @@
 """Cartes KPI premium pour l'UI Streamlit."""
+
 from __future__ import annotations
 
 
@@ -39,7 +40,7 @@ def carte_kpi(
         color: #888888;
         margin-top: 4px;
     ">{unite}</div>
-    {f'<div style="font-size:12px;color:#555555;margin-top:10px;border-top:1px solid #F0EBE3;padding-top:8px;">{contexte}</div>' if contexte else ''}
+    {f'<div style="font-size:12px;color:#555555;margin-top:10px;border-top:1px solid #F0EBE3;padding-top:8px;">{contexte}</div>' if contexte else ""}
 </div>
 """
 
