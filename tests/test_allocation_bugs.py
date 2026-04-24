@@ -53,7 +53,8 @@ class TestPasDeSurPonderationUSParDefautModeSimple:
         res = optimiser_allocation_mode_a("agressif", _CONFIG, mode="simple")
         poids = res["poids"]
         acwi = poids.get("actions_monde_acwi", 0.0)
-        assert acwi >= 0.85 - 1e-6, f"profil agressif mode simple: actions_monde_acwi={acwi:.2%}"
+        TOL = 1e-9
+        assert acwi >= 0.85 - TOL, f"profil agressif mode simple: actions_monde_acwi={acwi:.2%}"
 
 
 class TestFallbackFlaggedVisible:
