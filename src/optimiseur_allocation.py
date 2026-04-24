@@ -363,9 +363,8 @@ def _fallback_allocation_mode_a(
         "dynamique": {"actions_monde_acwi": 0.75, "obligations_agg_monde": 0.12, "obligations_euro": 0.05, "reit": 0.04, "or_matieres": 0.03, "monetaire": 0.01},
         "agressif":  {"actions_monde_acwi": 0.90, "obligations_agg_monde": 0.04, "obligations_euro": 0.01, "reit": 0.03, "or_matieres": 0.02, "monetaire": 0.00},
     }
-    ref = (allocations_ref_simple if mode == "simple" else allocations_ref).get(
-        profil_aversion, (allocations_ref_simple if mode == "simple" else allocations_ref)["equilibre"]
-    )
+    ref_dict = allocations_ref_simple if mode == "simple" else allocations_ref
+    ref = ref_dict.get(profil_aversion, ref_dict["equilibre"])
 
     # Appliquer contraintes personnalisées par projection
     poids = {c: ref.get(c, 0.0) for c in classes}

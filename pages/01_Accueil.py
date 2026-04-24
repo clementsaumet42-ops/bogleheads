@@ -1,4 +1,4 @@
-"""Page 1 — Accueil : présentation de l'outil et KPIs."""
+"""Page 1 — Accueil premium : cabinet patrimonial Boglehead."""
 
 from __future__ import annotations
 
@@ -7,15 +7,97 @@ from pathlib import Path
 import streamlit as st
 import yaml
 
-st.title("🏦 Boglehead FR — Outil CGP Multi-Enveloppes")
+# ─── Injection typographie premium ───────────────────────────────────────────
+
 st.markdown(
     """
-Bienvenue dans l'outil **Boglehead FR** pour conseillers en gestion de patrimoine.
-
-Construisez une stratégie d'investissement Boglehead complète pour vos clients :
-allocation cible optimisée, asset location fiscale, projection Monte-Carlo et plan de rebalancement.
-"""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500&display=swap');
+h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif !important; }
+p, div, span, label { font-family: 'Inter', sans-serif !important; }
+</style>
+""",
+    unsafe_allow_html=True,
 )
+
+# ─── Hero section ─────────────────────────────────────────────────────────────
+
+st.markdown(
+    """
+<div style="text-align:center; padding: 40px 20px 20px 20px;">
+    <h1 style="font-size:2.8rem; color:#1B3A5B; margin-bottom:8px;">
+        Conseil patrimonial Boglehead
+    </h1>
+    <p style="font-size:1.15rem; color:#555555; font-style:italic; margin-bottom:24px;">
+        Le conseil patrimonial Boglehead, adossé à l'expertise de votre cabinet.
+    </p>
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+# ─── Trois cartes services ─────────────────────────────────────────────────────
+
+col1, col2, col3 = st.columns(3)
+
+_carte_css = """
+background: #F5F3EE;
+border: 1px solid #B08D57;
+border-radius: 10px;
+padding: 28px 22px;
+min-height: 170px;
+"""
+
+with col1:
+    st.markdown(
+        f"""
+<div style="{_carte_css}">
+    <div style="font-size:1.2rem; font-weight:600; color:#1B3A5B; font-family:'Cormorant Garamond',serif;">
+        1. Profil client
+    </div>
+    <p style="color:#444444; margin-top:10px; font-size:0.9rem;">
+        Saisissez les caractéristiques de votre client : âge, patrimoine, fiscalité,
+        enveloppes disponibles. Validation Pydantic en temps réel.
+    </p>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+with col2:
+    st.markdown(
+        f"""
+<div style="{_carte_css}">
+    <div style="font-size:1.2rem; font-weight:600; color:#1B3A5B; font-family:'Cormorant Garamond',serif;">
+        2. Allocation optimale
+    </div>
+    <p style="color:#444444; margin-top:10px; font-size:0.9rem;">
+        Calcul Markowitz via ACWI 1 ligne ou granulaire US/Dev ex-US/EM.
+        Invariants validés : somme = 100 %, aucune pondération > 100 %.
+    </p>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+with col3:
+    st.markdown(
+        f"""
+<div style="{_carte_css}">
+    <div style="font-size:1.2rem; font-weight:600; color:#1B3A5B; font-family:'Cormorant Garamond',serif;">
+        3. Livrable conseil
+    </div>
+    <p style="color:#444444; margin-top:10px; font-size:0.9rem;">
+        Rapport PDF client 13 pages, Excel 22 onglets, projection Monte-Carlo
+        et plan de rebalancement fiscalement optimisé.
+    </p>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+st.markdown("<div style='margin-top:24px;'></div>", unsafe_allow_html=True)
+st.divider()
 
 # ─── KPIs ─────────────────────────────────────────────────────────────────────
 
@@ -67,49 +149,7 @@ with col3:
 
 st.divider()
 
-# ─── Présentation des modules ──────────────────────────────────────────────────
-
-st.subheader("🗺️ Fonctionnalités de l'outil")
-
-col_a, col_b = st.columns(2)
-with col_a:
-    st.markdown(
-        """
-**👤 Profil client**
-Saisissez les caractéristiques de votre client (âge, patrimoine, TMI, enveloppes)
-ou chargez un profil type YAML. Validation Pydantic en temps réel.
-
-**🎯 Allocation cible**
-Calcul de l'allocation optimale via Markowitz (scipy QP) calibré sur le profil de risque.
-Ajustez les contraintes (exposition USA, marchés émergents) et recalculez en live.
-
-**🏦 Asset Location**
-Ventilation optimale des classes d'actifs par enveloppe fiscale (MILP PuLP).
-Heatmap interactive et comparaison du coût annuel optimisé vs naïf.
-"""
-    )
-with col_b:
-    st.markdown(
-        """
-**📈 Projection Monte-Carlo**
-Simulation de 10 000 trajectoires sur 5 à 40 ans avec votre allocation cible.
-Fan chart P10/médiane/P90 et probabilité d'atteindre votre objectif patrimonial.
-
-**🔄 Rebalancement**
-Plan de rebalancement en 3 étapes fiscalement optimisé :
-arbitrages gratuits → flux → ventes ordonnées.
-
-**📥 Téléchargements**
-Générez le rapport Excel complet (22 onglets) et le PDF client (13 pages)
-directement depuis l'interface — aucune ligne de commande.
-"""
-    )
-
-st.divider()
-
 # ─── Call-to-action ───────────────────────────────────────────────────────────
-
-st.subheader("🚀 Commencer")
 
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
@@ -122,6 +162,7 @@ with col2:
 
 st.divider()
 st.caption(
-    "⚠️ *Les profils et simulations fournis sont illustratifs et ne constituent pas "
-    "un conseil en investissement personnalisé au sens de la directive MIF II.*"
+    "⚠️ *Les informations contenues dans cet outil sont à titre indicatif uniquement "
+    "et ne constituent pas un conseil en investissement personnalisé au sens de la directive MIF II. "
+    "Consultez toujours un conseiller qualifié avant toute décision d'investissement.*"
 )
