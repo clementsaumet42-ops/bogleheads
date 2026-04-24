@@ -50,6 +50,9 @@ _SOURCES = [
 ]
 
 # Enveloppes où le report d'imposition est déjà natif — ne pas proposer de switch
+# Note : CTO_IS (CTO d'une société soumise à l'IS) n'est PAS dans cette liste car
+# le report d'imposition n'est pas natif — l'IS est dû annuellement sur les revenus
+# et les plus-values réalisées (pas de report jusqu'à cession comme en AV/PEA).
 ENVELOPPES_REPORT_NATIF = frozenset({"PEA", "AV", "PER", "PEE", "Contrat_Cap_IS"})
 
 # Seuil minimum de gain pour créer une opportunité

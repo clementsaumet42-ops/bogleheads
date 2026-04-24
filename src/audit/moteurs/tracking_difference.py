@@ -17,6 +17,7 @@ import logging
 import warnings
 
 from src.audit.moteurs._constantes import (
+    AUM_MINIMUM_M_EUR,
     DOMICILES_ACCEPTABLES,
     GROUPES_INDICES_EQUIVALENTS,
     SOUS_CLASSE_VERS_INDICE,
@@ -159,11 +160,22 @@ def detecter_opportunites_td(
             if not comparables:
                 continue
 
-            # Filtre AUM
-            if alt.volume_quotidien_m_eur is None:
-                # On n'a pas l'AUM directement — on skippe si pas de volume non plus
+            # Filtre AUM : si données disponibles, vérifier liquidité ≥ 500 M€/j équivalent
+            if (
+                alt.volume_quotidien_m_eur is not None
+                and alt.volume_quotidien_m_eur < AUM_MINIMUM_M_EUR
+            ):
                 logger.debug(
-                    "ETF %s : volume_quotidien_m_eur null — filtre AUM non applicable",
+                    "ETF %s : volume_quotidien_m_eur=%.1f < %.0f M€ — filtre liquidité",
+                    alt.ticker,
+                    alt.volume_quotidien_m_eur,
+                    AUM_MINIMUM_M_EUR,
+                )
+                continue
+            if alt.volume_quotidien_m_eur is None:
+                # Données de liquidité absentes — on ne filtre pas (conservative)
+                logger.debug(
+                    "ETF %s : volume_quotidien_m_eur null — filtre AUM non applicable, ETF conservé",
                     alt.ticker,
                 )
 
