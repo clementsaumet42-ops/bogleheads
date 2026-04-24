@@ -395,8 +395,9 @@ class TestPagesS5:
 
         pc = ProfilConsolide(aversion_declaree="moyenne", delta_confiance="aligne")
         out = tmp_path / "nrp_17.pdf"
-        result = generer_pdf(PROFIL, out, profil_consolide=pc)
-        reader = PdfReader(str(result))
+        cfg = charger_config_pdf()
+        result = generer_pdf(PROFIL, cfg, out, profil_consolide=pc)
+        reader = PdfReader(str(result.chemin))
         assert len(reader.pages) == 17
 
     def test_generer_pdf_17_pages_avec_capital_humain(self, tmp_path):
@@ -406,14 +407,16 @@ class TestPagesS5:
 
         ch = CapitalHumain(revenus_nets_annuels=80000, annees_restantes=20)
         out = tmp_path / "nrp_17b.pdf"
-        result = generer_pdf(PROFIL, out, capital_humain_data=ch)
-        reader = PdfReader(str(result))
+        cfg = charger_config_pdf()
+        result = generer_pdf(PROFIL, cfg, out, capital_humain_data=ch)
+        reader = PdfReader(str(result.chemin))
         assert len(reader.pages) == 17
 
     def test_generer_pdf_13_pages_par_defaut(self, tmp_path):
         from pypdf import PdfReader
 
         out = tmp_path / "nrp_13.pdf"
-        result = generer_pdf(PROFIL, out)
-        reader = PdfReader(str(result))
+        cfg = charger_config_pdf()
+        result = generer_pdf(PROFIL, cfg, out)
+        reader = PdfReader(str(result.chemin))
         assert len(reader.pages) == 13

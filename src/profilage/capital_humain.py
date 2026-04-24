@@ -34,10 +34,7 @@ class CapitalHumain(BaseModel):
         r = _TAUX_ACTUALISATION.get(self.stabilite_emploi, 0.055)
         g = self.taux_croissance_salaire
         R0 = self.revenus_nets_annuels
-        if abs(r - g) < 1e-9:
-            va = R0 * T
-        else:
-            va = R0 * (1 - ((1 + g) / (1 + r)) ** T) / (r - g)
+        va = R0 * T if abs(r - g) < 1e-9 else R0 * (1 - ((1 + g) / (1 + r)) ** T) / (r - g)
         self.valeur_actualisee_eur = max(0.0, va)
         stabilite_to_bond = {
             "tres_stable": 0.80,

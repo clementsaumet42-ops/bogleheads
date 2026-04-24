@@ -28,10 +28,7 @@ def _get(obj: Any, key: str, default: Any = None) -> Any:
     for part in parts:
         if obj is None:
             return default
-        if isinstance(obj, dict):
-            obj = obj.get(part)
-        else:
-            obj = getattr(obj, part, None)
+        obj = obj.get(part) if isinstance(obj, dict) else getattr(obj, part, None)
     return obj if obj is not None else default
 
 
