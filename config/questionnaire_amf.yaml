@@ -1,0 +1,41 @@
+# Questionnaire AMF — Connaissance et expérience (Art. 325-3 RG AMF)
+version: "2024"
+sections:
+  - id: "connaissance"
+    titre: "Connaissance des instruments financiers"
+    questions:
+      - id: "q1"
+        texte: "Connaissez-vous les actions cotées ?"
+        type: "binaire"
+        options: ["Oui", "Non"]
+      - id: "q2"
+        texte: "Connaissez-vous les obligations ?"
+        type: "binaire"
+        options: ["Oui", "Non"]
+      - id: "q3"
+        texte: "Connaissez-vous les OPCVM/ETF ?"
+        type: "binaire"
+        options: ["Oui", "Non"]
+      - id: "q4"
+        texte: "Connaissez-vous les produits dérivés ?"
+        type: "binaire"
+        options: ["Oui", "Non"]
+      - id: "q5"
+        texte: "Avez-vous déjà investi en bourse ?"
+        type: "binaire"
+        options: ["Oui", "Non"]
+  - id: "experience"
+    titre: "Expérience et formation"
+    questions:
+      - id: "q6"
+        texte: "Quelle est votre formation financière ?"
+        type: "choix_unique"
+        options: ["Aucune", "Notions de base", "Formation spécialisée", "Professionnel de la finance"]
+      - id: "q7"
+        texte: "Depuis combien d'années investissez-vous ?"
+        type: "choix_unique"
+        options: ["Jamais", "Moins de 2 ans", "2 à 5 ans", "Plus de 5 ans"]
+      - id: "q8"
+        texte: "Fréquence de vos opérations ?"
+        type: "choix_unique"
+        options: ["Jamais", "Rarement", "Régulièrement", "Très fréquemment"]

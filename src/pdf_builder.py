@@ -59,7 +59,7 @@ _LIGHT_GREY = "#f5f5f5"
 _MED_GREY = "#e0e0e0"
 _WHITE = "#ffffff"
 
-NB_PAGES = 13
+NB_PAGES = 17
 
 
 def _hex(h: str) -> colors.HexColor:
@@ -1556,6 +1556,307 @@ def _make_header_footer_canvas_factory(
     return HeaderFooterCanvas
 
 
+# ─── Pages S5 conditionnelles ────────────────────────────────────────────────
+
+
+def _page_profil_3_prismes(profil: Any, styles: dict, profil_consolide: Any = None) -> list:
+    """Page profil 3 prismes — Grable-Lytton, AMF, scénarios (Art. 325-8 RG AMF)."""
+    elems: list = [PageBreak()]
+    elems.append(Paragraph("Profil de Risque — 3 Prismes d'Analyse", styles["title"]))
+    elems.append(
+        Paragraph(
+            "Conformément à l'Art. 325-8 RG AMF, le profil de risque est évalué selon "
+            "3 approches complémentaires : auto-évaluation, questionnaire Grable-Lytton "
+            "et scénarios comportementaux.",
+            styles["body"],
+        )
+    )
+    elems.append(Spacer(1, 0.4 * cm))
+
+    aversion_declaree = "—"
+    aversion_grable = "—"
+    aversion_scenarios = "—"
+    delta = "—"
+
+    if profil_consolide is not None:
+        aversion_declaree = getattr(profil_consolide, "aversion_declaree", "—") or "—"
+        aversion_grable = getattr(profil_consolide, "aversion_calculee_grable", "—") or "—"
+        sc = getattr(profil_consolide, "aversion_calculee_scenarios", None)
+        if sc is not None:
+            aversion_scenarios = f"{sc:.2f}"
+        delta = getattr(profil_consolide, "delta_confiance", "—") or "—"
+
+    data = [
+        ["Prisme", "Méthode", "Résultat", "Référence"],
+        ["1 — Auto-déclaration", "Questionnaire AMF", aversion_declaree, "Art. 325-3 RG AMF"],
+        ["2 — Psychométrique", "Grable-Lytton (1999)", aversion_grable, "Art. 325-8 RG AMF"],
+        ["3 — Comportemental", "Scénarios de marché", aversion_scenarios, "MIF II 2014/65/UE"],
+        ["Synthèse", "Écart entre prismes", delta, "Position AMF 2019-03"],
+    ]
+    col_widths = [4.5 * cm, 5 * cm, 4 * cm, 4.5 * cm]
+    tbl = Table(data, colWidths=col_widths)
+    tbl.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, 0), _hex(_PRIMARY)),
+                ("TEXTCOLOR", (0, 0), (-1, 0), _hex(_WHITE)),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, -1), 9),
+                ("FONTNAME", (0, 1), (0, -1), "Helvetica-Bold"),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [_hex(_LIGHT_GREY), _hex(_WHITE)]),
+                ("GRID", (0, 0), (-1, -1), 0.5, _hex(_MED_GREY)),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("TOPPADDING", (0, 0), (-1, -1), 6),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+            ]
+        )
+    )
+    elems.append(tbl)
+    elems.append(Spacer(1, 0.5 * cm))
+
+    incoherences = []
+    if profil_consolide is not None:
+        incoherences = getattr(profil_consolide, "incoherences_detectees", []) or []
+    if incoherences:
+        elems.append(Paragraph("⚠ Incohérences détectées", styles["h2"]))
+        for inc in incoherences:
+            desc = getattr(inc, "description", str(inc))
+            gravite = getattr(inc, "gravite", "")
+            elems.append(Paragraph(f"• [{gravite.upper()}] {desc}", styles["body"]))
+    else:
+        elems.append(
+            Paragraph(
+                "✓ Aucune incohérence majeure détectée entre les 3 prismes.",
+                styles["body"],
+            )
+        )
+    return elems
+
+
+def _page_capital_humain(profil: Any, styles: dict, capital_humain_data: Any = None) -> list:
+    """Page capital humain — VAN des revenus futurs (modèle Ibbotson 2007)."""
+    elems: list = [PageBreak()]
+    elems.append(Paragraph("Capital Humain — Richesse Totale", styles["title"]))
+    elems.append(
+        Paragraph(
+            "Le capital humain représente la valeur actualisée nette (VAN) des revenus futurs "
+            "du travail. Ce concept, développé par Ibbotson, Milevsky, Chen & Zhu (2007), "
+            "est fondamental pour construire une allocation d'actifs cohérente avec la richesse totale.",
+            styles["body"],
+        )
+    )
+    elems.append(Spacer(1, 0.4 * cm))
+
+    va_eur = 0.0
+    bond_pct = 60.0
+    equity_pct = 40.0
+    stabilite = "stable"
+    annees = 0
+    revenus = 0.0
+
+    if capital_humain_data is not None:
+        va_eur = getattr(capital_humain_data, "valeur_actualisee_eur", 0.0) or 0.0
+        bond_pct = getattr(capital_humain_data, "part_bond_like", 0.6) * 100
+        equity_pct = getattr(capital_humain_data, "part_equity_like", 0.4) * 100
+        stabilite = getattr(capital_humain_data, "stabilite_emploi", "stable") or "stable"
+        annees = getattr(capital_humain_data, "annees_restantes", 0) or 0
+        revenus = getattr(capital_humain_data, "revenus_nets_annuels", 0.0) or 0.0
+
+    data_ch = [
+        ["Paramètre", "Valeur"],
+        ["Revenus nets annuels", f"{revenus:,.0f} €".replace(",", " ")],
+        ["Années restantes avant retraite", str(annees)],
+        ["Stabilité de l'emploi", stabilite.replace("_", " ").capitalize()],
+        ["Valeur actualisée du capital humain", f"{va_eur:,.0f} €".replace(",", " ")],
+        ["Part bond-like (obligations implicites)", f"{bond_pct:.0f}%"],
+        ["Part equity-like (actions implicites)", f"{equity_pct:.0f}%"],
+    ]
+    tbl = Table(data_ch, colWidths=[9 * cm, 8 * cm])
+    tbl.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, 0), _hex(_PRIMARY)),
+                ("TEXTCOLOR", (0, 0), (-1, 0), _hex(_WHITE)),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("FONTNAME", (0, 1), (0, -1), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, -1), 9),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [_hex(_LIGHT_GREY), _hex(_WHITE)]),
+                ("GRID", (0, 0), (-1, -1), 0.5, _hex(_MED_GREY)),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("TOPPADDING", (0, 0), (-1, -1), 6),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+            ]
+        )
+    )
+    elems.append(tbl)
+    elems.append(Spacer(1, 0.4 * cm))
+    elems.append(
+        Paragraph(
+            "Source : Ibbotson R.G., Milevsky M.A., Chen P. & Zhu K.X. (2007). "
+            "<i>Lifetime Financial Advice: Human Capital, Asset Allocation, and Insurance.</i> "
+            "CFA Institute Research Foundation.",
+            styles["small"],
+        )
+    )
+    return elems
+
+
+def _page_justification_allocation(
+    profil: Any,
+    styles: dict,
+    profil_consolide: Any = None,
+    capital_humain_data: Any = None,
+    allocation_cible: dict | None = None,
+) -> list:
+    """Page justification de l'allocation — Art. 325-8 RG AMF."""
+    elems: list = [PageBreak()]
+    elems.append(Paragraph("Justification de l'Allocation Recommandée", styles["title"]))
+    elems.append(
+        Paragraph(
+            "Conformément à l'Art. 325-8 RG AMF, cette page documente les éléments "
+            "ayant conduit à l'allocation d'actifs recommandée.",
+            styles["body"],
+        )
+    )
+    elems.append(Spacer(1, 0.4 * cm))
+
+    aversion = "—"
+    delta = "—"
+    recommandation = "—"
+    if profil_consolide is not None:
+        aversion = getattr(profil_consolide, "aversion_declaree", "—") or "—"
+        delta = getattr(profil_consolide, "delta_confiance", "—") or "—"
+        recommandation = getattr(profil_consolide, "recommandation_allocation", "—") or "—"
+
+    elems.append(Paragraph("Synthèse du profil de risque consolidé", styles["h2"]))
+    data_synth = [
+        ["Élément", "Valeur"],
+        ["Profil de risque déclaré", aversion],
+        ["Cohérence inter-prismes", delta],
+        ["Profil recommandé pour allocation", recommandation],
+    ]
+    if capital_humain_data is not None:
+        va = getattr(capital_humain_data, "valeur_actualisee_eur", 0.0) or 0.0
+        bond = getattr(capital_humain_data, "part_bond_like", 0.6) * 100
+        data_synth.append(["Capital humain (VAN)", f"{va:,.0f} €".replace(",", " ")])
+        data_synth.append(["Orientation capital humain", f"{bond:.0f}% bond-like"])
+
+    tbl = Table(data_synth, colWidths=[9 * cm, 8 * cm])
+    tbl.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, 0), _hex(_PRIMARY)),
+                ("TEXTCOLOR", (0, 0), (-1, 0), _hex(_WHITE)),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("FONTNAME", (0, 1), (0, -1), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, -1), 9),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [_hex(_LIGHT_GREY), _hex(_WHITE)]),
+                ("GRID", (0, 0), (-1, -1), 0.5, _hex(_MED_GREY)),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("TOPPADDING", (0, 0), (-1, -1), 6),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+            ]
+        )
+    )
+    elems.append(tbl)
+
+    if allocation_cible:
+        elems.append(Spacer(1, 0.3 * cm))
+        elems.append(Paragraph("Allocation cible retenue", styles["h2"]))
+        data_alloc = [["Classe d'actif", "Poids (%)"]]
+        noms = {
+            "actions": "Actions",
+            "obligations": "Obligations",
+            "immobilier_cote": "Immobilier coté",
+            "or": "Or",
+            "liquidites": "Liquidités",
+        }
+        for k, label in noms.items():
+            poids = allocation_cible.get(k, 0.0)
+            if poids > 0:
+                data_alloc.append([label, f"{poids * 100:.1f}%"])
+        tbl_alloc = Table(data_alloc, colWidths=[9 * cm, 8 * cm])
+        tbl_alloc.setStyle(
+            TableStyle(
+                [
+                    ("BACKGROUND", (0, 0), (-1, 0), _hex(_PRIMARY)),
+                    ("TEXTCOLOR", (0, 0), (-1, 0), _hex(_WHITE)),
+                    ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                    ("FONTSIZE", (0, 0), (-1, -1), 9),
+                    ("ROWBACKGROUNDS", (0, 1), (-1, -1), [_hex(_LIGHT_GREY), _hex(_WHITE)]),
+                    ("GRID", (0, 0), (-1, -1), 0.5, _hex(_MED_GREY)),
+                    ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                    ("TOPPADDING", (0, 0), (-1, -1), 6),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+                ]
+            )
+        )
+        elems.append(tbl_alloc)
+    return elems
+
+
+def _page_sources_bibliographie(styles: dict, config_pdf: Any = None) -> list:
+    """Page sources et bibliographie — références académiques et réglementaires."""
+    elems: list = [PageBreak()]
+    elems.append(Paragraph("Sources & Bibliographie", styles["title"]))
+    elems.append(
+        Paragraph(
+            "Cette note de conseil s'appuie sur les travaux académiques et réglementaires "
+            "suivants pour justifier les choix méthodologiques.",
+            styles["body"],
+        )
+    )
+    elems.append(Spacer(1, 0.4 * cm))
+
+    elems.append(Paragraph("Références académiques", styles["h2"]))
+    refs_academiques = [
+        "Grable J.E. & Lytton R.H. (1999). Financial risk tolerance revisited. "
+        "<i>Financial Services Review</i>, 8(3), 163-181.",
+        "Ibbotson R.G., Milevsky M.A., Chen P. & Zhu K.X. (2007). "
+        "<i>Lifetime Financial Advice: Human Capital, Asset Allocation, and Insurance.</i> "
+        "CFA Institute Research Foundation.",
+        "Markowitz H. (1952). Portfolio selection. <i>Journal of Finance</i>, 7(1), 77-91.",
+        "Malkiel B.G. (2019). <i>A Random Walk Down Wall Street.</i> W.W. Norton & Company.",
+        "Bogle J.C. (2007). <i>The Little Book of Common Sense Investing.</i> Wiley.",
+        "Bernstein W.J. (2010). <i>The Investor's Manifesto.</i> Wiley.",
+        "Sharpe W.F. (1966). Mutual fund performance. <i>Journal of Business</i>, 39(1), 119-138.",
+        "Fama E.F. & French K.R. (1993). Common risk factors. "
+        "<i>Journal of Financial Economics</i>, 33(1), 3-56.",
+    ]
+    for ref in refs_academiques:
+        elems.append(Paragraph(f"• {ref}", styles["small"]))
+        elems.append(Spacer(1, 0.1 * cm))
+
+    elems.append(Spacer(1, 0.3 * cm))
+    elems.append(Paragraph("Références réglementaires", styles["h2"]))
+    refs_reglementaires = [
+        "Art. 325-3 RG AMF — Évaluation de la connaissance et de l'expérience client",
+        "Art. 325-8 RG AMF — Évaluation du profil de risque et adéquation des conseils",
+        "Art. L.541-8-1 CMF — Obligations d'information et de conseil du CIF",
+        "Directive MIF II 2014/65/UE — Marchés d'instruments financiers",
+        "Position AMF 2019-03 — Questionnaire de connaissance client MIF II",
+        "Art. 125-0 A CGI — Fiscalité de l'assurance-vie",
+        "Art. 150-0 A CGI — Plus-values de cessions de valeurs mobilières",
+        "Art. 990 I CGI — Prélèvement assurance-vie",
+    ]
+    for ref in refs_reglementaires:
+        elems.append(Paragraph(f"• {ref}", styles["small"]))
+        elems.append(Spacer(1, 0.1 * cm))
+
+    elems.append(Spacer(1, 0.3 * cm))
+    elems.append(Paragraph("Avertissement", styles["h2"]))
+    elems.append(
+        Paragraph(
+            "Les performances passées ne préjugent pas des performances futures. "
+            "Les projections présentées dans ce document sont basées sur des hypothèses "
+            "de marché et ne constituent pas une garantie de rendement. "
+            "Tout investissement comporte un risque de perte en capital.",
+            styles["body"],
+        )
+    )
+    return elems
+
+
 # ─── Fonction principale ──────────────────────────────────────────────────────
 
 
@@ -1563,9 +1864,11 @@ def generer_pdf(
     profil: Any,
     config_pdf: Any,
     sortie_path: str | Path,
+    profil_consolide: Any = None,
+    capital_humain_data: Any = None,
 ) -> ResultatPDF:
     """
-    Génère un PDF client 13 pages.
+    Génère un PDF client 13 pages (ou 17 pages avec profil_consolide/capital_humain_data).
 
     Parameters
     ----------
@@ -1662,6 +1965,15 @@ def generer_pdf(
         story += _page_fiscalite_transmission(profil, styles)
         story += _page_suivi_recommande(styles)
         story += _page_mentions_legales(config_pdf, styles, today)
+
+        # Pages S5 conditionnelles (ajoutées uniquement si données présentes)
+        if profil_consolide is not None or capital_humain_data is not None:
+            story += _page_profil_3_prismes(profil, styles, profil_consolide)
+            story += _page_capital_humain(profil, styles, capital_humain_data)
+            story += _page_justification_allocation(
+                profil, styles, profil_consolide, capital_humain_data, allocation_cible
+            )
+            story += _page_sources_bibliographie(styles, config_pdf)
 
         # Création du document
         doc = BaseDocTemplate(

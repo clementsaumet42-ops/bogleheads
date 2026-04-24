@@ -1,0 +1,33 @@
+# Mapping secteurs NAF — Code APE vers stabilité emploi
+# Source: INSEE nomenclature NAF révision 2
+version: "2024"
+secteurs:
+  "01": {libelle: "Agriculture", stabilite: "variable", cyclicite: "haute"}
+  "02": {libelle: "Sylviculture", stabilite: "stable", cyclicite: "faible"}
+  "05": {libelle: "Extraction charbon", stabilite: "variable", cyclicite: "haute"}
+  "10": {libelle: "Industries alimentaires", stabilite: "stable", cyclicite: "faible"}
+  "19": {libelle: "Raffinage pétrole", stabilite: "variable", cyclicite: "haute"}
+  "20": {libelle: "Industrie chimique", stabilite: "stable", cyclicite: "moyenne"}
+  "26": {libelle: "Electronique", stabilite: "variable", cyclicite: "haute"}
+  "28": {libelle: "Machines équipements", stabilite: "stable", cyclicite: "moyenne"}
+  "41": {libelle: "Construction bâtiments", stabilite: "variable", cyclicite: "haute"}
+  "45": {libelle: "Commerce auto", stabilite: "variable", cyclicite: "haute"}
+  "47": {libelle: "Commerce de détail", stabilite: "stable", cyclicite: "moyenne"}
+  "49": {libelle: "Transport terrestre", stabilite: "stable", cyclicite: "moyenne"}
+  "55": {libelle: "Hôtellerie", stabilite: "variable", cyclicite: "haute"}
+  "58": {libelle: "Edition", stabilite: "stable", cyclicite: "faible"}
+  "61": {libelle: "Télécommunications", stabilite: "tres_stable", cyclicite: "faible"}
+  "62": {libelle: "Programmation informatique", stabilite: "tres_stable", cyclicite: "faible"}
+  "64": {libelle: "Services financiers", stabilite: "stable", cyclicite: "moyenne"}
+  "65": {libelle: "Assurance", stabilite: "tres_stable", cyclicite: "faible"}
+  "68": {libelle: "Immobilier", stabilite: "stable", cyclicite: "moyenne"}
+  "69": {libelle: "Juridique comptable", stabilite: "tres_stable", cyclicite: "faible"}
+  "70": {libelle: "Conseil gestion", stabilite: "variable", cyclicite: "haute"}
+  "75": {libelle: "Vétérinaire", stabilite: "tres_stable", cyclicite: "faible"}
+  "84": {libelle: "Administration publique", stabilite: "tres_stable", cyclicite: "tres_faible"}
+  "85": {libelle: "Enseignement", stabilite: "tres_stable", cyclicite: "tres_faible"}
+  "86": {libelle: "Santé humaine", stabilite: "tres_stable", cyclicite: "tres_faible"}
+  "87": {libelle: "Hébergement médico-social", stabilite: "tres_stable", cyclicite: "tres_faible"}
+  "90": {libelle: "Arts spectacles", stabilite: "tres_variable", cyclicite: "tres_haute"}
+  "94": {libelle: "Organisations associatives", stabilite: "stable", cyclicite: "faible"}
+  "96": {libelle: "Autres services personnels", stabilite: "variable", cyclicite: "moyenne"}

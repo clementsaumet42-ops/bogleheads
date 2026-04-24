@@ -375,3 +375,45 @@ class TestExemplesCommites:
             assert 50 * 1024 <= taille <= 500 * 1024, (
                 f"{pdf_path.name} : {taille / 1024:.1f} Ko hors bornes"
             )
+
+
+# ─── Tests S5 — pages conditionnelles ────────────────────────────────────────
+
+_profils_all = __import__("src.schemas", fromlist=["charger_et_valider"]).charger_et_valider(
+    "profils_clients.yaml"
+)
+PROFIL = next(p for p in _profils_all.profils if p.id == 1)
+
+
+class TestPagesS5:
+    """Tests S5 — 4 nouvelles pages conditionnelles."""
+
+    def test_generer_pdf_17_pages_avec_profil_consolide(self, tmp_path):
+        from pypdf import PdfReader
+
+        from src.profilage.synthese import ProfilConsolide
+
+        pc = ProfilConsolide(aversion_declaree="moyenne", delta_confiance="aligne")
+        out = tmp_path / "nrp_17.pdf"
+        result = generer_pdf(PROFIL, out, profil_consolide=pc)
+        reader = PdfReader(str(result))
+        assert len(reader.pages) == 17
+
+    def test_generer_pdf_17_pages_avec_capital_humain(self, tmp_path):
+        from pypdf import PdfReader
+
+        from src.profilage.capital_humain import CapitalHumain
+
+        ch = CapitalHumain(revenus_nets_annuels=80000, annees_restantes=20)
+        out = tmp_path / "nrp_17b.pdf"
+        result = generer_pdf(PROFIL, out, capital_humain_data=ch)
+        reader = PdfReader(str(result))
+        assert len(reader.pages) == 17
+
+    def test_generer_pdf_13_pages_par_defaut(self, tmp_path):
+        from pypdf import PdfReader
+
+        out = tmp_path / "nrp_13.pdf"
+        result = generer_pdf(PROFIL, out)
+        reader = PdfReader(str(result))
+        assert len(reader.pages) == 13

@@ -1,0 +1,34 @@
+# Configuration du cabinet CIF
+# Remplacer les champs avant tout usage client réel
+
+cabinet:
+  nom: "[À COMPLÉTER : Nom du cabinet]"
+  prenom_ec: "[À COMPLÉTER : Prénom du conseiller]"
+  nom_ec: "[À COMPLÉTER : Nom du conseiller]"
+  adresse: "[À COMPLÉTER : Adresse complète]"
+  telephone: "[À COMPLÉTER : Téléphone]"
+  email: "[À COMPLÉTER : Email]"
+  site_web: "[À COMPLÉTER : Site web]"
+  numero_orias: "[À COMPLÉTER : N° ORIAS (ex: 12345678)]"
+  numero_cncif: "[À COMPLÉTER : N° CNCIF si applicable]"
+  rc_pro_assureur: "[À COMPLÉTER : Assureur RC Pro]"
+  rc_pro_numero: "[À COMPLÉTER : N° police RC Pro]"
+  rc_pro_montant_eur: 1500000
+  mediateur_nom: "Médiateur de l'AMF"
+  mediateur_url: "https://www.amf-france.org/fr/espace-epargnants/plaintes/mediateur-lamf"
+  conflits_interets: "Le conseiller ne perçoit pas de rétrocessions. La rémunération est exclusivement en honoraires directs."
+
+remuneration:
+  mode: "honoraires"
+  forfait_eur: 0
+  taux_horaire_eur: 250
+  taux_actif_pct: 0
+  part_variable_pct: 0
+  mention_retrocessions: "Aucune rétrocession perçue (Art. L.541-8-1 CMF)"
+
+tarifs:
+  mission_initiale_forfait_eur: 3000
+  suivi_annuel_forfait_eur: 1200
+  taux_horaire_eur: 250
+  taux_actif_min_eur: 100000
+  taux_actif_pct_annuel: 0.75

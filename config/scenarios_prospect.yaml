@@ -1,0 +1,89 @@
+# Scénarios de marché pour évaluation comportementale
+# 5 scénarios couvrant des contextes de marché variés
+version: "2024"
+scenarios:
+  - id: "sc1"
+    titre: "Krach boursier soudain"
+    description: "Les marchés actions perdent 40% en 3 mois suite à une crise mondiale imprévue."
+    contexte: "Votre portefeuille passe de 100 000 € à 60 000 €."
+    choix:
+      - id: "a"
+        texte: "Je vends tout pour préserver ce qu'il reste"
+        score: -2
+      - id: "b"
+        texte: "Je vends la moitié et attends"
+        score: -1
+      - id: "c"
+        texte: "Je ne fais rien et attends la reprise"
+        score: 1
+      - id: "d"
+        texte: "J'achète davantage pour profiter des prix bas"
+        score: 2
+  - id: "sc2"
+    titre: "Forte inflation persistante"
+    description: "L'inflation atteint 8% par an pendant 3 ans, érodant le pouvoir d'achat."
+    contexte: "Vos liquidités perdent 22% de leur valeur réelle."
+    choix:
+      - id: "a"
+        texte: "Je garde mes liquidités malgré la perte de valeur"
+        score: -2
+      - id: "b"
+        texte: "Je déplace vers des produits à taux variable"
+        score: -1
+      - id: "c"
+        texte: "J'investis partiellement en actifs réels (immobilier, SCPI)"
+        score: 1
+      - id: "d"
+        texte: "Je bascule vers des actions et matières premières"
+        score: 2
+  - id: "sc3"
+    titre: "Opportunité exceptionnelle"
+    description: "Un secteur technologique émergeant offre des rendements potentiels de 50% mais avec un risque de perte totale de 30%."
+    contexte: "Vous disposez de 20 000 € d'épargne disponible."
+    choix:
+      - id: "a"
+        texte: "Je n'investis pas, trop risqué"
+        score: -2
+      - id: "b"
+        texte: "J'investis 1 000 € maximum"
+        score: -1
+      - id: "c"
+        texte: "J'investis 5 000 € (25% de l'épargne)"
+        score: 1
+      - id: "d"
+        texte: "J'investis 10 000 € ou plus"
+        score: 2
+  - id: "sc4"
+    titre: "Stagnation prolongée"
+    description: "Les marchés stagnent pendant 5 ans avec un rendement annuel de 0%."
+    contexte: "Votre portefeuille ne croît pas et l'inflation érode sa valeur réelle."
+    choix:
+      - id: "a"
+        texte: "Je regrette d'avoir investi et liquide tout"
+        score: -2
+      - id: "b"
+        texte: "Je réduis mon exposition aux actions"
+        score: -1
+      - id: "c"
+        texte: "Je maintiens ma stratégie en attendant"
+        score: 1
+      - id: "d"
+        texte: "Je renforce mes positions car les valorisations sont attractives"
+        score: 2
+  - id: "sc5"
+    titre: "Hausse rapide des taux"
+    description: "Les taux d'intérêt passent de 1% à 5% en 12 mois, faisant chuter les obligations."
+    contexte: "Votre portefeuille obligataire perd 15% de sa valeur."
+    choix:
+      - id: "a"
+        texte: "Je liquide toutes mes obligations"
+        score: -2
+      - id: "b"
+        texte: "Je réduis la duration de mon portefeuille obligataire"
+        score: -1
+      - id: "c"
+        texte: "Je maintiens et attends la maturité"
+        score: 1
+      - id: "d"
+        texte: "Je profite pour acheter des obligations à haut rendement"
+        score: 2
