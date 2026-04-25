@@ -560,11 +560,36 @@ Chaque ETF dispose des champs suivants (nouveaux champs en **gras**) :
 2. Modifier `isin`, `nom`, `ticker`, et les autres champs
 3. Sourcer le DIC/KID officiel → renseigner `url_dic_kid`
 4. Vérifier l'éligibilité PEA (physique vs swap, domicile UE/EEE)
-5. Lancer les tests de validation :
+5. Renseigner les champs S11-C : `replication`, `domicile_iso`, `exposition_geo`
+6. Lancer les tests de validation :
 
 ```bash
 pytest tests/test_univers_etf.py -v
 ```
+
+### TER effectif (S11-C) — Drag fiscal intra-NAV
+
+Le **TER effectif** = TER affiché + drag de withholding intra-NAV.
+
+Les ETF physiques détenant des actions étrangères subissent une **retenue à la source (withholding tax)** prélevée dans la valeur liquidative, invisible sur le relevé client mais grève la performance de **0 à 60 bps/an**.
+
+| Réplication | Domicile | Exposition | Retenue eff. | Yield déf. | Drag estimé |
+|---|---|---|---|---|---|
+| `synthetique_swap` | * | * | 0 % | — | **0 bps** |
+| `physique_full/sampling` | IE | US | 15 % | 1,5 % | ~22 bps |
+| `physique_full/sampling` | LU | US | 30 % | 1,5 % | ~45 bps |
+| `physique_full/sampling` | FR/DE | US | 15 % | 1,5 % | ~22 bps |
+| physique | * | Monde_dev | 15 % pondéré | 1,8 % | ~27 bps |
+| physique | * | Monde_ACWI | 14 % pondéré | 1,9 % | ~27 bps |
+| physique | * | Emergents | 10 % pondéré | 2,5 % | ~25 bps |
+| physique | * | Europe / France | 0 % | 3,0 % | **0 bps** |
+| physique | * | Japon | 15 % | 2,0 % | ~30 bps |
+
+> 🔑 **Logique clé** : Les ETF synthétiques (swap) annulent totalement la withholding sur la jambe répliquée.
+> Les ETF physiques domiciliés en Irlande bénéficient du traité IE-US (15 % au lieu de 30 %).
+
+La page **Univers ETF** affiche les colonnes `TER affiché`, `Drag fiscal (bps)`, `TER effectif`
+et trie par défaut sur le **TER effectif ascendant**. Un badge 🔴 signale les ETF avec drag > 20 bps.
 
 ---
 

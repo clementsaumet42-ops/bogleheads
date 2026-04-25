@@ -51,6 +51,9 @@ univers_etf:
   derniere_verification: '2025-04-25'
   audit_status: ok
   audit_notes: "TER 0.38% vérifié DICI Amundi 2025. PEA éligible via synthétique swap confirmé règlement AMF."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: FR0011869353
   ticker: WLD
   nom: Lyxor PEA MSCI World UCITS ETF
@@ -88,6 +91,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B4L5Y983
   ticker: IWDA
   nom: iShares Core MSCI World UCITS ETF (Acc)
@@ -140,6 +146,9 @@ univers_etf:
   derniere_verification: '2025-04-25'
   audit_status: ok
   audit_notes: "TER 0.20% vérifié iShares.com 2025. Physique sampling confirmé. PEA non éligible (domicile IE + physique monde)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: LU1681043599
   ticker: LCWD
   nom: Amundi MSCI World UCITS ETF (Acc) — CTO
@@ -177,6 +186,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B3RBWM25
   ticker: VWRL
   nom: Vanguard FTSE All-World UCITS ETF (Dist)
@@ -215,6 +227,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BK5BQT80
   ticker: VWCE
   nom: Vanguard FTSE All-World UCITS ETF (Acc)
@@ -267,6 +282,9 @@ univers_etf:
   derniere_verification: '2025-04-25'
   audit_status: ok
   audit_notes: "TER 0.22% vérifié Vanguard.co.uk 2025. Physique sampling. PEA non éligible (domicile IE)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: LU0378818131
   ticker: XMWO
   nom: Xtrackers MSCI World Swap UCITS ETF 1C
@@ -305,6 +323,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: FR0011550185
   ticker: ESE
   nom: BNP Paribas Easy S&P 500 UCITS ETF EUR — PEA éligible
@@ -347,6 +368,9 @@ univers_etf:
   derniere_verification: '2025-04-25'
   audit_status: ok
   audit_notes: "TER 0.15% vérifié BNP Paribas AM 2025. Synthétique swap. PEA éligible (domicile FR + swap)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: LU0312348583
   ticker: '500'
   nom: Amundi S&P 500 UCITS ETF (C)
@@ -386,6 +410,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B5BMR087
   ticker: CSP1
   nom: iShares Core S&P 500 UCITS ETF (Acc)
@@ -438,6 +465,9 @@ univers_etf:
   derniere_verification: '2025-04-25'
   audit_status: ok
   audit_notes: "TER 0.07% vérifié iShares.com 2025. Physique full replication. PEA non éligible (domicile IE + physique)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_full  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE0032077012
   ticker: NASD
   nom: Invesco EQQQ Nasdaq-100 UCITS ETF
@@ -475,6 +505,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: LU0908500753
   ticker: ESE600
   nom: Amundi MSCI Europe UCITS ETF (C)
@@ -513,6 +546,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B53QG562
   ticker: EXSA
   nom: iShares STOXX Europe 600 UCITS ETF (Acc)
@@ -550,6 +586,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: LU0392494562
   ticker: C50
   nom: Amundi MSCI EMU UCITS ETF — PEA éligible
@@ -588,6 +627,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B95PGT31
   ticker: XMJP
   nom: Xtrackers MSCI Japan UCITS ETF (Acc)
@@ -625,6 +667,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Japon  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B52MJD48
   ticker: XPXJ
   nom: Xtrackers MSCI Pacific ex Japan UCITS ETF
@@ -662,6 +707,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BF4RFH31
   ticker: WSML
   nom: iShares MSCI World Small Cap UCITS ETF (Acc)
@@ -699,6 +747,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B3VVMM84
   ticker: IUS3
   nom: iShares Russell 2000 UCITS ETF (Acc)
@@ -736,6 +787,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B02KXM00
   ticker: IEUS
   nom: iShares MSCI Europe Small Cap UCITS ETF
@@ -773,6 +827,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BP3QZD73
   ticker: IWVL
   nom: iShares Edge MSCI World Value Factor UCITS ETF
@@ -810,6 +867,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BP3QZB59
   ticker: IWQU
   nom: iShares Edge MSCI World Quality Factor UCITS ETF
@@ -849,6 +909,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BP3QZC66
   ticker: IWMO
   nom: iShares Edge MSCI World Momentum Factor UCITS ETF
@@ -888,6 +951,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B8FHGS14
   ticker: MVOL
   nom: iShares Edge MSCI World Minimum Volatility UCITS ETF
@@ -925,6 +991,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B4L5YC18
   ticker: IEEM
   nom: iShares Core MSCI Emerging Markets IMI UCITS ETF
@@ -967,6 +1036,9 @@ univers_etf:
   derniere_verification: '2025-04-25'
   audit_status: ok
   audit_notes: "TER 0.18% vérifié iShares.com 2025. Physique EM IMI. PEA non éligible (domicile IE)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: FR0013412012
   ticker: PAEEM
   nom: Amundi MSCI Emerging Markets UCITS ETF — PEA éligible
@@ -1008,6 +1080,9 @@ univers_etf:
   derniere_verification: '2025-04-25'
   audit_status: ok
   audit_notes: "TER 0.20% vérifié Amundi 2025. Synthétique swap. PEA éligible (domicile FR + swap)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BJ0KDR00
   ticker: XMEM
   nom: Xtrackers MSCI Emerging Markets Swap UCITS ETF
@@ -1045,6 +1120,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BQT3WG13
   ticker: CIND
   nom: iShares MSCI India UCITS ETF (Acc)
@@ -1082,6 +1160,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B02KXK85
   ticker: FXC
   nom: iShares China Large Cap UCITS ETF
@@ -1119,6 +1200,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B4WXJJ64
   ticker: GOVS
   nom: iShares Core € Govt Bond UCITS ETF (Acc)
@@ -1157,6 +1241,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B3FH7618
   ticker: IBCI
   nom: iShares € Govt Bond 1-3yr UCITS ETF
@@ -1194,6 +1281,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B1FZS798
   ticker: IBCM
   nom: iShares € Govt Bond 3-7yr UCITS ETF
@@ -1231,6 +1321,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B1FZS913
   ticker: IBCL
   nom: iShares € Govt Bond 7-10yr UCITS ETF
@@ -1268,6 +1361,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BSKRJZ44
   ticker: IBCX
   nom: iShares € Govt Bond 20+yr UCITS ETF
@@ -1305,6 +1401,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B3F81R35
   ticker: IEAA
   nom: iShares Core € Corp Bond UCITS ETF (Acc)
@@ -1343,6 +1442,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B66F4759
   ticker: IHYG
   nom: iShares € High Yield Corp Bond UCITS ETF
@@ -1380,6 +1482,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: LU1650490474
   ticker: AGGH
   nom: iShares Core Global Aggregate Bond UCITS ETF EUR Hdg
@@ -1418,6 +1523,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BDFGJ445
   ticker: IBTM
   nom: iShares $ Treasury Bond 7-10yr UCITS ETF EUR Hdg
@@ -1457,6 +1565,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B7LFXY77
   ticker: ITPS
   nom: iShares $ TIPS UCITS ETF EUR Hdg
@@ -1494,6 +1605,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: FR0010371401
   ticker: C40
   nom: Lyxor EUR 2-10Y Inflation Expectations UCITS ETF
@@ -1532,6 +1646,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: France  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B4613386
   ticker: SEML
   nom: iShares J.P. Morgan EM Local Govt Bond UCITS ETF
@@ -1569,6 +1686,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B2NPKV68
   ticker: SEMB
   nom: iShares J.P. Morgan EM Bond UCITS ETF (USD Hedged)
@@ -1606,6 +1726,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B83YJG36
   ticker: IWDP
   nom: iShares Developed Markets Property Yield UCITS ETF
@@ -1643,6 +1766,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B1FZS350
   ticker: EPRE
   nom: SPDR FTSE EPRA Europe ex UK Real Estate UCITS ETF
@@ -1681,6 +1807,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B1FZSF77
   ticker: XREA
   nom: Xtrackers FTSE Developed Europe Real Estate UCITS ETF
@@ -1719,6 +1848,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: FR0013416716
   ticker: GOLD
   nom: Amundi Physical Gold ETC
@@ -1756,6 +1888,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_full  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B4ND3602
   ticker: IGLN
   nom: iShares Physical Gold ETC
@@ -1793,6 +1928,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_full  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: DE000A0S9GB0
   ticker: XGLD
   nom: Xtrackers Physical Gold ETC (EUR)
@@ -1830,6 +1968,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_full  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BZ1NCS44
   ticker: CMOD
   nom: iShares Diversified Commodity Swap UCITS ETF
@@ -1867,6 +2008,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BYMLZY58
   ticker: LYTR
   nom: Invesco Bloomberg Commodity UCITS ETF
@@ -1906,6 +2050,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B1FZS467
   ticker: INFR
   nom: iShares Global Infrastructure UCITS ETF
@@ -1943,6 +2090,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: FR0010510800
   ticker: CSH
   nom: Lyxor Smart Overnight Return UCITS ETF
@@ -1980,6 +2130,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: LU2082999306
   ticker: XEON
   nom: Xtrackers EUR Overnight Rate Swap UCITS ETF
@@ -2017,6 +2170,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B4L5YX21
   ticker: IH20
   nom: iShares Global Water UCITS ETF
@@ -2054,6 +2210,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B1XNHC34
   ticker: INRG
   nom: iShares Global Clean Energy UCITS ETF
@@ -2091,6 +2250,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B76VTN11
   ticker: IHCG
   nom: iShares Global Healthcare UCITS ETF
@@ -2128,6 +2290,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BGV5VN51
   ticker: WTAI
   nom: WisdomTree Artificial Intelligence UCITS ETF
@@ -2165,6 +2330,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BZ0PKT83
   ticker: HTEC
   nom: ROBO Global Healthcare Technology and Innovation UCITS ETF
@@ -2202,6 +2370,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B3YLTY66
   ticker: SSAC
   nom: iShares MSCI ACWI UCITS ETF (Acc)
@@ -2253,6 +2424,9 @@ univers_etf:
   derniere_verification: '2025-04-25'
   audit_status: ok
   audit_notes: "TER 0.20% vérifié iShares.com 2025. Physique sampling ACWI. PEA non éligible (domicile IE + physique)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BD45KH83
   ticker: FWRA
   nom: Invesco FTSE All-World UCITS ETF (Acc)
@@ -2291,6 +2465,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE0007J05YL2
   ticker: LCUW
   nom: Amundi Prime All Country World UCITS ETF (Acc)
@@ -2331,6 +2508,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: FR0007072012
   ticker: LYPS
   nom: Lyxor PEA S&P 500 UCITS ETF
@@ -2370,6 +2550,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: FR0013412285
   ticker: PUST
   nom: Amundi PEA S&P 500 ESG UCITS ETF
@@ -2407,6 +2590,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: FR0011550177
   ticker: PANX
   nom: Amundi PEA Nasdaq-100 UCITS ETF
@@ -2444,6 +2630,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: LU0690964092
   ticker: XBAE
   nom: Xtrackers Global Government Bond EUR Hedged UCITS ETF
@@ -2481,6 +2670,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BGYWFS63
   ticker: XZEB
   nom: Xtrackers EUR Corporate Bond UCITS ETF
@@ -2518,6 +2710,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BYX2JD69
   ticker: SUWU
   nom: iShares MSCI World SRI UCITS ETF (Acc)
@@ -2555,6 +2750,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: LU1861134382
   ticker: LCUI
   nom: Amundi MSCI World Climate Paris Aligned PAB UCITS ETF
@@ -2592,6 +2790,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B8GKDB10
   ticker: VHYL
   nom: Vanguard FTSE All-World High Dividend Yield UCITS ETF
@@ -2629,6 +2830,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B3F81409
   ticker: IDVY
   nom: iShares Euro Dividend UCITS ETF
@@ -2666,6 +2870,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00BFXR7892
   ticker: XDBC
   nom: Xtrackers Physical Silver ETC
@@ -2703,6 +2910,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_full  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE00B6R52259
   ticker: SSAC.MI
   nom: iShares MSCI ACWI UCITS ETF (Acc)
@@ -2740,6 +2950,9 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: IE0006WW1TQ4
   ticker: EXUS
   nom: iShares MSCI World ex USA UCITS ETF (Acc)
@@ -2777,6 +2990,9 @@ univers_etf:
   spread_moyen_bps: null
   volume_quotidien_m_eur: null
   alternatives_ecartees: []
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
 - isin: null  # TODO: vérifier ISIN Franklin MSCI World ex US sur justETF.com
   ticker: FLXW
   nom: Franklin MSCI World ex US UCITS ETF (Acc)
@@ -2814,3 +3030,7 @@ univers_etf:
   spread_moyen_bps: null
   volume_quotidien_m_eur: null
   alternatives_ecartees: []
+
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon

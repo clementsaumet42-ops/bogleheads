@@ -1,4 +1,4 @@
-"""Page 12 — Univers ETF : visibilité éligibilité enveloppes + filtres + export CSV (S11-B)."""
+"""Page 12 — Univers ETF : visibilité éligibilité enveloppes + TER effectif (S11-C)."""
 
 from __future__ import annotations
 
@@ -9,10 +9,22 @@ import pandas as pd
 import streamlit as st
 import yaml
 
-st.title("📚 Univers ETF — Éligibilité enveloppes")
+from src.fiscalite.drag_etf import calculer_drag_fiscal_etf
+
+# Seuil de drag matériel (en bps) au-delà duquel on affiche un badge rouge
+_DRAG_MATERIEL_BPS = 20
+
+st.title("📚 Univers ETF — Éligibilité enveloppes & TER effectif")
+
+st.info(
+    "**Pourquoi le TER effectif ?** Les ETF physiques détenant des actions étrangères subissent "
+    "une retenue à la source (*withholding tax*) prélevée dans la valeur liquidative. "
+    "Cette retenue est invisible sur le relevé client mais grève la performance de **0 à 60 bps/an** "
+    "selon le domicile et la réplication. Les ETF synthétiques (swap) annulent ce drag."
+)
 st.markdown(
     "*Consultez et filtrez les ETF de l'univers Boglehead FR par enveloppe fiscale, "
-    "classe d'actifs, TER et AUM.*"
+    "classe d'actifs, TER effectif et AUM.*"
 )
 
 # ─── Chargement des données ───────────────────────────────────────────────────
@@ -110,10 +122,24 @@ for etf in etfs_raw:
             "_per_raw": per,
             "_cto_raw": cto,
             "_audit_status": audit_st,
+            # S11-C : champs drag fiscal
+            "_replication": etf.get("replication"),
+            "_domicile_iso": etf.get("domicile_iso"),
+            "_exposition_geo": etf.get("exposition_geo"),
         }
     )
 
 df_all = pd.DataFrame(rows)
+
+# ─── S11-C : calcul drag et TER effectif ─────────────────────────────────────
+
+df_all["drag_bps"] = df_all.apply(
+    lambda r: calculer_drag_fiscal_etf(
+        r.get("_replication"), r.get("_domicile_iso"), r.get("_exposition_geo")
+    ),
+    axis=1,
+)
+df_all["TER_effectif_pct"] = df_all["TER"].fillna(0.0) + df_all["drag_bps"] / 100.0
 
 # ─── Carte synthèse ──────────────────────────────────────────────────────────
 
@@ -232,6 +258,9 @@ st.markdown(f"**{len(df_filtree)} ETF affiché(s)** sur {nb_total} total")
 if df_filtree.empty:
     st.info("Aucun ETF ne correspond aux filtres sélectionnés.")
 else:
+    # Tri par défaut sur TER_effectif_pct ascendant (S11-C)
+    df_filtree = df_filtree.sort_values("TER_effectif_pct", ascending=True)
+
     # Colonnes d'affichage
     df_display = df_filtree[
         [
@@ -240,6 +269,8 @@ else:
             "Nom",
             "Émetteur",
             "TER",
+            "drag_bps",
+            "TER_effectif_pct",
             "AUM (Mds€)",
             "Domicile",
             "Réplication",
@@ -258,7 +289,7 @@ else:
     for col_env in ["PEA", "AV", "PER", "CTO"]:
         df_display[col_env] = df_display[col_env].apply(lambda v: _bool_icon(v))
 
-    # TER en %
+    # TER affiché en %
     df_display["TER"] = df_display["TER"].apply(
         lambda v: (
             f"{float(v):.2%}"
@@ -266,6 +297,30 @@ else:
             else "—"
         )
     )
+
+    # Drag fiscal (bps) — badge si drag matériel > 20 bps
+    def _fmt_drag(v: float) -> str:
+        if v is None or (isinstance(v, float) and pd.isna(v)):
+            return "—"
+        bps = float(v)
+        if bps > _DRAG_MATERIEL_BPS:
+            return f"🔴 {bps:.0f} bps"
+        elif bps > 0:
+            return f"🟡 {bps:.0f} bps"
+        return "✅ 0 bps"
+
+    df_display["drag_bps"] = df_display["drag_bps"].apply(_fmt_drag)
+    df_display = df_display.rename(columns={"drag_bps": "Drag fiscal (bps)"})
+
+    # TER effectif en %
+    df_display["TER_effectif_pct"] = df_display["TER_effectif_pct"].apply(
+        lambda v: (
+            f"{float(v):.2%}"
+            if v is not None and not (isinstance(v, float) and pd.isna(v))
+            else "—"
+        )
+    )
+    df_display = df_display.rename(columns={"TER_effectif_pct": "TER effectif"})
 
     # AUM formaté
     df_display["AUM (Mds€)"] = df_display["AUM (Mds€)"].apply(
