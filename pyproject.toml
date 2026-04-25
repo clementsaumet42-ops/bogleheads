@@ -33,6 +33,7 @@ dev = [
 optim = ["pulp", "scipy"]
 web = ["streamlit>=1.30", "plotly>=5.18"]
 cif = ["cryptography>=42.0"]
+backtest = ["yfinance"]
 
 [tool.setuptools.packages.find]
 where = ["." ]

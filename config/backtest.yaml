@@ -1,0 +1,50 @@
+# Configuration du moteur de backtest S9
+# Backtest system configuration
+
+backtest:
+  capital_initial_eur: 100000.0
+  date_debut: "2003-01-31"
+  date_fin: "2024-12-31"
+
+  frais:
+    ter_par_classe:
+      actions_monde_developpe: 0.0020
+      actions_emergents: 0.0018
+      actions_europe: 0.0012
+      actions_usa: 0.0007
+      obligations_euro_agg: 0.0010
+      obligations_euro_souveraines: 0.0009
+      obligations_inflation_eur: 0.0010
+      cash_eur: 0.0005
+      or: 0.0015
+      matieres_premieres: 0.0019
+    courtage_par_ordre_eur: 1.0
+    spread_bps: 5.0
+    frais_enveloppe_annuel_pct:
+      PEA: 0.0
+      AV: 0.0060
+      PER: 0.0060
+      CTO: 0.0
+
+  fiscalite:
+    pfu_taux: 0.30
+    ps_taux: 0.172
+    rebalancement_seuil_pct: 0.05
+    distribution_par_classe:
+      actions_monde_developpe: 0.0
+      actions_emergents: 0.0
+      actions_europe: 0.0
+      actions_usa: 0.0
+      obligations_euro_agg: 0.02
+      obligations_euro_souveraines: 0.02
+      obligations_inflation_eur: 0.01
+      cash_eur: 0.03
+      or: 0.0
+      matieres_premieres: 0.0
+
+  portefeuilles_actifs:
+    - BOGLE_2_FUNDS_70_30
+    - BOGLE_3_FUNDS_60_30_10
+    - BOGLE_4_FUNDS
+    - LAZY_PERMANENT_PORTFOLIO
+    - ALL_WEATHER_RAY_DALIO

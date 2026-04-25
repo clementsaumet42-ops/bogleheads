@@ -5,6 +5,7 @@ import openpyxl
 from src.excel.onglet_allocation import creer_onglet_allocation_cible
 from src.excel.onglet_allocation_optimisee import creer_onglet_allocation_optimisee
 from src.excel.onglet_asset_location import creer_onglet_asset_location
+from src.excel.onglet_backtest import creer_onglet_backtest
 from src.excel.onglet_enveloppes import creer_onglet_enveloppes
 from src.excel.onglet_glide_path import _creer_onglet_glide_path
 from src.excel.onglet_parametres import creer_onglet_fiscalite, creer_onglet_parametres_client
@@ -90,6 +91,9 @@ def generer_excel(chemin_sortie: str = None):
 
     print("  → Onglet Allocation_Optimisee")
     creer_onglet_allocation_optimisee(wb, profil_ref)
+
+    print("  → Onglet Backtest_Comparatif")
+    creer_onglet_backtest(wb)
 
     wb.properties.title = "Boglehead FR — Outil CGP Multi-Enveloppes 2026"
     wb.properties.subject = "Allocation Boglehead multi-enveloppes — France 2026"
