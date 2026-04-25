@@ -31,7 +31,7 @@ profil = st.session_state.get("profil_actif")
 if not profil:
     st.warning("⚠️ Aucun profil chargé. Veuillez d'abord configurer un profil client.")
     if st.button("👤 Aller au profil client"):
-        st.switch_page("pages/02_Profil.py")
+        st.switch_page("pages/04_Profil.py")
     st.stop()
 
 nom = profil.get("nom", "—") if isinstance(profil, dict) else getattr(profil, "nom", "—")
@@ -478,4 +478,4 @@ if st.session_state.get("resultat_optim") is None or st.button("🔄 Recalculer 
     st.success("✅ Résultat sauvegardé en session.")
 
 if st.button("🏦 Optimiser l'asset location →", type="primary"):
-    st.switch_page("pages/05_Asset_Location.py")
+    st.switch_page("pages/07_Asset_Location.py")

@@ -54,6 +54,97 @@ if profil_raw:
         unsafe_allow_html=True,
     )
 
+# ─── Diagnostic existant ─────────────────────────────────────────────────────
+
+with st.expander("📊 Diagnostic du patrimoine existant", expanded=False):
+    if not profil_raw:
+        st.info("👤 Chargez d'abord un profil dans la page Profil.")
+    else:
+        _composition = (
+            profil_raw.get("composition_actuelle", [])
+            if isinstance(profil_raw, dict)
+            else getattr(profil_raw, "composition_actuelle", [])
+        )
+
+        if not _composition:
+            st.info(
+                "📦 Aucun patrimoine existant saisi. Allez dans **Profil → Patrimoine financier déjà constitué**."
+            )
+        else:
+            from src.audit.analyse_existant import analyser_existant
+            from src.schemas import Profil as _ProfilSchema
+
+            _allocation_cible: dict[str, float] = {}
+            if isinstance(profil_raw, dict):
+                _alloc = profil_raw.get("allocation_cible_bogleheads", {})
+                _allocation_cible = {
+                    k: v
+                    for k, v in _alloc.items()
+                    if isinstance(v, (int, float)) and k != "commentaire"
+                }
+
+            try:
+                _profil_obj = (
+                    _ProfilSchema.model_validate(profil_raw)
+                    if isinstance(profil_raw, dict)
+                    else profil_raw
+                )
+                _diag = analyser_existant(_profil_obj, _allocation_cible)
+
+                _col1, _col2, _col3, _col4 = st.columns(4)
+                with _col1:
+                    st.metric("Total patrimoine existant", format_euro(_diag.montant_total_eur))
+                with _col2:
+                    st.metric(
+                        "Coût fiscal annuel estimé",
+                        format_euro(_diag.cout_fiscal_annuel_estime_eur),
+                    )
+                with _col3:
+                    st.metric("+Values latentes", format_euro(_diag.plus_values_latentes_eur))
+                with _col4:
+                    st.metric(
+                        "Risque concentration", "⚠️ OUI" if _diag.risque_concentration else "✅ Non"
+                    )
+
+                if _diag.risque_concentration:
+                    st.error(
+                        f"🚨 Risque de concentration : {_diag.concentration_max_enveloppe_pct * 100:.1f}% dans une seule enveloppe (seuil : 80%)"
+                    )
+
+                if _diag.repartition_par_classe:
+                    import plotly.graph_objects as go
+
+                    _fig = go.Figure(
+                        data=[
+                            go.Pie(
+                                labels=list(_diag.repartition_par_classe.keys()),
+                                values=list(_diag.repartition_par_classe.values()),
+                            )
+                        ]
+                    )
+                    st.plotly_chart(_fig, use_container_width=True)
+
+                if _diag.drift_par_classe:
+                    import pandas as pd
+
+                    _df_drift = pd.DataFrame(
+                        [
+                            {
+                                "Classe": k,
+                                "Drift (pts %)": round(v * 100, 1),
+                                "Alerte": "⚠️" if abs(v) > 0.05 else "✅",
+                            }
+                            for k, v in _diag.drift_par_classe.items()
+                            if abs(v) > 0.001
+                        ]
+                    )
+                    if not _df_drift.empty:
+                        st.dataframe(_df_drift, use_container_width=True, hide_index=True)
+                    else:
+                        st.success("✅ Aucun drift significatif détecté.")
+            except Exception as _exc:
+                st.error(f"Erreur lors du diagnostic : {_exc}")
+
 # ─── Intro pédagogique ────────────────────────────────────────────────────────
 
 from src.pedagogie.audit import expliquer_concept_bps  # noqa: E402
@@ -151,7 +242,7 @@ if rapport is None:
         "Chargez d'abord un profil client sur la page **Profil** puis revenez ici."
     )
     if st.button("👤 Aller au profil client"):
-        st.switch_page("pages/02_Profil.py")
+        st.switch_page("pages/04_Profil.py")
     st.stop()
 
 # ─── Section 2 — KPIs ─────────────────────────────────────────────────────────

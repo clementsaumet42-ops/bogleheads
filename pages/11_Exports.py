@@ -16,7 +16,7 @@ profil = st.session_state.get("profil_actif")
 if not profil:
     st.warning("⚠️ Aucun profil chargé. Veuillez d'abord configurer un profil client.")
     if st.button("👤 Aller au profil client"):
-        st.switch_page("pages/02_Profil.py")
+        st.switch_page("pages/04_Profil.py")
     st.stop()
 
 nom = profil.get("nom", "—") if isinstance(profil, dict) else getattr(profil, "nom", "—")
@@ -160,4 +160,4 @@ st.caption(
 )
 
 if st.button("🔄 ← Rebalancement"):
-    st.switch_page("pages/07_Rebalancement.py")
+    st.switch_page("pages/09_Rebalancement.py")

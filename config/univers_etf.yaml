@@ -2708,3 +2708,77 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+- isin: IE0006WW1TQ4
+  ticker: EXUS
+  nom: iShares MSCI World ex USA UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Monde développé hors USA
+  classe_actif_granulaire: actions_dev_ex_usa
+  ter: 0.0015
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Actions monde développé hors USA — non éligible PEA.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-30'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  domicile_iso: IE
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: null
+  tracking_difference_3y: null
+  tracking_difference_5y: null
+  taux_retenue_source_effectif: null
+  securities_lending: null
+  revenu_sec_lending_bps_estim: null
+  spread_moyen_bps: null
+  volume_quotidien_m_eur: null
+  alternatives_ecartees: []
+- isin: null  # TODO: vérifier ISIN Franklin MSCI World ex US sur justETF.com
+  ticker: FLXW
+  nom: Franklin MSCI World ex US UCITS ETF (Acc)
+  emetteur: Franklin Templeton
+  classe_actifs: Actions
+  sous_classe: Monde développé hors USA
+  classe_actif_granulaire: actions_dev_ex_usa
+  ter: 0.0009
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Actions monde développé hors USA — non éligible PEA. ISIN non vérifié.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-30'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  domicile_iso: IE
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: null
+  tracking_difference_3y: null
+  tracking_difference_5y: null
+  taux_retenue_source_effectif: null
+  securities_lending: null
+  revenu_sec_lending_bps_estim: null
+  spread_moyen_bps: null
+  volume_quotidien_m_eur: null
+  alternatives_ecartees: []

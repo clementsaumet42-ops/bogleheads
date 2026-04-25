@@ -33,12 +33,14 @@ def test_import_app():
     "page_file",
     [
         "pages/01_Accueil.py",
-        "pages/02_Profil.py",
-        "pages/03_Allocation.py",
-        "pages/05_Asset_Location.py",
-        "pages/06_Monte_Carlo.py",
-        "pages/07_Rebalancement.py",
-        "pages/08_Exports.py",
+        "pages/02_Lettre_de_Mission.py",
+        "pages/03_Profilage.py",
+        "pages/04_Profil.py",
+        "pages/05_Allocation.py",
+        "pages/07_Asset_Location.py",
+        "pages/08_Monte_Carlo.py",
+        "pages/09_Rebalancement.py",
+        "pages/11_Exports.py",
     ],
 )
 def test_page_file_exists(page_file):
@@ -260,7 +262,7 @@ def test_cache_data_sur_allocation():
     """La page Allocation doit utiliser @st.cache_data sur le calcul Markowitz."""
     from pathlib import Path
 
-    source = Path("pages/03_Allocation.py").read_text(encoding="utf-8")
+    source = Path("pages/05_Allocation.py").read_text(encoding="utf-8")
     assert "st.cache_data" in source
 
 
@@ -268,7 +270,7 @@ def test_cache_data_sur_monte_carlo():
     """La page Monte-Carlo doit utiliser @st.cache_data sur la simulation."""
     from pathlib import Path
 
-    source = Path("pages/06_Monte_Carlo.py").read_text(encoding="utf-8")
+    source = Path("pages/08_Monte_Carlo.py").read_text(encoding="utf-8")
     assert "st.cache_data" in source
 
 

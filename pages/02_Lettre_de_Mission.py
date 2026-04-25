@@ -1,4 +1,4 @@
-"""Page 08 — Mission CIF : DER et Lettre de Mission."""
+"""Page 02 — Lettre de Mission CIF : DER et Lettre de Mission."""
 
 from __future__ import annotations
 
@@ -7,8 +7,8 @@ from pathlib import Path
 import streamlit as st
 import yaml
 
-st.set_page_config(page_title="Mission CIF", page_icon="📋")
-st.title("📋 Mission CIF")
+st.set_page_config(page_title="Lettre de Mission", page_icon="📋")
+st.title("📋 Lettre de Mission CIF")
 st.caption("Document d'Entrée en Relation & Lettre de Mission — Art. L.541-8-1 CMF")
 
 ROOT = Path(__file__).parent.parent
@@ -101,3 +101,38 @@ with col2:
                 "⬇ Télécharger la Lettre", f, file_name="lettre_mission.pdf", mime="application/pdf"
             )
         st.success("Lettre de mission générée avec succès.")
+
+# ─── Aperçu HTML ──────────────────────────────────────────────────────────────
+
+st.divider()
+st.subheader("👁 Aperçu de la lettre de mission")
+
+preview_html = f"""
+<div style="font-family: Georgia, serif; max-width: 680px; margin: 0 auto;
+            border: 1px solid #B08D57; border-radius: 8px; padding: 32px 40px;
+            background: #FAFAF8; color: #1B3A5B;">
+  <h2 style="text-align:center; font-size:1.4rem; border-bottom:2px solid #B08D57;
+             padding-bottom:12px; margin-bottom:20px;">
+    LETTRE DE MISSION — CONSEIL EN INVESTISSEMENTS FINANCIERS
+  </h2>
+  <p><strong>Cabinet :</strong> {nom or "—"}<br>
+     <strong>Conseiller :</strong> {prenom_ec or ""} {nom_ec or ""}<br>
+     <strong>N° ORIAS :</strong> {orias or "—"}
+  </p>
+  <hr style="border:none; border-top:1px solid #E0D8CC; margin:16px 0;">
+  <p><strong>Client :</strong> {client_prenom} {client_nom}<br>
+     <strong>Email :</strong> {client_email}
+  </p>
+  <hr style="border:none; border-top:1px solid #E0D8CC; margin:16px 0;">
+  <p style="font-size:0.9rem; color:#555;">
+    La présente lettre de mission est établie conformément aux articles L.541-1 et suivants
+    du Code monétaire et financier. Elle définit les modalités de la relation entre le
+    Conseiller en Investissements Financiers (CIF) et le client.
+  </p>
+  <p style="font-size:0.85rem; color:#888; margin-top:20px;">
+    <em>Document généré par Boglehead FR — usage interne CIF uniquement.</em>
+  </p>
+</div>
+"""
+
+st.html(preview_html)

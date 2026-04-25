@@ -9,7 +9,7 @@ from __future__ import annotations
 
 def test_page_audit_patrimonial_compile_sans_erreur():
     """La page doit être syntaxiquement correcte (compile sans lever d'exception)."""
-    with open("pages/04_Audit_Patrimonial.py", encoding="utf-8") as f:
+    with open("pages/06_Audit_Patrimonial.py", encoding="utf-8") as f:
         source = f.read()
 
     # Compile en mode 'exec' — vérifie la syntaxe sans exécuter le corps Streamlit
