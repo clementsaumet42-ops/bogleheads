@@ -1,7 +1,6 @@
 """Tests pour le système de backtest S9."""
-from __future__ import annotations
 
-from pathlib import Path
+from __future__ import annotations
 
 import pandas as pd
 import pytest
@@ -9,9 +8,7 @@ import pytest
 from src.backtest.donnees_historiques import aligner_series, charger_serie
 from src.backtest.fiscalite_backtest import (
     ConfigFiscalite,
-    calculer_fiscalite_optimisee,
     calculer_impot_dividendes_cto,
-    calculer_impot_rebalancement_cto,
 )
 from src.backtest.frais import ConfigFrais, appliquer_ter_mensuel
 from src.backtest.metriques import (
@@ -19,16 +16,11 @@ from src.backtest.metriques import (
     calculer_calmar,
     calculer_max_drawdown,
     calculer_sharpe,
-    calculer_sortino,
     calculer_volatilite_annuelle,
 )
 from src.backtest.moteur_backtest import ResultatBacktest, backtester
 from src.backtest.portefeuilles_bogle import (
     BOGLE_2_FUNDS_70_30,
-    BOGLE_3_FUNDS_60_30_10,
-    BOGLE_4_FUNDS,
-    ALL_WEATHER_RAY_DALIO,
-    LAZY_PERMANENT_PORTFOLIO,
     PORTEFEUILLES_DISPONIBLES,
     PortefeuilleBogle,
 )
@@ -174,7 +166,6 @@ def test_tous_portefeuilles_disponibles():
 
 def test_cagr_1pct_mensuel():
     """1% mensuel constant sur 1 an → CAGR ≈ 12.68%."""
-    rendements = pd.Series([0.01] * 12)
     capital_initial = 100_000.0
     capital_final = capital_initial * (1.01**12)
     cagr = calculer_cagr(capital_initial, capital_final, 1.0)
@@ -364,14 +355,9 @@ def test_backtest_net_optimise_superieur_net_fiscal():
 def test_backtest_zero_returns_capital_constant():
     """Série à 0% → capital final ≈ capital initial (brut, frais zéro)."""
     idx = pd.date_range("2010-01-31", periods=36, freq="ME")
-    zero_pf = PortefeuilleBogle(
-        nom="ZERO_TEST",
-        description="test",
-        source="test",
-        allocations={"actions_monde_developpe": 1.0},
-    )
     # Patch: on crée un CSV de zéros temporaire
     import csv
+
     from src.backtest.donnees_historiques import DATA_DIR
 
     zero_csv = DATA_DIR / "zero_test_tmp.csv"

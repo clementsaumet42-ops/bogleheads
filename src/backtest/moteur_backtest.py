@@ -1,4 +1,5 @@
 """Moteur de backtest mensuel pour portefeuilles Bogle."""
+
 from __future__ import annotations
 
 import logging
@@ -176,8 +177,7 @@ def backtester(
             # Rebalancement annuel
             capital_total = sum(valeurs.values())
             poids_actuels = {
-                k: valeurs[k] / capital_total if capital_total > 0 else poids[k]
-                for k in classes
+                k: valeurs[k] / capital_total if capital_total > 0 else poids[k] for k in classes
             }
             need_rebalance = any(
                 abs(poids_actuels[k] - poids[k]) > portefeuille.seuil_rebalancement_pct
@@ -202,7 +202,7 @@ def backtester(
                 if mode in ("net_frais", "net_fiscal_cto", "net_optimise"):
                     nb_ordres = sum(1 for v in ventes.values() if v > 0)
                     frais_reb = nb_ordres * config_frais.courtage_par_ordre_eur
-                    for k, v in ventes.items():
+                    for _k, v in ventes.items():
                         frais_reb += v * config_frais.spread_bps / 10_000
                     capital_total -= frais_reb
                     frais_totaux += frais_reb

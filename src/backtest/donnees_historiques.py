@@ -1,4 +1,5 @@
 """Chargement des séries historiques EUR pour le backtest."""
+
 from __future__ import annotations
 
 import logging
@@ -51,8 +52,7 @@ def charger_serie(classe: str) -> pd.Series:
     except Exception as exc:
         logger.warning("yfinance indisponible pour '%s': %s", classe, exc)
         raise FileNotFoundError(
-            f"Données historiques introuvables pour '{classe}'. "
-            f"CSV manquant: {csv_path}"
+            f"Données historiques introuvables pour '{classe}'. CSV manquant: {csv_path}"
         ) from exc
 
 

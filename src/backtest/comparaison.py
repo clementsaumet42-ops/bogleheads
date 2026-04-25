@@ -1,4 +1,5 @@
 """Comparaison multi-modes des backtests Bogle."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -83,8 +84,9 @@ def _generer_graphique(
         import matplotlib
 
         matplotlib.use("Agg")
-        import matplotlib.pyplot as plt
         from pathlib import Path
+
+        import matplotlib.pyplot as plt
 
         fig, ax = plt.subplots(figsize=(12, 6))
         couleurs = {

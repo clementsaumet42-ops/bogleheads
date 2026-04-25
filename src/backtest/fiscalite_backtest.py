@@ -1,4 +1,5 @@
 """Modélisation de la fiscalité pour le backtest."""
+
 from __future__ import annotations
 
 from pydantic import BaseModel, Field
@@ -53,7 +54,9 @@ def calculer_fiscalite_optimisee(
         taux_distrib = config_fiscalite.distribution_par_classe.get(classe, 0.0)
         dividendes = valeur * taux_distrib
         if enveloppe in ("PEA", "AV", "PER"):
-            # Fiscalité réduite : seulement PS (pas IR) sur PEA après 5 ans, AV après 8 ans
+            # Fiscalité réduite : seulement PS (pas IR) sur PEA après 5 ans, AV après 8 ans.
+            # Hypothèse simplificatrice : on suppose les enveloppes en régime favorable
+            # (durée de détention suffisante). À documenter dans les mentions de l'output.
             impot_total += dividendes * config_fiscalite.ps_taux
         else:
             impot_total += dividendes * config_fiscalite.pfu_taux

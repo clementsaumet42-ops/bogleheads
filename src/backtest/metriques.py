@@ -1,4 +1,5 @@
 """Métriques de performance pour le backtest."""
+
 from __future__ import annotations
 
 import numpy as np

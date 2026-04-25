@@ -1,4 +1,5 @@
 """Script de génération des backtests et export résultats."""
+
 from __future__ import annotations
 
 import json
@@ -6,11 +7,11 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).parent
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT))  # noqa: E402
 
-from src.backtest.comparaison import comparer_4_niveaux
-from src.backtest.portefeuilles_bogle import PORTEFEUILLES_DISPONIBLES
-from src.schemas import charger_et_valider
+from src.backtest.comparaison import comparer_4_niveaux  # noqa: E402
+from src.backtest.portefeuilles_bogle import PORTEFEUILLES_DISPONIBLES  # noqa: E402
+from src.schemas import charger_et_valider  # noqa: E402
 
 
 def main() -> None:
@@ -64,9 +65,9 @@ def main() -> None:
         for mode, res in rapport.resultats.items():
             print(
                 f"    [{mode:18s}] Capital final: {res.capital_final:>12,.0f} € "
-                f"| CAGR: {res.cagr*100:5.2f}% "
+                f"| CAGR: {res.cagr * 100:5.2f}% "
                 f"| Sharpe: {res.sharpe:5.2f} "
-                f"| MDD: {res.max_drawdown*100:6.2f}%"
+                f"| MDD: {res.max_drawdown * 100:6.2f}%"
             )
         print(
             f"    Delta frais: {rapport.delta_frais_bps:.1f} bps | "

@@ -1,6 +1,8 @@
 """Page Streamlit — Backtest Historique (Sprint S9)."""
+
 from __future__ import annotations
 
+import pandas as pd
 import streamlit as st
 
 st.set_page_config(
@@ -43,8 +45,11 @@ with st.sidebar:
             date_fin_defaut = "2024-12-31"
 
         capital = st.number_input(
-            "Capital initial (€)", min_value=1_000, max_value=10_000_000,
-            value=capital_defaut, step=10_000,
+            "Capital initial (€)",
+            min_value=1_000,
+            max_value=10_000_000,
+            value=capital_defaut,
+            step=10_000,
         )
         date_debut = st.text_input("Date début (YYYY-MM-DD)", value=date_debut_defaut)
         date_fin = st.text_input("Date fin (YYYY-MM-DD)", value=date_fin_defaut)
@@ -83,7 +88,7 @@ if not lancer:
         with st.expander(f"**{nom}**"):
             st.write(f"📝 {pf.description}")
             st.write(f"📚 Source : {pf.source}")
-            alloc_data = {k: f"{v*100:.1f}%" for k, v in pf.allocations.items()}
+            alloc_data = {k: f"{v * 100:.1f}%" for k, v in pf.allocations.items()}
             st.table(alloc_data)
     st.stop()
 
@@ -128,14 +133,13 @@ for i, (mode, label) in enumerate(modes_labels.items()):
         st.metric(
             label=label,
             value=f"{res.capital_final:,.0f} €",
-            delta=f"CAGR {res.cagr*100:.2f}%",
+            delta=f"CAGR {res.cagr * 100:.2f}%",
         )
 
 st.divider()
 
 # Tableau comparatif détaillé
 st.subheader("📋 Tableau comparatif")
-import pandas as pd
 
 rows = []
 for mode, res in rapport.resultats.items():
@@ -143,10 +147,10 @@ for mode, res in rapport.resultats.items():
         {
             "Mode": modes_labels.get(mode, mode),
             "Capital final (€)": f"{res.capital_final:,.0f}",
-            "CAGR": f"{res.cagr*100:.2f}%",
-            "Volatilité ann.": f"{res.volatilite_annuelle*100:.2f}%",
+            "CAGR": f"{res.cagr * 100:.2f}%",
+            "Volatilité ann.": f"{res.volatilite_annuelle * 100:.2f}%",
             "Sharpe": f"{res.sharpe:.2f}",
-            "Max Drawdown": f"{res.max_drawdown*100:.2f}%",
+            "Max Drawdown": f"{res.max_drawdown * 100:.2f}%",
             "Sortino": f"{res.sortino:.2f}",
             "Frais totaux (€)": f"{res.frais_totaux_eur:,.0f}",
             "Fiscalité (€)": f"{res.fiscalite_totale_eur:,.0f}",
@@ -202,7 +206,7 @@ with st.expander("📅 Détail annuel (mode brut)"):
     brut_detail = rapport.resultats["brut"].detail_annuel
     if brut_detail:
         df_annuel = pd.DataFrame(brut_detail)
-        df_annuel["rendement"] = df_annuel["rendement"].map(lambda x: f"{x*100:.2f}%")
+        df_annuel["rendement"] = df_annuel["rendement"].map(lambda x: f"{x * 100:.2f}%")
         df_annuel["capital_debut"] = df_annuel["capital_debut"].map(lambda x: f"{x:,.0f} €")
         df_annuel["capital_fin"] = df_annuel["capital_fin"].map(lambda x: f"{x:,.0f} €")
         st.dataframe(df_annuel, use_container_width=True, hide_index=True)

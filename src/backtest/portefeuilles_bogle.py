@@ -1,9 +1,10 @@
 """Définition des portefeuilles Bogle canoniques adaptés au contexte EUR/français."""
+
 from __future__ import annotations
 
 from typing import Literal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, model_validator
 
 
 class PortefeuilleBogle(BaseModel):
@@ -15,7 +16,7 @@ class PortefeuilleBogle(BaseModel):
     seuil_rebalancement_pct: float = 0.05
 
     @model_validator(mode="after")
-    def valider_allocations(self) -> "PortefeuilleBogle":
+    def valider_allocations(self) -> PortefeuilleBogle:
         total = sum(self.allocations.values())
         if abs(total - 1.0) > 1e-6:
             raise ValueError(f"La somme des allocations doit être 1.0, obtenu {total:.6f}")

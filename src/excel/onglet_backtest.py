@@ -1,10 +1,10 @@
 """Onglet Excel Backtest_Comparatif — Sprint S9."""
+
 from __future__ import annotations
 
 import openpyxl
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
-
 
 _PRIMARY = "1a4d8f"
 _ACCENT = "d4a017"
@@ -26,9 +26,9 @@ def creer_onglet_backtest(wb: openpyxl.Workbook) -> None:
 
     # Sous-titre
     ws.merge_cells("A2:H2")
-    ws["A2"].value = (
-        "Comparaison brut / net frais / net fiscal CTO / net optimisé — Données synthétiques 2003–2024"
-    )
+    ws[
+        "A2"
+    ].value = "Comparaison brut / net frais / net fiscal CTO / net optimisé — Données synthétiques 2003–2024"
     ws["A2"].font = Font(italic=True, color="666666", size=10)
     ws["A2"].alignment = Alignment(horizontal="center")
 
