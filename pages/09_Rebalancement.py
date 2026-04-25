@@ -1,4 +1,4 @@
-"""Page 6 — Rebalancement : plan 3 étapes (arbitrages gratuits → flux → ventes)."""
+"""Page 6 — Rebalancement : plan 3 étapes (arbitrages gratuits → flux → ventes) + utilité S11-C."""
 
 from __future__ import annotations
 
@@ -21,6 +21,136 @@ nom = profil.get("nom", "—") if isinstance(profil, dict) else getattr(profil, 
 st.markdown(f"**Profil actif :** {nom}")
 
 profil_dict = dict(profil) if isinstance(profil, dict) else {}
+
+# ─── Panneau « Pourquoi rebalancer ? » (S11-C) ────────────────────────────────
+
+with st.expander("🔍 Pourquoi rebalancer ? — Simulation drift naturel 12 mois", expanded=False):
+    st.markdown(
+        """
+Simulation du **drift naturel de l'allocation** sur 12 mois, en supposant que chaque classe
+d'actifs évolue selon ses rendements espérés sans action de votre part.
+"""
+    )
+
+    # Récupérer allocation cible depuis session
+    _ro = st.session_state.get("resultat_optim")
+    _alloc_cible_drift: dict[str, float] = {}
+    if _ro and _ro.get("allocation_cible"):
+        _alloc_cible_drift = _ro["allocation_cible"]
+    else:
+        _ab = profil_dict.get("allocation_cible_bogleheads") or {}
+        if isinstance(_ab, dict):
+            _alloc_cible_drift = {
+                k: v for k, v in _ab.items() if k != "commentaire" and isinstance(v, float)
+            }
+
+    if not _alloc_cible_drift:
+        st.info("ℹ️ Allocation cible non disponible — calculez d'abord l'allocation (page 05).")
+    else:
+        try:
+            from src.optimiseur_allocation import charger_config_optimiseur as _cfg_drift
+
+            _cfg = _cfg_drift()
+            _classes_actifs = _cfg.get("classes_actifs", {})
+
+            # Mapping approx entre clés allocation et clés optimiseur
+            _mu_map = {
+                "actions": "actions_monde_acwi",
+                "obligations": "obligations_euro",
+                "immobilier_cote": "reit",
+                "or": "or_matieres",
+                "liquidites": "monetaire",
+                "actions_monde_acwi": "actions_monde_acwi",
+                "actions_usa": "actions_usa",
+                "actions_dev_ex_usa": "actions_dev_ex_usa",
+                "actions_em": "actions_em",
+                "obligations_agg_monde": "obligations_agg_monde",
+                "obligations_euro": "obligations_euro",
+                "reit": "reit",
+                "or_matieres": "or_matieres",
+                "monetaire": "monetaire",
+            }
+
+            total_p = sum(_alloc_cible_drift.values())
+            if total_p <= 0:
+                raise ValueError("Allocation nulle")
+
+            # Normaliser l'allocation actuelle
+            _w0 = {k: v / total_p for k, v in _alloc_cible_drift.items()}
+
+            # Simuler le drift sur 12 mois
+            _w1_raw: dict[str, float] = {}
+            for classe, w in _w0.items():
+                cfg_key = _mu_map.get(classe, classe)
+                mu = float(_classes_actifs.get(cfg_key, {}).get("rendement_attendu_annuel", 0.05))
+                _w1_raw[classe] = w * (1 + mu)
+
+            total_1 = sum(_w1_raw.values())
+            _w1 = {k: v / total_1 for k, v in _w1_raw.items()}
+
+            # Calcul de la dérive max
+            derives = {k: abs(_w1.get(k, 0) - _w0.get(k, 0)) for k in _w0}
+            derive_max = max(derives.values()) if derives else 0.0
+            classe_max = max(derives, key=derives.get) if derives else "—"
+
+            # Verdict
+            if derive_max < 0.01:
+                verdict = "💚 Pas d'urgence — drift naturel limité (< 1 pp)"
+                couleur = "success"
+            elif derive_max < 0.05:
+                verdict = "🟡 Surveillance — rebalancer dans les prochains mois (1–5 pp)"
+                couleur = "warning"
+            else:
+                verdict = "🔴 Rebalancement recommandé maintenant (≥ 5 pp)"
+                couleur = "error"
+
+            # Affichage
+            col_d1, col_d2 = st.columns(2)
+            with col_d1:
+                st.markdown("**Allocation aujourd'hui**")
+                import pandas as pd
+
+                df_now = pd.DataFrame(
+                    [
+                        {"Classe": k, "Poids": f"{v:.1%}"}
+                        for k, v in sorted(_w0.items(), key=lambda x: -x[1])
+                    ]
+                )
+                st.dataframe(df_now, use_container_width=True, hide_index=True)
+
+            with col_d2:
+                st.markdown("**Dans 12 mois sans action**")
+                df_future = pd.DataFrame(
+                    [
+                        {
+                            "Classe": k,
+                            "Poids estimé": f"{_w1.get(k, 0):.1%}",
+                            "Dérive (pp)": f"{(_w1.get(k, 0) - _w0.get(k, 0)) * 100:+.1f}",
+                        }
+                        for k, _ in sorted(_w0.items(), key=lambda x: -abs(_w1.get(x[0], 0) - x[1]))
+                    ]
+                )
+                st.dataframe(df_future, use_container_width=True, hide_index=True)
+
+            st.metric(
+                f"Dérive max — classe '{classe_max}'",
+                f"{derive_max:.1%} ({derive_max * 100:.1f} pp)",
+            )
+
+            if couleur == "success":
+                st.success(verdict)
+            elif couleur == "warning":
+                st.warning(verdict)
+            else:
+                st.error(verdict)
+
+            st.caption(
+                "*Estimation indicative — hypothèses de rendements long terme de config/optimiseur.yaml. "
+                "Les rendements réels à 12 mois peuvent différer significativement.*"
+            )
+
+        except Exception as exc:
+            st.info(f"ℹ️ Simulation non disponible : {exc}")
 
 # ─── Sélecteur d'approche ─────────────────────────────────────────────────────
 
@@ -263,6 +393,116 @@ Le plan suit une **cascade fiscale en 3 étapes** ordonnées par coût fiscal cr
         st.error(f"❌ Erreur lors du calcul du plan MILP : {exc}")
 
 st.divider()
+
+# ─── Bilan coût/bénéfice (S11-C) ─────────────────────────────────────────────
+
+with st.expander("💰 Bilan coût / bénéfice du rebalancement", expanded=False):
+    st.markdown(
+        """
+Estimation indicative de la rentabilité du rebalancement comparé à l'inaction.
+
+> *⚠️ Calcul approximatif — ne tient pas compte de l'évolution réelle des marchés.*
+"""
+    )
+
+    try:
+        # Coût total (étapes MILP si disponibles)
+        frais_courtage_total = float(profil_dict.get("frais_courtier_par_transaction", 5.0) or 5.0)
+        # Estimation coût fiscal (ordre de grandeur)
+        cout_total_estime = frais_courtage_total * 2  # 2 transactions estimées par défaut
+
+        # Bénéfice estimé : réduction du tracking-error
+        # dérive_max × volatilité relative × 0.5 × patrimoine
+        patrimoine_cb = float(profil_dict.get("patrimoine_financier_total", 0) or 0)
+
+        # Calcul de la dérive actuelle vs cible
+        _ro2 = st.session_state.get("resultat_optim")
+        _alloc_c: dict[str, float] = {}
+        if _ro2 and _ro2.get("allocation_cible"):
+            _alloc_c = _ro2["allocation_cible"]
+        else:
+            _ab2 = profil_dict.get("allocation_cible_bogleheads") or {}
+            if isinstance(_ab2, dict):
+                _alloc_c = {
+                    k: v for k, v in _ab2.items() if k != "commentaire" and isinstance(v, float)
+                }
+
+        _pos2 = profil_dict.get("positions_detaillees") or []
+        _alloc_act2: dict[str, float] = {}
+        if _pos2:
+            _mont2: dict[str, float] = {}
+            for p2 in _pos2:
+                if isinstance(p2, dict):
+                    _mont2[p2.get("etf", "?")] = _mont2.get(p2.get("etf", "?"), 0) + float(
+                        p2.get("montant_actuel", 0)
+                    )
+            _tot2 = sum(_mont2.values())
+            if _tot2 > 0:
+                _alloc_act2 = {k: v / _tot2 for k, v in _mont2.items()}
+
+        if _alloc_c and _alloc_act2:
+            derive_rms = (
+                sum(
+                    ((_alloc_act2.get(k, 0) - v) ** 2)
+                    for k, v in _alloc_c.items()
+                    if k != "commentaire"
+                )
+                ** 0.5
+            )
+        elif _alloc_c:
+            # Utiliser la dérive théorique 12 mois comme proxy
+            derive_rms = 0.03  # 3 pp estimation conservatrice
+        else:
+            derive_rms = 0.0
+
+        # Bénéfice = réduction tracking-error × volatilité standard (15%) × 0.5 × patrimoine
+        vol_std = 0.15
+        benefice_estime = derive_rms * vol_std * 0.5 * patrimoine_cb
+
+        # Ratio
+        if cout_total_estime > 0 and benefice_estime > 0:
+            ratio = cout_total_estime / benefice_estime
+        else:
+            ratio = None
+
+        col_cb1, col_cb2, col_cb3 = st.columns(3)
+        with col_cb1:
+            st.metric(
+                "Coût estimé total",
+                format_euro(cout_total_estime),
+                help="Frais de courtage estimés (2 transactions par défaut)",
+            )
+        with col_cb2:
+            st.metric(
+                "Bénéfice estimé",
+                format_euro(benefice_estime),
+                help="Réduction tracking-error × volatilité × patrimoine (proxy indicatif)",
+            )
+        with col_cb3:
+            if ratio is not None:
+                st.metric("Ratio coût/bénéfice", f"{ratio:.2f}")
+            else:
+                st.metric("Ratio coût/bénéfice", "N/D")
+
+        if ratio is not None:
+            if ratio < 1:
+                st.success(f"✅ Rebalancement rentable — ratio {ratio:.2f} < 1 (bénéfice > coût)")
+            else:
+                st.warning(
+                    f"⚠️ Coût supérieur au bénéfice attendu (ratio {ratio:.2f} ≥ 1) — "
+                    "envisager d'attendre ou d'utiliser uniquement les flux entrants"
+                )
+        else:
+            st.info("ℹ️ Patrimoine non renseigné — configurez le profil pour obtenir l'estimation.")
+
+        st.caption(
+            "*Estimation indicative — ne tient pas compte de l'évolution réelle des marchés. "
+            "Dérive calculée sur l'allocation actuelle saisie. Coût fiscal non inclus dans cette estimation simplifiée.*"
+        )
+
+    except Exception as exc:
+        st.info(f"ℹ️ Bilan non disponible : {exc}")
+
 col1, col2 = st.columns(2)
 with col1:
     if st.button("📈 ← Monte-Carlo", use_container_width=True):

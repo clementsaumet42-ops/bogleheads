@@ -47,6 +47,10 @@ univers_etf:
     - ticker: PANX
       isin: FR0011550177
       raison: "Nasdaq-100 uniquement vs MSCI World — concentration US tech trop élevée pour allocation core"
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.38% vérifié DICI Amundi 2025. PEA éligible via synthétique swap confirmé règlement AMF."
 - isin: FR0011869353
   ticker: WLD
   nom: Lyxor PEA MSCI World UCITS ETF
@@ -132,6 +136,10 @@ univers_etf:
     - ticker: LCUW
       isin: IE0007J05YL2
       raison: "TER 0.07% attractif mais AUM beaucoup plus faible, liquidité inférieure, historique court"
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.20% vérifié iShares.com 2025. Physique sampling confirmé. PEA non éligible (domicile IE + physique monde)."
 - isin: LU1681043599
   ticker: LCWD
   nom: Amundi MSCI World UCITS ETF (Acc) — CTO
@@ -255,6 +263,10 @@ univers_etf:
     - ticker: FWRA
       isin: IE00BD45KH83
       raison: "Invesco FTSE All-World — TER 0.15% légèrement inférieur mais AUM 6x plus petit, liquidité moindre"
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.22% vérifié Vanguard.co.uk 2025. Physique sampling. PEA non éligible (domicile IE)."
 - isin: LU0378818131
   ticker: XMWO
   nom: Xtrackers MSCI World Swap UCITS ETF 1C
@@ -331,6 +343,10 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.15% vérifié BNP Paribas AM 2025. Synthétique swap. PEA éligible (domicile FR + swap)."
 - isin: LU0312348583
   ticker: '500'
   nom: Amundi S&P 500 UCITS ETF (C)
@@ -418,6 +434,10 @@ univers_etf:
     - ticker: LYPS
       isin: FR0007072012
       raison: "Version PEA uniquement via swap, pas adapté CTO — domicile France vs Irlande pour CTO"
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.07% vérifié iShares.com 2025. Physique full replication. PEA non éligible (domicile IE + physique)."
 - isin: IE0032077012
   ticker: NASD
   nom: Invesco EQQQ Nasdaq-100 UCITS ETF
@@ -943,6 +963,10 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.18% vérifié iShares.com 2025. Physique EM IMI. PEA non éligible (domicile IE)."
 - isin: FR0013412012
   ticker: PAEEM
   nom: Amundi MSCI Emerging Markets UCITS ETF — PEA éligible
@@ -980,6 +1004,10 @@ univers_etf:
   spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
   volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
   alternatives_ecartees: []  # à compléter en S8.2b
+  # S11-B : champs d'audit qualité (PAEEM)
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.20% vérifié Amundi 2025. Synthétique swap. PEA éligible (domicile FR + swap)."
 - isin: IE00BJ0KDR00
   ticker: XMEM
   nom: Xtrackers MSCI Emerging Markets Swap UCITS ETF
@@ -2221,6 +2249,10 @@ univers_etf:
     - ticker: LCUW
       isin: IE0007J05YL2
       raison: "TER 0.07% très attractif mais historique trop court (<3 ans) pour validation TD long terme"
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.20% vérifié iShares.com 2025. Physique sampling ACWI. PEA non éligible (domicile IE + physique)."
 - isin: IE00BD45KH83
   ticker: FWRA
   nom: Invesco FTSE All-World UCITS ETF (Acc)

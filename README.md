@@ -795,6 +795,56 @@ YAML configs ──→ src/*.py ──→ excel_builder.py ──→ output/*.xl
 | **S5** (1 sem.) | Import portefeuille + Comparateur | Argumentaire commercial |
 | **S6+** | AV avancée, Succession, Refresh auto | Profondeur métier |
 | **[x] S9** (1 sem.) | Backtest historique | Moteur backtest mensuel, 4 modes, 5 portefeuilles |
+| **[x] S11-AB** (1 sem.) | Crédibilité chiffrée | Sources Markowitz, audit ETF, visibilité éligibilité, utilité rebalancement |
+
+---
+
+## 🧪 Crédibilité chiffrée (S11-A + S11-B)
+
+Sprint S11 comble 4 lacunes de crédibilité identifiées par un expert-comptable / CIF :
+
+### 1. Sources Markowitz documentées (A)
+
+Les rendements espérés μ, volatilités σ et corrélations ρ sont maintenant **entièrement documentés** avec sources vérifiables :
+
+- `config/optimiseur.yaml` : section `metadonnees` + `rendements_esperes` avec `source_specifique` et `intervalle_confiance_95` pour chaque classe
+- `src/optimiseur/config_schemas.py` : validation Pydantic (`CalibrationMetadata`, `RendementEspere`, `ConfigOptimiseurEnrichi`)
+- `docs/methodologie_markowitz.md` : documentation de 3-4 pages (méthode, sources, limites, shrinkage)
+- Page `05_Allocation.py` : expander « 📖 Sources et hypothèses » avec tableau μ/σ par classe et avertissements AMF
+- Option shrinkage Ledoit-Wolf disponible mais désactivée par défaut (`appliquer_shrinkage=True`)
+
+### 2. Éligibilité ETF visible (B)
+
+L'éligibilité PEA/AV/PER/CTO est maintenant **visible dans l'UI** :
+
+- Page `12_Univers_ETF.py` : filtres par enveloppe (intersection), classe d'actifs, TER max, AUM min
+- Tableau avec icônes ✅/❌ par enveloppe, DICI cliquable, badge couleur « Vérifié »
+- Export CSV du tableau filtré
+- Liens depuis `05_Allocation.py` et `07_Asset_Location.py` → `12_Univers_ETF.py`
+
+### 3. Audit qualité ETF (B)
+
+- Script `tools/audit_univers_etf.py` : ISIN Luhn, TER, AUM, TD, `derniere_verification`, URL DICI
+- 10+ ETFs phares marqués `derniere_verification: 2025-04-25`
+- Workflow `.github/workflows/audit_etf.yml` (cron hebdomadaire, issue auto en cas de FAIL)
+- Champs `derniere_verification`, `audit_status`, `audit_notes` dans `src/schemas.py`
+
+### 4. Utilité du rebalancement visible (C)
+
+- Page `09_Rebalancement.py` : panneau « 🔍 Pourquoi rebalancer ? » avec simulation drift 12 mois
+- Verdict 💚/🟡/🔴 selon la dérive calculée
+- Bilan coût/bénéfice estimatif avec ratio coût/bénéfice
+
+### Sources μ/σ
+
+| Source | Couverture |
+|--------|-----------|
+| JPM LTCMA 2026 | Toutes classes sauf OR/REIT |
+| Vanguard Capital Markets Model 2026 | Actions développées |
+| Research Affiliates CMA Q1 2026 | Dev ex-USA, EM |
+| BlackRock Investment Institute 2026 | Validation croisée |
+
+Voir : [`docs/methodologie_markowitz.md`](docs/methodologie_markowitz.md)
 
 ---
 

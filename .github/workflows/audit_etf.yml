@@ -1,0 +1,76 @@
+name: Audit ETF hebdomadaire
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"   # Chaque lundi à 06h00 UTC
+  workflow_dispatch:        # Déclenchement manuel possible
+
+jobs:
+  audit-etf:
+    name: Audit qualité univers ETF
+    runs-on: ubuntu-latest
+
+    permissions:
+      issues: write       # Pour créer des issues en cas de FAIL
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Run ETF audit (no network)
+        id: audit
+        run: |
+          python tools/audit_univers_etf.py --no-net 2>&1 | tee /tmp/audit_output.txt
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Run ETF audit --check (no network)
+        id: audit_check
+        run: |
+          python tools/audit_univers_etf.py --check --no-net
+          echo "audit_status=pass" >> "$GITHUB_OUTPUT"
+        continue-on-error: true
+
+      - name: Upload audit reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-etf-reports
+          path: output/audit_univers_etf_*.json
+          retention-days: 90
+
+      - name: Create issue on FAIL
+        if: steps.audit_check.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let body = '## ❌ Audit ETF — FAIL détecté\n\n';
+            body += '**Date :** ' + new Date().toISOString().split('T')[0] + '\n\n';
+
+            // Lire le rapport markdown le plus récent
+            const files = fs.readdirSync('output').filter(f => f.startsWith('audit_univers_etf_') && f.endsWith('.md'));
+            if (files.length > 0) {
+              const latest = files.sort().pop();
+              body += fs.readFileSync('output/' + latest, 'utf8');
+            } else {
+              body += 'Rapport non disponible — voir les artifacts GitHub Actions.\n';
+            }
+
+            body += '\n\n---\n*Issue générée automatiquement par le workflow `audit_etf.yml`*';
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Audit ETF FAIL — ${new Date().toISOString().split('T')[0]}`,
+              body: body,
+              labels: ['data-quality'],
+            });
