@@ -5,7 +5,7 @@ from .base import Alerte, Severite, regle
 
 logger = logging.getLogger(__name__)
 
-_TAUX_MARCHE_IMMO_REF = 0.038  # taux marché immobilier 2025 référence
+_TAUX_MARCHE_IMMO_REF = 0.038  # taux marché immobilier référence — à réviser annuellement
 
 
 @regle("R29", famille="Crédit & cash")

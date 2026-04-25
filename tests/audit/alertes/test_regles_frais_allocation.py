@@ -262,7 +262,7 @@ def test_R10_no_trigger_empty():
 # ── R11: Sur-concentration ───────────────────────────────────────────────────
 
 def test_R11_triggers_concentration():
-    ligne = _ligne(etf_ticker="AAPL", montant_eur=40000.0)
+    ligne = _ligne(etf_ticker="IWDA", montant_eur=40000.0)
     profil = MagicMock(
         composition_actuelle=[ligne],
         patrimoine_financier_total=100000.0,
@@ -270,7 +270,7 @@ def test_R11_triggers_concentration():
     alerte = detecter_R11(profil)
     assert alerte is not None
     assert alerte.code == "R11"
-    assert alerte.ligne_concernee == "AAPL"
+    assert alerte.ligne_concernee == "IWDA"
 
 
 def test_R11_no_trigger_balanced():
@@ -283,6 +283,6 @@ def test_R11_no_trigger_balanced():
 
 
 def test_R11_no_trigger_zero_patrimoine():
-    ligne = _ligne(etf_ticker="AAPL", montant_eur=40000.0)
+    ligne = _ligne(etf_ticker="VWCE", montant_eur=40000.0)
     profil = MagicMock(composition_actuelle=[ligne], patrimoine_financier_total=0.0)
     assert detecter_R11(profil) is None

@@ -5,7 +5,7 @@ from .base import Alerte, Severite, regle
 
 logger = logging.getLogger(__name__)
 
-_TAUX_PFU_IR = 0.128  # taux IR du PFU (12,8%) — CGI art. 200 A 1 bis
+_TAUX_PFU_IR = 0.128  # taux IR du PFU (12,8%) — CGI art. 200 A
 
 
 @regle("R12", famille="Fiscalité gâchée")
