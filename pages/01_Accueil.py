@@ -158,7 +158,7 @@ with col2:
         "pour charger votre premier profil client."
     )
     if st.button("👤 Charger un profil client", type="primary", use_container_width=True):
-        st.switch_page("pages/02_Profil.py")
+        st.switch_page("pages/04_Profil.py")
 
 st.divider()
 st.caption(

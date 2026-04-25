@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pandas as pd
 import streamlit as st
 import yaml
 
@@ -222,7 +223,119 @@ if st.session_state.get("profil_actif"):
     col1, col2 = st.columns(2)
     with col1:
         if st.button("🎯 Calculer l'allocation", use_container_width=True):
-            st.switch_page("pages/03_Allocation.py")
+            st.switch_page("pages/05_Allocation.py")
     with col2:
         if st.button("📈 Projection Monte-Carlo", use_container_width=True):
-            st.switch_page("pages/06_Monte_Carlo.py")
+            st.switch_page("pages/08_Monte_Carlo.py")
+
+# ─── Composition patrimoniale existante ──────────────────────────────────────
+
+st.divider()
+with st.expander("📦 Patrimoine financier déjà constitué", expanded=False):
+    st.markdown("Saisissez ligne par ligne les supports déjà détenus (ETF, fonds, etc.)")
+
+    @st.cache_data(ttl=3600)
+    def _charger_univers() -> dict:
+        path = _ROOT / "config" / "univers_etf.yaml"
+        import yaml as _yaml
+
+        data = _yaml.safe_load(path.read_text(encoding="utf-8"))
+        return {e["isin"]: e for e in data.get("univers_etf", []) if e.get("isin")}
+
+    _univers = _charger_univers()
+
+    _comp_init = []
+    if st.session_state.get("profil_actif"):
+        _comp_init = st.session_state["profil_actif"].get("composition_actuelle", [])
+
+    _df_init = (
+        pd.DataFrame(
+            _comp_init if _comp_init else [],
+            columns=[
+                "enveloppe",
+                "etf_isin",
+                "etf_ticker",
+                "libelle_libre",
+                "classe_actif",
+                "montant_eur",
+                "prix_revient_eur",
+            ],
+        )
+        if _comp_init
+        else pd.DataFrame(
+            columns=[
+                "enveloppe",
+                "etf_isin",
+                "etf_ticker",
+                "libelle_libre",
+                "classe_actif",
+                "montant_eur",
+                "prix_revient_eur",
+            ]
+        )
+    )
+
+    edited_df = st.data_editor(
+        _df_init,
+        column_config={
+            "enveloppe": st.column_config.SelectboxColumn(
+                "Enveloppe",
+                options=["PEA", "PEA_PME", "PER", "AV", "CTO", "CTO_IS", "Contrat_Cap_IS"],
+            ),
+            "etf_isin": st.column_config.TextColumn("ISIN"),
+            "etf_ticker": st.column_config.TextColumn("Ticker"),
+            "libelle_libre": st.column_config.TextColumn("Libellé libre"),
+            "classe_actif": st.column_config.TextColumn("Classe d'actif"),
+            "montant_eur": st.column_config.NumberColumn("Montant (€)", format="%.2f"),
+            "prix_revient_eur": st.column_config.NumberColumn("Prix de revient (€)", format="%.2f"),
+        },
+        num_rows="dynamic",
+        use_container_width=True,
+        key="composition_editor",
+    )
+
+    isin_input = st.text_input("🔍 Lookup ISIN → Ticker / Classe", placeholder="ex: IE00B4L5Y983")
+    if isin_input and isin_input in _univers:
+        etf = _univers[isin_input]
+        st.info(
+            f"✅ {etf['ticker']} — {etf['nom']} — {etf.get('sous_classe', etf.get('classe_actifs', '?'))}"
+        )
+    elif isin_input:
+        st.warning("ISIN non trouvé dans l'univers ETF.")
+
+    col_btn1, col_btn2 = st.columns(2)
+    with col_btn1:
+        if st.button("💾 Enregistrer la composition", use_container_width=True):
+            records = edited_df.dropna(subset=["enveloppe", "classe_actif", "montant_eur"]).to_dict(
+                "records"
+            )
+            composition = []
+            for r in records:
+                try:
+                    from src.schemas import LigneExistante
+
+                    ligne = LigneExistante(
+                        enveloppe=str(r.get("enveloppe", "")),
+                        etf_isin=r.get("etf_isin") or None,
+                        etf_ticker=r.get("etf_ticker") or None,
+                        libelle_libre=r.get("libelle_libre") or None,
+                        classe_actif=str(r.get("classe_actif", "")),
+                        montant_eur=float(r.get("montant_eur", 0)),
+                        prix_revient_eur=float(r["prix_revient_eur"])
+                        if r.get("prix_revient_eur")
+                        else None,
+                    )
+                    composition.append(ligne.model_dump())
+                except Exception:
+                    pass
+
+            if st.session_state.get("profil_actif"):
+                st.session_state["profil_actif"]["composition_actuelle"] = composition
+                st.success(f"✅ {len(composition)} ligne(s) enregistrée(s) dans le profil actif.")
+            else:
+                st.warning("⚠️ Chargez d'abord un profil avant d'enregistrer la composition.")
+    with col_btn2:
+        if st.button("🗑️ Vider", use_container_width=True):
+            if st.session_state.get("profil_actif"):
+                st.session_state["profil_actif"]["composition_actuelle"] = []
+            st.rerun()

@@ -70,6 +70,8 @@ def test_tous_les_isin_valides(etfs):
     invalids = []
     for etf in etfs:
         isin = etf.get("isin", "")
+        if isin is None:
+            continue  # ISIN non encore disponible — ignoré
         if isin == "ISIN_A_VERIFIER":
             invalids.append(f"{etf.get('ticker')}: ISIN_A_VERIFIER (littéral non corrigé)")
         elif not _isin_checksum_valid(isin):
@@ -79,7 +81,7 @@ def test_tous_les_isin_valides(etfs):
 
 def test_unicite_isin(etfs):
     """Vérifie qu'il n'y a pas de doublons ISIN."""
-    isins = [e["isin"] for e in etfs]
+    isins = [e["isin"] for e in etfs if e.get("isin") is not None]
     seen = set()
     duplicates = []
     for isin in isins:

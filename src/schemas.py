@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from datetime import date as _date
 from pathlib import Path
 from typing import Any
 
@@ -36,7 +37,7 @@ class ETFEligibilite(_Lenient):
 
 
 class ETF(_Lenient):
-    isin: str
+    isin: str | None = None
     ticker: str
     nom: str
     emetteur: str
@@ -109,6 +110,20 @@ class AbattementsUtilises(_Lenient):
     av_abattement_annuel_restant: float = Field(
         default=4600.0, ge=0
     )  # 4 600 € (célibataire) ou 9 200 € (couple)
+
+
+class LigneExistante(_Lenient):
+    """Une ligne de portefeuille déjà détenue par le client."""
+
+    enveloppe: str
+    etf_isin: str | None = None
+    etf_ticker: str | None = None
+    libelle_libre: str | None = None
+    classe_actif: str
+    montant_eur: float
+    prix_revient_eur: float | None = None
+    date_acquisition: _date | None = None
+    quantite: float | None = None
 
 
 # ─── Profils clients ──────────────────────────────────────────────────────────
@@ -232,6 +247,7 @@ class Profil(_Lenient):
     positions_detaillees: list[PositionDetaillee] = Field(default_factory=list)
     abattements_utilises: AbattementsUtilises = Field(default_factory=AbattementsUtilises)
     frais_courtier_par_transaction: float = Field(default=0.0, ge=0)  # € par transaction
+    composition_actuelle: list[LigneExistante] = Field(default_factory=list)
 
 
 class ProfilsWrapper(_Lenient):
