@@ -102,7 +102,7 @@ def calculer_drag_fiscal_etf(
     domicile: str | None,
     exposition_geo: str | None,
     yield_brut_estime_pct: float | None = None,
-    inclure_drag_replication: bool = True,  # noqa: ARG001  (anticipation S12)
+    inclure_drag_replication: bool = True,
 ) -> float:
     """Retourne le drag fiscal annuel estimé (en bps) dû à la withholding tax
     intra-NAV non récupérée par l'enveloppe ETF.
@@ -130,8 +130,9 @@ def calculer_drag_fiscal_etf(
     yield_brut_estime_pct : float | None
         Override du yield brut (%). Si None, utilise la table par défaut.
     inclure_drag_replication : bool
-        Paramètre anticipant S12 (tracking error structurel). Sans effet pour
-        l'instant (DRAG_REPLICATION_BPS = 0).
+        Anticipation S12 — sera utilisé pour ajouter DRAG_REPLICATION_BPS au
+        résultat (tracking error structurel). Sans effet pour l'instant
+        (DRAG_REPLICATION_BPS = 0). Conservé pour la stabilité de l'API.
 
     Retourne
     --------
@@ -192,4 +193,7 @@ def calculer_drag_fiscal_etf(
     # drag_bps = retenue_effective (%) × yield_brut (%) × 100
     # = (retenue/100) × (yield/100) × 10000
     drag_bps = (retenue_pct / 100.0) * (yield_pct / 100.0) * 10_000.0
+    # DRAG_REPLICATION_BPS sera ajouté ici en S12 si inclure_drag_replication=True
+    if inclure_drag_replication:
+        drag_bps += DRAG_REPLICATION_BPS
     return round(drag_bps, 2)

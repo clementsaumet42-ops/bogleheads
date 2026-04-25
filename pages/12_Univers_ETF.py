@@ -11,6 +11,9 @@ import yaml
 
 from src.fiscalite.drag_etf import calculer_drag_fiscal_etf
 
+# Seuil de drag matériel (en bps) au-delà duquel on affiche un badge rouge
+_DRAG_MATERIEL_BPS = 20
+
 st.title("📚 Univers ETF — Éligibilité enveloppes & TER effectif")
 
 st.info(
@@ -300,7 +303,7 @@ else:
         if v is None or (isinstance(v, float) and pd.isna(v)):
             return "—"
         bps = float(v)
-        if bps > 20:
+        if bps > _DRAG_MATERIEL_BPS:
             return f"🔴 {bps:.0f} bps"
         elif bps > 0:
             return f"🟡 {bps:.0f} bps"
