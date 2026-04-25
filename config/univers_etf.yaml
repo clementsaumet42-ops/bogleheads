@@ -2745,7 +2745,7 @@ univers_etf:
   spread_moyen_bps: null
   volume_quotidien_m_eur: null
   alternatives_ecartees: []
-- isin: null
+- isin: null  # TODO: vérifier ISIN Franklin MSCI World ex US sur justETF.com
   ticker: FLXW
   nom: Franklin MSCI World ex US UCITS ETF (Acc)
   emetteur: Franklin Templeton
