@@ -21,6 +21,7 @@ from src.excel.onglet_rebalancement_flux import _creer_onglet_rebalancement_flux
 from src.excel.onglet_reporting import creer_onglet_reporting
 from src.excel.onglet_tuto_solveur import creer_onglet_tuto_solveur
 from src.excel.onglet_univers_etf import creer_onglet_univers_etf
+from src.excel.onglet_alertes import creer_onglet_alertes
 from src.excel.styles import ROOT, load_yaml
 
 
@@ -94,6 +95,17 @@ def generer_excel(chemin_sortie: str = None):
 
     print("  → Onglet Backtest_Comparatif")
     creer_onglet_backtest(wb)
+
+    print("  → Onglet Alertes_40_Règles")
+    try:
+        from src.audit.alertes import detecter_alertes
+        from src.schemas import Profil as _ProfilSchema
+        _profil_ref_obj = _ProfilSchema.model_validate(profil_ref)
+        _alertes = detecter_alertes(_profil_ref_obj)
+        _ws_alertes = wb.create_sheet("Alertes (40 règles)")
+        creer_onglet_alertes(_ws_alertes, _alertes)
+    except Exception as _exc:
+        print(f"     ⚠ Onglet alertes ignoré : {_exc}")
 
     wb.properties.title = "Boglehead FR — Outil CGP Multi-Enveloppes 2026"
     wb.properties.subject = "Allocation Boglehead multi-enveloppes — France 2026"

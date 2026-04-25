@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from datetime import date
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, Optional
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -252,6 +252,36 @@ class Profil(_Lenient):
     abattements_utilises: AbattementsUtilises = Field(default_factory=AbattementsUtilises)
     frais_courtier_par_transaction: float = Field(default=0.0, ge=0)  # € par transaction
     composition_actuelle: list[LigneExistante] = Field(default_factory=list)
+
+    # ── Champs S12 — moteur d'alertes ────────────────────────────────────────
+    revenu_fiscal_reference: Optional[float] = None
+    taeg_credits_conso: Optional[float] = None
+    taeg_credit_immo: Optional[float] = None
+    solde_credit_conso: Optional[float] = None
+    capital_restant_immo: Optional[float] = None
+    abondement_employeur_max: Optional[float] = None
+    abondement_employeur_actuel: Optional[float] = None
+    a_pee: Optional[bool] = None
+    a_perco: Optional[bool] = None
+    participation_versee_pee: Optional[bool] = None
+    est_en_couple: Optional[bool] = None
+    a_testament: Optional[bool] = None
+    clause_beneficiaire_demembree: Optional[bool] = None
+    clause_beneficiaire_renseignee: Optional[bool] = None
+    date_revue_patrimoine: Optional[str] = None
+    plafond_per_non_utilise: Optional[float] = None
+    a_utilise_ir_pme: Optional[bool] = None
+    a_utilise_donation: Optional[bool] = None
+    volume_ordres_annuel: Optional[float] = None
+    charges_mensuelles: Optional[float] = None
+    epargne_precaution: Optional[float] = None
+    a_livret_a: Optional[bool] = None
+    assurances_vie: Optional[list] = None
+    fond_de_fonds: Optional[bool] = None
+    pee_actions_entreprise_pct: Optional[float] = None
+    nb_credits_conso: Optional[int] = None
+    frais_entree_scpi: Optional[float] = None
+    ter_fonds_actifs: Optional[float] = None
 
 
 class ProfilsWrapper(_Lenient):
