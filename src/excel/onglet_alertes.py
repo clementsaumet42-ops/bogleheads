@@ -27,7 +27,6 @@ def creer_onglet_alertes(ws, alertes, toutes_les_regles=None):
     for col, h in enumerate(headers, 1):
         cell = ws.cell(row=1, column=col, value=h)
         if Font and PatternFill:
-            cell.font = Font(bold=True)
             cell.fill = PatternFill("solid", fgColor="1B3A5B")
             cell.font = Font(bold=True, color="FFFFFF")
 

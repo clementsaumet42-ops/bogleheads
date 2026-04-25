@@ -5,6 +5,8 @@ from .base import Alerte, Severite, regle
 
 logger = logging.getLogger(__name__)
 
+_TAUX_PFU_IR = 0.128  # taux IR du PFU (12,8%) — CGI art. 200 A 1 bis
+
 
 @regle("R12", famille="Fiscalité gâchée")
 def detecter_R12(profil) -> Alerte | None:
@@ -37,7 +39,7 @@ def detecter_R12(profil) -> Alerte | None:
 
         rendement_div = 0.025
         dividendes = cto_distribuant * rendement_div
-        gain = dividendes * (tmi - 0.128)  # saving by switching from PFU (12.8%) to capitalizing
+        gain = dividendes * (tmi - _TAUX_PFU_IR)  # saving by switching from PFU (12.8%) to capitalizing
 
         return Alerte(
             code="R12",
@@ -253,7 +255,7 @@ def detecter_R17(profil) -> Alerte | None:
 
         restant = PLAFOND_PEA - montant_pea
         horizon = max(65 - age, 5)
-        gain_horizon = restant * 0.07 * horizon * 0.128
+        gain_horizon = restant * 0.07 * horizon * _TAUX_PFU_IR
 
         return Alerte(
             code="R17",
