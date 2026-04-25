@@ -89,7 +89,7 @@ def detecter_R34(profil) -> Alerte | None:
         if tmi < 0.30:
             return None
 
-        rfr = getattr(profil, "rfr_annuel", None)
+        rfr = getattr(profil, "revenu_fiscal_reference", None)
         if rfr is None:
             return None
 

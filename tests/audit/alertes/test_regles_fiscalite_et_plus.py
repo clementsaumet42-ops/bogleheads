@@ -378,7 +378,7 @@ def test_R33_no_trigger_small_patrimoine():
 # ── R34: Quotient familial ──────────────────────────────────────────────────
 
 def test_R34_triggers():
-    profil = MagicMock(est_en_couple=True, tmi=0.41, rfr_annuel=80000.0, regime_fiscal_detenteur="IR")
+    profil = MagicMock(est_en_couple=True, tmi=0.41, revenu_fiscal_reference=80000.0, regime_fiscal_detenteur="IR")
     alerte = detecter_R34(profil)
     assert alerte is not None
     assert alerte.code == "R34"
@@ -386,7 +386,7 @@ def test_R34_triggers():
 
 
 def test_R34_no_trigger_low_tmi():
-    profil = MagicMock(est_en_couple=True, tmi=0.11, rfr_annuel=30000.0)
+    profil = MagicMock(est_en_couple=True, tmi=0.11, revenu_fiscal_reference=30000.0)
     assert detecter_R34(profil) is None
 
 

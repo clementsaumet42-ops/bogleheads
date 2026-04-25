@@ -37,7 +37,7 @@ def detecter_R12(profil) -> Alerte | None:
 
         rendement_div = 0.025
         dividendes = cto_distribuant * rendement_div
-        gain = dividendes * 0.128  # IR economy: TMI 30% vs PFU 12.8%
+        gain = dividendes * (tmi - 0.128)  # saving by switching from PFU (12.8%) to capitalizing
 
         return Alerte(
             code="R12",

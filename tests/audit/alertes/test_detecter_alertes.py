@@ -20,7 +20,7 @@ def _make_profil(**kwargs):
             actions=0.6, obligations=0.3, immobilier_cote=0.05, or_=0.0, liquidites=0.05
         ),
         "enveloppes_disponibles": None,
-        "rfr_annuel": None,
+        "revenu_fiscal_reference": None,
         "regime_fiscal_detenteur": "IR",
         "abattements_utilises": MagicMock(),
         "contraintes_personnalisees": MagicMock(),
