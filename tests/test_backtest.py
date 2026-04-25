@@ -1,7 +1,6 @@
 """Tests pour le système de backtest S9."""
 from __future__ import annotations
 
-import math
 from pathlib import Path
 
 import pandas as pd
@@ -253,8 +252,6 @@ def test_ter_mensuel_reduit_valeur():
     assert val < 100_000
     assert val > 99_980
     # Vérification mathématique : val = 100000 * (1 - ter) ^ (1/12)
-    import math
-
     expected = 100_000 * (0.998 ** (1 / 12))
     assert abs(val - expected) < 0.01
 

@@ -68,7 +68,7 @@ def creer_onglet_backtest(wb: openpyxl.Workbook) -> None:
             ws.cell(row=row, column=1, value=pf).alignment = Alignment(horizontal="left")
             ws.cell(row=row, column=2, value=mode)
             ws.cell(row=row, column=3, value=100_000).number_format = "#,##0.00"
-            ws.cell(row=row, column=4, value="=C{r}*(1+E{r}/100)^21".format(r=row))
+            ws.cell(row=row, column=4, value="—")
             ws.cell(row=row, column=5, value="—")
             ws.cell(row=row, column=6, value="—")
             ws.cell(row=row, column=7, value="—")

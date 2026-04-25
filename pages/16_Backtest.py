@@ -52,7 +52,11 @@ with st.sidebar:
         portefeuille_choisi = st.selectbox(
             "Portefeuille",
             list(PORTEFEUILLES_DISPONIBLES.keys()),
-            format_func=lambda k: PORTEFEUILLES_DISPONIBLES[k].description[:60] + "…",
+            format_func=lambda k: (
+                PORTEFEUILLES_DISPONIBLES[k].description[:60] + "…"
+                if len(PORTEFEUILLES_DISPONIBLES[k].description) > 60
+                else PORTEFEUILLES_DISPONIBLES[k].description
+            ),
         )
 
         mode_affichage = st.radio(

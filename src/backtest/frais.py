@@ -12,9 +12,11 @@ class ConfigFrais(BaseModel):
 
 
 def appliquer_ter_mensuel(valeur: float, ter_annuel: float) -> float:
-    """Applique le TER annuel sur une période mensuelle."""
-    ter_mensuel = 1 - (1 - ter_annuel) ** (1 / 12)
-    return valeur * (1 - ter_mensuel)
+    """Applique le TER annuel sur une période mensuelle.
+
+    valeur_après = valeur × (1 - ter_annuel)^(1/12)
+    """
+    return valeur * (1 - ter_annuel) ** (1 / 12)
 
 
 def appliquer_frais_transaction(montant: float, config: ConfigFrais) -> float:
