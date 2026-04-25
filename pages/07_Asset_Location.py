@@ -127,3 +127,15 @@ with col1:
 with col2:
     if st.button("📈 Projection Monte-Carlo →", type="primary", use_container_width=True):
         st.switch_page("pages/08_Monte_Carlo.py")
+
+# ─── Lien vers univers ETF (S11-B) ─────────────────────────────────────────
+
+st.divider()
+col_etf1, col_etf2 = st.columns([2, 1])
+with col_etf1:
+    st.markdown(
+        "📚 Consultez les ETF disponibles par enveloppe (PEA, AV, PER, CTO) pour implémenter cette ventilation."
+    )
+with col_etf2:
+    if st.button("📚 Voir les ETFs disponibles par enveloppe →", use_container_width=True):
+        st.switch_page("pages/12_Univers_ETF.py")

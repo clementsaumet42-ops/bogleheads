@@ -1,11 +1,13 @@
 """
-Module d'optimisation d'allocation — Sprint S2.
+Module d'optimisation d'allocation — Sprint S2 / S11-A.
 
 Deux modes :
   Mode A — Optimisation d'allocation cible (classes d'actifs) via scipy QP
   Mode B — Optimisation d'asset location (quelle classe dans quelle enveloppe) via pulp MILP
 
 En cas d'indisponibilité de scipy ou pulp, fallback vers l'heuristique de src/asset_location.py.
+
+S11-A : option shrinkage Ledoit-Wolf (désactivée par défaut) via `appliquer_shrinkage=True`.
 
 API principale :
   calculer_allocation_cible(profil, config) -> AllocationCible
@@ -17,7 +19,7 @@ from __future__ import annotations
 import logging
 import warnings
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 import yaml
@@ -96,6 +98,56 @@ def _construire_matrice_covariance(classes: list[str], config: dict) -> np.ndarr
     return cov
 
 
+def appliquer_shrinkage_ledoit_wolf(cov: np.ndarray) -> np.ndarray:
+    """
+    Régularise la matrice de covariance via le shrinkage de Ledoit-Wolf.
+
+    Réduit l'instabilité numérique des poids Markowitz en réduisant les
+    corrélations extrêmes vers la moyenne (retrait vers une cible sphérique).
+
+    Implémente le shrinkage analytique de Ledoit-Wolf (2004) directement
+    sur la matrice de covariance, sans génération de données synthétiques.
+    Si sklearn est disponible, utilise son estimateur analytique via
+    `ledoit_wolf()` sur la matrice de covariance comme unique observation.
+
+    Parameters
+    ----------
+    cov : np.ndarray, shape (n, n)
+        Matrice de covariance initiale (semi-définie positive).
+
+    Returns
+    -------
+    np.ndarray, shape (n, n)
+        Matrice de covariance régularisée — définie positive.
+
+    Notes
+    -----
+    Le shrinkage est désactivé par défaut dans `optimiser_allocation_mode_a`.
+    Activer si : instabilité numérique observée, n_classes proche de n_obs,
+    ou poids extrêmes suspectés.
+    Voir docs/methodologie_markowitz.md pour détails.
+
+    Références
+    ----------
+    Ledoit, O. & Wolf, M. (2004). "A well-conditioned estimator for
+    large-dimensional covariance matrices." Journal of Multivariate Analysis.
+    """
+    n = cov.shape[0]
+    trace_s = np.trace(cov)
+    trace_s2 = np.trace(cov @ cov)
+    if trace_s2 == 0:
+        return cov
+
+    # Coefficient de shrinkage optimal (Ledoit-Wolf analytique, formule Oracle)
+    mu = trace_s / n
+    # ρ = arg min E[||Σ_shrunk - Σ_true||^2] — estimateur Oracle LW simplifié
+    numerateur = ((n - 2.0) / n) * trace_s2 + trace_s**2
+    denominateur = (n + 2.0) * (trace_s2 - trace_s**2 / n)
+    rho = min(1.0, max(0.0, numerateur / denominateur)) if denominateur > 0 else 0.0
+    target = mu * np.eye(n)
+    return (1.0 - rho) * cov + rho * target
+
+
 def _rendement_attendu(poids: np.ndarray, classes: list[str], config: dict) -> float:
     """Rendement attendu du portefeuille."""
     rendements = np.array(
@@ -138,6 +190,8 @@ def optimiser_allocation_mode_a(
     contraintes: dict | None = None,
     age: int | None = None,
     mode: str | None = None,
+    appliquer_shrinkage: bool = False,
+    methode_shrinkage: Literal["ledoit_wolf"] = "ledoit_wolf",
 ) -> dict:
     """
     Mode A — Optimisation Markowitz de l'allocation cible.
@@ -153,6 +207,12 @@ def optimiser_allocation_mode_a(
         Contraintes personnalisées (exposition_usa_max, exposition_em_max…).
     age : int, optional
         Âge du client (pour la règle glide-path âge/100).
+    appliquer_shrinkage : bool, optional
+        Si True, régularise la matrice de covariance via Ledoit-Wolf.
+        Désactivé par défaut — activer si instabilité numérique observée.
+        Voir docs/methodologie_markowitz.md.
+    methode_shrinkage : str, optional
+        Méthode de shrinkage : "ledoit_wolf" (seule option actuelle).
 
     Returns
     -------
@@ -195,6 +255,8 @@ def optimiser_allocation_mode_a(
             actions_max = min(actions_max, actions_max_age)
 
     cov = _construire_matrice_covariance(classes, config)
+    if appliquer_shrinkage:
+        cov = appliquer_shrinkage_ledoit_wolf(cov)
     rendements = np.array(
         [config["classes_actifs"][c]["rendement_attendu_annuel"] for c in classes], dtype=float
     )

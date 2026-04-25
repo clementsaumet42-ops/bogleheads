@@ -55,6 +55,10 @@ class ETF(_Lenient):
     date_verification_dic: str | None = None
     contrats_av_reference: list[str] = Field(default_factory=list)
     frais_entree_typique_pct: float = Field(default=0.0, ge=0)
+    # S11-B : champs d'audit qualité
+    derniere_verification: date | None = None  # date de revue manuelle des données
+    audit_status: str = "non_verifie"  # "ok", "warn", "fail", "non_verifie"
+    audit_notes: str | None = None  # notes libres sur l'audit
 
 
 class UniversETFWrapper(_Lenient):

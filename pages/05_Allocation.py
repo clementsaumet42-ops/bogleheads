@@ -366,7 +366,7 @@ selon le profil ou les contraintes de l'investisseur.
         f"→ allocation actions = {total_actions:.1%}"
     )
 
-# ─── Expander Hypothèses de calcul ─────────────────────────────────────────────
+# ─── Expander Sources et hypothèses (S11-A) ───────────────────────────────────
 
 _ROOT_CFG = Path(__file__).parent.parent / "config" / "optimiseur.yaml"
 
@@ -375,34 +375,104 @@ _ROOT_CFG = Path(__file__).parent.parent / "config" / "optimiseur.yaml"
 def _charger_hypotheses() -> dict:
     try:
         data = yaml.safe_load(_ROOT_CFG.read_text(encoding="utf-8"))
-        return data.get("hypotheses_meta", {})
+        return data
     except Exception:
         return {}
 
 
-with st.expander("ℹ️ Hypothèses de calcul et sources"):
-    meta = _charger_hypotheses()
-    if meta:
-        st.markdown(f"**Base :** {meta.get('base', '—')}")
-        st.markdown(
-            f"**Inflation attendue :** {meta.get('inflation_attendue', 0.02):.1%} "
-            f"(zone Euro long terme BCE)"
-        )
-        st.markdown(
-            f"**Devise de référence :** {meta.get('devise_reference', 'EUR')} "
-            f"| **Juridiction :** {meta.get('juridiction', 'France')}"
-        )
-        st.markdown(f"**Date de mise à jour :** {meta.get('date_maj', '—')}")
-        sources = meta.get("sources", [])
+with st.expander("📖 Sources et hypothèses de calibration"):
+    cfg_full = _charger_hypotheses()
+    meta_s11 = cfg_full.get("metadonnees", {})
+    meta_base = cfg_full.get("hypotheses_meta", {})
+
+    if meta_s11:
+        date_cal = meta_s11.get("date_calibration", "—")
+        periode = meta_s11.get("periode_donnees", {})
+        debut = periode.get("debut", "—")
+        fin = periode.get("fin", "—")
+        nb_obs = periode.get("nb_observations_mensuelles", "—")
+
+        col_m1, col_m2 = st.columns(2)
+        with col_m1:
+            st.markdown(f"**Date de calibration :** {date_cal}")
+            st.markdown(f"**Période :** {debut} → {fin}")
+            st.markdown(f"**Observations mensuelles :** {nb_obs}")
+        with col_m2:
+            st.markdown(
+                f"**Devise :** {meta_base.get('devise_reference', 'EUR')} "
+                f"| **Juridiction :** {meta_base.get('juridiction', 'France')}"
+            )
+            methodologie = meta_s11.get("methodologie", {})
+            re_meth = methodologie.get("rendements_esperes", {})
+            if re_meth:
+                st.markdown(f"**Méthode μ :** {re_meth.get('methode', '—')}")
+                src_url = re_meth.get("url")
+                src = re_meth.get("source", "—")
+                if src_url:
+                    st.markdown(f"**Source :** [{src}]({src_url})")
+                else:
+                    st.markdown(f"**Source :** {src}")
+
+        # Tableau μ / σ par classe
+        rendements_esp = cfg_full.get("rendements_esperes", {})
+        classes_actifs = cfg_full.get("classes_actifs", {})
+        if rendements_esp or classes_actifs:
+            st.markdown("---")
+            st.markdown("**Hypothèses par classe d'actifs :**")
+            import pandas as pd
+
+            rows = []
+            for classe, re_data in rendements_esp.items():
+                ca = classes_actifs.get(classe, {})
+                ic = re_data.get("intervalle_confiance_95")
+                ic_str = f"[{ic[0]:.1%} ; {ic[1]:.1%}]" if ic and len(ic) == 2 else "—"
+                rows.append(
+                    {
+                        "Classe": classe,
+                        "μ (%)": f"{re_data.get('valeur', 0):.1%}",
+                        "σ (%)": (
+                            f"{ca.get('volatilite_annuelle', 0):.1%}"
+                            if ca.get("volatilite_annuelle") is not None
+                            else "—"
+                        ),
+                        "IC 95%": ic_str,
+                        "Source": re_data.get("source_specifique", "—")[:80],
+                    }
+                )
+            if rows:
+                st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+        # Avertissements AMF
+        avertissements = meta_s11.get("avertissements", [])
+        if avertissements:
+            st.markdown("---")
+            for av in avertissements:
+                st.warning(f"⚠️ {av}")
+    elif meta_base:
+        st.markdown(f"**Base :** {meta_base.get('base', '—')}")
+        st.markdown(f"**Date de mise à jour :** {meta_base.get('date_maj', '—')}")
+        sources = meta_base.get("sources", [])
         if sources:
             st.markdown("**Sources :**")
             for src in sources:
                 st.markdown(f"- {src}")
-        avert = meta.get("avertissement", "")
+        avert = meta_base.get("avertissement", "")
         if avert:
             st.warning(f"⚠️ {avert.strip()}")
     else:
         st.info("Métadonnées non disponibles.")
+
+# ─── Lien vers univers ETF (S11-B) ─────────────────────────────────────────
+
+st.divider()
+col_etf1, col_etf2 = st.columns([2, 1])
+with col_etf1:
+    st.markdown(
+        "📚 Retrouvez les ETF éligibles pour cette allocation, filtrés par enveloppe (PEA, AV, PER, CTO)"
+    )
+with col_etf2:
+    if st.button("📚 Voir les ETFs éligibles →", use_container_width=True):
+        st.switch_page("pages/12_Univers_ETF.py")
 
 # ─── Explication pédagogique (S8.1 — preuve bout-en-bout) ────────────────────
 
