@@ -120,3 +120,83 @@ def test_univers_etf_contient_etfs_verifies():
 
     nb_verifies = sum(1 for e in etfs if e.get("derniere_verification") is not None)
     assert nb_verifies >= 5, f"Attendu ≥ 5 ETFs avec derniere_verification, trouvé {nb_verifies}."
+
+
+# ─── Tests S11-C : TER effectif ──────────────────────────────────────────────
+
+
+def test_ter_effectif_colonne_presente():
+    """La colonne TER_effectif_pct est calculée dans le DataFrame de la page."""
+    import yaml
+
+    from src.fiscalite.drag_etf import calculer_drag_fiscal_etf
+
+    config_path = ROOT / "config" / "univers_etf.yaml"
+    raw = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    etfs = raw.get("univers_etf", [])
+
+    import pandas as pd
+
+    rows = []
+    for etf in etfs:
+        ter = etf.get("ter", 0.0) or 0.0
+        drag = calculer_drag_fiscal_etf(
+            etf.get("replication"), etf.get("domicile_iso"), etf.get("exposition_geo")
+        )
+        rows.append({"ticker": etf["ticker"], "ter": ter, "drag_bps": drag})
+    df = pd.DataFrame(rows)
+    df["TER_effectif_pct"] = df["ter"] + df["drag_bps"] / 100.0
+
+    assert "TER_effectif_pct" in df.columns, "Colonne TER_effectif_pct manquante"
+    assert len(df) > 0, "DataFrame vide"
+    # Les valeurs doivent toutes être ≥ ter (drag ≥ 0)
+    assert (df["TER_effectif_pct"] >= df["ter"]).all(), (
+        "TER_effectif_pct < TER affiché pour certains ETFs (drag négatif impossible)"
+    )
+
+
+def test_tri_ter_effectif_inverse_classement():
+    """Tri par TER effectif ≠ tri par TER affiché sur fixture avec LU-US physique bas TER."""
+    import pandas as pd
+
+    from src.fiscalite.drag_etf import calculer_drag_fiscal_etf
+
+    # Fixture : ETF physique LU-US avec TER bas vs synthétique avec TER plus haut
+    fixture = [
+        # Physique LU-US : TER 0.10% mais drag ~45 bps → TER effectif ~0.55%
+        {
+            "ticker": "ETF_PHYS_LU",
+            "ter": 0.0010,
+            "replication": "physique_sampling",
+            "domicile_iso": "LU",
+            "exposition_geo": "US",
+        },
+        # Synthétique : TER 0.38% mais drag 0 → TER effectif = 0.38%
+        {
+            "ticker": "ETF_SWAP_FR",
+            "ter": 0.0038,
+            "replication": "synthetique_swap",
+            "domicile_iso": "FR",
+            "exposition_geo": "US",
+        },
+    ]
+    df = pd.DataFrame(fixture)
+    df["drag_bps"] = df.apply(
+        lambda r: calculer_drag_fiscal_etf(
+            r["replication"], r["domicile_iso"], r["exposition_geo"]
+        ),
+        axis=1,
+    )
+    df["TER_effectif_pct"] = df["ter"] + df["drag_bps"] / 100.0
+
+    # Tri par TER affiché : physique LU (0.10%) < synthétique (0.38%)
+    par_ter_affiche = df.sort_values("ter").reset_index(drop=True)
+    assert par_ter_affiche.iloc[0]["ticker"] == "ETF_PHYS_LU", (
+        "TER affiché le plus bas devrait être physique LU"
+    )
+
+    # Tri par TER effectif : synthétique (0.38%) < physique LU (0.10% + ~0.45% = ~0.55%)
+    par_ter_effectif = df.sort_values("TER_effectif_pct").reset_index(drop=True)
+    assert par_ter_effectif.iloc[0]["ticker"] == "ETF_SWAP_FR", (
+        "Après tri par TER effectif, le swap (drag=0) devrait passer devant le physique LU-US"
+    )

@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from datetime import date
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -375,7 +375,9 @@ class AlternativeEcartee(_Lenient):
 
 
 class ETFEnrichi(ETF):
-    """Extension de ETF avec les champs S8.2a (tracking difference, liquidité, alternatives)."""
+    """Extension de ETF avec les champs S8.2a (tracking difference, liquidité, alternatives)
+    et S11-C (drag fiscal intra-NAV).
+    """
 
     domicile_iso: str | None = None  # ISO-3166-1 alpha-2: IE, FR, LU, DE, etc.
     distribuant_capitalisant: str | None = None  # ACC | DIST
@@ -388,6 +390,14 @@ class ETFEnrichi(ETF):
     spread_moyen_bps: float | None = Field(default=None, ge=0)
     volume_quotidien_m_eur: float | None = Field(default=None, ge=0)
     alternatives_ecartees: list[AlternativeEcartee] = Field(default_factory=list)
+    # ─── S11-C : drag fiscal intra-NAV ──────────────────────────────────────
+    # Ces 3 champs sont optionnels (None par défaut) pour ne pas casser les
+    # fixtures existantes. Si l'un des trois manque, calculer_drag_fiscal_etf()
+    # retourne 0.0 avec un warning logger.
+    replication: Literal["physique_full", "physique_sampling", "synthetique_swap"] | None = None
+    exposition_geo: (
+        Literal["US", "Europe", "Monde_dev", "Monde_ACWI", "Emergents", "France", "Japon"] | None
+    ) = None
 
 
 # ─── S8.2a — Contrats d'assurance-vie ────────────────────────────────────────
