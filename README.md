@@ -794,6 +794,7 @@ YAML configs ──→ src/*.py ──→ excel_builder.py ──→ output/*.xl
 | **[x] S4** (2 sem.) | Streamlit | **7 pages interactives, Docker, 34 tests** |
 | **S5** (1 sem.) | Import portefeuille + Comparateur | Argumentaire commercial |
 | **S6+** | AV avancée, Succession, Refresh auto | Profondeur métier |
+| **[x] S9** (1 sem.) | Backtest historique | Moteur backtest mensuel, 4 modes, 5 portefeuilles |
 
 ---
 

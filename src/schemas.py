@@ -502,6 +502,36 @@ class RetenuesSourceConfig(_Lenient):
 
 # ─── Chargement et validation centralisés ────────────────────────────────────
 
+# ─── S9 — Backtest ────────────────────────────────────────────────────────────
+
+
+class ConfigFraisBacktest(_Lenient):
+    ter_par_classe: dict[str, float] = Field(default_factory=dict)
+    courtage_par_ordre_eur: float = Field(default=1.0, ge=0)
+    spread_bps: float = Field(default=5.0, ge=0)
+    frais_enveloppe_annuel_pct: dict[str, float] = Field(default_factory=dict)
+
+
+class ConfigFiscaliteBacktest(_Lenient):
+    pfu_taux: float = Field(default=0.30, ge=0, le=1)
+    ps_taux: float = Field(default=0.172, ge=0, le=1)
+    distribution_par_classe: dict[str, float] = Field(default_factory=dict)
+    rebalancement_seuil_pct: float = Field(default=0.05, ge=0)
+
+
+class BacktestParams(_Lenient):
+    capital_initial_eur: float = Field(default=100_000.0, ge=0)
+    date_debut: str = "2003-01-31"
+    date_fin: str = "2024-12-31"
+    frais: ConfigFraisBacktest = Field(default_factory=ConfigFraisBacktest)
+    fiscalite: ConfigFiscaliteBacktest = Field(default_factory=ConfigFiscaliteBacktest)
+    portefeuilles_actifs: list[str] = Field(default_factory=list)
+
+
+class ConfigBacktest(_Lenient):
+    backtest: BacktestParams
+
+
 _SCHEMAS: dict = {
     "univers_etf.yaml": UniversETFWrapper,
     "enveloppes.yaml": EnveloppesWrapper,
@@ -516,6 +546,8 @@ _SCHEMAS: dict = {
     "contrats_av.yaml": AssuranceVieConfig,
     "brokers.yaml": BrokersConfig,
     "retenues_source.yaml": RetenuesSourceConfig,
+    # S9 — Backtest
+    "backtest.yaml": ConfigBacktest,
 }
 
 

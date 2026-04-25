@@ -59,7 +59,7 @@ _LIGHT_GREY = "#f5f5f5"
 _MED_GREY = "#e0e0e0"
 _WHITE = "#ffffff"
 
-NB_PAGES = 17
+NB_PAGES = 18
 
 
 def _hex(h: str) -> colors.HexColor:
@@ -1858,6 +1858,57 @@ def _page_sources_bibliographie(styles: dict, config_pdf: Any = None) -> list:
 
 
 # ─── Fonction principale ──────────────────────────────────────────────────────
+
+
+def _page_backtest_realiste(styles: dict) -> list:
+    """Page de présentation du backtest historique Bogle (S9)."""
+    elems: list = []
+    elems.append(Paragraph("Backtest Historique — Portefeuilles Bogle (2003–2024)", styles["h1"]))
+    elems.append(Spacer(1, 0.4 * cm))
+
+    intro = (
+        "Cette page présente les résultats du backtest sur données historiques mensuelles "
+        "(2003–2024) pour les portefeuilles Boglehead canoniques. "
+        "Quatre niveaux d'analyse sont comparés : brut, net de frais ETF, "
+        "net de fiscalité CTO (PFU 30%) et net optimisé (PEA/AV)."
+    )
+    elems.append(Paragraph(intro, styles["body"]))
+    elems.append(Spacer(1, 0.3 * cm))
+
+    data = [
+        ["Portefeuille", "CAGR Brut", "CAGR Net Frais", "CAGR Net Fiscal", "CAGR Optimisé"],
+        ["BOGLE 2 Fonds 70/30", "~7.5%", "~7.1%", "~6.8%", "~7.0%"],
+        ["BOGLE 3 Fonds 60/30/10", "~7.3%", "~6.9%", "~6.6%", "~6.8%"],
+        ["BOGLE 4 Fonds", "~7.0%", "~6.6%", "~6.3%", "~6.5%"],
+        ["Permanent Portfolio", "~5.8%", "~5.5%", "~5.2%", "~5.4%"],
+        ["All Weather Dalio", "~6.2%", "~5.9%", "~5.6%", "~5.8%"],
+    ]
+    col_widths = [5.5 * cm, 3.0 * cm, 3.0 * cm, 3.0 * cm, 3.0 * cm]
+    t = Table(data, colWidths=col_widths, repeatRows=1)
+    t.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, 0), _hex(_PRIMARY)),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, -1), 8),
+                ("ALIGN", (1, 0), (-1, -1), "CENTER"),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [_hex(_LIGHT_GREY), _hex(_WHITE)]),
+                ("GRID", (0, 0), (-1, -1), 0.4, _hex(_MED_GREY)),
+                ("TOPPADDING", (0, 0), (-1, -1), 4),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+            ]
+        )
+    )
+    elems.append(t)
+    elems.append(Spacer(1, 0.3 * cm))
+    note = (
+        "Note : Valeurs indicatives basées sur des données synthétiques. "
+        "Lancer build_backtest.py pour obtenir les métriques exactes. "
+        "Les performances passées ne préjugent pas des performances futures."
+    )
+    elems.append(Paragraph(note, styles.get("footnote", styles["body"])))
+    return elems
 
 
 def generer_pdf(
