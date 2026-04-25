@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from datetime import date as _date
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -122,7 +122,7 @@ class LigneExistante(_Lenient):
     classe_actif: str
     montant_eur: float
     prix_revient_eur: float | None = None
-    date_acquisition: _date | None = None
+    date_acquisition: date | None = None
     quantite: float | None = None
 
 
