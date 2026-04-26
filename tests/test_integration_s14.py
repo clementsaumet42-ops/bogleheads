@@ -156,7 +156,7 @@ def test_page_conformite_cif_se_rend() -> None:
         pytest.skip("streamlit.testing.v1 non disponible")
     except Exception as e:
         # Accept timeout or file errors gracefully
-        if "timeout" in str(e).lower() or "No such file" in str(e):
+        if "timeout" in str(e).lower() or "no such file" in str(e).lower():
             pytest.skip(f"AppTest indisponible : {e}")
         raise
 
