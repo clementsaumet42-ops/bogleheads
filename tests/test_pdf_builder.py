@@ -101,8 +101,7 @@ class TestSchemasPydanticS3:
             date_generation="2026-04-23",
         )
         assert res.nb_pages == 13
-
-    def test_schemas_yaml_registered(self):
+        assert res.profil_id == 1
         """pdf_cabinet.yaml est enregistré dans _SCHEMAS."""
         from src.schemas import _SCHEMAS
 
