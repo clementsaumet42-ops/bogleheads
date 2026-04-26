@@ -2,6 +2,7 @@ from pathlib import Path
 
 import openpyxl
 
+from src.excel.onglet_alertes import creer_onglet_alertes
 from src.excel.onglet_allocation import creer_onglet_allocation_cible
 from src.excel.onglet_allocation_optimisee import creer_onglet_allocation_optimisee
 from src.excel.onglet_asset_location import creer_onglet_asset_location
@@ -21,7 +22,6 @@ from src.excel.onglet_rebalancement_flux import _creer_onglet_rebalancement_flux
 from src.excel.onglet_reporting import creer_onglet_reporting
 from src.excel.onglet_tuto_solveur import creer_onglet_tuto_solveur
 from src.excel.onglet_univers_etf import creer_onglet_univers_etf
-from src.excel.onglet_alertes import creer_onglet_alertes
 from src.excel.styles import ROOT, load_yaml
 
 
@@ -100,6 +100,7 @@ def generer_excel(chemin_sortie: str = None):
     try:
         from src.audit.alertes import detecter_alertes
         from src.schemas import Profil as _ProfilSchema
+
         _profil_ref_obj = _ProfilSchema.model_validate(profil_ref)
         _alertes = detecter_alertes(_profil_ref_obj)
         _ws_alertes = wb.create_sheet("Alertes (40 règles)")

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+
 from .base import Alerte, Severite, regle
 
 logger = logging.getLogger(__name__)

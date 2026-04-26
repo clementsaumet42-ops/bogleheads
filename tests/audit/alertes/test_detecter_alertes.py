@@ -1,10 +1,10 @@
 """Tests for S12 alert engine — detecter_alertes orchestrator."""
+
 from __future__ import annotations
 
-import pytest
 from unittest.mock import MagicMock
 
-from src.audit.alertes import detecter_alertes, Alerte, Severite
+from src.audit.alertes import Severite, detecter_alertes
 
 
 def _make_profil(**kwargs):

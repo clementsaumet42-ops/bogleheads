@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+
 from .base import Alerte, Severite, regle
 
 logger = logging.getLogger(__name__)
@@ -20,9 +21,19 @@ def detecter_R25(profil) -> Alerte | None:
 
         composition = getattr(profil, "composition_actuelle", None) or []
         has_invested = any(
-            "PEE" in str(getattr(l, "enveloppe", "") if not isinstance(l, dict) else l.get("enveloppe", "")).upper()
-            or "PERCO" in str(getattr(l, "enveloppe", "") if not isinstance(l, dict) else l.get("enveloppe", "")).upper()
-            for l in composition
+            "PEE"
+            in str(
+                getattr(item, "enveloppe", "")
+                if not isinstance(item, dict)
+                else item.get("enveloppe", "")
+            ).upper()
+            or "PERCO"
+            in str(
+                getattr(item, "enveloppe", "")
+                if not isinstance(item, dict)
+                else item.get("enveloppe", "")
+            ).upper()
+            for item in composition
         )
         if has_invested:
             return None
@@ -60,7 +71,7 @@ def detecter_R26(profil) -> Alerte | None:
             severite=Severite.ROUGE,
             titre=f"PEE investi à {pee_pct:.0%} en actions de l'entreprise",
             description=(
-                f"Investir plus de 33% de son PEE en actions de son propre employeur crée un double risque : "
+                "Investir plus de 33% de son PEE en actions de son propre employeur crée un double risque : "
                 "si l'entreprise fait faillite, vous perdez emploi ET épargne."
             ),
             gain_eur_annuel=None,

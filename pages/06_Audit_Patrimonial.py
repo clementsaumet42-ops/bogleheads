@@ -105,7 +105,11 @@ else:
                     f"<strong>{_icon} [{_alerte.code}] {_alerte.titre}</strong><br/>"
                     f"<span style='font-size:0.88rem;'>{_alerte.description}</span><br/>"
                     f"<em style='font-size:0.85rem;color:#1B3A5B;'>👉 {_alerte.action_concrete}</em>"
-                    + (f"<br/><span style='font-size:0.82rem;'>💰 {_gain_txt}</span>" if _gain_txt else "")
+                    + (
+                        f"<br/><span style='font-size:0.82rem;'>💰 {_gain_txt}</span>"
+                        if _gain_txt
+                        else ""
+                    )
                     + "</div>",
                     unsafe_allow_html=True,
                 )

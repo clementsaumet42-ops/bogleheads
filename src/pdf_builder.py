@@ -537,6 +537,7 @@ def _page_alertes(profil: Any, styles: dict, alertes=None) -> list:
     if alertes is None:
         try:
             from src.audit.alertes import detecter_alertes
+
             alertes = detecter_alertes(profil)
         except Exception as exc:
             logger.warning("Impossible de détecter les alertes S12 : %s", exc)
@@ -555,22 +556,29 @@ def _page_alertes(profil: Any, styles: dict, alertes=None) -> list:
         "VERT": colors.HexColor("#CCFFCC"),
     }
 
-    elems.append(Paragraph(
-        f"Top {len(top_alertes)} alertes détectées (sur {len(alertes)} au total) :",
-        styles["h2"],
-    ))
+    elems.append(
+        Paragraph(
+            f"Top {len(top_alertes)} alertes détectées (sur {len(alertes)} au total) :",
+            styles["h2"],
+        )
+    )
     elems.append(Spacer(1, 0.2 * cm))
 
     rows = [["Code", "Sévérité", "Titre", "Gain €/an", "Action"]]
     for a in top_alertes:
         gain_str = f"{a.gain_eur_annuel:,.0f} €" if a.gain_eur_annuel else "—"
-        rows.append([
-            a.code,
-            _SEV_LABEL.get(a.severite.value, a.severite.value),
-            Paragraph(a.titre, styles["body"]),
-            gain_str,
-            Paragraph(a.action_concrete[:80] + ("…" if len(a.action_concrete) > 80 else ""), styles["body"]),
-        ])
+        rows.append(
+            [
+                a.code,
+                _SEV_LABEL.get(a.severite.value, a.severite.value),
+                Paragraph(a.titre, styles["body"]),
+                gain_str,
+                Paragraph(
+                    a.action_concrete[:80] + ("…" if len(a.action_concrete) > 80 else ""),
+                    styles["body"],
+                ),
+            ]
+        )
 
     t = Table(rows, colWidths=[1.2 * cm, 2.2 * cm, 5.5 * cm, 2.2 * cm, 5.5 * cm])
     style_cmds = [
@@ -2079,6 +2087,7 @@ def generer_pdf(
         # S12 — Alertes patrimoniales
         try:
             from src.audit.alertes import detecter_alertes as _detecter_alertes
+
             _alertes_s12 = _detecter_alertes(profil)
         except Exception as _exc_s12:
             logger.warning("Alertes S12 non disponibles : %s", _exc_s12)

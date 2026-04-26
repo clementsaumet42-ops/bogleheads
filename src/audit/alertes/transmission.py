@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+
 from .base import Alerte, Severite, regle
 
 logger = logging.getLogger(__name__)
@@ -20,9 +21,19 @@ def detecter_R32(profil) -> Alerte | None:
 
         composition = getattr(profil, "composition_actuelle", None) or []
         has_av = any(
-            "AV" in str(getattr(l, "enveloppe", "") if not isinstance(l, dict) else l.get("enveloppe", "")).upper()
-            or "ASSURANCE" in str(getattr(l, "enveloppe", "") if not isinstance(l, dict) else l.get("enveloppe", "")).upper()
-            for l in composition
+            "AV"
+            in str(
+                getattr(item, "enveloppe", "")
+                if not isinstance(item, dict)
+                else item.get("enveloppe", "")
+            ).upper()
+            or "ASSURANCE"
+            in str(
+                getattr(item, "enveloppe", "")
+                if not isinstance(item, dict)
+                else item.get("enveloppe", "")
+            ).upper()
+            for item in composition
         )
         if not has_av:
             return None

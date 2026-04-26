@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+
 from .base import Alerte, Severite, regle
 
 logger = logging.getLogger(__name__)
@@ -23,11 +24,10 @@ def detecter_R1(profil) -> Alerte | None:
             else:
                 frais_uc = getattr(c, "frais_uc", 0) or 0
                 encours = getattr(c, "encours", 0) or 0
-            if frais_uc > 0.01 and encours > 30000:
-                if frais_uc > pire_frais:
-                    pire_frais = frais_uc
-                    pire_contrat = c
-                    encours_total = encours
+            if frais_uc > 0.01 and encours > 30000 and frais_uc > pire_frais:
+                pire_frais = frais_uc
+                pire_contrat = c
+                encours_total = encours
 
         if pire_contrat is None:
             return None
