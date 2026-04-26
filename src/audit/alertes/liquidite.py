@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+
 from .base import Alerte, Severite, regle
 
 logger = logging.getLogger(__name__)
@@ -54,9 +55,19 @@ def detecter_R22(profil) -> Alerte | None:
 
         composition = getattr(profil, "composition_actuelle", None) or []
         has_livret = any(
-            "LIVRET" in str(getattr(l, "classe_actif", "") if not isinstance(l, dict) else l.get("classe_actif", "")).upper()
-            or "LIVRET" in str(getattr(l, "libelle_libre", "") if not isinstance(l, dict) else l.get("libelle_libre", "")).upper()
-            for l in composition
+            "LIVRET"
+            in str(
+                getattr(item, "classe_actif", "")
+                if not isinstance(item, dict)
+                else item.get("classe_actif", "")
+            ).upper()
+            or "LIVRET"
+            in str(
+                getattr(item, "libelle_libre", "")
+                if not isinstance(item, dict)
+                else item.get("libelle_libre", "")
+            ).upper()
+            for item in composition
         )
         if has_livret:
             return None
@@ -140,7 +151,11 @@ def detecter_R24(profil) -> Alerte | None:
 
             if "LIVRET A" in libelle.upper() or "LIVRET_A" in libelle.upper():
                 montant_livret_a += montant
-            if "EURO" in classe.upper() or "FONDS EURO" in libelle.upper() or "FONDS_EURO" in classe.upper():
+            if (
+                "EURO" in classe.upper()
+                or "FONDS EURO" in libelle.upper()
+                or "FONDS_EURO" in classe.upper()
+            ):
                 montant_fonds_euros += montant
 
         if montant_livret_a >= PLAFOND_LIVRET_A * 0.9:

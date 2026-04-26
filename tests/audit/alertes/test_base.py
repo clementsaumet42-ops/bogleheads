@@ -1,8 +1,8 @@
 """Tests for S12 alert engine — base infrastructure."""
+
 from __future__ import annotations
 
-import pytest
-from src.audit.alertes.base import Alerte, Severite, _REGISTRY, regle
+from src.audit.alertes.base import _REGISTRY, Alerte, Severite, regle
 
 
 def test_severite_values():

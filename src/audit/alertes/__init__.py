@@ -1,13 +1,20 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
 
-from .base import Alerte, Severite, _REGISTRY
-from . import frais, allocation, fiscalite, configuration, liquidite, epargne_salariale, credit, transmission, hygiene, bonus
-
-if TYPE_CHECKING:
-    from src.schemas import Profil
+from . import (  # noqa: F401
+    allocation,
+    bonus,
+    configuration,
+    credit,
+    epargne_salariale,
+    fiscalite,
+    frais,
+    hygiene,
+    liquidite,
+    transmission,
+)
+from .base import _REGISTRY, Alerte, Severite
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +24,7 @@ _SEVERITE_ORDER = {Severite.ROUGE: 0, Severite.JAUNE: 1, Severite.VERT: 2}
 def detecter_alertes(profil) -> list[Alerte]:
     """Évalue les 40 règles S12 et retourne les alertes déclenchées, triées par priorité."""
     alertes = []
-    for code, famille, fn in _REGISTRY:
+    for code, _famille, fn in _REGISTRY:
         try:
             alerte = fn(profil)
             if alerte is not None:

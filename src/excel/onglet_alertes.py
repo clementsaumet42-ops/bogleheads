@@ -16,13 +16,21 @@ _COULEUR_MAP = {
 def creer_onglet_alertes(ws, alertes, toutes_les_regles=None):
     """Crée l'onglet 'Alertes (40 règles)' dans le classeur Excel."""
     try:
-        from openpyxl.styles import Font, PatternFill, Alignment
+        from openpyxl.styles import Font, PatternFill
     except ImportError:
-        Font = PatternFill = Alignment = None
+        Font = PatternFill = None
 
     headers = [
-        "Code", "Famille", "Sévérité", "Titre", "Description",
-        "Gain €/an", "Gain € horizon", "Action concrète", "Sources", "Statut",
+        "Code",
+        "Famille",
+        "Sévérité",
+        "Titre",
+        "Description",
+        "Gain €/an",
+        "Gain € horizon",
+        "Action concrète",
+        "Sources",
+        "Statut",
     ]
     for col, h in enumerate(headers, 1):
         cell = ws.cell(row=1, column=col, value=h)

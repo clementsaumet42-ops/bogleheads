@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+
 from .base import Alerte, Severite, regle
 
 logger = logging.getLogger(__name__)
@@ -30,16 +31,19 @@ def detecter_R12(profil) -> Alerte | None:
                 ticker = getattr(ligne, "etf_ticker", "")
                 montant = getattr(ligne, "montant_eur", 0)
 
-            if "CTO" in str(env).upper():
-                if "DIST" in str(ticker or "").upper() or "DIST" in str(libelle or "").upper():
-                    cto_distribuant += montant or 0
+            if "CTO" in str(env).upper() and (
+                "DIST" in str(ticker or "").upper() or "DIST" in str(libelle or "").upper()
+            ):
+                cto_distribuant += montant or 0
 
         if cto_distribuant < 10000:
             return None
 
         rendement_div = 0.025
         dividendes = cto_distribuant * rendement_div
-        gain = dividendes * (tmi - _TAUX_PFU_IR)  # saving by switching from PFU (12.8%) to capitalizing
+        gain = dividendes * (
+            tmi - _TAUX_PFU_IR
+        )  # saving by switching from PFU (12.8%) to capitalizing
 
         return Alerte(
             code="R12",
@@ -82,7 +86,10 @@ def detecter_R13(profil) -> Alerte | None:
             if "PEA" in str(env).upper():
                 classe_str = str(classe or "").lower()
                 libelle_str = str(libelle or "").lower()
-                if any(k in classe_str or k in libelle_str for k in ["fonds actif", "opcvm", "sicav", "fcp"]):
+                if any(
+                    k in classe_str or k in libelle_str
+                    for k in ["fonds actif", "opcvm", "sicav", "fcp"]
+                ):
                     pea_fonds_actifs += montant or 0
 
         if pea_fonds_actifs < 5000:
@@ -124,29 +131,30 @@ def detecter_R14(profil) -> Alerte | None:
                 env = getattr(ligne, "enveloppe", "")
                 date_acq = getattr(ligne, "date_acquisition", None)
 
-            if "AV" in str(env).upper() or "ASSURANCE" in str(env).upper():
-                if date_acq is not None:
-                    if isinstance(date_acq, str):
-                        try:
-                            date_acq = datetime.fromisoformat(date_acq).date()
-                        except Exception:
-                            continue
-                    age_contrat = (date.today() - date_acq).days / 365.25
-                    if age_contrat < 8:
-                        return Alerte(
-                            code="R14",
-                            famille="Fiscalité gâchée",
-                            severite=Severite.JAUNE,
-                            titre="AV non optimisée fiscalement (contrat < 8 ans)",
-                            description=(
-                                f"Votre contrat AV a moins de 8 ans ({age_contrat:.1f} ans). "
-                                "Tout rachat avant 8 ans perd l'abattement annuel de 4 600 € (ou 9 200 € en couple)."
-                            ),
-                            gain_eur_annuel=None,
-                            gain_eur_horizon=None,
-                            action_concrete="Éviter tout rachat non indispensable avant la 8e année du contrat.",
-                            sources=["CGI art. 125-0 A"],
-                        )
+            if (
+                "AV" in str(env).upper() or "ASSURANCE" in str(env).upper()
+            ) and date_acq is not None:
+                if isinstance(date_acq, str):
+                    try:
+                        date_acq = datetime.fromisoformat(date_acq).date()
+                    except Exception:
+                        continue
+                age_contrat = (date.today() - date_acq).days / 365.25
+                if age_contrat < 8:
+                    return Alerte(
+                        code="R14",
+                        famille="Fiscalité gâchée",
+                        severite=Severite.JAUNE,
+                        titre="AV non optimisée fiscalement (contrat < 8 ans)",
+                        description=(
+                            f"Votre contrat AV a moins de 8 ans ({age_contrat:.1f} ans). "
+                            "Tout rachat avant 8 ans perd l'abattement annuel de 4 600 € (ou 9 200 € en couple)."
+                        ),
+                        gain_eur_annuel=None,
+                        gain_eur_horizon=None,
+                        action_concrete="Éviter tout rachat non indispensable avant la 8e année du contrat.",
+                        sources=["CGI art. 125-0 A"],
+                    )
         return None
     except Exception as e:
         logger.info(f"R14 skip: {e}")
@@ -171,31 +179,32 @@ def detecter_R15(profil) -> Alerte | None:
                 env = getattr(ligne, "enveloppe", "")
                 date_acq = getattr(ligne, "date_acquisition", None)
 
-            if "AV" in str(env).upper() or "ASSURANCE" in str(env).upper():
-                if date_acq is not None:
-                    if isinstance(date_acq, str):
-                        try:
-                            date_acq = datetime.fromisoformat(date_acq).date()
-                        except Exception:
-                            continue
-                    age_contrat = (date.today() - date_acq).days / 365.25
-                    if 0 < age_contrat < 8:
-                        tmi = getattr(profil, "tmi", 0) or 0
-                        gain_annuel = abattement * tmi
-                        return Alerte(
-                            code="R15",
-                            famille="Fiscalité gâchée",
-                            severite=Severite.JAUNE,
-                            titre=f"AV <8 ans — alimenter pour activer l'abattement {abattement:,} €",
-                            description=(
-                                f"Votre contrat AV ouvert depuis {age_contrat:.1f} ans doit être alimenté "
-                                f"pour déclencher l'abattement annuel de {abattement:,} € applicable après 8 ans."
-                            ),
-                            gain_eur_annuel=round(gain_annuel, 0),
-                            gain_eur_horizon=round(gain_annuel * 20, 0),
-                            action_concrete="Alimenter le contrat AV régulièrement et attendre les 8 ans pour les rachats.",
-                            sources=["CGI art. 125-0 A"],
-                        )
+            if (
+                "AV" in str(env).upper() or "ASSURANCE" in str(env).upper()
+            ) and date_acq is not None:
+                if isinstance(date_acq, str):
+                    try:
+                        date_acq = datetime.fromisoformat(date_acq).date()
+                    except Exception:
+                        continue
+                age_contrat = (date.today() - date_acq).days / 365.25
+                if 0 < age_contrat < 8:
+                    tmi = getattr(profil, "tmi", 0) or 0
+                    gain_annuel = abattement * tmi
+                    return Alerte(
+                        code="R15",
+                        famille="Fiscalité gâchée",
+                        severite=Severite.JAUNE,
+                        titre=f"AV <8 ans — alimenter pour activer l'abattement {abattement:,} €",
+                        description=(
+                            f"Votre contrat AV ouvert depuis {age_contrat:.1f} ans doit être alimenté "
+                            f"pour déclencher l'abattement annuel de {abattement:,} € applicable après 8 ans."
+                        ),
+                        gain_eur_annuel=round(gain_annuel, 0),
+                        gain_eur_horizon=round(gain_annuel * 20, 0),
+                        action_concrete="Alimenter le contrat AV régulièrement et attendre les 8 ans pour les rachats.",
+                        sources=["CGI art. 125-0 A"],
+                    )
         return None
     except Exception as e:
         logger.info(f"R15 skip: {e}")
@@ -245,9 +254,19 @@ def detecter_R17(profil) -> Alerte | None:
 
         composition = getattr(profil, "composition_actuelle", None) or []
         montant_pea = sum(
-            (getattr(l, "montant_eur", 0) if not isinstance(l, dict) else l.get("montant_eur", 0)) or 0
-            for l in composition
-            if "PEA" in str(getattr(l, "enveloppe", "") if not isinstance(l, dict) else l.get("enveloppe", "")).upper()
+            (
+                getattr(item, "montant_eur", 0)
+                if not isinstance(item, dict)
+                else item.get("montant_eur", 0)
+            )
+            or 0
+            for item in composition
+            if "PEA"
+            in str(
+                getattr(item, "enveloppe", "")
+                if not isinstance(item, dict)
+                else item.get("enveloppe", "")
+            ).upper()
         )
 
         if montant_pea >= PLAFOND_PEA * 0.9:

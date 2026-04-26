@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from datetime import date
 from pathlib import Path
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -254,34 +254,34 @@ class Profil(_Lenient):
     composition_actuelle: list[LigneExistante] = Field(default_factory=list)
 
     # ── Champs S12 — moteur d'alertes ────────────────────────────────────────
-    revenu_fiscal_reference: Optional[float] = None
-    taeg_credits_conso: Optional[float] = None
-    taeg_credit_immo: Optional[float] = None
-    solde_credit_conso: Optional[float] = None
-    capital_restant_immo: Optional[float] = None
-    abondement_employeur_max: Optional[float] = None
-    abondement_employeur_actuel: Optional[float] = None
-    a_pee: Optional[bool] = None
-    a_perco: Optional[bool] = None
-    participation_versee_pee: Optional[bool] = None
-    est_en_couple: Optional[bool] = None
-    a_testament: Optional[bool] = None
-    clause_beneficiaire_demembree: Optional[bool] = None
-    clause_beneficiaire_renseignee: Optional[bool] = None
-    date_revue_patrimoine: Optional[str] = None
-    plafond_per_non_utilise: Optional[float] = None
-    a_utilise_ir_pme: Optional[bool] = None
-    a_utilise_donation: Optional[bool] = None
-    volume_ordres_annuel: Optional[float] = None
-    charges_mensuelles: Optional[float] = None
-    epargne_precaution: Optional[float] = None
-    a_livret_a: Optional[bool] = None
-    assurances_vie: Optional[list] = None
-    fond_de_fonds: Optional[bool] = None
-    pee_actions_entreprise_pct: Optional[float] = None
-    nb_credits_conso: Optional[int] = None
-    frais_entree_scpi: Optional[float] = None
-    ter_fonds_actifs: Optional[float] = None
+    revenu_fiscal_reference: float | None = None
+    taeg_credits_conso: float | None = None
+    taeg_credit_immo: float | None = None
+    solde_credit_conso: float | None = None
+    capital_restant_immo: float | None = None
+    abondement_employeur_max: float | None = None
+    abondement_employeur_actuel: float | None = None
+    a_pee: bool | None = None
+    a_perco: bool | None = None
+    participation_versee_pee: bool | None = None
+    est_en_couple: bool | None = None
+    a_testament: bool | None = None
+    clause_beneficiaire_demembree: bool | None = None
+    clause_beneficiaire_renseignee: bool | None = None
+    date_revue_patrimoine: str | None = None
+    plafond_per_non_utilise: float | None = None
+    a_utilise_ir_pme: bool | None = None
+    a_utilise_donation: bool | None = None
+    volume_ordres_annuel: float | None = None
+    charges_mensuelles: float | None = None
+    epargne_precaution: float | None = None
+    a_livret_a: bool | None = None
+    assurances_vie: list | None = None
+    fond_de_fonds: bool | None = None
+    pee_actions_entreprise_pct: float | None = None
+    nb_credits_conso: int | None = None
+    frais_entree_scpi: float | None = None
+    ter_fonds_actifs: float | None = None
 
 
 class ProfilsWrapper(_Lenient):

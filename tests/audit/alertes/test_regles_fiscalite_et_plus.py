@@ -1,32 +1,59 @@
 """Tests for S12 alert rules R12-R40 (fiscalité, config, liquidité, épargne, crédit, transmission, hygiène, bonus)."""
+
 from __future__ import annotations
 
-import pytest
 from unittest.mock import MagicMock
 
-from src.audit.alertes.fiscalite import (
-    detecter_R12, detecter_R13, detecter_R14, detecter_R15,
-    detecter_R16, detecter_R17, detecter_R18,
+from src.audit.alertes.base import Severite
+from src.audit.alertes.bonus import (
+    detecter_R36,
+    detecter_R37,
+    detecter_R38,
+    detecter_R39,
+    detecter_R40,
 )
 from src.audit.alertes.configuration import detecter_R19, detecter_R20
-from src.audit.alertes.liquidite import detecter_R21, detecter_R22, detecter_R23, detecter_R24
-from src.audit.alertes.epargne_salariale import detecter_R25, detecter_R26, detecter_R27, detecter_R28
 from src.audit.alertes.credit import detecter_R29, detecter_R30, detecter_R31
-from src.audit.alertes.transmission import detecter_R32, detecter_R33, detecter_R34
+from src.audit.alertes.epargne_salariale import (
+    detecter_R25,
+    detecter_R26,
+    detecter_R27,
+    detecter_R28,
+)
+from src.audit.alertes.fiscalite import (
+    detecter_R12,
+    detecter_R13,
+    detecter_R14,
+    detecter_R15,
+    detecter_R16,
+    detecter_R17,
+    detecter_R18,
+)
 from src.audit.alertes.hygiene import detecter_R35
-from src.audit.alertes.bonus import detecter_R36, detecter_R37, detecter_R38, detecter_R39, detecter_R40
-from src.audit.alertes.base import Severite
+from src.audit.alertes.liquidite import detecter_R21, detecter_R22, detecter_R23, detecter_R24
+from src.audit.alertes.transmission import detecter_R32, detecter_R33, detecter_R34
 
 
-def _ligne(enveloppe="CTO", classe_actif="actions", montant_eur=10000.0,
-           libelle_libre="ETF World", etf_ticker="IWDA", date_acquisition=None):
+def _ligne(
+    enveloppe="CTO",
+    classe_actif="actions",
+    montant_eur=10000.0,
+    libelle_libre="ETF World",
+    etf_ticker="IWDA",
+    date_acquisition=None,
+):
     return MagicMock(
-        enveloppe=enveloppe, classe_actif=classe_actif, montant_eur=montant_eur,
-        libelle_libre=libelle_libre, etf_ticker=etf_ticker, date_acquisition=date_acquisition,
+        enveloppe=enveloppe,
+        classe_actif=classe_actif,
+        montant_eur=montant_eur,
+        libelle_libre=libelle_libre,
+        etf_ticker=etf_ticker,
+        date_acquisition=date_acquisition,
     )
 
 
 # ── R12: ETF DIST en CTO ─────────────────────────────────────────────────────
+
 
 def test_R12_triggers_dist_cto_high_tmi():
     ligne = _ligne(enveloppe="CTO", etf_ticker="IWDA DIST", montant_eur=50000.0)
@@ -51,6 +78,7 @@ def test_R12_no_trigger_acc_etf():
 
 # ── R13: PEA fonds actifs ────────────────────────────────────────────────────
 
+
 def test_R13_triggers_pea_fonds_actifs():
     ligne = _ligne(enveloppe="PEA", classe_actif="OPCVM", montant_eur=20000.0)
     profil = MagicMock(composition_actuelle=[ligne])
@@ -66,6 +94,7 @@ def test_R13_no_trigger_pea_etf():
 
 
 # ── R14: AV < 8 ans ──────────────────────────────────────────────────────────
+
 
 def test_R14_triggers_young_av():
     ligne = _ligne(enveloppe="AV", date_acquisition="2023-01-01")
@@ -83,6 +112,7 @@ def test_R14_no_trigger_old_av():
 
 # ── R15: AV < 8 ans non alimentée ───────────────────────────────────────────
 
+
 def test_R15_triggers():
     ligne = _ligne(enveloppe="AV", date_acquisition="2022-01-01")
     profil = MagicMock(composition_actuelle=[ligne], est_en_couple=False, tmi=0.30)
@@ -92,6 +122,7 @@ def test_R15_triggers():
 
 
 # ── R16: PER non alimenté ────────────────────────────────────────────────────
+
 
 def test_R16_triggers():
     profil = MagicMock(plafond_per_non_utilise=5000.0, tmi=0.41)
@@ -113,6 +144,7 @@ def test_R16_no_trigger_no_plafond():
 
 # ── R17: Plafond PEA non utilisé ─────────────────────────────────────────────
 
+
 def test_R17_triggers_underused_pea():
     ligne = _ligne(enveloppe="PEA", montant_eur=50000.0)
     profil = MagicMock(age=35, composition_actuelle=[ligne])
@@ -129,6 +161,7 @@ def test_R17_no_trigger_full_pea():
 
 # ── R18: Donation ────────────────────────────────────────────────────────────
 
+
 def test_R18_triggers():
     profil = MagicMock(age=55, a_utilise_donation=False, patrimoine_financier_total=200000.0)
     alerte = detecter_R18(profil)
@@ -142,6 +175,7 @@ def test_R18_no_trigger_already_used():
 
 
 # ── R19: PEA non ouvert ──────────────────────────────────────────────────────
+
 
 def test_R19_triggers_no_pea():
     profil = MagicMock(age=30, composition_actuelle=[], enveloppes_disponibles={})
@@ -164,6 +198,7 @@ def test_R19_no_trigger_age_40():
 
 # ── R20: Clause bénéficiaire ─────────────────────────────────────────────────
 
+
 def test_R20_triggers_no_clause():
     ligne = _ligne(enveloppe="AV")
     profil = MagicMock(composition_actuelle=[ligne], clause_beneficiaire_renseignee=False)
@@ -179,6 +214,7 @@ def test_R20_no_trigger_clause_set():
 
 
 # ── R21: Épargne précaution insuffisante ─────────────────────────────────────
+
 
 def test_R21_triggers():
     profil = MagicMock(charges_mensuelles=3000.0, epargne_precaution=5000.0)
@@ -200,6 +236,7 @@ def test_R21_no_trigger_no_data():
 
 # ── R22: Livret A ────────────────────────────────────────────────────────────
 
+
 def test_R22_triggers_no_livret():
     profil = MagicMock(a_livret_a=False, composition_actuelle=[])
     alerte = detecter_R22(profil)
@@ -213,6 +250,7 @@ def test_R22_no_trigger_has_livret():
 
 
 # ── R23: Excès de liquidités ─────────────────────────────────────────────────
+
 
 def test_R23_triggers_excess_cash():
     profil = MagicMock(charges_mensuelles=2000.0, epargne_precaution=30000.0)
@@ -229,6 +267,7 @@ def test_R23_no_trigger_normal_cash():
 
 # ── R24: Livret A non plein avant fonds euros ────────────────────────────────
 
+
 def test_R24_triggers():
     ligne_fe = _ligne(classe_actif="FONDS_EURO", montant_eur=10000.0)
     profil = MagicMock(composition_actuelle=[ligne_fe])
@@ -238,6 +277,7 @@ def test_R24_triggers():
 
 
 # ── R25: PEE/PERCO non alimenté ──────────────────────────────────────────────
+
 
 def test_R25_triggers():
     profil = MagicMock(a_pee=True, a_perco=False, composition_actuelle=[])
@@ -254,6 +294,7 @@ def test_R25_no_trigger_invested():
 
 # ── R26: PEE concentration employer ─────────────────────────────────────────
 
+
 def test_R26_triggers():
     profil = MagicMock(pee_actions_entreprise_pct=0.5)
     alerte = detecter_R26(profil)
@@ -267,6 +308,7 @@ def test_R26_no_trigger_diversified():
 
 
 # ── R27: Abondement non maxé ─────────────────────────────────────────────────
+
 
 def test_R27_triggers():
     profil = MagicMock(abondement_employeur_max=2000.0, abondement_employeur_actuel=500.0)
@@ -283,6 +325,7 @@ def test_R27_no_trigger_maxed():
 
 # ── R28: Participation non versée PEE ────────────────────────────────────────
 
+
 def test_R28_triggers():
     profil = MagicMock(participation_versee_pee=False, tmi=0.30)
     alerte = detecter_R28(profil)
@@ -297,9 +340,12 @@ def test_R28_no_trigger_versee():
 
 # ── R29: Crédit conso avec cash ──────────────────────────────────────────────
 
+
 def test_R29_triggers():
     profil = MagicMock(
-        taeg_credits_conso=0.08, solde_credit_conso=5000.0, epargne_precaution=50000.0,
+        taeg_credits_conso=0.08,
+        solde_credit_conso=5000.0,
+        epargne_precaution=50000.0,
     )
     alerte = detecter_R29(profil)
     assert alerte is not None
@@ -308,12 +354,15 @@ def test_R29_triggers():
 
 def test_R29_no_trigger_no_cash():
     profil = MagicMock(
-        taeg_credits_conso=0.08, solde_credit_conso=5000.0, epargne_precaution=1000.0,
+        taeg_credits_conso=0.08,
+        solde_credit_conso=5000.0,
+        epargne_precaution=1000.0,
     )
     assert detecter_R29(profil) is None
 
 
 # ── R30: Crédit immo renégociable ────────────────────────────────────────────
+
 
 def test_R30_triggers():
     profil = MagicMock(taeg_credit_immo=0.06, capital_restant_immo=200000.0)
@@ -329,6 +378,7 @@ def test_R30_no_trigger_low_rate():
 
 # ── R31: Rachat crédits ──────────────────────────────────────────────────────
 
+
 def test_R31_triggers():
     profil = MagicMock(nb_credits_conso=3)
     alerte = detecter_R31(profil)
@@ -342,6 +392,7 @@ def test_R31_no_trigger_single():
 
 
 # ── R32: Clause bénéficiaire démembrée ──────────────────────────────────────
+
 
 def test_R32_triggers():
     ligne = _ligne(enveloppe="AV")
@@ -363,6 +414,7 @@ def test_R32_no_trigger_not_couple():
 
 # ── R33: Testament ──────────────────────────────────────────────────────────
 
+
 def test_R33_triggers():
     profil = MagicMock(patrimoine_financier_total=600000.0, a_testament=False)
     alerte = detecter_R33(profil)
@@ -377,8 +429,11 @@ def test_R33_no_trigger_small_patrimoine():
 
 # ── R34: Quotient familial ──────────────────────────────────────────────────
 
+
 def test_R34_triggers():
-    profil = MagicMock(est_en_couple=True, tmi=0.41, revenu_fiscal_reference=80000.0, regime_fiscal_detenteur="IR")
+    profil = MagicMock(
+        est_en_couple=True, tmi=0.41, revenu_fiscal_reference=80000.0, regime_fiscal_detenteur="IR"
+    )
     alerte = detecter_R34(profil)
     assert alerte is not None
     assert alerte.code == "R34"
@@ -391,6 +446,7 @@ def test_R34_no_trigger_low_tmi():
 
 
 # ── R35: Revue patrimoniale ──────────────────────────────────────────────────
+
 
 def test_R35_triggers_no_date():
     profil = MagicMock(date_revue_patrimoine=None)
@@ -408,12 +464,14 @@ def test_R35_triggers_old_date():
 
 def test_R35_no_trigger_recent():
     from datetime import date, timedelta
+
     recent = (date.today() - timedelta(days=30)).isoformat()
     profil = MagicMock(date_revue_patrimoine=recent)
     assert detecter_R35(profil) is None
 
 
 # ── R36-R40: Bonus ──────────────────────────────────────────────────────────
+
 
 def test_R36_triggers():
     profil = MagicMock(plafond_per_non_utilise=3000.0, tmi=0.30)

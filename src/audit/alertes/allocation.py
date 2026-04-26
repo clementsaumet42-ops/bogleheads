@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+
 from .base import Alerte, Severite, regle
 
 logger = logging.getLogger(__name__)
@@ -19,10 +20,20 @@ def detecter_R7(profil) -> Alerte | None:
 
         if patrimoine > 0:
             cash = sum(
-                (getattr(l, "montant_eur", 0) if not isinstance(l, dict) else l.get("montant_eur", 0)) or 0
-                for l in composition
+                (
+                    getattr(item, "montant_eur", 0)
+                    if not isinstance(item, dict)
+                    else item.get("montant_eur", 0)
+                )
+                or 0
+                for item in composition
                 if any(
-                    k in str(getattr(l, "classe_actif", "") if not isinstance(l, dict) else l.get("classe_actif", "")).upper()
+                    k
+                    in str(
+                        getattr(item, "classe_actif", "")
+                        if not isinstance(item, dict)
+                        else item.get("classe_actif", "")
+                    ).upper()
                     for k in ("LIQUID", "CASH", "LIVRET")
                 )
             )
@@ -71,7 +82,11 @@ def detecter_R8(profil) -> Alerte | None:
 
         patrimoine = getattr(profil, "patrimoine_financier_total", 0) or 0
         horizon = 65 - age
-        gain_horizon = round(patrimoine * (0.60 - actions) * (0.07 - 0.02) * horizon, 0) if patrimoine > 0 else None
+        gain_horizon = (
+            round(patrimoine * (0.60 - actions) * (0.07 - 0.02) * horizon, 0)
+            if patrimoine > 0
+            else None
+        )
 
         return Alerte(
             code="R8",
@@ -85,7 +100,10 @@ def detecter_R8(profil) -> Alerte | None:
             gain_eur_annuel=None,
             gain_eur_horizon=gain_horizon,
             action_concrete="Revoir l'allocation cible vers 60-80% actions adapté à l'horizon long terme.",
-            sources=["Vanguard Target Retirement methodology", "Bogle, The Little Book of Common Sense Investing"],
+            sources=[
+                "Vanguard Target Retirement methodology",
+                "Bogle, The Little Book of Common Sense Investing",
+            ],
         )
     except Exception as e:
         logger.info(f"R8 skip: {e}")
@@ -153,9 +171,17 @@ def detecter_R10(profil) -> Alerte | None:
             return None
 
         classes = {
-            str(getattr(l, "classe_actif", "") if not isinstance(l, dict) else l.get("classe_actif", "")).strip()
-            for l in composition
-            if (getattr(l, "classe_actif", "") if not isinstance(l, dict) else l.get("classe_actif", ""))
+            str(
+                getattr(item, "classe_actif", "")
+                if not isinstance(item, dict)
+                else item.get("classe_actif", "")
+            ).strip()
+            for item in composition
+            if (
+                getattr(item, "classe_actif", "")
+                if not isinstance(item, dict)
+                else item.get("classe_actif", "")
+            )
         }
 
         if len(classes) >= 3:

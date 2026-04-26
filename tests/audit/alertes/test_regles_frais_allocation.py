@@ -1,28 +1,49 @@
 """Tests for S12 alert rules R1-R11 (frais + allocation)."""
+
 from __future__ import annotations
 
-import pytest
 from unittest.mock import MagicMock
 
-from src.audit.alertes.frais import (
-    detecter_R1, detecter_R2, detecter_R3, detecter_R4, detecter_R5, detecter_R6,
-)
 from src.audit.alertes.allocation import (
-    detecter_R7, detecter_R8, detecter_R9, detecter_R10, detecter_R11,
+    detecter_R7,
+    detecter_R8,
+    detecter_R9,
+    detecter_R10,
+    detecter_R11,
 )
 from src.audit.alertes.base import Severite
+from src.audit.alertes.frais import (
+    detecter_R1,
+    detecter_R2,
+    detecter_R3,
+    detecter_R4,
+    detecter_R5,
+    detecter_R6,
+)
 
 
-def _ligne(enveloppe="CTO", classe_actif="actions", montant_eur=10000.0,
-           libelle_libre="ETF World", etf_ticker="IWDA", date_acquisition=None):
+def _ligne(
+    enveloppe="CTO",
+    classe_actif="actions",
+    montant_eur=10000.0,
+    libelle_libre="ETF World",
+    etf_ticker="IWDA",
+    date_acquisition=None,
+):
     return MagicMock(
-        enveloppe=enveloppe, classe_actif=classe_actif, montant_eur=montant_eur,
-        libelle_libre=libelle_libre, etf_ticker=etf_ticker, date_acquisition=date_acquisition,
-        prix_revient_eur=montant_eur, quantite=10.0,
+        enveloppe=enveloppe,
+        classe_actif=classe_actif,
+        montant_eur=montant_eur,
+        libelle_libre=libelle_libre,
+        etf_ticker=etf_ticker,
+        date_acquisition=date_acquisition,
+        prix_revient_eur=montant_eur,
+        quantite=10.0,
     )
 
 
 # ── R1: AV frais UC ──────────────────────────────────────────────────────────
+
 
 def test_R1_triggers_on_high_frais_uc():
     profil = MagicMock(
@@ -59,6 +80,7 @@ def test_R1_no_av():
 
 # ── R2: ETF en AV ────────────────────────────────────────────────────────────
 
+
 def test_R2_triggers_on_av_etf():
     pos = MagicMock(enveloppe="AV", montant_actuel=50000.0)
     profil = MagicMock(positions_detaillees=[pos], composition_actuelle=[])
@@ -74,6 +96,7 @@ def test_R2_no_trigger_low_amount():
 
 
 # ── R3: SCPI frais ───────────────────────────────────────────────────────────
+
 
 def test_R3_triggers_on_scpi():
     ligne = _ligne(classe_actif="SCPI", montant_eur=30000.0)
@@ -96,6 +119,7 @@ def test_R3_no_scpi():
 
 # ── R4: Fonds actifs TER ─────────────────────────────────────────────────────
 
+
 def test_R4_triggers_on_fonds_actifs():
     ligne = _ligne(classe_actif="OPCVM", montant_eur=20000.0)
     profil = MagicMock(composition_actuelle=[ligne], ter_fonds_actifs=0.025)
@@ -111,6 +135,7 @@ def test_R4_no_trigger_no_ter_field():
 
 
 # ── R5: Frais courtage ───────────────────────────────────────────────────────
+
 
 def test_R5_triggers_on_high_courtage():
     profil = MagicMock(
@@ -130,6 +155,7 @@ def test_R5_no_trigger_low_courtage():
 
 # ── R6: Fond de fonds ────────────────────────────────────────────────────────
 
+
 def test_R6_triggers_fond_de_fonds():
     profil = MagicMock(fond_de_fonds=True, patrimoine_financier_total=100000.0)
     alerte = detecter_R6(profil)
@@ -144,6 +170,7 @@ def test_R6_no_trigger():
 
 
 # ── R7: Cash >50% ────────────────────────────────────────────────────────────
+
 
 def test_R7_triggers_on_excess_cash():
     ligne_cash = _ligne(classe_actif="LIQUIDITES", montant_eur=60000.0)
@@ -174,6 +201,7 @@ def test_R7_no_trigger_low_cash():
 
 
 # ── R8: Sous-exposition actions ──────────────────────────────────────────────
+
 
 def test_R8_triggers_young_low_actions():
     alloc = MagicMock(actions=0.10)
@@ -209,6 +237,7 @@ def test_R8_no_trigger_age_45():
 
 # ── R9: 100% fonds euros ─────────────────────────────────────────────────────
 
+
 def test_R9_triggers_100pct_fonds_euros():
     ligne_fe = _ligne(enveloppe="AV", classe_actif="FONDS_EURO", montant_eur=50000.0)
     profil = MagicMock(
@@ -235,6 +264,7 @@ def test_R9_no_trigger_age_50():
 
 # ── R10: Diversification ─────────────────────────────────────────────────────
 
+
 def test_R10_triggers_single_class():
     ligne1 = _ligne(classe_actif="actions", montant_eur=50000.0)
     ligne2 = _ligne(classe_actif="actions", montant_eur=30000.0)
@@ -260,6 +290,7 @@ def test_R10_no_trigger_empty():
 
 
 # ── R11: Sur-concentration ───────────────────────────────────────────────────
+
 
 def test_R11_triggers_concentration():
     ligne = _ligne(etf_ticker="IWDA", montant_eur=40000.0)
