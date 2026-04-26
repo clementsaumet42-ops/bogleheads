@@ -528,6 +528,84 @@ def _page_synthese_executive(
     return elems
 
 
+def _page_alertes(profil: Any, styles: dict, alertes=None) -> list:
+    """Page Alertes S12 — top alertes patrimoniales."""
+    elems: list = []
+    elems.append(Paragraph("Alertes Patrimoniales — Moteur S12", styles["title"]))
+    elems.append(Spacer(1, 0.3 * cm))
+
+    if alertes is None:
+        try:
+            from src.audit.alertes import detecter_alertes
+
+            alertes = detecter_alertes(profil)
+        except Exception as exc:
+            logger.warning("Impossible de détecter les alertes S12 : %s", exc)
+            alertes = []
+
+    if not alertes:
+        elems.append(Paragraph("✅ Aucune alerte déclenchée sur ce profil.", styles["body"]))
+        elems.append(PageBreak())
+        return elems
+
+    top_alertes = alertes[:5]
+    _SEV_LABEL = {"ROUGE": "🔴 ROUGE", "JAUNE": "🟡 JAUNE", "VERT": "🟢 VERT"}
+    _SEV_COLOR = {
+        "ROUGE": colors.HexColor("#FFCCCC"),
+        "JAUNE": colors.HexColor("#FFF9CC"),
+        "VERT": colors.HexColor("#CCFFCC"),
+    }
+
+    elems.append(
+        Paragraph(
+            f"Top {len(top_alertes)} alertes détectées (sur {len(alertes)} au total) :",
+            styles["h2"],
+        )
+    )
+    elems.append(Spacer(1, 0.2 * cm))
+
+    rows = [["Code", "Sévérité", "Titre", "Gain €/an", "Action"]]
+    for a in top_alertes:
+        gain_str = f"{a.gain_eur_annuel:,.0f} €" if a.gain_eur_annuel else "—"
+        rows.append(
+            [
+                a.code,
+                _SEV_LABEL.get(a.severite.value, a.severite.value),
+                Paragraph(a.titre, styles["body"]),
+                gain_str,
+                Paragraph(
+                    a.action_concrete[:80] + ("…" if len(a.action_concrete) > 80 else ""),
+                    styles["body"],
+                ),
+            ]
+        )
+
+    t = Table(rows, colWidths=[1.2 * cm, 2.2 * cm, 5.5 * cm, 2.2 * cm, 5.5 * cm])
+    style_cmds = [
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1B3A5B")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 8),
+        ("GRID", (0, 0), (-1, -1), 0.3, colors.grey),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F5F3EE")]),
+    ]
+    for i, a in enumerate(top_alertes, 1):
+        bg = _SEV_COLOR.get(a.severite.value, colors.white)
+        style_cmds.append(("BACKGROUND", (1, i), (1, i), bg))
+    t.setStyle(TableStyle(style_cmds))
+    elems.append(t)
+
+    elems.append(Spacer(1, 0.4 * cm))
+    note = (
+        "Note : Les alertes sont générées automatiquement par le moteur de règles S12. "
+        "Elles ne constituent pas un conseil en investissement."
+    )
+    elems.append(Paragraph(note, styles.get("footnote", styles["body"])))
+    elems.append(PageBreak())
+    return elems
+
+
 def _page_profil_client(profil: Any, styles: dict) -> list:
     """Page 3 — Profil client."""
     elems: list = []
@@ -2005,6 +2083,17 @@ def generer_pdf(
 
         story += _page_couverture(profil, config_pdf, styles, today)
         story += _page_synthese_executive(profil, styles, allocation_cible, economie_annuelle)
+
+        # S12 — Alertes patrimoniales
+        try:
+            from src.audit.alertes import detecter_alertes as _detecter_alertes
+
+            _alertes_s12 = _detecter_alertes(profil)
+        except Exception as _exc_s12:
+            logger.warning("Alertes S12 non disponibles : %s", _exc_s12)
+            _alertes_s12 = []
+        story += _page_alertes(profil, styles, alertes=_alertes_s12)
+
         story += _page_profil_client(profil, styles)
         story += _page_patrimoine_actuel(profil, styles, tmp_dir)
         story += _page_philosophie(styles)

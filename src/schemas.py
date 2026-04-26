@@ -253,6 +253,36 @@ class Profil(_Lenient):
     frais_courtier_par_transaction: float = Field(default=0.0, ge=0)  # € par transaction
     composition_actuelle: list[LigneExistante] = Field(default_factory=list)
 
+    # ── Champs S12 — moteur d'alertes ────────────────────────────────────────
+    revenu_fiscal_reference: float | None = None
+    taeg_credits_conso: float | None = None
+    taeg_credit_immo: float | None = None
+    solde_credit_conso: float | None = None
+    capital_restant_immo: float | None = None
+    abondement_employeur_max: float | None = None
+    abondement_employeur_actuel: float | None = None
+    a_pee: bool | None = None
+    a_perco: bool | None = None
+    participation_versee_pee: bool | None = None
+    est_en_couple: bool | None = None
+    a_testament: bool | None = None
+    clause_beneficiaire_demembree: bool | None = None
+    clause_beneficiaire_renseignee: bool | None = None
+    date_revue_patrimoine: str | None = None
+    plafond_per_non_utilise: float | None = None
+    a_utilise_ir_pme: bool | None = None
+    a_utilise_donation: bool | None = None
+    volume_ordres_annuel: float | None = None
+    charges_mensuelles: float | None = None
+    epargne_precaution: float | None = None
+    a_livret_a: bool | None = None
+    assurances_vie: list | None = None
+    fond_de_fonds: bool | None = None
+    pee_actions_entreprise_pct: float | None = None
+    nb_credits_conso: int | None = None
+    frais_entree_scpi: float | None = None
+    ter_fonds_actifs: float | None = None
+
 
 class ProfilsWrapper(_Lenient):
     disclaimer: str

@@ -2,6 +2,7 @@ from pathlib import Path
 
 import openpyxl
 
+from src.excel.onglet_alertes import creer_onglet_alertes
 from src.excel.onglet_allocation import creer_onglet_allocation_cible
 from src.excel.onglet_allocation_optimisee import creer_onglet_allocation_optimisee
 from src.excel.onglet_asset_location import creer_onglet_asset_location
@@ -94,6 +95,18 @@ def generer_excel(chemin_sortie: str = None):
 
     print("  → Onglet Backtest_Comparatif")
     creer_onglet_backtest(wb)
+
+    print("  → Onglet Alertes_40_Règles")
+    try:
+        from src.audit.alertes import detecter_alertes
+        from src.schemas import Profil as _ProfilSchema
+
+        _profil_ref_obj = _ProfilSchema.model_validate(profil_ref)
+        _alertes = detecter_alertes(_profil_ref_obj)
+        _ws_alertes = wb.create_sheet("Alertes (40 règles)")
+        creer_onglet_alertes(_ws_alertes, _alertes)
+    except Exception as _exc:
+        print(f"     ⚠ Onglet alertes ignoré : {_exc}")
 
     wb.properties.title = "Boglehead FR — Outil CGP Multi-Enveloppes 2026"
     wb.properties.subject = "Allocation Boglehead multi-enveloppes — France 2026"

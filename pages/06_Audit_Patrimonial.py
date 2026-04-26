@@ -54,6 +54,68 @@ if profil_raw:
         unsafe_allow_html=True,
     )
 
+# ─── Section S12 — Alertes patrimoniales ─────────────────────────────────────
+
+st.markdown("### 🚨 Alertes patrimoniales — Moteur S12 (40 règles)")
+
+if not profil_raw:
+    st.info("👤 Chargez d'abord un profil dans la page Profil pour voir les alertes.")
+else:
+    try:
+        from src.audit.alertes import detecter_alertes
+        from src.schemas import Profil as _ProfilSchemaAlertes
+
+        _profil_obj_alertes = (
+            _ProfilSchemaAlertes.model_validate(profil_raw)
+            if isinstance(profil_raw, dict)
+            else profil_raw
+        )
+        _alertes = detecter_alertes(_profil_obj_alertes)
+
+        if not _alertes:
+            st.success("✅ Aucune alerte déclenchée sur ce profil.")
+        else:
+            _SEV_ICON = {"ROUGE": "🔴", "JAUNE": "🟡", "VERT": "🟢"}
+            _SEV_COLOR = {"ROUGE": "#FFCCCC", "JAUNE": "#FFF9CC", "VERT": "#CCFFCC"}
+
+            _col_rouge, _col_jaune, _col_vert = st.columns(3)
+            _nb_rouge = sum(1 for a in _alertes if a.severite.value == "ROUGE")
+            _nb_jaune = sum(1 for a in _alertes if a.severite.value == "JAUNE")
+            _nb_vert = sum(1 for a in _alertes if a.severite.value == "VERT")
+            with _col_rouge:
+                st.metric("🔴 Critiques", _nb_rouge)
+            with _col_jaune:
+                st.metric("🟡 Avertissements", _nb_jaune)
+            with _col_vert:
+                st.metric("🟢 Opportunités", _nb_vert)
+
+            st.markdown("")
+            for _alerte in _alertes:
+                _sev_val = _alerte.severite.value
+                _icon = _SEV_ICON.get(_sev_val, "ℹ️")
+                _bg = _SEV_COLOR.get(_sev_val, "#FFFFFF")
+                _gain_txt = (
+                    f"Gain estimé : **{_alerte.gain_eur_annuel:,.0f} €/an**"
+                    if _alerte.gain_eur_annuel
+                    else ""
+                )
+                st.markdown(
+                    f"<div style='background:{_bg};border-radius:6px;padding:10px 14px;"
+                    f"margin-bottom:8px;border-left:4px solid #1B3A5B;'>"
+                    f"<strong>{_icon} [{_alerte.code}] {_alerte.titre}</strong><br/>"
+                    f"<span style='font-size:0.88rem;'>{_alerte.description}</span><br/>"
+                    f"<em style='font-size:0.85rem;color:#1B3A5B;'>👉 {_alerte.action_concrete}</em>"
+                    + (
+                        f"<br/><span style='font-size:0.82rem;'>💰 {_gain_txt}</span>"
+                        if _gain_txt
+                        else ""
+                    )
+                    + "</div>",
+                    unsafe_allow_html=True,
+                )
+    except Exception as _exc_alertes:
+        st.warning(f"Moteur d'alertes S12 non disponible : {_exc_alertes}")
+
 # ─── Diagnostic existant ─────────────────────────────────────────────────────
 
 with st.expander("📊 Diagnostic du patrimoine existant", expanded=False):
