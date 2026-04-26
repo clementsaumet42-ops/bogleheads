@@ -126,13 +126,13 @@ class TestGenerationPDFProfil1:
         assert pdf_profil1.taille_octets < 500 * 1024
 
     def test_nb_pages_egal_13(self, pdf_profil1):
-        """Le PDF contient exactement 14 pages (13 S3 + 1 alertes S12)."""
-        assert pdf_profil1.nb_pages == 14
+        """Le PDF contient exactement 14 pages (13 S3 + 1 alertes S12 + 1 best_provider S13)."""
+        assert pdf_profil1.nb_pages == 15
 
     def test_nb_pages_via_pypdf(self, pdf_profil1):
         """Vérification du nombre de pages via pypdf.PdfReader."""
         reader = pypdf.PdfReader(pdf_profil1.chemin)
-        assert len(reader.pages) == 14
+        assert len(reader.pages) == 15
 
     def test_profil_id_correct(self, pdf_profil1):
         """ResultatPDF contient le bon profil_id."""
@@ -175,7 +175,7 @@ class TestFallbacks:
         sortie = tmp_path / "no_logo.pdf"
         res = generer_pdf(profil1, config, sortie)
         assert sortie.exists()
-        assert res.nb_pages == 14
+        assert res.nb_pages == 15
 
     def test_logo_path_inexistant_pas_erreur(self, profil1, tmp_path):
         """Si logo_path pointe vers un fichier inexistant, fallback texte."""
@@ -188,7 +188,7 @@ class TestFallbacks:
         sortie = tmp_path / "bad_logo.pdf"
         res = generer_pdf(profil1, config, sortie)
         assert sortie.exists()
-        assert res.nb_pages == 14
+        assert res.nb_pages == 15
 
     def test_fallback_monte_carlo_sans_module(self, profil1, config_pdf, tmp_path):
         """Fallback Monte-Carlo si src.projection indisponible — pas d'erreur fatale."""
@@ -197,7 +197,7 @@ class TestFallbacks:
             # Le fallback interne doit prendre le relais sans lever d'exception
             res = generer_pdf(profil1, config_pdf, sortie)
             assert sortie.exists()
-            assert res.nb_pages == 14
+            assert res.nb_pages == 15
 
     def test_fallback_optimiseur_absent(self, profil1, tmp_path):
         """Si S2 optimiseur absent, fallback sur allocation profil sans erreur fatale."""
@@ -206,7 +206,7 @@ class TestFallbacks:
             sortie = tmp_path / "fallback_optim.pdf"
             res = generer_pdf(profil1, config, sortie)
             assert sortie.exists()
-            assert res.nb_pages == 14
+            assert res.nb_pages == 15
 
 
 # ─── Tests 6 profils ─────────────────────────────────────────────────────────
@@ -220,16 +220,16 @@ class TestSixProfils:
             sortie = tmp_path / f"{profil.code}_test.pdf"
             res = generer_pdf(profil, config, sortie)
             assert sortie.exists(), f"PDF non créé pour profil {profil.id}"
-            assert res.nb_pages == 14, f"Profil {profil.id} : {res.nb_pages} pages au lieu de 14"
+            assert res.nb_pages == 15, f"Profil {profil.id} : {res.nb_pages} pages au lieu de 15"
 
     def test_tous_profils_13_pages_pypdf(self, profils, tmp_path):
-        """Vérification pypdf : chaque profil donne exactement 14 pages (13 S3 + 1 alertes S12)."""
+        """Vérification pypdf : chaque profil donne exactement 14 pages (13 S3 + 1 alertes S12 + 1 best_provider S13)."""
         config = CabinetConfig(cabinet=CabinetInfo(nom="Cabinet Test"))
         for profil in profils.profils:
             sortie = tmp_path / f"{profil.code}_pypdf.pdf"
             generer_pdf(profil, config, sortie)
             reader = pypdf.PdfReader(str(sortie))
-            assert len(reader.pages) == 14, f"Profil {profil.id} : {len(reader.pages)} pages"
+            assert len(reader.pages) == 15, f"Profil {profil.id} : {len(reader.pages)} pages"
 
     def test_tous_profils_taille_valide(self, profils, tmp_path):
         """Chaque PDF fait entre 50 Ko et 500 Ko."""
@@ -294,7 +294,7 @@ class TestReproductibilite:
         sortie2 = tmp_path / "rep2.pdf"
         res1 = generer_pdf(profil1, config_pdf, sortie1)
         res2 = generer_pdf(profil1, config_pdf, sortie2)
-        assert res1.nb_pages == res2.nb_pages == 14
+        assert res1.nb_pages == res2.nb_pages == 15
 
     def test_meme_profil_meme_contenu_textuel(self, profil1, config_pdf, tmp_path):
         """Même profil → le nom du client apparaît dans les deux PDFs."""
@@ -353,14 +353,14 @@ class TestExemplesCommites:
             assert pdf_path.exists(), f"Fichier exemple manquant : {pdf_path.name}"
 
     def test_exemples_13_pages(self):
-        """Les fichiers exemple ont 14 pages (13 S3 + 1 alertes S12)."""
+        """Les fichiers exemple ont 14 pages (13 S3 + 1 alertes S12 + 1 best_provider S13)."""
         examples_dir = ROOT / "examples"
         if not examples_dir.exists():
             pytest.skip("Dossier examples/ non présent")
         for pdf_path in examples_dir.glob("*_exemple.pdf"):
             reader = pypdf.PdfReader(str(pdf_path))
-            assert len(reader.pages) == 14, (
-                f"{pdf_path.name} : {len(reader.pages)} pages au lieu de 14"
+            assert len(reader.pages) == 15, (
+                f"{pdf_path.name} : {len(reader.pages)} pages au lieu de 15"
             )
 
     def test_exemples_taille_valide(self):
@@ -396,7 +396,7 @@ class TestPagesS5:
         cfg = charger_config_pdf()
         result = generer_pdf(PROFIL, cfg, out, profil_consolide=pc)
         reader = PdfReader(str(result.chemin))
-        assert len(reader.pages) == 18
+        assert len(reader.pages) == 19
 
     def test_generer_pdf_17_pages_avec_capital_humain(self, tmp_path):
         from pypdf import PdfReader
@@ -408,7 +408,7 @@ class TestPagesS5:
         cfg = charger_config_pdf()
         result = generer_pdf(PROFIL, cfg, out, capital_humain_data=ch)
         reader = PdfReader(str(result.chemin))
-        assert len(reader.pages) == 18
+        assert len(reader.pages) == 19
 
     def test_generer_pdf_13_pages_par_defaut(self, tmp_path):
         from pypdf import PdfReader
@@ -417,4 +417,4 @@ class TestPagesS5:
         cfg = charger_config_pdf()
         result = generer_pdf(PROFIL, cfg, out)
         reader = PdfReader(str(result.chemin))
-        assert len(reader.pages) == 14
+        assert len(reader.pages) == 15

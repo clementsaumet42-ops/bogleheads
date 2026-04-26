@@ -1,0 +1,179 @@
+# Teneurs de compte PER disponibles en France — données 2025
+# Sources: sites distributeurs, ACPR, DREES, communiqués officiels
+
+teneurs_per:
+
+- id: yomoni_per
+  nom: "Yomoni PER"
+  type_per: individuel
+  assureur: "Suravenir (Crédit Mutuel Arkéa)"
+  distributeur: "Yomoni"
+  frais_gestion_uc_pct: 0.0160
+  frais_gestion_fonds_euros_pct: null
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  frais_versement_pct: 0.0
+  nb_uc_total: 10
+  nb_etf: 10
+  fonds_euros_disponible: false
+  rendement_fonds_euros_2024: null
+  etfs_disponibles: null
+  versement_minimum_eur: 100
+  gestion_libre: false
+  gestion_pilotee: true
+  sortie_capital_possible: true
+  sortie_rente_possible: true
+  annees_existence: 5
+  sources:
+    - "https://www.yomoni.fr/per"
+    - "Grille tarifaire Yomoni PER 2025"
+
+- id: linxea_spirit_per
+  nom: "Linxea Spirit PER"
+  type_per: individuel
+  assureur: "Spirica (Crédit Agricole)"
+  distributeur: "Linxea"
+  frais_gestion_uc_pct: 0.0050
+  frais_gestion_fonds_euros_pct: 0.0060
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  frais_versement_pct: 0.0
+  nb_uc_total: 700
+  nb_etf: 40
+  fonds_euros_disponible: true
+  rendement_fonds_euros_2024: 0.0305
+  etfs_disponibles: null
+  versement_minimum_eur: 500
+  gestion_libre: true
+  gestion_pilotee: true
+  sortie_capital_possible: true
+  sortie_rente_possible: true
+  annees_existence: 5
+  sources:
+    - "https://www.linxea.com/epargne-retraite/linxea-spirit-per/"
+    - "Communiqué Spirica taux fonds euros 2024, janvier 2025"
+
+- id: goodvest_per
+  nom: "Goodvest PER"
+  type_per: individuel
+  assureur: "Groupama Gan Vie"
+  distributeur: "Goodvest"
+  frais_gestion_uc_pct: 0.0180
+  frais_gestion_fonds_euros_pct: null
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  frais_versement_pct: 0.0
+  nb_uc_total: 50
+  nb_etf: 30
+  fonds_euros_disponible: false
+  rendement_fonds_euros_2024: null
+  etfs_disponibles: null
+  versement_minimum_eur: 300
+  gestion_libre: false
+  gestion_pilotee: true
+  sortie_capital_possible: true
+  sortie_rente_possible: true
+  annees_existence: 4
+  sources:
+    - "https://goodvest.fr/per"
+    - "Grille tarifaire Goodvest PER 2025"
+
+- id: ramify_per
+  nom: "Ramify PER"
+  type_per: individuel
+  assureur: "Apicil Épargne"
+  distributeur: "Ramify"
+  frais_gestion_uc_pct: 0.0130
+  frais_gestion_fonds_euros_pct: null
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  frais_versement_pct: 0.0
+  nb_uc_total: 20
+  nb_etf: 20
+  fonds_euros_disponible: false
+  rendement_fonds_euros_2024: null
+  etfs_disponibles: null
+  versement_minimum_eur: 1000
+  gestion_libre: true
+  gestion_pilotee: true
+  sortie_capital_possible: true
+  sortie_rente_possible: true
+  annees_existence: 4
+  sources:
+    - "https://ramify.fr/per"
+    - "Grille tarifaire Ramify PER 2025"
+
+- id: placement_direct_per
+  nom: "PER Placement-direct (Swiss Life)"
+  type_per: individuel
+  assureur: "Swiss Life"
+  distributeur: "Placement-direct.fr"
+  frais_gestion_uc_pct: 0.0060
+  frais_gestion_fonds_euros_pct: 0.0080
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  frais_versement_pct: 0.0
+  nb_uc_total: 500
+  nb_etf: 50
+  fonds_euros_disponible: true
+  rendement_fonds_euros_2024: 0.0290
+  etfs_disponibles: null
+  versement_minimum_eur: 500
+  gestion_libre: true
+  gestion_pilotee: true
+  sortie_capital_possible: true
+  sortie_rente_possible: true
+  annees_existence: 6
+  sources:
+    - "https://www.placement-direct.fr/assurance-vie/per-swiss-life.html"
+    - "Grille tarifaire Swiss Life PER 2025"
+
+- id: credit_agricole_per
+  nom: "PER Crédit Agricole Investore Integrale"
+  type_per: individuel
+  assureur: "Predica (Crédit Agricole)"
+  distributeur: "Crédit Agricole"
+  frais_gestion_uc_pct: 0.0085
+  frais_gestion_fonds_euros_pct: 0.0080
+  frais_entree_pct: 0.0200
+  frais_arbitrage_pct: 0.0050
+  frais_versement_pct: 0.0
+  nb_uc_total: 200
+  nb_etf: 10
+  fonds_euros_disponible: true
+  rendement_fonds_euros_2024: 0.0250
+  etfs_disponibles: null
+  versement_minimum_eur: 300
+  gestion_libre: true
+  gestion_pilotee: true
+  sortie_capital_possible: true
+  sortie_rente_possible: true
+  annees_existence: 5
+  sources:
+    - "https://www.credit-agricole.fr/particulier/epargne-retraite/per-per.html"
+    - "Grille tarifaire Crédit Agricole PER 2025"
+
+- id: generali_patrimoine_per
+  nom: "PER Generali Patrimoine"
+  type_per: individuel
+  assureur: "Generali Vie"
+  distributeur: "Generali"
+  frais_gestion_uc_pct: 0.0080
+  frais_gestion_fonds_euros_pct: 0.0070
+  frais_entree_pct: 0.0
+  frais_arbitrage_pct: 0.0
+  frais_versement_pct: 0.0
+  nb_uc_total: 300
+  nb_etf: 25
+  fonds_euros_disponible: true
+  rendement_fonds_euros_2024: 0.0270
+  etfs_disponibles: null
+  versement_minimum_eur: 500
+  gestion_libre: true
+  gestion_pilotee: true
+  sortie_capital_possible: true
+  sortie_rente_possible: true
+  annees_existence: 6
+  sources:
+    - "https://www.generali.fr/pro/protection-sociale/retraite/per-individuel.html"
+    - "Grille tarifaire Generali Patrimoine PER 2025"
