@@ -136,3 +136,8 @@ preview_html = f"""
 """
 
 st.html(preview_html)
+
+st.divider()
+st.info("💡 Pour générer la version finale signable, utilisez la page dédiée à la conformité CIF.")
+if st.button("📄 Générer la version finale signable →", type="secondary"):
+    st.switch_page("pages/21_Conformite_CIF.py")

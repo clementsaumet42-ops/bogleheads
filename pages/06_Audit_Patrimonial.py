@@ -569,3 +569,15 @@ with st.expander("⚙️ Hypothèses & avertissements", expanded=False):
         "sans signature du plan d'action par l'EC et le client.</em></div>",
         unsafe_allow_html=True,
     )
+
+# ─── Section conformité ────────────────────────────────────────────────────────
+st.divider()
+st.markdown("### 📋 Documents conformité à signer pour ce client")
+st.info(
+    "Suite à cet audit, les documents réglementaires CIF doivent être générés et signés. "
+    "Rendez-vous sur la page Conformité CIF pour générer le Rapport d'Adéquation MIF II."
+)
+col_cif1, col_cif2 = st.columns(2)
+with col_cif1:
+    if st.button("📋 Générer les documents conformité", key="btn_conformite_audit"):
+        st.switch_page("pages/21_Conformite_CIF.py")

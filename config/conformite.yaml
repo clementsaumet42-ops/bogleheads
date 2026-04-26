@@ -1,0 +1,103 @@
+# Configuration conformité CIF — Sprint S14
+# Sources: art. L541-1 CMF, art. 325-3 RG AMF, art. 325-5 RG AMF, art. 25(6) MIF II, RGPD art. 13/14
+
+cabinet_orias: "[À COMPLÉTER : N° ORIAS]"
+cabinet_associations:
+  - "CNCIF"
+  - "ANACOFI-CIF"
+cabinet_assurance_rcp: "[À COMPLÉTER : Nom assureur RC Pro]"
+cabinet_assurance_rcp_numero: "[À COMPLÉTER : N° Police RC Pro]"
+cabinet_mediateur: "Médiateur de l'AMF"
+horizon_conservation_annees: 5
+
+textes_der:
+  identification: >
+    Conformément à l'article 325-5 du Règlement Général de l'Autorité des Marchés Financiers
+    (RG AMF), le présent Document d'Entrée en Relation (DER) vous est remis avant toute
+    fourniture de conseil en investissement. Il décrit les caractéristiques essentielles des
+    services proposés par votre Conseiller en Investissements Financiers (CIF), agréé en
+    application de l'article L.541-1 du Code Monétaire et Financier (CMF).
+  statuts_services: >
+    Le cabinet exerce l'activité de Conseil en Investissements Financiers (CIF) au sens de
+    l'article L.541-1 du CMF, en qualité de conseil non indépendant. Les services proposés
+    comprennent : l'analyse patrimoniale globale, l'élaboration de recommandations
+    d'allocation d'actifs personnalisées, le suivi et le rebalancement périodique du
+    portefeuille, ainsi que l'optimisation fiscale multi-enveloppes (PEA, assurance-vie,
+    CTO, PER). Ces services sont fournis dans le cadre de la directive MIF II (2014/65/UE).
+  remuneration: >
+    Conformément à l'article L.541-8-1 CMF, le cabinet vous informe de ses modalités de
+    rémunération. Le cabinet est rémunéré exclusivement par honoraires directs facturés
+    au client. Aucune rétrocession de commission de la part de producteurs de produits
+    financiers n'est perçue. Tout conflit d'intérêts potentiel vous sera signalé avant
+    toute recommandation.
+  reclamations: >
+    Toute réclamation doit être adressée par écrit (courrier recommandé ou email avec
+    accusé de réception) au cabinet. Le cabinet dispose de 10 jours ouvrables pour en
+    accuser réception et de 2 mois maximum pour apporter une réponse motivée, conformément
+    à la réglementation applicable. En l'absence de réponse satisfaisante, le client peut
+    saisir le médiateur compétent : le Médiateur de l'AMF (https://www.amf-france.org),
+    ou le médiateur de l'association professionnelle dont le cabinet est membre.
+  rgpd: >
+    Vos données personnelles sont collectées et traitées par le cabinet dans le cadre de
+    la relation de conseil en investissement, conformément au Règlement Général sur la
+    Protection des Données (RGPD — Règlement UE 2016/679) et à la loi Informatique et
+    Libertés. Finalités du traitement : gestion de la relation client, élaboration des
+    conseils en investissement, obligations légales et réglementaires (archivage 5 ans
+    minimum, art. 325-5 RG AMF). Durée de conservation : 5 ans à compter de la fin de
+    la relation contractuelle. Vous disposez des droits d'accès, de rectification,
+    d'effacement, de limitation du traitement et de portabilité de vos données (RGPD
+    art. 15 à 20). Pour exercer ces droits, contactez le cabinet par email. En cas de
+    litige, vous pouvez saisir la CNIL (www.cnil.fr).
+  conclusion: >
+    Le présent document vous est remis à titre informatif et ne constitue pas en lui-même
+    un engagement contractuel. La relation de conseil est formalisée par la lettre de
+    mission signée par les deux parties. Le client reconnaît avoir reçu et pris
+    connaissance du présent DER avant toute fourniture de conseil.
+
+textes_lettre_mission:
+  preambule: >
+    La présente lettre de mission est conclue conformément à l'article 325-3 du Règlement
+    Général AMF et à l'article L.541-8-1 du Code Monétaire et Financier. Elle formalise
+    la relation entre le Conseiller en Investissements Financiers (CIF) et le Client,
+    et définit les modalités de fourniture des services de conseil en investissement.
+  objet: >
+    Le Conseiller s'engage à fournir au Client des services de conseil en investissement
+    personnalisés, adaptés à son profil de risque, à ses objectifs patrimoniaux et à sa
+    situation financière, conformément aux dispositions de la directive MIF II (2014/65/UE)
+    et de ses textes d'application.
+  duree_resiliation: >
+    La présente mission est conclue pour une durée indéterminée à compter de sa signature.
+    Chaque partie peut y mettre fin par lettre recommandée avec accusé de réception
+    moyennant un préavis de 30 jours calendaires. En cas de résiliation, le Conseiller
+    restituera au Client l'ensemble des documents le concernant dans un délai de 15 jours.
+  responsabilite: >
+    Le Conseiller est couvert par une assurance Responsabilité Civile Professionnelle.
+    Sa responsabilité est limitée aux conseils fournis dans le cadre de la présente
+    mission. Le Client est seul décisionnaire de ses investissements. En cas de litige,
+    les parties s'engagent à recourir à la médiation avant toute action judiciaire.
+    Le droit applicable est le droit français.
+  mentions_cncif: >
+    Lettre de mission établie conformément aux clauses standard CNCIF (Chambre Nationale
+    des Conseillers en Investissements Financiers). Le Conseiller est membre de l'association
+    professionnelle agréée par l'AMF.
+
+textes_rapport_adequation:
+  introduction: >
+    Le présent rapport d'adéquation est établi conformément à l'article 25(6) de la
+    directive MIF II (2014/65/UE) et à l'article 325-5 du Règlement Général AMF. Il
+    justifie par écrit que les recommandations formulées correspondent aux caractéristiques
+    personnelles du Client, notamment ses objectifs d'investissement, sa tolérance au
+    risque, sa capacité à subir des pertes, ses connaissances et son expérience, ainsi
+    que sa situation financière.
+  avertissements: >
+    Les recommandations formulées dans ce rapport sont basées sur les informations
+    déclarées par le Client lors de son questionnaire de profilage. Elles ne constituent
+    pas une garantie de performance. Tout investissement comporte un risque de perte en
+    capital. Le Client est invité à mettre à jour ses informations au moins une fois par an
+    ou à chaque changement significatif de sa situation (RGPD art. 13/14). Les performances
+    passées ne préjugent pas des performances futures.
+  obligation_maj: >
+    Conformément à l'article 325-5 RG AMF, le Conseiller procèdera à une mise à jour
+    annuelle du présent rapport d'adéquation. Le Client est tenu d'informer le Conseiller
+    de tout changement significatif de sa situation patrimoniale, familiale ou
+    professionnelle susceptible d'impacter l'adéquation des recommandations.
