@@ -518,12 +518,54 @@ class Broker(_Lenient):
     annees_existence: int = Field(default=0, ge=0)
     actionnariat: str | None = None
     sources: list[str] = Field(default_factory=list)
+    etfs_disponibles: list[str] | None = None
 
 
 class BrokersConfig(_Lenient):
     """Root model pour brokers.yaml."""
 
     brokers: list[Broker]
+
+
+# ─── S13 — Teneurs de compte PER ─────────────────────────────────────────────
+
+
+class TeneurPER(_Lenient):
+    """Teneur de compte PER (Plan Épargne Retraite)."""
+
+    id: str
+    nom: str
+    type_per: Literal["individuel", "collectif", "obligatoire"] = "individuel"
+    assureur: str | None = None
+    distributeur: str | None = None
+    # Frais
+    frais_gestion_uc_pct: float = Field(ge=0, le=0.05)
+    frais_gestion_fonds_euros_pct: float | None = Field(default=None, ge=0, le=0.05)
+    frais_entree_pct: float = Field(default=0.0, ge=0, le=0.10)
+    frais_arbitrage_pct: float = Field(default=0.0, ge=0, le=0.05)
+    frais_versement_pct: float = Field(default=0.0, ge=0, le=0.10)
+    # Univers
+    nb_uc_total: int = Field(ge=0)
+    nb_etf: int = Field(default=0, ge=0)
+    fonds_euros_disponible: bool = False
+    rendement_fonds_euros_2024: float | None = Field(default=None, ge=0, le=0.20)
+    etfs_disponibles: list[str] | None = None
+    # Conditions
+    versement_minimum_eur: float = Field(ge=0)
+    gestion_libre: bool = True
+    gestion_pilotee: bool = False
+    # Sortie
+    sortie_capital_possible: bool = True
+    sortie_rente_possible: bool = True
+    # Meta
+    annees_existence: int = Field(default=0, ge=0)
+    sources: list[str] = Field(default_factory=list)
+
+
+class TeneursPERConfig(_Lenient):
+    """Root model pour teneurs_per.yaml."""
+
+    teneurs_per: list[TeneurPER]
 
 
 # ─── S8.2a — Retenues à la source ────────────────────────────────────────────
@@ -608,6 +650,8 @@ _SCHEMAS: dict = {
     "retenues_source.yaml": RetenuesSourceConfig,
     # S9 — Backtest
     "backtest.yaml": ConfigBacktest,
+    # S13 — Teneurs PER
+    "teneurs_per.yaml": TeneursPERConfig,
 }
 
 

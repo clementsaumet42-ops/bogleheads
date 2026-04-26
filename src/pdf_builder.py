@@ -1320,6 +1320,74 @@ def _page_plan_rebalancement(
     return elems
 
 
+def _page_best_provider(styles: dict) -> list:
+    """Page S13 — Best Provider : synthèse des providers les moins chers par enveloppe."""
+    elems: list = []
+    elems.append(Paragraph("Best Provider — Classement par coût", styles["title"]))
+    elems.append(Spacer(1, 0.2 * cm))
+
+    elems.append(
+        Paragraph(
+            "Ce tableau compare les providers (brokers, assureurs AV, teneurs PER) "
+            "sur un horizon de 10 ans en tenant compte de tous les frais : TER des ETF, "
+            "frais de gestion de l'enveloppe, courtage et arbitrage.",
+            styles["body"],
+        )
+    )
+    elems.append(Spacer(1, 0.3 * cm))
+
+    # Tableau de synthèse statique (mise à jour via page 20 de l'application)
+    synthese_data = [
+        ["Enveloppe", "Critères de sélection", "Points de vigilance"],
+        [
+            "PEA",
+            "• Courtage le plus bas sur ETF Euronext\n• Pas de frais de garde\n• IFU automatique",
+            "• Frais d'inactivité\n• Frais de change si ETF en USD",
+        ],
+        [
+            "CTO",
+            "• Courtage ETF faible\n• Fiscalité IFU automatique\n• Accès marchés US",
+            "• Frais de change\n• Pas de niche fiscale",
+        ],
+        [
+            "Assurance-Vie",
+            "• Frais UC < 0,60%/an\n• ETF en gestion libre\n• Fonds euros ≥ 2,5%",
+            "• Frais d'entrée (0% recommandé)\n• Univers ETF disponible",
+        ],
+        [
+            "PER",
+            "• Frais UC < 0,70%/an\n• Gestion libre disponible\n• ETF indiciels accessibles",
+            "• Versement minimum\n• Frais de sortie en rente",
+        ],
+    ]
+    formatted = [
+        [Paragraph(str(c).replace("\n", "<br/>"), styles["body"]) for c in row]
+        for row in synthese_data
+    ]
+    elems.append(_zebra_table(formatted, col_widths=[3 * cm, 7 * cm, 6.5 * cm]))
+    elems.append(Spacer(1, 0.3 * cm))
+
+    elems.append(
+        Paragraph(
+            "<b>Méthodologie :</b> Le coût total 10 ans = TER effectif × encours moyen × 10 "
+            "+ frais de gestion enveloppe × encours moyen × 10 + courtage × nb rebalancements × 10. "
+            "Encours moyen estimé avec une croissance annuelle de 6%.",
+            styles["body"],
+        )
+    )
+    elems.append(Spacer(1, 0.2 * cm))
+    elems.append(
+        Paragraph(
+            "Utilisez la page <b>Best Provider</b> (page 20 de l'application) "
+            "pour obtenir un classement personnalisé selon votre patrimoine et vos ETF.",
+            styles["body"],
+        )
+    )
+
+    elems.append(PageBreak())
+    return elems
+
+
 def _page_fiscalite_transmission(profil: Any, styles: dict) -> list:
     """Page 11 — Fiscalité & transmission."""
     elems: list = []
@@ -2102,6 +2170,7 @@ def generer_pdf(
         story += _page_univers_etf(styles, etfs_list)
         story += _page_projection_mc(profil, styles, tmp_dir, allocation_cible)
         story += _page_plan_rebalancement(profil, styles, resultat_rebalancement)
+        story += _page_best_provider(styles)
         story += _page_fiscalite_transmission(profil, styles)
         story += _page_suivi_recommande(styles)
         story += _page_mentions_legales(config_pdf, styles, today)
