@@ -198,7 +198,7 @@ class TestPDFBestProviderPage:
         assert len(elems) > 0
 
     def test_pdf_15_pages(self, tmp_path):
-        """Le PDF de base a maintenant 16 pages (S15 + plan exécution)."""
+        """Le PDF de base a maintenant 17 pages (S17 + annexe hypothèses)."""
         from src.pdf_builder import charger_config_pdf, generer_pdf
         from src.schemas import charger_et_valider
 
@@ -207,4 +207,4 @@ class TestPDFBestProviderPage:
         config = charger_config_pdf()
         sortie = tmp_path / "test_s13.pdf"
         result = generer_pdf(profil1, config, sortie)
-        assert result.nb_pages == 16
+        assert result.nb_pages == 17

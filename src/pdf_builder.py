@@ -1517,6 +1517,113 @@ def _page_suivi_recommande(styles: dict) -> list:
     return elems
 
 
+def _page_hypotheses_sources(styles: dict) -> list:
+    """Annexe — Hypothèses retenues et sources (Sprint S17)."""
+    # Clés prioritaires visibles dans le PDF (Priority 1)
+    _CLES_PDF = [
+        "rendement_actions_monde",
+        "rendement_obligations",
+        "rendement_or",
+        "rendement_immobilier_cote",
+        "rendement_liquidites",
+        "inflation_long_terme",
+        "taux_pfu",
+        "taux_ps",
+        "esperance_vie_homme_60ans",
+        "esperance_vie_femme_60ans",
+        "taux_sans_risque",
+    ]
+
+    elems: list = []
+    elems.append(Paragraph("Annexe — Hypothèses retenues et sources", styles["title"]))
+    elems.append(Spacer(1, 0.15 * cm))
+    elems.append(
+        Paragraph(
+            "Les hypothèses ci-dessous sont celles en vigueur au moment de la génération "
+            "de ce document. Elles sont versionnées, sourcées et auditables : "
+            "un snapshot figé est conservé dans le dossier mission pour permettre "
+            "la traçabilité en cas de contestation future.",
+            styles["body"],
+        )
+    )
+    elems.append(Spacer(1, 0.2 * cm))
+
+    try:
+        from src.hypotheses.catalogue import charger_catalogue
+
+        catalogue = charger_catalogue()
+        header = [
+            Paragraph("<b>Hypothèse</b>", styles["small"]),
+            Paragraph("<b>Valeur</b>", styles["small"]),
+            Paragraph("<b>Description</b>", styles["small"]),
+            Paragraph("<b>Source principale</b>", styles["small"]),
+            Paragraph("<b>v / confiance</b>", styles["small"]),
+        ]
+        rows: list = [header]
+        for cle in _CLES_PDF:
+            h = catalogue.get(cle)
+            if h is None:
+                continue
+            valeur_str = f"{h.valeur} {h.unite}"
+            cle_cell = Paragraph(f"<b>{cle}</b>", styles["small"])
+            val_cell = Paragraph(valeur_str, styles["small"])
+            desc = h.description.strip().replace("\n", " ")
+            desc_short = desc[:90] + ("…" if len(desc) > 90 else "")
+            desc_cell = Paragraph(desc_short, styles["small"])
+            source_str = "—"
+            if h.sources:
+                s = h.sources[0]
+                source_str = s.organisme
+                if s.url:
+                    source_str += f" ({s.date_publication.year})"
+            source_cell = Paragraph(source_str, styles["small"])
+            vc_cell = Paragraph(
+                f"v{h.version}<br/>{h.confiance}",
+                styles["small"],
+            )
+            rows.append([cle_cell, val_cell, desc_cell, source_cell, vc_cell])
+
+        if len(rows) > 1:
+            col_widths = [3.8 * cm, 2.0 * cm, 6.2 * cm, 3.5 * cm, 2.0 * cm]
+            tbl = Table(rows, colWidths=col_widths, repeatRows=1)
+            ts = TableStyle(
+                [
+                    ("BACKGROUND", (0, 0), (-1, 0), _hex(_PRIMARY)),
+                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                    ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                    ("FONTSIZE", (0, 0), (-1, -1), 6.5),
+                    ("ROWBACKGROUNDS", (0, 1), (-1, -1), [_hex(_LIGHT_GREY), _hex(_WHITE)]),
+                    ("GRID", (0, 0), (-1, -1), 0.25, _hex(_MED_GREY)),
+                    ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                    ("LEFTPADDING", (0, 0), (-1, -1), 3),
+                    ("RIGHTPADDING", (0, 0), (-1, -1), 3),
+                    ("TOPPADDING", (0, 0), (-1, -1), 2),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
+                ]
+            )
+            tbl.setStyle(ts)
+            elems.append(tbl)
+    except Exception as exc:
+        logger.warning("Impossible de charger les hypothèses pour le PDF : %s", exc)
+        elems.append(
+            Paragraph(
+                "Hypothèses non disponibles — vérifier config/hypotheses.yaml.",
+                styles["body"],
+            )
+        )
+
+    elems.append(Spacer(1, 0.2 * cm))
+    elems.append(
+        Paragraph(
+            "<i>Liste complète, sources détaillées et historique de versions : "
+            "config/hypotheses.yaml — page 23 « Hypothèses » de l'outil Boglehead FR.</i>",
+            styles["small"],
+        )
+    )
+    elems.append(PageBreak())
+    return elems
+
+
 def _page_mentions_legales(config: Any, styles: dict, today: str) -> list:
     """Page 13 — Mentions légales & annexes."""
     elems: list = []
@@ -2178,6 +2285,19 @@ def generer_pdf(
     sortie_path.parent.mkdir(parents=True, exist_ok=True)
     today = date.today().isoformat()
 
+    # ── Snapshot hypothèses (S17) — figé au moment de la génération ──────────
+    try:
+        from src.hypotheses.snapshot import creer_snapshot, sauvegarder_snapshot
+
+        profil_id_str = str(int(_get(profil, "id", 0) or 0))
+        _snapshot = creer_snapshot(f"pdf_{profil_id_str}_{today}")
+        try:
+            sauvegarder_snapshot(_snapshot)
+        except Exception as _exc_snap_save:
+            logger.debug("Snapshot non sauvegardé (mode test ?) : %s", _exc_snap_save)
+    except Exception as _exc_snap:
+        logger.debug("Snapshot hypothèses non disponible : %s", _exc_snap)
+
     # ── Calculs préliminaires ─────────────────────────────────────────────────
     allocation_cible: dict[str, float] | None = None
     resultat_mode_b = None
@@ -2271,6 +2391,7 @@ def generer_pdf(
         story += _page_fiscalite_transmission(profil, styles)
         story += _page_suivi_recommande(styles)
         story += _page_plan_execution(styles)
+        story += _page_hypotheses_sources(styles)
         story += _page_mentions_legales(config_pdf, styles, today)
 
         # Pages S5 conditionnelles (ajoutées uniquement si données présentes)

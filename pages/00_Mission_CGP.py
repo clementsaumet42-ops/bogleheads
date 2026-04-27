@@ -386,3 +386,98 @@ if st.button("📄 Exporter récap mission (PDF 1 page)"):
     except Exception as exc:
         st.error(f"Erreur lors de la génération du PDF : {exc}")
         logger.exception("Erreur génération PDF récap")
+
+# ─── Section hypothèses & sources (S17) ──────────────────────────────────────
+
+st.divider()
+st.subheader("📚 Hypothèses & Sources")
+st.caption("Registre des hypothèses actives — sources citées, versions, snapshots.")
+
+with st.expander("Voir les hypothèses actives"):
+    try:
+        import pandas as pd
+
+        from src.hypotheses.catalogue import lister_hypotheses_par_categorie
+
+        par_cat = lister_hypotheses_par_categorie()
+        lignes = []
+        for _cat, hyps in sorted(par_cat.items()):
+            for h in sorted(hyps, key=lambda x: x.cle):
+                src = h.sources[0] if h.sources else None
+                lignes.append(
+                    {
+                        "Clé": h.cle,
+                        "Valeur": f"{h.valeur} {h.unite}",
+                        "Catégorie": h.categorie,
+                        "Source": src.organisme if src else "—",
+                        "Confiance": h.confiance,
+                        "Version": h.version,
+                    }
+                )
+        st.dataframe(pd.DataFrame(lignes), use_container_width=True, hide_index=True)
+        st.caption("Liste complète et sources détaillées → page 23 « Hypothèses ».")
+    except Exception as exc:
+        st.warning(f"Hypothèses non disponibles : {exc}")
+
+# ─── Snapshots ───────────────────────────────────────────────────────────────
+
+if "mission_id" in st.session_state and st.session_state["mission_id"]:
+    _mid = st.session_state["mission_id"]
+    col_snap1, col_snap2 = st.columns([3, 1])
+    with col_snap1:
+        st.markdown("**Snapshots d'hypothèses** — traçabilité en cas de contestation future.")
+    with col_snap2:
+        if st.button("📎 Figer un snapshot maintenant"):
+            try:
+                from src.hypotheses.snapshot import creer_snapshot, sauvegarder_snapshot
+
+                snap = creer_snapshot(_mid)
+                chemin = sauvegarder_snapshot(snap)
+                st.success(f"✅ Snapshot figé : {chemin.name}")
+                st.caption(f"Hash SHA-256 : `{snap.hash_integrite[:16]}…`")
+            except Exception as exc:
+                st.error(f"Erreur lors du snapshot : {exc}")
+
+    try:
+        from src.hypotheses.snapshot import lister_snapshots
+
+        snaps = lister_snapshots(_mid)
+        if snaps:
+            st.markdown(f"**{len(snaps)} snapshot(s) disponible(s)** pour cette mission :")
+            for s_path in reversed(snaps[-5:]):
+                st.markdown(f"- `{s_path.name}`")
+            # Bouton diff entre les 2 derniers snapshots
+            if len(snaps) >= 2 and st.button("🔍 Comparer les 2 derniers snapshots"):
+                try:
+                    import json
+
+                    from src.hypotheses.snapshot import SnapshotHypotheses
+                    from src.hypotheses.versionnage import comparer_snapshots
+
+                    snap_a = SnapshotHypotheses.from_dict(
+                        json.loads(snaps[-2].read_text(encoding="utf-8"))
+                    )
+                    snap_b = SnapshotHypotheses.from_dict(
+                        json.loads(snaps[-1].read_text(encoding="utf-8"))
+                    )
+                    diff = comparer_snapshots(snap_a, snap_b)
+                    if diff["modifiees"]:
+                        st.warning(f"⚠️ {len(diff['modifiees'])} hypothèse(s) modifiée(s) :")
+                        for m in diff["modifiees"]:
+                            st.markdown(f"  - `{m['cle']}` : {m['delta_valeur']}")
+                    if diff["ajoutees"]:
+                        st.info(
+                            f"➕ {len(diff['ajoutees'])} ajoutée(s) : {[h.cle for h in diff['ajoutees']]}"
+                        )
+                    if diff["retirees"]:
+                        st.info(
+                            f"➖ {len(diff['retirees'])} retirée(s) : {[h.cle for h in diff['retirees']]}"
+                        )
+                    if not diff["modifiees"] and not diff["ajoutees"] and not diff["retirees"]:
+                        st.success("✅ Aucun changement entre les deux snapshots.")
+                except Exception as exc:
+                    st.error(f"Erreur comparaison : {exc}")
+        else:
+            st.caption("Aucun snapshot enregistré pour cette mission.")
+    except Exception:
+        pass
