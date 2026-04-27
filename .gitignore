@@ -54,7 +54,7 @@ output/audit_univers_etf_*.md
 !output/.gitkeep
 
 # Mission CGP — données de missions persistées
-data/missions/*.json
+data/missions/
 
 # OS
 .DS_Store
