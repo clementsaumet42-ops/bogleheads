@@ -34,6 +34,7 @@ optim = ["pulp", "scipy"]
 web = ["streamlit>=1.30", "plotly>=5.18"]
 cif = ["cryptography>=42.0"]
 backtest = ["yfinance"]
+pdf = ["pdfplumber>=0.10", "pytesseract>=0.3", "pdf2image>=1.17"]
 
 [tool.setuptools.packages.find]
 where = ["." ]

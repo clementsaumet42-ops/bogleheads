@@ -1,0 +1,40 @@
+emetteur:
+  nom: "Linxea"
+  type: "courtier_en_ligne"
+  signatures:
+    - "LINXEA"
+    - "Linxea"
+    - "linxea.com"
+    - "ORIAS 07 026 669"
+  enveloppe_par_defaut_si_indetectable: "AV"
+
+extraction:
+  methode: "tableau"
+  page_strategie: "toutes"
+
+  detection_enveloppe:
+    av: ["Assurance vie", "Linxea Spirit", "Linxea Avenir", "Linxea Zen", "Linxea Evolution"]
+    per: ["PER", "Linxea PER", "Plan d'Épargne Retraite"]
+
+  colonnes_attendues:
+    - nom: "isin"
+      patterns: ["Code ISIN", "ISIN", "Code"]
+    - nom: "libelle"
+      patterns: ["Libellé", "Support", "Fonds", "Dénomination"]
+    - nom: "quantite"
+      patterns: ["Nombre de parts", "Parts", "Quantité"]
+    - nom: "valorisation"
+      patterns: ["Valeur de rachat", "Valorisation", "Valeur totale", "Montant"]
+    - nom: "cours"
+      patterns: ["Valeur liquidative", "VL", "Valeur de part", "Cours"]
+
+  filtres_lignes:
+    exclure_si_contient: ["Total", "TOTAL", "Fonds en euros", "Total général"]
+    inclure_si_isin: false
+
+regex_isin: '\b([A-Z]{2}[A-Z0-9]{9}[0-9])\b'
+regex_montant_eur: '(\d{1,3}(?:[\s.,]\d{3})*(?:[,.]\d{2})?)\s*€?'
+
+post_traitement:
+  normalise_devises: true
+  conversion_si_non_eur: false

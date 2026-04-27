@@ -37,6 +37,15 @@ class EtatMission:
     notes: dict[str, str] = field(default_factory=dict)
     # S18-A : snapshot de session_state pour auto-save (rétro-compatible)
     session_state_snapshot: dict[str, Any] | None = field(default=None)
+    # S20 : imports patrimoine depuis PDF (rétro-compatible)
+    imports_patrimoine: list[dict[str, Any]] = field(default_factory=list)
+
+    def ajouter_import(self, import_pdf: Any) -> None:
+        """Ajoute un ImportPDF à la liste des imports (S20)."""
+        if hasattr(import_pdf, "model_dump"):
+            self.imports_patrimoine.append(import_pdf.model_dump())
+        else:
+            self.imports_patrimoine.append(dict(import_pdf))
 
     def to_dict(self) -> dict[str, Any]:
         d: dict[str, Any] = {
@@ -50,6 +59,8 @@ class EtatMission:
         }
         if self.session_state_snapshot is not None:
             d["session_state_snapshot"] = self.session_state_snapshot
+        if self.imports_patrimoine:
+            d["imports_patrimoine"] = self.imports_patrimoine
         return d
 
     @classmethod
@@ -65,6 +76,7 @@ class EtatMission:
             chemin_persistance=chemin,
             notes=data.get("notes", {}),
             session_state_snapshot=data.get("session_state_snapshot"),
+            imports_patrimoine=data.get("imports_patrimoine", []),
         )
 
 

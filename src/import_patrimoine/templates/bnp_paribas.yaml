@@ -1,0 +1,44 @@
+emetteur:
+  nom: "BNP Paribas"
+  type: "banque"
+  signatures:
+    - "BNP PARIBAS"
+    - "BNP Paribas SA"
+    - "BNP Paribas Personal Finance"
+    - "bnpparibas.fr"
+  enveloppe_par_defaut_si_indetectable: "CTO"
+
+extraction:
+  methode: "hybride"
+  page_strategie: "toutes"
+
+  detection_enveloppe:
+    pea: ["PEA", "Plan d'Épargne en Actions"]
+    pea_pme: ["PEA PME", "PEA-PME"]
+    cto: ["Compte-titres", "Compte titres", "CTO"]
+    av: ["Assurance vie", "Cardif", "Multiplacements"]
+    per: ["PER", "Plan d'Épargne Retraite", "Perp"]
+    livret: ["Livret A", "LDD", "Livret de développement durable"]
+
+  colonnes_attendues:
+    - nom: "isin"
+      patterns: ["Code ISIN", "ISIN", "Code valeur"]
+    - nom: "libelle"
+      patterns: ["Libellé valeur", "Valeur", "Désignation"]
+    - nom: "quantite"
+      patterns: ["Quantité", "Nombre de titres", "Qté"]
+    - nom: "valorisation"
+      patterns: ["Valorisation", "Montant net", "Valeur de marché"]
+    - nom: "cours"
+      patterns: ["Cours", "Cours en devise"]
+
+  filtres_lignes:
+    exclure_si_contient: ["Total", "TOTAL", "Sous-total", "Liquidités"]
+    inclure_si_isin: false
+
+regex_isin: '\b([A-Z]{2}[A-Z0-9]{9}[0-9])\b'
+regex_montant_eur: '(\d{1,3}(?:[\s.,]\d{3})*(?:[,.]\d{2})?)\s*€?'
+
+post_traitement:
+  normalise_devises: true
+  conversion_si_non_eur: false
