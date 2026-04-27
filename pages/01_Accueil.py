@@ -7,7 +7,11 @@ from pathlib import Path
 import streamlit as st
 import yaml
 
+from src.ui.theme import injecter_css
+
 # ─── Injection typographie premium ───────────────────────────────────────────
+
+injecter_css()
 
 st.markdown(
     """
@@ -139,13 +143,11 @@ nb_profils, nb_enveloppes, nb_etfs = _charger_kpis()
 
 col1, col2, col3 = st.columns(3)
 with col1:
-    st.metric("👤 Profils types", nb_profils, help="Profils clients fictifs pré-configurés")
+    st.metric("Profils types", nb_profils, help="Profils clients fictifs pré-configurés")
 with col2:
-    st.metric(
-        "🏦 Enveloppes fiscales", nb_enveloppes, help="PEA, PER, AV, CTO, PEE, Contrat Cap IS"
-    )
+    st.metric("Enveloppes fiscales", nb_enveloppes, help="PEA, PER, AV, CTO, PEE, Contrat Cap IS")
 with col3:
-    st.metric("📊 ETF disponibles", nb_etfs, help="ETF passifs Boglehead validés")
+    st.metric("ETF disponibles", nb_etfs, help="ETF passifs Boglehead validés")
 
 st.divider()
 
@@ -154,15 +156,15 @@ st.divider()
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.info(
-        "👈 Utilisez la navigation à gauche ou cliquez ci-dessous "
+        "Utilisez la navigation à gauche ou cliquez ci-dessous "
         "pour charger votre premier profil client."
     )
-    if st.button("👤 Charger un profil client", type="primary", use_container_width=True):
+    if st.button("Charger un profil client", type="primary", use_container_width=True):
         st.switch_page("pages/04_Profil.py")
 
 st.divider()
 st.caption(
-    "⚠️ *Les informations contenues dans cet outil sont à titre indicatif uniquement "
+    "*Les informations contenues dans cet outil sont à titre indicatif uniquement "
     "et ne constituent pas un conseil en investissement personnalisé au sens de la directive MIF II. "
     "Consultez toujours un conseiller qualifié avant toute décision d'investissement.*"
 )

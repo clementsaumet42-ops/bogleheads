@@ -8,10 +8,14 @@ from pathlib import Path
 import streamlit as st
 import yaml
 
+from src.ui.theme import injecter_css
+
 logger = logging.getLogger(__name__)
 
-st.set_page_config(page_title="Conformité CIF", page_icon="📋", layout="wide")
-st.title("📋 Conformité CIF — Documents réglementaires")
+st.set_page_config(page_title="Conformité CIF", page_icon="🏛️", layout="wide")
+injecter_css()
+
+st.title("Conformité CIF — Documents réglementaires")
 st.caption(
     "DER · Lettre de Mission · Rapport d'Adéquation MIF II — "
     "Art. L.541-1 CMF / Art. 325-3 & 325-5 RG AMF / Art. 25(6) MIF II"
@@ -85,7 +89,7 @@ if profil_raw is not None:
 
 if profil_raw is None:
     st.warning(
-        "⚠️ Aucun profil client actif. Chargez un profil via la page **Profilage** "
+        "Aucun profil client actif. Chargez un profil via la page **Profilage** "
         "ou **Dossiers** pour activer la génération des documents."
     )
 
@@ -93,11 +97,11 @@ if profil_raw is None:
 
 tab_dash, tab_der, tab_lm, tab_ra, tab_archives = st.tabs(
     [
-        "📊 Dashboard",
-        "📄 DER",
-        "📝 Lettre de Mission",
-        "📋 Rapport d'Adéquation",
-        "🗄️ Archives",
+        "Dashboard",
+        "DER",
+        "Lettre de Mission",
+        "Rapport d'Adéquation",
+        "Archives",
     ]
 )
 
@@ -122,25 +126,25 @@ with tab_dash:
     col1, col2, col3 = st.columns(3)
     with col1:
         if "DER" in types_signes:
-            st.success("✅ DER — Signé")
+            st.success("DER — Signé")
         elif "DER" in types_presents:
-            st.warning("⏳ DER — Généré, non signé")
+            st.warning("DER — Généré, non signé")
         else:
-            st.error("❌ DER — Non généré")
+            st.error("DER — Non généré")
     with col2:
         if "LETTRE_MISSION" in types_signes:
-            st.success("✅ Lettre de Mission — Signée")
+            st.success("Lettre de Mission — Signée")
         elif "LETTRE_MISSION" in types_presents:
-            st.warning("⏳ Lettre de Mission — Générée, non signée")
+            st.warning("Lettre de Mission — Générée, non signée")
         else:
-            st.error("❌ Lettre de Mission — Non générée")
+            st.error("Lettre de Mission — Non générée")
     with col3:
         if "RAPPORT_ADEQUATION" in types_signes:
-            st.success("✅ Rapport d'Adéquation — Signé")
+            st.success("Rapport d'Adéquation — Signé")
         elif "RAPPORT_ADEQUATION" in types_presents:
-            st.warning("⏳ Rapport d'Adéquation — Généré, non signé")
+            st.warning("Rapport d'Adéquation — Généré, non signé")
         else:
-            st.error("❌ Rapport d'Adéquation — Non généré")
+            st.error("Rapport d'Adéquation — Non généré")
 
     if docs:
         st.markdown(f"**{len(docs)} document(s) archivé(s)** pour ce client.")
@@ -158,17 +162,17 @@ with tab_der:
     if profil_raw is None:
         st.warning("Chargez un profil client pour générer le DER.")
     else:
-        if st.button("📄 Générer le DER", type="primary", key="btn_gen_der"):
+        if st.button("Générer le DER", type="primary", key="btn_gen_der"):
             try:
                 from src.conformite.der import generer_der
 
                 out_path = OUTPUT_DIR / f"der_{profil_id_display}.pdf"
                 doc = generer_der(profil_raw, cabinet_raw or {}, conformite_raw or {}, out_path)
                 st.session_state["der_doc"] = doc
-                st.success(f"✅ DER généré — SHA256 : `{doc.sha256[:16]}…`")
+                st.success(f"DER généré — SHA256 : `{doc.sha256[:16]}…`")
                 with open(out_path, "rb") as f:
                     st.download_button(
-                        "⬇️ Télécharger le DER",
+                        "Télécharger le DER",
                         f,
                         file_name=f"DER_{client_nom_display}_{doc.date_generation[:10]}.pdf",
                         mime="application/pdf",
@@ -179,7 +183,7 @@ with tab_der:
         der_doc = st.session_state.get("der_doc")
         if der_doc is not None:
             st.divider()
-            st.subheader("✍️ Signature eIDAS simple")
+            st.subheader("Signature eIDAS simple")
             nom_sig = st.text_input(
                 "Nom du signataire", value=client_nom_display, key="der_nom_sig"
             )
@@ -188,7 +192,7 @@ with tab_der:
                 "Je certifie avoir lu et accepté le Document d'Entrée en Relation (signature électronique simple eIDAS)",
                 key="der_consent",
             )
-            if st.button("✅ Signer le DER", key="btn_sign_der"):
+            if st.button("Signer le DER", key="btn_sign_der"):
                 if not consentement:
                     st.error("Cochez la case de consentement pour signer.")
                 elif not email_sig:
@@ -201,7 +205,7 @@ with tab_der:
                         preuve = signer_document(der_doc, nom_sig, email_sig, consentement)
                         archiver_document(der_doc, preuve, ARCHIVE_DIR)
                         st.success(
-                            f"✅ DER signé et archivé — Hash signature : `{preuve.hash_signature[:16]}…`"
+                            f"DER signé et archivé — Hash signature : `{preuve.hash_signature[:16]}…`"
                         )
                     except Exception as e:
                         st.error(f"Erreur lors de la signature : {e}")
@@ -246,7 +250,7 @@ with tab_lm:
                 lm_duree = st.number_input("Durée (mois)", min_value=1, value=12)
                 lm_date_debut = st.date_input("Date de début")
 
-            submitted = st.form_submit_button("📝 Générer la Lettre de Mission", type="primary")
+            submitted = st.form_submit_button("Générer la Lettre de Mission", type="primary")
 
         if submitted:
             try:
@@ -265,10 +269,10 @@ with tab_lm:
                     profil_raw, cabinet_raw or {}, conformite_raw or {}, parametres, out_path
                 )
                 st.session_state["lm_doc"] = doc
-                st.success(f"✅ Lettre de Mission générée — SHA256 : `{doc.sha256[:16]}…`")
+                st.success(f"Lettre de Mission générée — SHA256 : `{doc.sha256[:16]}…`")
                 with open(out_path, "rb") as f:
                     st.download_button(
-                        "⬇️ Télécharger la Lettre de Mission",
+                        "Télécharger la Lettre de Mission",
                         f,
                         file_name=f"LM_{client_nom_display}_{doc.date_generation[:10]}.pdf",
                         mime="application/pdf",
@@ -279,7 +283,7 @@ with tab_lm:
         lm_doc = st.session_state.get("lm_doc")
         if lm_doc is not None:
             st.divider()
-            st.subheader("✍️ Signature eIDAS simple")
+            st.subheader("Signature eIDAS simple")
             lm_nom_sig = st.text_input(
                 "Nom du signataire", value=client_nom_display, key="lm_nom_sig"
             )
@@ -288,7 +292,7 @@ with tab_lm:
                 "Je certifie avoir lu et accepté la Lettre de Mission (signature électronique simple eIDAS)",
                 key="lm_consent",
             )
-            if st.button("✅ Signer la Lettre de Mission", key="btn_sign_lm"):
+            if st.button("Signer la Lettre de Mission", key="btn_sign_lm"):
                 if not lm_consent:
                     st.error("Cochez la case de consentement pour signer.")
                 elif not lm_email_sig:
@@ -301,7 +305,7 @@ with tab_lm:
                         preuve = signer_document(lm_doc, lm_nom_sig, lm_email_sig, lm_consent)
                         archiver_document(lm_doc, preuve, ARCHIVE_DIR)
                         st.success(
-                            f"✅ Lettre de Mission signée et archivée — `{preuve.hash_signature[:16]}…`"
+                            f"Lettre de Mission signée et archivée — `{preuve.hash_signature[:16]}…`"
                         )
                     except Exception as e:
                         st.error(f"Erreur lors de la signature : {e}")
@@ -322,11 +326,11 @@ with tab_ra:
 
         if not allocation_cible:
             st.info(
-                "ℹ️ Aucune allocation cible en session. "
+                "ℹ Aucune allocation cible en session. "
                 "Générez une allocation via la page **Allocation** pour pré-remplir ce rapport."
             )
 
-        if st.button("📋 Générer le Rapport d'Adéquation", type="primary", key="btn_gen_ra"):
+        if st.button("Générer le Rapport d'Adéquation", type="primary", key="btn_gen_ra"):
             try:
                 from src.conformite.rapport_adequation import generer_rapport_adequation
 
@@ -340,10 +344,10 @@ with tab_ra:
                     out_path,
                 )
                 st.session_state["ra_doc"] = doc
-                st.success(f"✅ Rapport d'Adéquation généré — SHA256 : `{doc.sha256[:16]}…`")
+                st.success(f"Rapport d'Adéquation généré — SHA256 : `{doc.sha256[:16]}…`")
                 with open(out_path, "rb") as f:
                     st.download_button(
-                        "⬇️ Télécharger le Rapport d'Adéquation",
+                        "Télécharger le Rapport d'Adéquation",
                         f,
                         file_name=f"RA_{client_nom_display}_{doc.date_generation[:10]}.pdf",
                         mime="application/pdf",
@@ -354,7 +358,7 @@ with tab_ra:
         ra_doc = st.session_state.get("ra_doc")
         if ra_doc is not None:
             st.divider()
-            st.subheader("✍️ Signature eIDAS simple")
+            st.subheader("Signature eIDAS simple")
             ra_nom_sig = st.text_input(
                 "Nom du signataire", value=client_nom_display, key="ra_nom_sig"
             )
@@ -363,7 +367,7 @@ with tab_ra:
                 "Je certifie avoir lu et accepté le Rapport d'Adéquation (signature électronique simple eIDAS)",
                 key="ra_consent",
             )
-            if st.button("✅ Signer le Rapport d'Adéquation", key="btn_sign_ra"):
+            if st.button("Signer le Rapport d'Adéquation", key="btn_sign_ra"):
                 if not ra_consent:
                     st.error("Cochez la case de consentement pour signer.")
                 elif not ra_email_sig:
@@ -375,7 +379,7 @@ with tab_ra:
 
                         preuve = signer_document(ra_doc, ra_nom_sig, ra_email_sig, ra_consent)
                         archiver_document(ra_doc, preuve, ARCHIVE_DIR)
-                        st.success(f"✅ Rapport signé et archivé — `{preuve.hash_signature[:16]}…`")
+                        st.success(f"Rapport signé et archivé — `{preuve.hash_signature[:16]}…`")
                     except Exception as e:
                         st.error(f"Erreur lors de la signature : {e}")
 
@@ -403,7 +407,7 @@ with tab_archives:
                         "Type": d.type_doc,
                         "Client": d.client_nom,
                         "Date génération": d.date_generation[:19],
-                        "Signé": "✅" if d.signe else "⏳",
+                        "Signé": "" if d.signe else "",
                         "Date signature": (d.date_signature or "")[:19],
                         "Version": d.version_template,
                         "SHA256": d.sha256[:16] + "…",
@@ -411,7 +415,7 @@ with tab_archives:
                 )
             st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
 
-            if st.button("🔍 Vérifier l'intégrité des PDFs", key="btn_verify"):
+            if st.button("Vérifier l'intégrité des PDFs", key="btn_verify"):
                 resultats = verifier_integrite_dossier(profil_id_display, ARCHIVE_DIR)
                 if not resultats:
                     st.warning("Aucun fichier à vérifier.")
@@ -419,11 +423,11 @@ with tab_archives:
                     ok = sum(1 for v in resultats.values() if v)
                     ko = sum(1 for v in resultats.values() if not v)
                     if ko == 0:
-                        st.success(f"✅ Intégrité vérifiée — {ok} fichier(s) intact(s).")
+                        st.success(f"Intégrité vérifiée — {ok} fichier(s) intact(s).")
                     else:
-                        st.error(f"⚠️ {ko} fichier(s) altéré(s) / manquant(s) sur {ok + ko}.")
+                        st.error(f"{ko} fichier(s) altéré(s) / manquant(s) sur {ok + ko}.")
                     for chemin, valide in resultats.items():
-                        icon = "✅" if valide else "❌"
+                        icon = "" if valide else ""
                         st.text(f"{icon} {chemin}")
     except Exception as e:
         st.error(f"Erreur lors de la lecture des archives : {e}")

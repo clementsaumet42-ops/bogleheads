@@ -10,11 +10,14 @@ import streamlit as st
 import yaml
 
 from src.fiscalite.drag_etf import calculer_drag_fiscal_etf
+from src.ui.theme import injecter_css
 
 # Seuil de drag matériel (en bps) au-delà duquel on affiche un badge rouge
 _DRAG_MATERIEL_BPS = 20
 
-st.title("📚 Univers ETF — Éligibilité enveloppes & TER effectif")
+injecter_css()
+
+st.title("Univers ETF — Éligibilité enveloppes & TER effectif")
 
 st.info(
     "**Pourquoi le TER effectif ?** Les ETF physiques détenant des actions étrangères subissent "
@@ -38,40 +41,40 @@ def _charger_etfs() -> list[dict]:
         raw = yaml.safe_load(_ETF_YAML.read_text(encoding="utf-8"))
         return raw.get("univers_etf", [])
     except Exception as exc:
-        st.error(f"❌ Erreur chargement univers_etf.yaml : {exc}")
+        st.error(f"Erreur chargement univers_etf.yaml : {exc}")
         return []
 
 
 etfs_raw = _charger_etfs()
 
 if not etfs_raw:
-    st.warning("⚠️ Aucun ETF chargé.")
+    st.warning("Aucun ETF chargé.")
     st.stop()
 
 
 def _badge_verification(dv_str: str | None) -> str:
     """Retourne un badge coloré selon l'ancienneté de la vérification."""
     if dv_str is None:
-        return "🔴 Non vérifié"
+        return "Non vérifié"
     try:
         dv = date.fromisoformat(str(dv_str)) if not isinstance(dv_str, date) else dv_str
         age = (date.today() - dv).days
         if age <= 180:
-            return f"🟢 {dv} ({age}j)"
+            return f"Récent — {dv} ({age}j)"
         elif age <= 365:
-            return f"🟡 {dv} ({age}j)"
+            return f"Ancien — {dv} ({age}j)"
         else:
-            return f"🔴 {dv} ({age}j)"
+            return f"Expiré — {dv} ({age}j)"
     except Exception:
-        return f"⚪ {dv_str}"
+        return f"{dv_str}"
 
 
 def _bool_icon(val: bool | None) -> str:
     if val is True:
-        return "✅"
+        return "Oui"
     if val is False:
-        return "❌"
-    return "⚠️"
+        return "Non"
+    return "—"
 
 
 # ─── Construction du DataFrame ───────────────────────────────────────────────
@@ -179,7 +182,7 @@ st.divider()
 
 # ─── Filtres ─────────────────────────────────────────────────────────────────
 
-st.subheader("🔍 Filtres")
+st.subheader("Filtres")
 
 col_f1, col_f2 = st.columns(2)
 
@@ -304,10 +307,10 @@ else:
             return "—"
         bps = float(v)
         if bps > _DRAG_MATERIEL_BPS:
-            return f"🔴 {bps:.0f} bps"
+            return f"Élevé — {bps:.0f} bps"
         elif bps > 0:
-            return f"🟡 {bps:.0f} bps"
-        return "✅ 0 bps"
+            return f"{bps:.0f} bps"
+        return "0 bps"
 
     df_display["drag_bps"] = df_display["drag_bps"].apply(_fmt_drag)
     df_display = df_display.rename(columns={"drag_bps": "Drag fiscal (bps)"})
@@ -342,7 +345,7 @@ else:
 
     # DICI : lien cliquable
     df_display["DICI"] = df_display["DICI"].apply(
-        lambda v: f"[🔗 DICI]({v})" if v and not (isinstance(v, float) and pd.isna(v)) else "—"
+        lambda v: f"[ DICI]({v})" if v and not (isinstance(v, float) and pd.isna(v)) else "—"
     )
 
     # Badge vérification
@@ -358,7 +361,7 @@ else:
 
     csv_data = df_display.to_csv(index=False, sep=";", encoding="utf-8-sig")
     st.download_button(
-        label="📥 Export CSV",
+        label="Export CSV",
         data=csv_data.encode("utf-8-sig"),
         file_name=f"univers_etf_filtre_{date.today()}.csv",
         mime="text/csv",
@@ -370,8 +373,8 @@ else:
 st.divider()
 col_nav1, col_nav2 = st.columns(2)
 with col_nav1:
-    if st.button("🎯 Allocation cible", use_container_width=True):
+    if st.button("Allocation cible", use_container_width=True):
         st.switch_page("pages/05_Allocation.py")
 with col_nav2:
-    if st.button("🏦 Asset Location →", type="primary", use_container_width=True):
+    if st.button("Asset Location →", type="primary", use_container_width=True):
         st.switch_page("pages/07_Asset_Location.py")

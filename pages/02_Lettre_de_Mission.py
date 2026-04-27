@@ -7,8 +7,12 @@ from pathlib import Path
 import streamlit as st
 import yaml
 
-st.set_page_config(page_title="Lettre de Mission", page_icon="📋")
-st.title("📋 Lettre de Mission CIF")
+from src.ui.theme import injecter_css
+
+st.set_page_config(page_title="Lettre de Mission", page_icon="🏛️")
+injecter_css()
+
+st.title("Lettre de Mission CIF")
 st.caption("Document d'Entrée en Relation & Lettre de Mission — Art. L.541-8-1 CMF")
 
 ROOT = Path(__file__).parent.parent
@@ -35,7 +39,7 @@ client_email = st.text_input("Email du client", value="jean.dupont@exemple.fr")
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button("📄 Générer le DER"):
+    if st.button("Générer le DER"):
         from src.cif.der import generer_der
 
         out = ROOT / "output" / "der_client.pdf"
@@ -60,13 +64,11 @@ with col1:
         }
         path = generer_der(config_cabinet, out)
         with open(path, "rb") as f:
-            st.download_button(
-                "⬇ Télécharger le DER", f, file_name="DER.pdf", mime="application/pdf"
-            )
+            st.download_button("Télécharger le DER", f, file_name="DER.pdf", mime="application/pdf")
         st.success("DER généré avec succès.")
 
 with col2:
-    if st.button("📝 Générer la Lettre de Mission"):
+    if st.button("Générer la Lettre de Mission"):
         from src.cif.lettre_mission import generer_lettre_mission
 
         out = ROOT / "output" / "lettre_mission_client.pdf"
@@ -98,14 +100,14 @@ with col2:
         path = generer_lettre_mission(config_cabinet, client_info, out)
         with open(path, "rb") as f:
             st.download_button(
-                "⬇ Télécharger la Lettre", f, file_name="lettre_mission.pdf", mime="application/pdf"
+                "Télécharger la Lettre", f, file_name="lettre_mission.pdf", mime="application/pdf"
             )
         st.success("Lettre de mission générée avec succès.")
 
 # ─── Aperçu HTML ──────────────────────────────────────────────────────────────
 
 st.divider()
-st.subheader("👁 Aperçu de la lettre de mission")
+st.subheader("Aperçu de la lettre de mission")
 
 preview_html = f"""
 <div style="font-family: Georgia, serif; max-width: 680px; margin: 0 auto;
@@ -138,6 +140,6 @@ preview_html = f"""
 st.html(preview_html)
 
 st.divider()
-st.info("💡 Pour générer la version finale signable, utilisez la page dédiée à la conformité CIF.")
-if st.button("📄 Générer la version finale signable →", type="secondary"):
+st.info("Pour générer la version finale signable, utilisez la page dédiée à la conformité CIF.")
+if st.button("Générer la version finale signable →", type="secondary"):
     st.switch_page("pages/21_Conformite_CIF.py")

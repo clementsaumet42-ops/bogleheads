@@ -76,6 +76,68 @@ Format : [Semantic Versioning](https://semver.org/lang/fr/) — [Keep a Changelo
 
 ---
 
+## [1.0.0] — Sprint S19 — UX Private Banking (refonte visuelle haut de gamme)
+
+### Ajouté
+
+#### Lot A — Système de thème
+- `.streamlit/config.toml` : palette Private Banking (or vieilli, ivoire, ardoise, bleu nuit)
+- `src/ui/theme.py` : constantes de palette Python + fonction `injecter_css()` (CSS global ~200 lignes)
+  - Imports Google Fonts EB Garamond + Inter via @import
+  - Override composants Streamlit (boutons, headers, tableaux, sidebar, expanders, metric, alertes)
+  - Fallback Georgia/"Times New Roman" + system-ui si Google Fonts hors ligne
+
+#### Lot B — Composants UI réutilisables
+- `src/ui/components.py` : 10 composants éditoriaux
+  - `titre_page()` — EB Garamond 36px + séparateur or
+  - `kpi_card()` — valeur serif 32px, fond blanc cassé, bordure or fine
+  - `tableau_elegant()` — alternance ivoire/blanc cassé, chiffres EB Garamond tabulaire
+  - `bouton_principal()` — bleu nuit + or, hover bleu profond
+  - `bouton_secondaire()` — transparent + ardoise, hover or
+  - `panneau_avertissement()` — filet gauche 4px coloré (or/ardoise/bordeaux)
+  - `section()` — section éditoriale avec séparateur or
+  - `icone_lucide()` — SVG Lucide inline depuis `assets/icons/`
+  - `lettrine()` — première lettre EB Garamond 64px
+  - `monogramme_html()` — SVG monogramme cabinet dimensionné
+
+#### Lot C — Refonte pages Streamlit
+- 26 pages `pages/` refaites : zéro emoji dans l'UI rendue
+- Appel `injecter_css()` ajouté sur chaque page
+- `st.title()` / `st.header()` remplacés par `titre_page()` / `section()` sur les pages principales
+
+#### Lot D — Refonte PDF
+- `src/pdf_builder.py` : palette Private Banking (bleu nuit `#0B1929`, or `#8B6F47`)
+- Tableaux : en-têtes bleu nuit/ivoire, alternance ivoire/blanc cassé, filets or 0.25pt
+- Camembert : palette dégradée bleu nuit → or → ardoise
+- Monte-Carlo : médiane bleu nuit, P10/P90 ardoise claire 25%, pas de grille, axes fins ardoise
+- Suppression emojis dans le texte PDF (alertes, cabinets, ETFs)
+
+#### Lot E — Ressources statiques
+- `assets/monogramme.svg` — initiale "S" or sur bleu nuit, cartouche ovale
+- `assets/monogramme_or.svg` — variante or sur transparent
+- `assets/monogramme_blanc.svg` — variante blanc sur transparent
+- `assets/icons/` — 18 icônes Lucide SVG (stroke 1.5px) : chevron-right, check, alert-circle, info, download, file-text, users, briefcase, trending-up, pie-chart, calendar, clock, archive, external-link, settings, arrow-right, eye, printer
+
+#### Lot F — Documentation
+- `docs/charte-graphique.md` : palette, typographie, composants, icônes, règles
+- `README.md` : mention charte graphique + crédits Lucide/EB Garamond/Inter
+- `CHANGELOG.md` : entrée S19
+
+#### Tests
+- `tests/test_ui_components.py` : `injecter_css()` + 15 composants testés avec mock Streamlit
+- `tests/test_no_emoji_in_ui.py` : scanner récursif pages/ et src/ui/, whitelist page_icon= et commentaires
+- `tests/test_pdf_visual_regression.py` : palette `_PRIMARY`/`_ACCENT`, nombre de pages, nom client, patrimoine total
+
+### Modifié
+- Zéro modification de logique métier (fiscalite, allocation, optimiseur, audit, conformite, execution, hypotheses, mission)
+
+### Crédits
+- **Lucide Icons** — ISC License — https://lucide.dev
+- **EB Garamond** — OFL License — Georg Duffner
+- **Inter** — OFL License — Rasmus Andersson
+
+---
+
 ## [0.9.0] — Sprint S18 — Densification UX
 
 ### Ajouté

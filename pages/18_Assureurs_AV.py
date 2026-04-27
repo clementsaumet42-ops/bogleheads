@@ -6,9 +6,12 @@ import pandas as pd
 import streamlit as st
 
 from src.catalogue.crud import diff_yaml, lire_yaml, sauvegarder_yaml
+from src.ui.theme import injecter_css
 
-st.set_page_config(page_title="Assureurs AV", page_icon="🛡️")
-st.title("🛡️ Assureurs AV — Gestion des contrats")
+st.set_page_config(page_title="Assureurs AV", page_icon="🏛️")
+injecter_css()
+
+st.title("Assureurs AV — Gestion des contrats")
 
 st.info(
     "Gérez les contrats d'assurance-vie référencés. Backup automatique avant chaque sauvegarde."
@@ -32,7 +35,7 @@ contrats: list[dict] = data.get(_KEY_LIST, [])
 
 # ─── Tableau lecture ───────────────────────────────────────────────────────────
 
-st.subheader(f"📊 {len(contrats)} contrats AV dans le catalogue")
+st.subheader(f"{len(contrats)} contrats AV dans le catalogue")
 
 if contrats:
     cols = [
@@ -50,7 +53,7 @@ if contrats:
 
 # ─── Formulaire ───────────────────────────────────────────────────────────────
 
-st.subheader("➕ Ajouter / Modifier un contrat AV")
+st.subheader("Ajouter / Modifier un contrat AV")
 
 with st.form("form_av"):
     c_id = st.text_input("ID (slug, ex: linxea_spirit) *")
@@ -79,11 +82,11 @@ with st.form("form_av"):
     annees = st.number_input("Années d'existence", min_value=0, step=1)
     sources = st.text_area("Sources (une par ligne, obligatoire)")
 
-    submitted = st.form_submit_button("🔍 Prévisualiser le diff")
+    submitted = st.form_submit_button("Prévisualiser le diff")
 
 if submitted:
     if not c_id or not c_nom or not assureur or not sources.strip():
-        st.warning("⚠️ ID, Nom, Assureur et au moins une source sont obligatoires.")
+        st.warning("ID, Nom, Assureur et au moins une source sont obligatoires.")
     else:
         nouveau_contrat: dict = {
             "id": c_id.strip().lower(),
@@ -113,7 +116,7 @@ if submitted:
         nouveau_data[_KEY_LIST] = liste
 
         diff = diff_yaml(data, nouveau_data)
-        st.subheader("🔍 Diff (dry-run)")
+        st.subheader("Diff (dry-run)")
         if diff:
             st.code(diff, language="diff")
         else:
@@ -121,28 +124,28 @@ if submitted:
 
         st.session_state["av_preview"] = nouveau_data
 
-if "av_preview" in st.session_state and st.button("✅ Confirmer la sauvegarde"):
+if "av_preview" in st.session_state and st.button("Confirmer la sauvegarde"):
     try:
         sauvegarder_yaml(_FILENAME, st.session_state["av_preview"])
-        st.success("✅ Contrats AV sauvegardés avec backup.")
+        st.success("Contrats AV sauvegardés avec backup.")
         del st.session_state["av_preview"]
         st.cache_data.clear()
     except Exception as exc:
-        st.error(f"❌ Erreur : {exc}")
+        st.error(f"Erreur : {exc}")
 
 # ─── Suppression ──────────────────────────────────────────────────────────────
 
-st.subheader("🗑️ Supprimer un contrat AV")
+st.subheader("Supprimer un contrat AV")
 if contrats:
     options = {f"{c.get('nom', '?')} ({c.get('id', '?')})": c.get("id") for c in contrats}
     choix = st.selectbox("Sélectionner le contrat à supprimer", list(options.keys()))
-    if st.button("🗑️ Supprimer (avec backup)"):
+    if st.button("Supprimer (avec backup)"):
         cid = options[choix]
         nouveau_data = dict(data)
         nouveau_data[_KEY_LIST] = [c for c in contrats if c.get("id") != cid]
         try:
             sauvegarder_yaml(_FILENAME, nouveau_data)
-            st.success(f"✅ Contrat '{cid}' supprimé.")
+            st.success(f"Contrat '{cid}' supprimé.")
             st.cache_data.clear()
         except Exception as exc:
-            st.error(f"❌ Erreur : {exc}")
+            st.error(f"Erreur : {exc}")
