@@ -2294,7 +2294,9 @@ def generer_pdf(
         try:
             sauvegarder_snapshot(_snapshot)
         except Exception as _exc_snap_save:
-            logger.debug("Snapshot non sauvegardé (mode test ?) : %s", _exc_snap_save)
+            logger.debug(
+                "Snapshot non sauvegardé (permission ou espace disque ?) : %s", _exc_snap_save
+            )
     except Exception as _exc_snap:
         logger.debug("Snapshot hypothèses non disponible : %s", _exc_snap)
 

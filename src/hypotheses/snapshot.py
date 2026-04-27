@@ -148,18 +148,19 @@ def charger_snapshot(mission_id: str, dt: datetime | None = None) -> SnapshotHyp
     if not fichiers:
         raise FileNotFoundError(f"Aucun fichier snapshot dans : {dossier}")
 
+    def _ts_from_path(p: Path) -> float:
+        """Extrait le timestamp UNIX depuis le nom de fichier YYYYMMDD-HHMMSS."""
+        try:
+            return datetime.strptime(p.stem, "%Y%m%d-%H%M%S").timestamp()
+        except ValueError:
+            return 0.0
+
     if dt is None:
-        chemin = fichiers[-1]  # le plus récent
+        chemin = fichiers[-1]  # le plus récent (tri alphabétique = tri chronologique)
     else:
         # le plus proche par date
         ts_cible = dt.timestamp()
-        chemin = min(
-            fichiers,
-            key=lambda f: abs(
-                datetime.fromisoformat(f.stem.replace("-", "T", 1).replace("-", ":")).timestamp()
-                - ts_cible
-            ),
-        )
+        chemin = min(fichiers, key=lambda f: abs(_ts_from_path(f) - ts_cible))
     data = json.loads(chemin.read_text(encoding="utf-8"))
     return SnapshotHypotheses.from_dict(data)
 
