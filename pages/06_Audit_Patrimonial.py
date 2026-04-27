@@ -11,8 +11,11 @@ import streamlit as st
 from src.ui.cards import carte_kpi
 from src.ui.explications import bloc_script_restitution, expander_explication
 from src.ui.formatters import format_euro
+from src.ui.theme import injecter_css
 
 # ─── Injection typographie premium ───────────────────────────────────────────
+
+injecter_css()
 
 st.markdown(
     """
@@ -26,7 +29,7 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif !important; }
 
 # ─── Section 1 — En-tête ──────────────────────────────────────────────────────
 
-st.title("🔍 Audit patrimonial — Chasse aux points de base")
+st.title("Audit patrimonial — Chasse aux points de base")
 st.markdown("_Identification des économies activables sur votre portefeuille actuel_")
 
 profil_raw = st.session_state.get("profil_actif")
@@ -47,7 +50,7 @@ if profil_raw:
     st.markdown(
         f"<div style='background:#F5F3EE;border:1px solid #B08D57;border-radius:6px;"
         f"padding:10px 16px;font-size:0.9rem;color:#1B3A5B;margin-bottom:16px;'>"
-        f"👤 <strong>{nom}</strong> &nbsp;|&nbsp; "
+        f"<strong>{nom}</strong> &nbsp;|&nbsp; "
         f"Patrimoine financier : <strong>{format_euro(float(patrimoine))}</strong> &nbsp;|&nbsp; "
         f"TMI : <strong>{tmi_val * 100:.0f} %</strong>"
         f"</div>",
@@ -56,10 +59,10 @@ if profil_raw:
 
 # ─── Section S12 — Alertes patrimoniales ─────────────────────────────────────
 
-st.markdown("### 🚨 Alertes patrimoniales — Moteur S12 (40 règles)")
+st.markdown("###  Alertes patrimoniales — Moteur S12 (40 règles)")
 
 if not profil_raw:
-    st.info("👤 Chargez d'abord un profil dans la page Profil pour voir les alertes.")
+    st.info("Chargez d'abord un profil dans la page Profil pour voir les alertes.")
 else:
     try:
         from src.audit.alertes import detecter_alertes
@@ -73,9 +76,9 @@ else:
         _alertes = detecter_alertes(_profil_obj_alertes)
 
         if not _alertes:
-            st.success("✅ Aucune alerte déclenchée sur ce profil.")
+            st.success("Aucune alerte déclenchée sur ce profil.")
         else:
-            _SEV_ICON = {"ROUGE": "🔴", "JAUNE": "🟡", "VERT": "🟢"}
+            _SEV_ICON = {"ROUGE": "", "JAUNE": "", "VERT": ""}
             _SEV_COLOR = {"ROUGE": "#FFCCCC", "JAUNE": "#FFF9CC", "VERT": "#CCFFCC"}
 
             _col_rouge, _col_jaune, _col_vert = st.columns(3)
@@ -83,16 +86,16 @@ else:
             _nb_jaune = sum(1 for a in _alertes if a.severite.value == "JAUNE")
             _nb_vert = sum(1 for a in _alertes if a.severite.value == "VERT")
             with _col_rouge:
-                st.metric("🔴 Critiques", _nb_rouge)
+                st.metric("Critiques", _nb_rouge)
             with _col_jaune:
-                st.metric("🟡 Avertissements", _nb_jaune)
+                st.metric("Avertissements", _nb_jaune)
             with _col_vert:
-                st.metric("🟢 Opportunités", _nb_vert)
+                st.metric("Opportunités", _nb_vert)
 
             st.markdown("")
             for _alerte in _alertes:
                 _sev_val = _alerte.severite.value
-                _icon = _SEV_ICON.get(_sev_val, "ℹ️")
+                _icon = _SEV_ICON.get(_sev_val, "ℹ")
                 _bg = _SEV_COLOR.get(_sev_val, "#FFFFFF")
                 _gain_txt = (
                     f"Gain estimé : **{_alerte.gain_eur_annuel:,.0f} €/an**"
@@ -104,9 +107,9 @@ else:
                     f"margin-bottom:8px;border-left:4px solid #1B3A5B;'>"
                     f"<strong>{_icon} [{_alerte.code}] {_alerte.titre}</strong><br/>"
                     f"<span style='font-size:0.88rem;'>{_alerte.description}</span><br/>"
-                    f"<em style='font-size:0.85rem;color:#1B3A5B;'>👉 {_alerte.action_concrete}</em>"
+                    f"<em style='font-size:0.85rem;color:#1B3A5B;'> {_alerte.action_concrete}</em>"
                     + (
-                        f"<br/><span style='font-size:0.82rem;'>💰 {_gain_txt}</span>"
+                        f"<br/><span style='font-size:0.82rem;'> {_gain_txt}</span>"
                         if _gain_txt
                         else ""
                     )
@@ -118,9 +121,9 @@ else:
 
 # ─── Diagnostic existant ─────────────────────────────────────────────────────
 
-with st.expander("📊 Diagnostic du patrimoine existant", expanded=False):
+with st.expander("Diagnostic du patrimoine existant", expanded=False):
     if not profil_raw:
-        st.info("👤 Chargez d'abord un profil dans la page Profil.")
+        st.info("Chargez d'abord un profil dans la page Profil.")
     else:
         _composition = (
             profil_raw.get("composition_actuelle", [])
@@ -130,7 +133,7 @@ with st.expander("📊 Diagnostic du patrimoine existant", expanded=False):
 
         if not _composition:
             st.info(
-                "📦 Aucun patrimoine existant saisi. Allez dans **Profil → Patrimoine financier déjà constitué**."
+                "Aucun patrimoine existant saisi. Allez dans **Profil → Patrimoine financier déjà constitué**."
             )
         else:
             from src.audit.analyse_existant import analyser_existant
@@ -165,12 +168,12 @@ with st.expander("📊 Diagnostic du patrimoine existant", expanded=False):
                     st.metric("+Values latentes", format_euro(_diag.plus_values_latentes_eur))
                 with _col4:
                     st.metric(
-                        "Risque concentration", "⚠️ OUI" if _diag.risque_concentration else "✅ Non"
+                        "Risque concentration", "OUI" if _diag.risque_concentration else "Non"
                     )
 
                 if _diag.risque_concentration:
                     st.error(
-                        f"🚨 Risque de concentration : {_diag.concentration_max_enveloppe_pct * 100:.1f}% dans une seule enveloppe (seuil : 80%)"
+                        f"Risque de concentration : {_diag.concentration_max_enveloppe_pct * 100:.1f}% dans une seule enveloppe (seuil : 80%)"
                     )
 
                 if _diag.repartition_par_classe:
@@ -194,7 +197,7 @@ with st.expander("📊 Diagnostic du patrimoine existant", expanded=False):
                             {
                                 "Classe": k,
                                 "Drift (pts %)": round(v * 100, 1),
-                                "Alerte": "⚠️" if abs(v) > 0.05 else "✅",
+                                "Alerte": "" if abs(v) > 0.05 else "",
                             }
                             for k, v in _diag.drift_par_classe.items()
                             if abs(v) > 0.001
@@ -203,7 +206,7 @@ with st.expander("📊 Diagnostic du patrimoine existant", expanded=False):
                     if not _df_drift.empty:
                         st.dataframe(_df_drift, use_container_width=True, hide_index=True)
                     else:
-                        st.success("✅ Aucun drift significatif détecté.")
+                        st.success("Aucun drift significatif détecté.")
             except Exception as _exc:
                 st.error(f"Erreur lors du diagnostic : {_exc}")
 
@@ -211,7 +214,7 @@ with st.expander("📊 Diagnostic du patrimoine existant", expanded=False):
 
 from src.pedagogie.audit import expliquer_concept_bps  # noqa: E402
 
-expander_explication(expliquer_concept_bps(), icone="📐")
+expander_explication(expliquer_concept_bps(), icone="")
 
 # ─── Chargement des référentiels ──────────────────────────────────────────────
 
@@ -284,12 +287,12 @@ def _lancer_audit(profil_raw: dict | object) -> None:  # noqa: ANN001
 # Bouton de relance
 col_btn, col_info = st.columns([1, 3])
 with col_btn:
-    if st.button("🔄 Lancer / relancer l'audit"):
+    if st.button("Lancer / relancer l'audit"):
         if profil_raw:
             with st.spinner("Analyse en cours…"):
                 _lancer_audit(profil_raw)
         else:
-            st.warning("⚠️ Aucun profil chargé — rendez-vous sur la page Profil.")
+            st.warning("Aucun profil chargé — rendez-vous sur la page Profil.")
 
 # Lancer automatiquement si profil présent et pas encore de rapport
 if profil_raw and "rapport_audit" not in st.session_state:
@@ -300,24 +303,24 @@ rapport = st.session_state.get("rapport_audit")
 
 if rapport is None:
     st.info(
-        "📋 Aucun rapport disponible. "
+        "Aucun rapport disponible. "
         "Chargez d'abord un profil client sur la page **Profil** puis revenez ici."
     )
-    if st.button("👤 Aller au profil client"):
+    if st.button("Aller au profil client"):
         st.switch_page("pages/04_Profil.py")
     st.stop()
 
 # ─── Section 2 — KPIs ─────────────────────────────────────────────────────────
 
 st.divider()
-st.subheader("💶 Résumé des opportunités")
+st.subheader("Résumé des opportunités")
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
     st.markdown(
         carte_kpi(
-            titre="💰 Gain activable / an",
+            titre="Gain activable / an",
             valeur=format_euro(rapport.gain_total_annuel_eur),
             contexte="Somme des économies annuelles identifiées",
         ),
@@ -327,7 +330,7 @@ with col1:
 with col2:
     st.markdown(
         carte_kpi(
-            titre="📈 Gain capitalisé 30 ans",
+            titre="Gain capitalisé 30 ans",
             valeur=format_euro(rapport.gain_total_30ans_eur),
             contexte="À 4 %/an, hypothèses constantes",
             couleur_valeur="#2E5D4F",
@@ -339,7 +342,7 @@ with col3:
     nb_opp = len(rapport.opportunites)
     st.markdown(
         carte_kpi(
-            titre="🎯 Opportunités identifiées",
+            titre="Opportunités identifiées",
             valeur=str(nb_opp),
             contexte=f"dont {rapport.nb_opportunites_haute_confiance} haute confiance",
         ),
@@ -349,7 +352,7 @@ with col3:
 # ─── Section 3 — Répartition par levier ──────────────────────────────────────
 
 st.divider()
-st.subheader("📊 Répartition par levier")
+st.subheader("Répartition par levier")
 
 levier_labels = {
     "tracking_difference": "Tracking Difference",
@@ -388,7 +391,7 @@ if any(v.get("gain_annuel_eur", 0) > 0 for _, v in synthese_sorted):
                 {
                     "Levier": label,
                     "Nb opp.": 0,
-                    "Gain annuel": "✅ Optimal",
+                    "Gain annuel": "Optimal",
                     "Gain 30 ans": "—",
                 }
             )
@@ -397,17 +400,17 @@ if any(v.get("gain_annuel_eur", 0) > 0 for _, v in synthese_sorted):
     st.dataframe(df_synthese, hide_index=True, use_container_width=True)
 else:
     st.success(
-        "✅ Pas d'optimisation identifiée — votre portefeuille est déjà optimal sur tous les leviers."
+        "Pas d'optimisation identifiée — votre portefeuille est déjà optimal sur tous les leviers."
     )
 
 # ─── Section 4 — Liste détaillée des opportunités ────────────────────────────
 
 st.divider()
-st.subheader("🔎 Opportunités détaillées")
+st.subheader("Opportunités détaillées")
 
 if not rapport.opportunites:
     st.success(
-        "✅ Aucune opportunité identifiée : votre portefeuille est déjà optimal "
+        "Aucune opportunité identifiée : votre portefeuille est déjà optimal "
         "sur les 5 leviers analysés. Bravo !"
     )
 else:
@@ -417,19 +420,19 @@ else:
         st.session_state["opportunites_a_activer"] = []
 
     complexite_couleurs = {
-        "faible": ("🟢", "#2E5D4F"),
-        "moyenne": ("🟡", "#A65A00"),
-        "elevee": ("🔴", "#A65A4E"),
+        "faible": ("", "#2E5D4F"),
+        "moyenne": ("", "#A65A00"),
+        "elevee": ("", "#A65A4E"),
     }
     confiance_couleurs = {
-        "haute": ("✅", "#2E5D4F"),
-        "moyenne": ("⚠️", "#A65A00"),
-        "basse": ("❓", "#888888"),
+        "haute": ("", "#2E5D4F"),
+        "moyenne": ("", "#A65A00"),
+        "basse": ("", "#888888"),
     }
 
     for i, opp in enumerate(rapport.opportunites):
         titre_expander = (
-            f"{'🥇' if i == 0 else '🎯'} {opp.titre} — "
+            f"{'' if i == 0 else ''} {opp.titre} — "
             f"**{format_euro(opp.gain_annuel_eur)}/an** "
             f"({format_euro(opp.gain_30ans_eur)} sur 30 ans)"
         )
@@ -448,8 +451,8 @@ else:
             st.markdown(f"**Formule :** `{opp.formule}`")
 
             # Badges complexité et confiance
-            cplx_icone, cplx_couleur = complexite_couleurs.get(opp.complexite, ("⚪", "#888888"))
-            conf_icone, conf_couleur = confiance_couleurs.get(opp.confiance, ("❓", "#888888"))
+            cplx_icone, cplx_couleur = complexite_couleurs.get(opp.complexite, ("", "#888888"))
+            conf_icone, conf_couleur = confiance_couleurs.get(opp.confiance, ("", "#888888"))
             st.markdown(
                 f"<span style='background:#F5F3EE;border:1px solid #E8E0D5;"
                 f"border-radius:4px;padding:3px 8px;font-size:0.82rem;color:{cplx_couleur};'>"
@@ -459,7 +462,7 @@ else:
                 f"{conf_icone} Confiance : {opp.confiance}</span> &nbsp;"
                 f"<span style='background:#F5F3EE;border:1px solid #E8E0D5;"
                 f"border-radius:4px;padding:3px 8px;font-size:0.82rem;color:#1B3A5B;'>"
-                f"⏱ Délai : {opp.delai_mise_en_oeuvre_jours} j</span>",
+                f"Délai : {opp.delai_mise_en_oeuvre_jours} j</span>",
                 unsafe_allow_html=True,
             )
 
@@ -471,11 +474,11 @@ else:
 
             # Sources
             if opp.sources:
-                sources_html = " &nbsp;|&nbsp; ".join(f"<em>{s}</em>" for s in opp.sources)
+                sources_html = "&nbsp;|&nbsp; ".join(f"<em>{s}</em>" for s in opp.sources)
                 st.markdown(
                     f"<div style='font-size:0.78rem;color:#888;margin-top:6px;"
                     f"border-top:1px solid #E8E0D5;padding-top:6px;'>"
-                    f"📚 {sources_html}</div>",
+                    f"{sources_html}</div>",
                     unsafe_allow_html=True,
                 )
 
@@ -484,7 +487,7 @@ else:
                 st.markdown(
                     f"<div style='background:#FFF8F0;border-left:3px solid #B08D57;"
                     f"padding:8px 12px;border-radius:4px;font-size:0.9rem;color:#555;"
-                    f"margin-top:8px;'>⚠️ <strong>Note EC :</strong> {opp.note_ec}</div>",
+                    f"margin-top:8px;'> <strong>Note EC :</strong> {opp.note_ec}</div>",
                     unsafe_allow_html=True,
                 )
 
@@ -494,7 +497,7 @@ else:
 
             # Bouton "à activer"
             deja_coche = opp.id in st.session_state.get("opportunites_a_activer", [])
-            label_btn = "✅ Marquée à activer" if deja_coche else "☑️ Marquer comme à activer"
+            label_btn = "Marquée à activer" if deja_coche else "Marquer comme à activer"
             if st.button(label_btn, key=f"activer_{opp.id}"):
                 a_activer = st.session_state.get("opportunites_a_activer", [])
                 if opp.id in a_activer:
@@ -507,14 +510,14 @@ else:
 # ─── Section 5 — Plan d'action EC ────────────────────────────────────────────
 
 st.divider()
-st.subheader("📋 Plan d'action")
+st.subheader("Plan d'action")
 
 ids_a_activer = st.session_state.get("opportunites_a_activer", [])
 opps_a_activer = [o for o in rapport.opportunites if o.id in ids_a_activer]
 
 if not opps_a_activer:
     st.info(
-        "ℹ️ Aucune opportunité marquée à activer pour l'instant. "
+        "ℹ Aucune opportunité marquée à activer pour l'instant. "
         "Cochez les opportunités ci-dessus pour construire le plan d'action."
     )
 else:
@@ -537,16 +540,16 @@ else:
 
     st.dataframe(pd.DataFrame(plan_rows), hide_index=True, use_container_width=True)
 
-    if st.button("📄 Export plan d'action"):
+    if st.button("Export plan d'action"):
         st.info(
-            "📄 Export PDF/Excel à venir en S8.2d — "
+            "Export PDF/Excel à venir en S8.2d — "
             "la fonctionnalité d'export sera branchée sur le générateur de PDF NRP."
         )
 
 # ─── Section 6 — Hypothèses & avertissements ─────────────────────────────────
 
 st.divider()
-with st.expander("⚙️ Hypothèses & avertissements", expanded=False):
+with st.expander("Hypothèses & avertissements", expanded=False):
     st.markdown("### Hypothèses utilisées")
 
     hyp = rapport.hypotheses_utilisees
@@ -557,14 +560,14 @@ with st.expander("⚙️ Hypothèses & avertissements", expanded=False):
         st.dataframe(pd.DataFrame(hyp_rows), hide_index=True, use_container_width=True)
 
     if rapport.avertissements:
-        st.markdown("### ⚠️ Avertissements")
+        st.markdown("###  Avertissements")
         for avert in rapport.avertissements:
             st.warning(avert)
 
     st.markdown(
         "<div style='font-size:0.78rem;color:#888;margin-top:12px;"
         "border-top:1px solid #E8E0D5;padding-top:8px;'>"
-        "⚖️ <em>Économies modélisées à hypothèses constantes. "
+        "<em>Économies modélisées à hypothèses constantes. "
         "Ne constitue pas un conseil personnalisé au sens de la directive MIF II "
         "sans signature du plan d'action par l'EC et le client.</em></div>",
         unsafe_allow_html=True,
@@ -572,12 +575,12 @@ with st.expander("⚙️ Hypothèses & avertissements", expanded=False):
 
 # ─── Section conformité ────────────────────────────────────────────────────────
 st.divider()
-st.markdown("### 📋 Documents conformité à signer pour ce client")
+st.markdown("###  Documents conformité à signer pour ce client")
 st.info(
     "Suite à cet audit, les documents réglementaires CIF doivent être générés et signés. "
     "Rendez-vous sur la page Conformité CIF pour générer le Rapport d'Adéquation MIF II."
 )
 col_cif1, col_cif2 = st.columns(2)
 with col_cif1:
-    if st.button("📋 Générer les documents conformité", key="btn_conformite_audit"):
+    if st.button("Générer les documents conformité", key="btn_conformite_audit"):
         st.switch_page("pages/21_Conformite_CIF.py")

@@ -9,8 +9,11 @@ import streamlit as st
 import yaml
 
 from src.ui.formatters import format_euro
+from src.ui.theme import injecter_css
 
-st.title("👤 Profil client")
+injecter_css()
+
+st.title("Profil client")
 
 _ROOT = Path(__file__).parent.parent
 
@@ -32,11 +35,11 @@ profils_yaml = _charger_profils_yaml()
 
 mode = st.radio(
     "Source du profil",
-    ["📂 Profil type YAML", "✏️ Profil custom"],
+    ["Profil type YAML", "Profil custom"],
     horizontal=True,
 )
 
-if mode == "📂 Profil type YAML":
+if mode == "Profil type YAML":
     # ── Sélection d'un profil type ────────────────────────────────────────────
     noms = [f"Profil {p['id']} — {p['nom']}" for p in profils_yaml]
     choix = st.selectbox("Choisissez un profil type", noms)
@@ -68,7 +71,7 @@ if mode == "📂 Profil type YAML":
                 with alloc_cols[i]:
                     st.metric(k.capitalize(), f"{v * 100:.0f} %")
 
-    if st.button("✅ Charger ce profil", type="primary"):
+    if st.button("Charger ce profil", type="primary"):
         # Validation Pydantic
         try:
             from src.schemas import Profil
@@ -81,9 +84,9 @@ if mode == "📂 Profil type YAML":
             st.session_state["resultat_mc"] = None
             st.session_state["pdf_bytes"] = None
             st.session_state["excel_bytes"] = None
-            st.success(f"✅ Profil **{profil_raw['nom']}** chargé avec succès !")
+            st.success(f"Profil **{profil_raw['nom']}** chargé avec succès !")
         except Exception as exc:
-            st.error(f"❌ Erreur de validation Pydantic : {exc}")
+            st.error(f"Erreur de validation Pydantic : {exc}")
 
 else:
     # ── Formulaire custom ─────────────────────────────────────────────────────
@@ -120,7 +123,7 @@ else:
 
         total_alloc = actions_pct + obligations_pct + immo_pct + or_pct + liquidites_pct
         if total_alloc != 100:
-            st.warning(f"⚠️ Total allocation : {total_alloc}% (doit être 100%)")
+            st.warning(f"Total allocation : {total_alloc}% (doit être 100%)")
 
         aversion = st.selectbox(
             "Profil d'aversion au risque",
@@ -157,11 +160,11 @@ else:
                 else 0
             )
 
-        submitted = st.form_submit_button("✅ Valider le profil", type="primary")
+        submitted = st.form_submit_button("Valider le profil", type="primary")
 
     if submitted:
         if total_alloc != 100:
-            st.error("❌ La somme des allocations doit être égale à 100%.")
+            st.error("La somme des allocations doit être égale à 100%.")
         else:
             enveloppes: dict = {}
             if pea_ouvert:
@@ -208,30 +211,30 @@ else:
                 st.session_state["resultat_mc"] = None
                 st.session_state["pdf_bytes"] = None
                 st.session_state["excel_bytes"] = None
-                st.success(f"✅ Profil **{nom}** validé et enregistré !")
+                st.success(f"Profil **{nom}** validé et enregistré !")
             except Exception as exc:
-                st.error(f"❌ Erreur de validation : {exc}")
+                st.error(f"Erreur de validation : {exc}")
 
 # ─── Affichage du profil actif en session ─────────────────────────────────────
 
 if st.session_state.get("profil_actif"):
     st.divider()
-    st.subheader("📋 Profil actif en session")
+    st.subheader("Profil actif en session")
     profil = st.session_state["profil_actif"]
     st.json(profil, expanded=False)
 
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("🎯 Calculer l'allocation", use_container_width=True):
+        if st.button("Calculer l'allocation", use_container_width=True):
             st.switch_page("pages/05_Allocation.py")
     with col2:
-        if st.button("📈 Projection Monte-Carlo", use_container_width=True):
+        if st.button("Projection Monte-Carlo", use_container_width=True):
             st.switch_page("pages/08_Monte_Carlo.py")
 
 # ─── Composition patrimoniale existante ──────────────────────────────────────
 
 st.divider()
-with st.expander("📦 Patrimoine financier déjà constitué", expanded=False):
+with st.expander("Patrimoine financier déjà constitué", expanded=False):
     st.markdown("Saisissez ligne par ligne les supports déjà détenus (ETF, fonds, etc.)")
 
     @st.cache_data(ttl=3600)
@@ -294,18 +297,18 @@ with st.expander("📦 Patrimoine financier déjà constitué", expanded=False):
         key="composition_editor",
     )
 
-    isin_input = st.text_input("🔍 Lookup ISIN → Ticker / Classe", placeholder="ex: IE00B4L5Y983")
+    isin_input = st.text_input("Lookup ISIN → Ticker / Classe", placeholder="ex: IE00B4L5Y983")
     if isin_input and isin_input in _univers:
         etf = _univers[isin_input]
         st.info(
-            f"✅ {etf['ticker']} — {etf['nom']} — {etf.get('sous_classe', etf.get('classe_actifs', '?'))}"
+            f"{etf['ticker']} — {etf['nom']} — {etf.get('sous_classe', etf.get('classe_actifs', '?'))}"
         )
     elif isin_input:
         st.warning("ISIN non trouvé dans l'univers ETF.")
 
     col_btn1, col_btn2 = st.columns(2)
     with col_btn1:
-        if st.button("💾 Enregistrer la composition", use_container_width=True):
+        if st.button("Enregistrer la composition", use_container_width=True):
             records = edited_df.dropna(subset=["enveloppe", "classe_actif", "montant_eur"]).to_dict(
                 "records"
             )
@@ -331,11 +334,11 @@ with st.expander("📦 Patrimoine financier déjà constitué", expanded=False):
 
             if st.session_state.get("profil_actif"):
                 st.session_state["profil_actif"]["composition_actuelle"] = composition
-                st.success(f"✅ {len(composition)} ligne(s) enregistrée(s) dans le profil actif.")
+                st.success(f"{len(composition)} ligne(s) enregistrée(s) dans le profil actif.")
             else:
-                st.warning("⚠️ Chargez d'abord un profil avant d'enregistrer la composition.")
+                st.warning("Chargez d'abord un profil avant d'enregistrer la composition.")
     with col_btn2:
-        if st.button("🗑️ Vider", use_container_width=True):
+        if st.button("Vider", use_container_width=True):
             if st.session_state.get("profil_actif"):
                 st.session_state["profil_actif"]["composition_actuelle"] = []
             st.rerun()

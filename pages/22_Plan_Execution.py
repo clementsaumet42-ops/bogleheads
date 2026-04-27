@@ -11,10 +11,14 @@ import pandas as pd
 import streamlit as st
 import yaml
 
+from src.ui.theme import injecter_css
+
 logger = logging.getLogger(__name__)
 
-st.set_page_config(page_title="Plan d'Exécution", page_icon="🚀", layout="wide")
-st.title("🚀 Plan d'Exécution — Du théorique au concret")
+st.set_page_config(page_title="Plan d'Exécution", page_icon="🏛️", layout="wide")
+injecter_css()
+
+st.title("Plan d'Exécution — Du théorique au concret")
 st.caption("Screener ETF · Ordres chiffrés · Déploiement DCA/lump · Calendrier de mise en œuvre")
 
 ROOT = Path(__file__).parent.parent
@@ -124,7 +128,7 @@ if enveloppe_screen == "AV":
         placeholder="Linxea Spirit 2",
     )
 
-if st.button("🔍 Lancer le screener", key="btn_screener"):
+if st.button("Lancer le screener", key="btn_screener"):
     if not catalogue:
         st.warning("Catalogue ETF non disponible.")
     else:
@@ -151,7 +155,7 @@ if st.button("🔍 Lancer le screener", key="btn_screener"):
                     f"Vérifiez le catalogue ou les contraintes d'éligibilité."
                 )
             else:
-                st.success(f"✅ Top {len(resultats)} ETF pour {case_label} ({enveloppe_screen})")
+                st.success(f"Top {len(resultats)} ETF pour {case_label} ({enveloppe_screen})")
 
                 rows = []
                 for i, r in enumerate(resultats):
@@ -240,7 +244,7 @@ with st.expander("Saisir l'allocation finale et les prix", expanded=False):
         / 100
     )
 
-    if st.button("⚡ Générer les ordres", key="btn_ordres"):
+    if st.button("Générer les ordres", key="btn_ordres"):
         try:
             import json
 
@@ -277,7 +281,7 @@ with st.expander("Saisir l'allocation finale et les prix", expanded=False):
 
             st.session_state["plan_ordres"] = plan_ordres
             st.success(
-                f"✅ {len(plan_ordres['ordres'])} ordre(s) générés — "
+                f"{len(plan_ordres['ordres'])} ordre(s) générés — "
                 f"Frais totaux : {plan_ordres['frais_total']:,.2f} €"
             )
 
@@ -309,7 +313,7 @@ if plan_ordres and plan_ordres.get("ordres"):
 
         csv_content = export_ordres_csv(plan_ordres)
         st.download_button(
-            label="📥 Télécharger CSV",
+            label="Télécharger CSV",
             data=csv_content.encode("utf-8"),
             file_name=f"ordres_{date.today().isoformat()}.csv",
             mime="text/csv",
@@ -377,7 +381,7 @@ with col_ovrd2:
         key="dep_duree_override",
     )
 
-if st.button("📋 Calculer le plan de déploiement", key="btn_deploiement"):
+if st.button("Calculer le plan de déploiement", key="btn_deploiement"):
     if not enveloppes_dep:
         st.warning("Veuillez sélectionner au moins une enveloppe.")
     else:
@@ -401,7 +405,7 @@ if st.button("📋 Calculer le plan de déploiement", key="btn_deploiement"):
 
             st.session_state["plan_deploiement"] = plan_dep
             st.success(
-                f"✅ Mode **{plan_dep['mode']}** — "
+                f"Mode **{plan_dep['mode']}** — "
                 f"Durée : {plan_dep['duree_mois']} mois — "
                 f"Séquence : {' → '.join(plan_dep['sequence_enveloppes'])}"
             )
@@ -425,7 +429,7 @@ if plan_dep:
     st.subheader("Séquence d'enveloppes")
     seq = plan_dep.get("sequence_enveloppes", [])
     if seq:
-        st.write(" → ".join(f"**{e}**" for e in seq))
+        st.write("→ ".join(f"**{e}**" for e in seq))
 
     tranches = plan_dep.get("tranches", [])
     if tranches:
@@ -453,7 +457,7 @@ date_debut_cal = st.date_input(
     key="cal_date_debut",
 )
 
-if st.button("📅 Générer le calendrier", key="btn_calendrier"):
+if st.button("Générer le calendrier", key="btn_calendrier"):
     plan_dep_cal = st.session_state.get("plan_deploiement")
     if plan_dep_cal is None:
         st.warning(
@@ -467,7 +471,7 @@ if st.button("📅 Générer le calendrier", key="btn_calendrier"):
                 calendrier = generer_calendrier(plan_dep_cal, date_debut_cal)
 
             st.session_state["calendrier"] = calendrier
-            st.success(f"✅ {len(calendrier)} étapes générées")
+            st.success(f"{len(calendrier)} étapes générées")
 
         except Exception as exc:
             st.error(f"Erreur lors de la génération du calendrier : {exc}")
@@ -477,7 +481,7 @@ if st.button("📅 Générer le calendrier", key="btn_calendrier"):
 calendrier = st.session_state.get("calendrier")
 if calendrier:
     # Icônes par type
-    _icons = {"admin": "📁", "virement": "💸", "ordre": "📈", "controle": "✅"}
+    _icons = {"admin": "", "virement": "", "ordre": "", "controle": ""}
 
     df_cal = pd.DataFrame(
         [
@@ -502,7 +506,7 @@ if calendrier:
     # Export CSV du calendrier
     csv_cal = df_cal.to_csv(index=False, encoding="utf-8")
     st.download_button(
-        label="📥 Télécharger le calendrier CSV",
+        label="Télécharger le calendrier CSV",
         data=csv_cal.encode("utf-8"),
         file_name=f"calendrier_{date.today().isoformat()}.csv",
         mime="text/csv",

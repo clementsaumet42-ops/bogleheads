@@ -50,14 +50,18 @@ from src.schemas import ResultatPDF
 
 logger = logging.getLogger(__name__)
 
-# ─── Constantes palette ───────────────────────────────────────────────────────
+# ─── Constantes palette Private Banking (S19) ────────────────────────────────
 
-_PRIMARY = "#1a4d8f"
-_ACCENT = "#d4a017"
-_NEUTRAL = "#333333"
-_LIGHT_GREY = "#f5f5f5"
-_MED_GREY = "#e0e0e0"
-_WHITE = "#ffffff"
+_PRIMARY = "#0B1929"  # bleu nuit
+_ACCENT = "#8B6F47"  # or vieilli
+_NEUTRAL = "#2C2C2C"  # ardoise
+_LIGHT_GREY = "#F5F1EA"  # ivoire
+_MED_GREY = "#FAF7F2"  # blanc cassé
+_WHITE = "#FFFFFF"
+_ARDOISE_CLAIRE = "#5A5A5A"
+_OR_CLAIR = "#B8946A"
+_ROUGE_BORDEAUX = "#6B1E2C"
+_VERT_FORET = "#2D4A3E"
 
 NB_PAGES = 18
 
@@ -169,19 +173,20 @@ def _zebra_table(
         ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
         ("FONTSIZE", (0, 0), (-1, -1), 8),
         ("BACKGROUND", (0, 0), (-1, 0), _hex(_PRIMARY)),
-        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("TEXTCOLOR", (0, 0), (-1, 0), _hex(_LIGHT_GREY)),
+        ("FONTSIZE", (0, 0), (-1, 0), 7.5),
         ("ALIGN", (0, 0), (-1, -1), "LEFT"),
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
         ("ROWBACKGROUND", (0, 0), (-1, -1), [_hex(_WHITE), _hex(_LIGHT_GREY)]),
-        ("GRID", (0, 0), (-1, -1), 0.25, _hex(_MED_GREY)),
+        ("LINEBELOW", (0, 0), (-1, -2), 0.25, _hex(_ACCENT + "55")),
         ("TOPPADDING", (0, 0), (-1, -1), 3),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
         ("LEFTPADDING", (0, 0), (-1, -1), 4),
         ("RIGHTPADDING", (0, 0), (-1, -1), 4),
     ]
-    # Zebra
+    # Zebra — ivoire / blanc cassé alternance
     for i in range(1 if header else 0, nb):
-        bg = _hex(_LIGHT_GREY) if i % 2 == 0 else _hex(_WHITE)
+        bg = _hex(_LIGHT_GREY) if i % 2 == 0 else _hex(_MED_GREY)
         style_cmds.append(("BACKGROUND", (0, i), (-1, i), bg))
     t.setStyle(TableStyle(style_cmds))
     return t
@@ -224,19 +229,22 @@ def _chart_patrimoine_camembert(
         if total <= 0:
             return None
 
+        # Palette haut de gamme : dégradé bleu nuit → or → ardoise
         palette = [
-            "#1a4d8f",
-            "#d4a017",
-            "#2e7d32",
-            "#c62828",
-            "#6a1b9a",
-            "#00838f",
-            "#ef6c00",
-            "#37474f",
+            "#0B1929",  # bleu nuit
+            "#8B6F47",  # or vieilli
+            "#5A5A5A",  # ardoise claire
+            "#B8946A",  # or clair
+            "#16263F",  # bleu profond
+            "#2D4A3E",  # vert forêt
+            "#6B1E2C",  # rouge bordeaux
+            "#2C2C2C",  # ardoise
         ]
         colors_used = palette[: len(labels)]
 
         fig, ax = plt.subplots(figsize=(5, 4), dpi=120)
+        ax.set_facecolor("#FAF7F2")
+        fig.patch.set_facecolor("#FAF7F2")
         wedges, texts, autotexts = ax.pie(
             sizes,
             labels=None,
@@ -255,6 +263,7 @@ def _chart_patrimoine_camembert(
             fontsize=7,
         )
         ax.set_title("Répartition par enveloppe", fontsize=11, color=_PRIMARY)
+        ax.spines[:].set_visible(False)
         fig.tight_layout()
         path = os.path.join(tmp_dir, "chart_patrimoine.png")
         fig.savefig(path, bbox_inches="tight", dpi=120)
@@ -331,17 +340,28 @@ def _chart_projection_mc(
             proba_objectif = nb_ok / nb_tirages
 
         fig, ax = plt.subplots(figsize=(7, 4), dpi=120)
+        ax.set_facecolor("#FAF7F2")
+        fig.patch.set_facecolor("#FAF7F2")
         ax.fill_between(annees, p10 / 1e6, p90 / 1e6, alpha=0.25, color=_PRIMARY, label="P10–P90")
         ax.plot(annees, mediane / 1e6, color=_PRIMARY, linewidth=2, label="Médiane")
-        ax.plot(annees, p10 / 1e6, color=_ACCENT, linewidth=1, linestyle="--", label="P10")
-        ax.plot(annees, p90 / 1e6, color="#2e7d32", linewidth=1, linestyle="--", label="P90")
+        ax.plot(annees, p10 / 1e6, color=_ARDOISE_CLAIRE, linewidth=1, linestyle="--", label="P10")
+        ax.plot(annees, p90 / 1e6, color=_ARDOISE_CLAIRE, linewidth=1, linestyle="--", label="P90")
         if objectif and objectif > 0:
-            ax.axhline(objectif / 1e6, color="red", linewidth=1, linestyle=":", label="Objectif")
-        ax.set_xlabel("Années", fontsize=9)
-        ax.set_ylabel("Capital (M€)", fontsize=9)
+            ax.axhline(
+                objectif / 1e6, color=_ROUGE_BORDEAUX, linewidth=1, linestyle=":", label="Objectif"
+            )
+        ax.set_xlabel("Années", fontsize=9, color=_ARDOISE_CLAIRE)
+        ax.set_ylabel("Capital (M€)", fontsize=9, color=_ARDOISE_CLAIRE)
         ax.set_title("Projection Monte-Carlo — 5 000 simulations", fontsize=10, color=_PRIMARY)
-        ax.legend(fontsize=8)
-        ax.grid(True, alpha=0.3)
+        ax.legend(fontsize=8, framealpha=0.9)
+        ax.grid(False)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_linewidth(0.5)
+        ax.spines["left"].set_color(_ARDOISE_CLAIRE)
+        ax.spines["bottom"].set_linewidth(0.5)
+        ax.spines["bottom"].set_color(_ARDOISE_CLAIRE)
+        ax.tick_params(colors=_ARDOISE_CLAIRE, labelsize=8)
         fig.tight_layout()
         path = os.path.join(tmp_dir, "chart_projection.png")
         fig.savefig(path, bbox_inches="tight", dpi=120)
@@ -435,9 +455,9 @@ def _page_couverture(
 
     infos = []
     if tel:
-        infos.append(f"📞 {tel}")
+        infos.append(f"Tel. : {tel}")
     if email:
-        infos.append(f"✉ {email}")
+        infos.append(f"Courriel : {email}")
     if orias:
         infos.append(f"N° ORIAS : {orias}")
     if conformite:
@@ -544,16 +564,16 @@ def _page_alertes(profil: Any, styles: dict, alertes=None) -> list:
             alertes = []
 
     if not alertes:
-        elems.append(Paragraph("✅ Aucune alerte déclenchée sur ce profil.", styles["body"]))
+        elems.append(Paragraph("Aucune alerte déclenchée sur ce profil.", styles["body"]))
         elems.append(PageBreak())
         return elems
 
     top_alertes = alertes[:5]
-    _SEV_LABEL = {"ROUGE": "🔴 ROUGE", "JAUNE": "🟡 JAUNE", "VERT": "🟢 VERT"}
+    _SEV_LABEL = {"ROUGE": "ROUGE", "JAUNE": "JAUNE", "VERT": "VERT"}
     _SEV_COLOR = {
-        "ROUGE": colors.HexColor("#FFCCCC"),
-        "JAUNE": colors.HexColor("#FFF9CC"),
-        "VERT": colors.HexColor("#CCFFCC"),
+        "ROUGE": colors.HexColor(_ROUGE_BORDEAUX + "33"),
+        "JAUNE": colors.HexColor(_ACCENT + "33"),
+        "VERT": colors.HexColor(_VERT_FORET + "33"),
     }
 
     elems.append(
@@ -582,13 +602,13 @@ def _page_alertes(profil: Any, styles: dict, alertes=None) -> list:
 
     t = Table(rows, colWidths=[1.2 * cm, 2.2 * cm, 5.5 * cm, 2.2 * cm, 5.5 * cm])
     style_cmds = [
-        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1B3A5B")),
-        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("BACKGROUND", (0, 0), (-1, 0), _hex(_PRIMARY)),
+        ("TEXTCOLOR", (0, 0), (-1, 0), _hex(_LIGHT_GREY)),
         ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
         ("FONTSIZE", (0, 0), (-1, -1), 8),
-        ("GRID", (0, 0), (-1, -1), 0.3, colors.grey),
+        ("LINEBELOW", (0, 0), (-1, -2), 0.25, _hex(_ACCENT + "55")),
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F5F3EE")]),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [_hex(_MED_GREY), _hex(_LIGHT_GREY)]),
     ]
     for i, a in enumerate(top_alertes, 1):
         bg = _SEV_COLOR.get(a.severite.value, colors.white)
@@ -874,7 +894,7 @@ def _page_allocation_cible(
         # Fallback : afficher l'allocation Boglehead du profil
         elems.append(
             Paragraph(
-                "⚠️ Optimisation non disponible — affichage de l'allocation indicative.",
+                "Optimisation non disponible — affichage de l'allocation indicative.",
                 styles["body"],
             )
         )
@@ -999,8 +1019,8 @@ def _page_univers_etf(styles: dict, etfs: list | None) -> list:
         rows = [["ISIN", "Ticker", "Nom court", "Classe", "TER", "PEA", "AV"]]
         for etf in etfs_sel:
             elig = getattr(etf, "eligibilite", None)
-            pea = "✓" if (elig and getattr(elig, "PEA", False)) else "✗"
-            av = "✓" if (elig and getattr(elig, "AV_UC", False)) else "✗"
+            pea = "Oui" if (elig and getattr(elig, "PEA", False)) else "Non"
+            av = "Oui" if (elig and getattr(elig, "AV_UC", False)) else "Non"
             nom = getattr(etf, "nom", "")[:35]
             rows.append(
                 [
@@ -1022,15 +1042,15 @@ def _page_univers_etf(styles: dict, etfs: list | None) -> list:
             ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
             ("FONTSIZE", (0, 0), (-1, -1), 7),
             ("BACKGROUND", (0, 0), (-1, 0), _hex(_PRIMARY)),
-            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-            ("GRID", (0, 0), (-1, -1), 0.25, _hex(_MED_GREY)),
+            ("TEXTCOLOR", (0, 0), (-1, 0), _hex(_LIGHT_GREY)),
+            ("LINEBELOW", (0, 0), (-1, -2), 0.25, _hex(_ACCENT + "55")),
             ("TOPPADDING", (0, 0), (-1, -1), 2),
             ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
             ("LEFTPADDING", (0, 0), (-1, -1), 3),
             ("RIGHTPADDING", (0, 0), (-1, -1), 3),
         ]
         for i in range(1, len(rows)):
-            bg = _hex(_LIGHT_GREY) if i % 2 == 0 else _hex(_WHITE)
+            bg = _hex(_LIGHT_GREY) if i % 2 == 0 else _hex(_MED_GREY)
             style_cmds.append(("BACKGROUND", (0, i), (-1, i), bg))
         t.setStyle(TableStyle(style_cmds))
         elems.append(t)
@@ -1038,21 +1058,21 @@ def _page_univers_etf(styles: dict, etfs: list | None) -> list:
         # Liste statique de fallback
         fallback = [
             ["ISIN", "Ticker", "Nom", "Classe", "TER", "PEA"],
-            ["IE0031442068", "CW8", "Amundi MSCI World (PEA)", "Actions Monde", "0.38%", "✓"],
-            ["IE00B4L5Y983", "IWDA", "iShares MSCI World (Acc)", "Actions Monde", "0.20%", "✗"],
-            ["IE00B52VJ196", "CSP1", "iShares Core S&P 500 (Acc)", "Actions USA", "0.07%", "✗"],
+            ["IE0031442068", "CW8", "Amundi MSCI World (PEA)", "Actions Monde", "0.38%", "Oui"],
+            ["IE00B4L5Y983", "IWDA", "iShares MSCI World (Acc)", "Actions Monde", "0.20%", "Non"],
+            ["IE00B52VJ196", "CSP1", "iShares Core S&P 500 (Acc)", "Actions USA", "0.07%", "Non"],
             [
                 "IE00B3RBWM25",
                 "SWDA",
                 "iShares Core MSCI World (Dist)",
                 "Actions Monde",
                 "0.20%",
-                "✗",
+                "Non",
             ],
-            ["LU1437018838", "PAEEM", "Amundi MSCI Emerg. (PEA)", "Émergents", "0.20%", "✓"],
-            ["IE00B441G979", "AGGH", "iShares Core Glbl Agg Bd", "Obligations", "0.10%", "✗"],
-            ["IE00B14X4T88", "GOVS", "iShares € Govt Bond", "Obligations €", "0.07%", "✗"],
-            ["IE00B4ND3602", "SGLD", "iShares Physical Gold", "Or", "0.12%", "✗"],
+            ["LU1437018838", "PAEEM", "Amundi MSCI Emerg. (PEA)", "Émergents", "0.20%", "Oui"],
+            ["IE00B441G979", "AGGH", "iShares Core Glbl Agg Bd", "Obligations", "0.10%", "Non"],
+            ["IE00B14X4T88", "GOVS", "iShares € Govt Bond", "Obligations €", "0.07%", "Non"],
+            ["IE00B4ND3602", "SGLD", "iShares Physical Gold", "Or", "0.12%", "Non"],
         ]
         formatted = [[Paragraph(str(c), styles["small"]) for c in row] for row in fallback]
         elems.append(
@@ -1871,7 +1891,7 @@ def _page_profil_3_prismes(profil: Any, styles: dict, profil_consolide: Any = No
     if profil_consolide is not None:
         incoherences = getattr(profil_consolide, "incoherences_detectees", []) or []
     if incoherences:
-        elems.append(Paragraph("⚠ Incohérences détectées", styles["h2"]))
+        elems.append(Paragraph("Incohérences détectées", styles["h2"]))
         for inc in incoherences:
             desc = getattr(inc, "description", str(inc))
             gravite = getattr(inc, "gravite", "")
@@ -1879,7 +1899,7 @@ def _page_profil_3_prismes(profil: Any, styles: dict, profil_consolide: Any = No
     else:
         elems.append(
             Paragraph(
-                "✓ Aucune incohérence majeure détectée entre les 3 prismes.",
+                "Aucune incohérence majeure détectée entre les 3 prismes.",
                 styles["body"],
             )
         )

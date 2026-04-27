@@ -11,16 +11,16 @@ from __future__ import annotations
 from src.pedagogie.base import Explication
 
 
-def expander_explication(explication: Explication, icone: str = "💡") -> None:
+def expander_explication(explication: Explication, icone: str = "") -> None:
     """Affiche un st.expander avec titre court, contenu long et source en pied.
 
     Args:
         explication: Objet Explication à afficher.
-        icone: Icône emoji préfixant le titre (défaut : 💡).
+        icone: Préfixe optionnel du titre (défaut : vide).
     """
     import streamlit as st
 
-    label = f"{icone} {explication.titre}"
+    label = f"{icone} {explication.titre}".strip() if icone else explication.titre
     with st.expander(label):
         st.markdown(explication.texte_long)
 
@@ -30,29 +30,29 @@ def expander_explication(explication: Explication, icone: str = "💡") -> None:
         if explication.alternative_ecartee:
             st.markdown(
                 f"<div style='"
-                f"background:#FFF8F0;"
-                f"border-left:3px solid #B08D57;"
+                f"background:#FAF7F2;"
+                f"border-left:3px solid #8B6F47;"
                 f"padding:8px 12px;"
-                f"border-radius:4px;"
+                f"border-radius:0 4px 4px 0;"
                 f"font-size:0.9rem;"
-                f"color:#555;"
+                f"color:#5A5A5A;"
                 f"margin-top:8px;"
                 f"'>"
-                f"⚖️ <strong>Alternative écartée :</strong> {explication.alternative_ecartee}"
+                f"<strong>Alternative écartée :</strong> {explication.alternative_ecartee}"
                 f"</div>",
                 unsafe_allow_html=True,
             )
 
         if explication.gain_eur is not None:
             gain_str = f"{explication.gain_eur:+,.0f} €"
-            couleur = "#2E5D4F" if explication.gain_eur >= 0 else "#A65A4E"
+            couleur = "#2D4A3E" if explication.gain_eur >= 0 else "#6B1E2C"
             st.markdown(
                 f"<div style='"
                 f"font-size:0.85rem;"
                 f"color:{couleur};"
                 f"margin-top:6px;"
                 f"'>"
-                f"💶 <strong>Impact chiffré :</strong> {gain_str}"
+                f"<strong>Impact chiffré :</strong> {gain_str}"
                 f"</div>",
                 unsafe_allow_html=True,
             )
@@ -63,15 +63,15 @@ def expander_explication(explication: Explication, icone: str = "💡") -> None:
 
 def bloc_script_restitution(
     script_texte: str,
-    titre: str = "💬 Ce que vous dites au client",
+    titre: str = "Ce que vous dites au client",
 ) -> None:
     """Encadré distinctif avec script type prêt à lire pour l'EC/CIF.
 
-    Style : bordure navy, fond ivoire, typo serif cabinet.
+    Style : bordure bleu nuit, fond ivoire, typo serif cabinet.
 
     Args:
         script_texte: Texte du script (déjà rendu via rendre_script()).
-        titre: Titre de l'encadré (défaut : "💬 Ce que vous dites au client").
+        titre: Titre de l'encadré (défaut : "Ce que vous dites au client").
     """
     import html as html_module
 
@@ -145,11 +145,11 @@ def tableau_alternatives(explications: list[Explication]) -> None:
         hide_index=True,
         column_config={
             "Choix retenu": st.column_config.TextColumn(
-                "✅ Choix retenu",
+                "Choix retenu",
                 width="medium",
             ),
             "Alternative écartée": st.column_config.TextColumn(
-                "❌ Alternative écartée",
+                "Alternative écartée",
                 width="large",
             ),
         },
@@ -157,13 +157,13 @@ def tableau_alternatives(explications: list[Explication]) -> None:
 
 
 def badge_source(source: str) -> str:
-    """Retourne un badge markdown '📚 Source : …' pour fin de section.
+    """Retourne un badge HTML 'Source : ...' pour fin de section.
 
     Args:
         source: Référence académique ou réglementaire.
 
     Returns:
-        Chaîne Markdown formatée.
+        Chaîne HTML formatée.
     """
     return (
         f"<div style='"
@@ -172,5 +172,5 @@ def badge_source(source: str) -> str:
         f"margin-top:8px;"
         f"border-top:1px solid #E8E0D5;"
         f"padding-top:6px;"
-        f"'>📚 <em>Source : {source}</em></div>"
+        f"'><em>Source : {source}</em></div>"
     )
