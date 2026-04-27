@@ -936,7 +936,21 @@ Voir : [`docs/methodologie_markowitz.md`](docs/methodologie_markowitz.md)
 
 ---
 
-## 📄 Licence
+## Charte graphique & crédits (S19)
+
+L'interface suit la charte graphique Private Banking décrite dans [`docs/charte-graphique.md`](docs/charte-graphique.md).
+
+### Typographie
+- **EB Garamond** (titres) — Georg Duffner — [OFL License](https://fonts.google.com/specimen/EB+Garamond)
+- **Inter** (corps) — Rasmus Andersson — [OFL License](https://fonts.google.com/specimen/Inter)
+
+### Icônes
+- **Lucide Icons** — Lucide Contributors — [ISC License](https://lucide.dev/license)
+  Icônes embarquées dans `assets/icons/` : chevron-right, check, alert-circle, info, download, file-text, users, briefcase, trending-up, pie-chart, calendar, clock, archive, external-link, settings, arrow-right, eye, printer
+
+---
+
+## Licence
 
 Ce projet est fourni à titre pédagogique. Les paramètres fiscaux sont indicatifs et doivent être validés par un expert-comptable ou conseiller fiscal agréé avant toute utilisation professionnelle.
 

@@ -6,15 +6,18 @@ import streamlit as st
 
 from src.ui.charts import fan_chart_mc
 from src.ui.formatters import format_euro, format_pct
+from src.ui.theme import injecter_css
 
-st.title("📈 Projection Monte-Carlo")
+injecter_css()
+
+st.title("Projection Monte-Carlo")
 
 # ─── Vérification du profil ───────────────────────────────────────────────────
 
 profil = st.session_state.get("profil_actif")
 if not profil:
-    st.warning("⚠️ Aucun profil chargé. Veuillez d'abord configurer un profil client.")
-    if st.button("👤 Aller au profil client"):
+    st.warning("Aucun profil chargé. Veuillez d'abord configurer un profil client.")
+    if st.button("Aller au profil client"):
         st.switch_page("pages/04_Profil.py")
     st.stop()
 
@@ -23,7 +26,7 @@ st.markdown(f"**Profil actif :** {nom}")
 
 # ─── Paramètres de simulation ─────────────────────────────────────────────────
 
-st.subheader("⚙️ Paramètres de simulation")
+st.subheader("Paramètres de simulation")
 col1, col2, col3 = st.columns(3)
 
 profil_dict = dict(profil) if isinstance(profil, dict) else {}
@@ -136,7 +139,7 @@ def _projeter(
 versement_annuel = versement_mensuel * 12
 objectif_val = objectif if objectif and objectif > 0 else None
 
-with st.spinner("⚙️ Simulation Monte-Carlo en cours…"):
+with st.spinner("Simulation Monte-Carlo en cours…"):
     try:
         resultats_mc = _projeter(
             float(capital),
@@ -148,13 +151,13 @@ with st.spinner("⚙️ Simulation Monte-Carlo en cours…"):
         )
         st.session_state["resultat_mc"] = resultats_mc
     except Exception as exc:
-        st.error(f"❌ Erreur lors de la simulation : {exc}")
+        st.error(f"Erreur lors de la simulation : {exc}")
         st.stop()
 
 # ─── KPIs résultats ───────────────────────────────────────────────────────────
 
 st.divider()
-st.subheader("📊 Résultats de la simulation")
+st.subheader("Résultats de la simulation")
 
 perc = resultats_mc["capital_final_percentiles"]
 col1, col2, col3, col4 = st.columns(4)
@@ -177,7 +180,7 @@ with col4:
 
 annee_med = resultats_mc.get("annee_mediane_atteinte")
 if annee_med is not None:
-    st.success(f"🎯 La médiane atteint l'objectif à **l'année {annee_med}**.")
+    st.success(f"La médiane atteint l'objectif à **l'année {annee_med}**.")
 
 # ─── Fan chart ────────────────────────────────────────────────────────────────
 
@@ -193,15 +196,15 @@ fig = fan_chart_mc(
 st.plotly_chart(fig, use_container_width=True)
 
 st.caption(
-    "📌 *Simulation basée sur des rendements historiques calibrés. "
+    "*Simulation basée sur des rendements historiques calibrés. "
     "Les performances passées ne préjugent pas des performances futures.*"
 )
 
 st.divider()
 col1, col2 = st.columns(2)
 with col1:
-    if st.button("🏦 ← Asset Location", use_container_width=True):
+    if st.button("← Asset Location", use_container_width=True):
         st.switch_page("pages/07_Asset_Location.py")
 with col2:
-    if st.button("🔄 Rebalancement →", type="primary", use_container_width=True):
+    if st.button("Rebalancement →", type="primary", use_container_width=True):
         st.switch_page("pages/09_Rebalancement.py")

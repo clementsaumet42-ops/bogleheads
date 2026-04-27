@@ -6,9 +6,12 @@ import pandas as pd
 import streamlit as st
 
 from src.catalogue.crud import diff_yaml, lire_yaml, sauvegarder_yaml
+from src.ui.theme import injecter_css
 
-st.set_page_config(page_title="Brokers", page_icon="🏦")
-st.title("🏦 Brokers — Gestion")
+st.set_page_config(page_title="Brokers", page_icon="🏛️")
+injecter_css()
+
+st.title("Brokers — Gestion")
 
 st.info("Gérez la liste des brokers disponibles. Backup automatique avant chaque sauvegarde.")
 
@@ -30,7 +33,7 @@ brokers: list[dict] = data.get(_KEY_LIST, [])
 
 # ─── Tableau lecture ───────────────────────────────────────────────────────────
 
-st.subheader(f"📊 {len(brokers)} brokers dans le catalogue")
+st.subheader(f"{len(brokers)} brokers dans le catalogue")
 
 if brokers:
     cols = [
@@ -47,7 +50,7 @@ if brokers:
 
 # ─── Formulaire ───────────────────────────────────────────────────────────────
 
-st.subheader("➕ Ajouter / Modifier un broker")
+st.subheader("Ajouter / Modifier un broker")
 
 with st.form("form_broker"):
     b_id = st.text_input("ID (slug, ex: degiro) *")
@@ -65,11 +68,11 @@ with st.form("form_broker"):
     annees = st.number_input("Années d'existence", min_value=0, step=1)
     sources = st.text_area("Sources (une par ligne)")
 
-    submitted = st.form_submit_button("🔍 Prévisualiser le diff")
+    submitted = st.form_submit_button("Prévisualiser le diff")
 
 if submitted:
     if not b_id or not b_nom:
-        st.warning("⚠️ ID et Nom sont obligatoires.")
+        st.warning("ID et Nom sont obligatoires.")
     else:
         nouveau_broker: dict = {
             "id": b_id.strip().lower(),
@@ -98,7 +101,7 @@ if submitted:
         nouveau_data[_KEY_LIST] = liste
 
         diff = diff_yaml(data, nouveau_data)
-        st.subheader("🔍 Diff (dry-run)")
+        st.subheader("Diff (dry-run)")
         if diff:
             st.code(diff, language="diff")
         else:
@@ -106,28 +109,28 @@ if submitted:
 
         st.session_state["broker_preview"] = nouveau_data
 
-if "broker_preview" in st.session_state and st.button("✅ Confirmer la sauvegarde"):
+if "broker_preview" in st.session_state and st.button("Confirmer la sauvegarde"):
     try:
         sauvegarder_yaml(_FILENAME, st.session_state["broker_preview"])
-        st.success("✅ Brokers sauvegardés avec backup.")
+        st.success("Brokers sauvegardés avec backup.")
         del st.session_state["broker_preview"]
         st.cache_data.clear()
     except Exception as exc:
-        st.error(f"❌ Erreur : {exc}")
+        st.error(f"Erreur : {exc}")
 
 # ─── Suppression ──────────────────────────────────────────────────────────────
 
-st.subheader("🗑️ Supprimer un broker")
+st.subheader("Supprimer un broker")
 if brokers:
     options = {f"{b.get('nom', '?')} ({b.get('id', '?')})": b.get("id") for b in brokers}
     choix = st.selectbox("Sélectionner le broker à supprimer", list(options.keys()))
-    if st.button("🗑️ Supprimer (avec backup)"):
+    if st.button("Supprimer (avec backup)"):
         bid = options[choix]
         nouveau_data = dict(data)
         nouveau_data[_KEY_LIST] = [b for b in brokers if b.get("id") != bid]
         try:
             sauvegarder_yaml(_FILENAME, nouveau_data)
-            st.success(f"✅ Broker '{bid}' supprimé.")
+            st.success(f"Broker '{bid}' supprimé.")
             st.cache_data.clear()
         except Exception as exc:
-            st.error(f"❌ Erreur : {exc}")
+            st.error(f"Erreur : {exc}")

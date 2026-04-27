@@ -11,9 +11,12 @@ import yaml
 
 from src.catalogue.best_provider import classer_providers
 from src.schemas import AssuranceVieConfig, BrokersConfig, TeneursPERConfig, UniversETFWrapper
+from src.ui.theme import injecter_css
 
-st.set_page_config(page_title="Best Provider", page_icon="🏆")
-st.title("🏆 Best Provider — Classement par coût sur 10 ans")
+st.set_page_config(page_title="Best Provider", page_icon="🏛️")
+injecter_css()
+
+st.title("Best Provider — Classement par coût sur 10 ans")
 
 st.markdown(
     "Comparez les brokers, assureurs AV et teneurs PER sur votre allocation cible. "
@@ -59,7 +62,7 @@ with contextlib.suppress(Exception):
 
 # ─── Paramètres de simulation ─────────────────────────────────────────────────
 
-st.subheader("⚙️ Paramètres de simulation")
+st.subheader("Paramètres de simulation")
 
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -97,7 +100,7 @@ etfs_selectionnes = st.multiselect(
 etfs_retenus = [etf_options[e] for e in etfs_selectionnes]
 
 # Allocation par enveloppe
-st.subheader("📊 Allocation cible par enveloppe")
+st.subheader("Allocation cible par enveloppe")
 allocation_cible: dict[str, float] = {}
 if enveloppes_choisies:
     poids_defaut = 1.0 / len(enveloppes_choisies)
@@ -117,7 +120,7 @@ if enveloppes_choisies:
             total_poids += poids
 
     if abs(total_poids - 100.0) > 0.1:
-        st.warning(f"⚠️ Le total des pondérations ({total_poids:.1f}%) doit être égal à 100%.")
+        st.warning(f"Le total des pondérations ({total_poids:.1f}%) doit être égal à 100%.")
 
 # ─── Calcul ───────────────────────────────────────────────────────────────────
 
@@ -135,7 +138,7 @@ class _LigneSimple:
         self.enveloppe = enveloppe
 
 
-if st.button("🚀 Calculer le classement") and enveloppes_choisies:
+if st.button("Calculer le classement") and enveloppes_choisies:
     profil_sim = _ProfilSimple(float(patrimoine), enveloppes_choisies)
 
     with st.spinner("Calcul en cours..."):
@@ -151,24 +154,17 @@ if st.button("🚀 Calculer le classement") and enveloppes_choisies:
         )
 
     if not any(resultats.values()):
-        st.warning("⚠️ Aucun provider trouvé pour les enveloppes sélectionnées.")
+        st.warning("Aucun provider trouvé pour les enveloppes sélectionnées.")
     else:
         for enveloppe, candidats in resultats.items():
             if not candidats:
                 continue
 
-            st.subheader(f"📂 {enveloppe} — {len(candidats)} provider(s)")
+            st.subheader(f"{enveloppe} — {len(candidats)} provider(s)")
 
             rows = []
             for i, c in enumerate(candidats):
-                if i == 0:
-                    medal = "🥇"
-                elif i == 1:
-                    medal = "🥈"
-                elif i == 2:
-                    medal = "🥉"
-                else:
-                    medal = f"#{i + 1}"
+                medal = f"#{i + 1}"
                 rows.append(
                     {
                         "Rang": medal,
@@ -196,7 +192,7 @@ if st.button("🚀 Calculer le classement") and enveloppes_choisies:
                 st.bar_chart(chart_data)
 
         # Résumé global
-        st.subheader("📋 Résumé — Meilleur provider par enveloppe")
+        st.subheader("Résumé — Meilleur provider par enveloppe")
         resume = []
         for enveloppe, candidats in resultats.items():
             if candidats:
@@ -213,6 +209,6 @@ if st.button("🚀 Calculer le classement") and enveloppes_choisies:
             st.dataframe(pd.DataFrame(resume), use_container_width=True, hide_index=True)
 
 st.caption(
-    "⚠️ Simulation indicative sur la base des données disponibles. "
+    "Simulation indicative sur la base des données disponibles. "
     "Les frais réels peuvent varier. Consultez les grilles tarifaires des providers avant toute décision."
 )

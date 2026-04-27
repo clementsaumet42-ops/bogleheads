@@ -28,40 +28,40 @@ def afficher_health_check(
     with st.container(border=True):
         col1, col2 = st.columns([1, 2])
         with col1:
-            st.markdown("**🔍 Health Check allocation**")
+            st.markdown("**Vérification allocation**")
         with col2:
             if somme_ok:
                 st.markdown(
-                    f"<span style='color:#2E5D4F'>✓</span> Somme allocation = {total_pct:.1f} %",
+                    f"<span style='color:#2D4A3E'>OK</span> Somme allocation = {total_pct:.1f} %",
                     unsafe_allow_html=True,
                 )
             else:
                 st.markdown(
-                    f"<span style='color:#A65A4E'>⚠️</span> Somme = {total_pct:.1f} % ≠ 100 %",
+                    f"<span style='color:#6B1E2C'>Attention</span> Somme = {total_pct:.1f} % ≠ 100 %",
                     unsafe_allow_html=True,
                 )
 
             if contraintes_ok:
                 st.markdown(
-                    f"<span style='color:#2E5D4F'>✓</span> Contraintes profil respectées "
+                    f"<span style='color:#2D4A3E'>OK</span> Contraintes profil respectées "
                     f"(actions ∈ [{actions_min:.0%}, {actions_max:.0%}])",
                     unsafe_allow_html=True,
                 )
             else:
                 st.markdown(
-                    f"<span style='color:#A65A4E'>⚠️</span> Contraintes profil non respectées "
+                    f"<span style='color:#6B1E2C'>Attention</span> Contraintes profil non respectées "
                     f"(actions = {total_actions:.1%}, attendu [{actions_min:.0%}, {actions_max:.0%}])",
                     unsafe_allow_html=True,
                 )
 
             if optimiseur_optimal:
                 st.markdown(
-                    "<span style='color:#2E5D4F'>✓</span> Optimiseur : résolution optimale (scipy SLSQP)",
+                    "<span style='color:#2D4A3E'>OK</span> Optimiseur : résolution optimale (scipy SLSQP)",
                     unsafe_allow_html=True,
                 )
             else:
                 st.markdown(
-                    "<span style='color:#A65A4E'>⚠️</span> Optimiseur : fallback heuristique",
+                    "<span style='color:#6B1E2C'>Note</span> Optimiseur : fallback heuristique",
                     unsafe_allow_html=True,
                 )
 
@@ -71,6 +71,6 @@ def afficher_health_check(
                 else "Granulaire — US / Dev ex-US / EM"
             )
             st.markdown(
-                f"<span style='color:#1B3A5B'>ⓘ</span> Mode {mode_label}",
+                f"<span style='color:#0B1929'>Info</span> Mode {mode_label}",
                 unsafe_allow_html=True,
             )

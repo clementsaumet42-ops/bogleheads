@@ -9,7 +9,10 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from src.ui.theme import injecter_css
+
 st.set_page_config(page_title="Import Patrimoine PDF", layout="wide")
+injecter_css()
 st.title("Import Patrimoine depuis PDF")
 st.caption(
     "Importez des relevés PDF pour alimenter le patrimoine de la mission active. "
