@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bogleheads-fr"
-version = "0.8.0"
+version = "1.0.0"
 description = "Outil CGP Boglehead multi-enveloppes fiscales France 2026"
 authors = [{name = "clementsaumet42-ops"}]
 license = {text = "MIT"}

@@ -37,6 +37,6 @@ def test_pas_demoji_dans_page_import() -> None:
             if _est_emoji(char):
                 trouvees.append((numero, char, ligne.strip()))
 
-    assert trouvees == [], "Emoji(s) trouvé(s) dans 24_Import_Patrimoine.py :\n" + "\n".join(
+    assert trouvees == [], f"Emoji(s) trouvé(s) dans {PAGE_IMPORT.name} :\n" + "\n".join(
         f"  Ligne {num}: '{em}' dans: {ctx}" for num, em, ctx in trouvees
     )

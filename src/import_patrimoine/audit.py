@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from src.import_patrimoine.modele import ImportPDF
@@ -33,7 +33,7 @@ def enregistrer_import(mission_id: str, import_pdf: ImportPDF) -> None:
 
     entrees.append(
         {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "import": import_pdf.model_dump(),
         }
     )

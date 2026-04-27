@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import hashlib
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
@@ -266,7 +266,7 @@ if st.button(
         import_pdf = ImportPDF(
             pdf_nom=pdf_nom,
             pdf_hash=meta["pdf_hash"],
-            timestamp_import=datetime.utcnow().isoformat(),
+            timestamp_import=datetime.now(timezone.utc).isoformat(),
             emetteur_detecte=meta["emetteur"],
             template_utilise=meta["template"],
             lignes_validees=lignes_pdf_val,
