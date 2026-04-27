@@ -13,14 +13,17 @@ from src.fiscalite.constantes import (
 )
 from src.fiscalite.cto_is import detecter_piege_mtm
 from src.fiscalite.pea import verifier_plafond_pea
+from src.ui.theme import injecter_css
 
-st.set_page_config(page_title="Alertes Fiscales", page_icon="⚠️", layout="wide")
+st.set_page_config(page_title="Alertes Fiscales", page_icon="🏛️", layout="wide")
 
-st.title("⚠️ Alertes Fiscales")
+injecter_css()
+
+st.title("Alertes Fiscales")
 st.markdown("Détectez les pièges fiscaux et optimisez votre stratégie d'investissement.")
 
 # Section 1 : Mark-to-Market IS
-st.header("🚨 Piège Mark-to-Market (MTM) pour sociétés IS")
+st.header("Piège Mark-to-Market (MTM) pour sociétés IS")
 st.markdown(
     """
 Le Mark-to-Market (Art. 209-0 A CGI) impose les **plus-values latentes** chaque année
@@ -47,18 +50,18 @@ with st.expander("Tester une position"):
         alerte = detecter_piege_mtm(position, regime_detenteur)
 
         if alerte:
-            st.error(f"🚨 {alerte['alerte']}")
+            st.error(f"{alerte['alerte']}")
             st.write(f"**Plus-value latente** : {alerte['pv_latente']:,.0f} €")
             st.write(f"**IS dû annuellement** : {alerte['is_du_annuel']:,.0f} €")
             st.write(f"**Article** : {alerte['article']}")
             st.write(f"**Conséquence** : {alerte['consequence']}")
-            st.info(f"💡 **Solution** : {alerte['solution']}")
+            st.info(f"**Solution** : {alerte['solution']}")
         else:
-            st.success("✅ Pas de MTM détecté sur cette position")
+            st.success("Pas de MTM détecté sur cette position")
 
 
 # Section 2 : PEA < 5 ans
-st.header("⏰ Durée de détention PEA")
+st.header("Durée de détention PEA")
 st.markdown(
     f"""
 Avant {PEA_DUREE_5_ANS} ans, le PEA n'a **pas d'avantage fiscal** significatif vs CTO.
@@ -77,20 +80,20 @@ with st.expander("Vérifier votre PEA"):
     if duree_pea < PEA_DUREE_5_ANS:
         temps_restant = PEA_DUREE_5_ANS - duree_pea
         st.warning(
-            f"⚠️ PEA < 5 ans : **pas d'avantage fiscal**. "
+            f"PEA < 5 ans : **pas d'avantage fiscal**. "
             f"Attendez encore **{temps_restant:.1f} ans** avant de retirer."
         )
         st.info(
-            f"💰 Économie attendue après 5 ans : **12.8%** d'IR économisés (seuls les PS {TAUX_PS:.1%} restent dus)"
+            f"Économie attendue après 5 ans : **12.8%** d'IR économisés (seuls les PS {TAUX_PS:.1%} restent dus)"
         )
     else:
         st.success(
-            f"✅ PEA > 5 ans : **exonération d'IR**, seuls les PS {TAUX_PS:.1%} dus. Retraits libres !"
+            f"PEA > 5 ans : **exonération d'IR**, seuls les PS {TAUX_PS:.1%} dus. Retraits libres !"
         )
 
 
 # Section 3 : Plafonds PEA/PEA-PME
-st.header("📏 Plafonds PEA et PEA-PME")
+st.header("Plafonds PEA et PEA-PME")
 st.markdown(
     """
 **Plafonds de versements** :
@@ -107,9 +110,9 @@ with st.expander("Vérifier vos plafonds"):
     result = verifier_plafond_pea(versements_pea, versements_pea_pme)
 
     if result["respect_plafond"]:
-        st.success("✅ Plafonds respectés")
+        st.success("Plafonds respectés")
     else:
-        st.error("🚨 Plafonds dépassés !")
+        st.error("Plafonds dépassés !")
         if result["depassement_pea"] > 0:
             st.write(f"**Dépassement PEA** : {result['depassement_pea']:,.0f} €")
         if result["depassement_pea_pme"] > 0:
@@ -119,7 +122,7 @@ with st.expander("Vérifier vos plafonds"):
 
 
 # Section 4 : AV < 8 ans
-st.header("🕐 Durée de détention Assurance Vie")
+st.header("Durée de détention Assurance Vie")
 st.markdown(
     f"""
 Avant {AV_DUREE_8_ANS} ans, l'assurance vie n'offre **pas d'abattement annuel** (4 600 € / 9 200 €).
@@ -138,17 +141,17 @@ with st.expander("Vérifier votre contrat AV"):
     if duree_av < AV_DUREE_8_ANS:
         temps_restant_av = AV_DUREE_8_ANS - duree_av
         st.warning(
-            f"⚠️ AV < 8 ans : **pas d'abattement**. "
+            f"AV < 8 ans : **pas d'abattement**. "
             f"Attendez encore **{temps_restant_av:.1f} ans** pour bénéficier de l'abattement."
         )
     else:
         st.success(
-            "✅ AV > 8 ans : **abattement annuel** de 4 600 € (célibataire) ou 9 200 € (couple) !"
+            "AV > 8 ans : **abattement annuel** de 4 600 € (célibataire) ou 9 200 € (couple) !"
         )
 
 
 # Section 5 : Option barème IR
-st.header("🎯 Option barème IR vs PFU")
+st.header("Option barème IR vs PFU")
 st.markdown(
     f"""
 L'option pour le barème IR est **irrévocable** pour l'année fiscale et s'applique à
@@ -160,13 +163,13 @@ L'option pour le barème IR est **irrévocable** pour l'année fiscale et s'appl
 )
 
 st.info(
-    "💡 **Règle générale** : Option barème intéressante si TMI ≤ 11% "
+    "**Règle générale** : Option barème intéressante si TMI ≤ 11% "
     "(ou si beaucoup de dividendes avec abattement 40%)"
 )
 
 
 # Section 6 : Contrat cap IS vs CTO IS
-st.header("💼 Société IS : Contrat cap vs CTO")
+st.header("Société IS : Contrat cap vs CTO")
 st.markdown(
     """
 Pour une société IS, le **contrat de capitalisation** (Art. 238 septies E CGI)
@@ -178,7 +181,7 @@ est souvent plus avantageux que le CTO avec MTM.
 )
 
 st.success(
-    "💡 **Recommandation** : Privilégier le contrat de capitalisation IS "
+    "**Recommandation** : Privilégier le contrat de capitalisation IS "
     "si rendement attendu > TME (ce qui est généralement le cas)"
 )
 
@@ -186,6 +189,6 @@ st.success(
 # Footer
 st.markdown("---")
 st.caption(
-    "⚠️ Alertes indicatives basées sur la réglementation 2026. "
+    "Alertes indicatives basées sur la réglementation 2026. "
     "Consultez un expert-comptable pour votre situation spécifique."
 )

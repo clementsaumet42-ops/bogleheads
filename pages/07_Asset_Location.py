@@ -6,15 +6,18 @@ import streamlit as st
 
 from src.ui.charts import heatmap_asset_location
 from src.ui.formatters import format_euro, format_pct
+from src.ui.theme import injecter_css
 
-st.title("🏦 Asset Location")
+injecter_css()
+
+st.title("Asset Location")
 
 # ─── Vérification du profil ───────────────────────────────────────────────────
 
 profil = st.session_state.get("profil_actif")
 if not profil:
-    st.warning("⚠️ Aucun profil chargé. Veuillez d'abord configurer un profil client.")
-    if st.button("👤 Aller au profil client"):
+    st.warning("Aucun profil chargé. Veuillez d'abord configurer un profil client.")
+    if st.button("Aller au profil client"):
         st.switch_page("pages/04_Profil.py")
     st.stop()
 
@@ -40,12 +43,12 @@ if st.session_state.get("resultat_optim") and st.session_state["resultat_optim"]
 ):
     resultat_complet = st.session_state["resultat_optim"]
 else:
-    with st.spinner("⚙️ Optimisation asset location MILP en cours…"):
+    with st.spinner("Optimisation asset location MILP en cours…"):
         try:
             resultat_complet = _optimiser(profil_dict)
             st.session_state["resultat_optim"] = resultat_complet
         except Exception as exc:
-            st.error(f"❌ Erreur lors de l'optimisation : {exc}")
+            st.error(f"Erreur lors de l'optimisation : {exc}")
             st.stop()
 
 res_a = resultat_complet.get("resultat_mode_a", {})
@@ -53,7 +56,7 @@ res_b = resultat_complet.get("resultat_mode_b", {})
 
 # ─── KPIs comparaison coût ────────────────────────────────────────────────────
 
-st.subheader("💰 Comparaison des coûts annuels")
+st.subheader("Comparaison des coûts annuels")
 col1, col2, col3 = st.columns(3)
 
 cout_opt = res_b.get("cout_annuel_optimise", 0)
@@ -86,14 +89,14 @@ statut_b = res_b.get("statut", "—")
 msg_b = res_b.get("message")
 if statut_b:
     if statut_b == "optimal":
-        st.success(f"✅ Statut : {statut_b}")
+        st.success(f"Statut : {statut_b}")
     else:
-        st.info(f"ℹ️ Statut : {statut_b}" + (f" — {msg_b}" if msg_b else ""))
+        st.info(f"ℹ Statut : {statut_b}" + (f"— {msg_b}" if msg_b else ""))
 
 # ─── Heatmap ─────────────────────────────────────────────────────────────────
 
 st.divider()
-st.subheader("🗺️ Ventilation par classe × enveloppe")
+st.subheader("Ventilation par classe × enveloppe")
 
 ventilation = res_b.get("ventilation", [])
 if ventilation:
@@ -105,7 +108,7 @@ else:
 # ─── Tableau détaillé ─────────────────────────────────────────────────────────
 
 if ventilation:
-    st.subheader("📋 Tableau détaillé de la ventilation")
+    st.subheader("Tableau détaillé de la ventilation")
     import pandas as pd
 
     patrimoine = profil_dict.get("patrimoine_financier_total", 100_000) or 100_000
@@ -122,10 +125,10 @@ if ventilation:
 st.divider()
 col1, col2 = st.columns(2)
 with col1:
-    if st.button("🎯 ← Allocation cible", use_container_width=True):
+    if st.button("← Allocation cible", use_container_width=True):
         st.switch_page("pages/05_Allocation.py")
 with col2:
-    if st.button("📈 Projection Monte-Carlo →", type="primary", use_container_width=True):
+    if st.button("Projection Monte-Carlo →", type="primary", use_container_width=True):
         st.switch_page("pages/08_Monte_Carlo.py")
 
 # ─── Lien vers univers ETF (S11-B) ─────────────────────────────────────────
@@ -134,8 +137,8 @@ st.divider()
 col_etf1, col_etf2 = st.columns([2, 1])
 with col_etf1:
     st.markdown(
-        "📚 Consultez les ETF disponibles par enveloppe (PEA, AV, PER, CTO) pour implémenter cette ventilation."
+        "Consultez les ETF disponibles par enveloppe (PEA, AV, PER, CTO) pour implémenter cette ventilation."
     )
 with col_etf2:
-    if st.button("📚 Voir les ETFs disponibles par enveloppe →", use_container_width=True):
+    if st.button("Voir les ETFs disponibles par enveloppe →", use_container_width=True):
         st.switch_page("pages/12_Univers_ETF.py")

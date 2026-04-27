@@ -6,9 +6,12 @@ import pandas as pd
 import streamlit as st
 
 from src.catalogue.crud import diff_yaml, lire_yaml, sauvegarder_yaml
+from src.ui.theme import injecter_css
 
 st.set_page_config(page_title="Teneurs PER", page_icon="🏛️")
-st.title("🏛️ Teneurs PER — Gestion")
+injecter_css()
+
+st.title("Teneurs PER — Gestion")
 
 st.info("Gérez les teneurs de compte PER référencés. Backup automatique avant chaque sauvegarde.")
 
@@ -30,7 +33,7 @@ teneurs: list[dict] = data.get(_KEY_LIST, [])
 
 # ─── Tableau lecture ───────────────────────────────────────────────────────────
 
-st.subheader(f"📊 {len(teneurs)} teneurs PER dans le catalogue")
+st.subheader(f"{len(teneurs)} teneurs PER dans le catalogue")
 
 if teneurs:
     cols = [
@@ -49,7 +52,7 @@ if teneurs:
 
 # ─── Formulaire ───────────────────────────────────────────────────────────────
 
-st.subheader("➕ Ajouter / Modifier un teneur PER")
+st.subheader("Ajouter / Modifier un teneur PER")
 
 with st.form("form_per"):
     t_id = st.text_input("ID (slug, ex: linxea_spirit_per) *")
@@ -92,11 +95,11 @@ with st.form("form_per"):
     annees = st.number_input("Années d'existence", min_value=0, step=1)
     sources = st.text_area("Sources (une par ligne)")
 
-    submitted = st.form_submit_button("🔍 Prévisualiser le diff")
+    submitted = st.form_submit_button("Prévisualiser le diff")
 
 if submitted:
     if not t_id or not t_nom:
-        st.warning("⚠️ ID et Nom sont obligatoires.")
+        st.warning("ID et Nom sont obligatoires.")
     else:
         nouveau_teneur: dict = {
             "id": t_id.strip().lower(),
@@ -133,7 +136,7 @@ if submitted:
         nouveau_data[_KEY_LIST] = liste
 
         diff = diff_yaml(data, nouveau_data)
-        st.subheader("🔍 Diff (dry-run)")
+        st.subheader("Diff (dry-run)")
         if diff:
             st.code(diff, language="diff")
         else:
@@ -141,28 +144,28 @@ if submitted:
 
         st.session_state["per_preview"] = nouveau_data
 
-if "per_preview" in st.session_state and st.button("✅ Confirmer la sauvegarde"):
+if "per_preview" in st.session_state and st.button("Confirmer la sauvegarde"):
     try:
         sauvegarder_yaml(_FILENAME, st.session_state["per_preview"])
-        st.success("✅ Teneurs PER sauvegardés avec backup.")
+        st.success("Teneurs PER sauvegardés avec backup.")
         del st.session_state["per_preview"]
         st.cache_data.clear()
     except Exception as exc:
-        st.error(f"❌ Erreur : {exc}")
+        st.error(f"Erreur : {exc}")
 
 # ─── Suppression ──────────────────────────────────────────────────────────────
 
-st.subheader("🗑️ Supprimer un teneur PER")
+st.subheader("Supprimer un teneur PER")
 if teneurs:
     options = {f"{t.get('nom', '?')} ({t.get('id', '?')})": t.get("id") for t in teneurs}
     choix = st.selectbox("Sélectionner le teneur à supprimer", list(options.keys()))
-    if st.button("🗑️ Supprimer (avec backup)"):
+    if st.button("Supprimer (avec backup)"):
         tid = options[choix]
         nouveau_data = dict(data)
         nouveau_data[_KEY_LIST] = [t for t in teneurs if t.get("id") != tid]
         try:
             sauvegarder_yaml(_FILENAME, nouveau_data)
-            st.success(f"✅ Teneur PER '{tid}' supprimé.")
+            st.success(f"Teneur PER '{tid}' supprimé.")
             st.cache_data.clear()
         except Exception as exc:
-            st.error(f"❌ Erreur : {exc}")
+            st.error(f"Erreur : {exc}")

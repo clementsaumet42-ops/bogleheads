@@ -5,13 +5,17 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+from src.ui.theme import injecter_css
+
 st.set_page_config(
     page_title="Backtest Historique",
-    page_icon="📈",
+    page_icon="🏛️",
     layout="wide",
 )
 
-st.title("📈 Backtest Historique — Portefeuilles Bogle")
+injecter_css()
+
+st.title("Backtest Historique — Portefeuilles Bogle")
 st.markdown(
     "Simulation historique mensuelle des portefeuilles Boglehead sur données réelles EUR (2003–2024)."
 )
@@ -31,7 +35,7 @@ except Exception as e:
 # ─── Sidebar paramètres ───────────────────────────────────────────────────────
 
 with st.sidebar:
-    st.header("⚙️ Paramètres")
+    st.header("Paramètres")
 
     if _backtest_ok:
         try:
@@ -69,7 +73,7 @@ with st.sidebar:
             ["Tous les 4 modes", "Brut uniquement", "Net optimisé uniquement"],
         )
 
-        lancer = st.button("🚀 Lancer le backtest", use_container_width=True)
+        lancer = st.button("Lancer le backtest", use_container_width=True)
 
 # ─── Corps principal ──────────────────────────────────────────────────────────
 
@@ -79,15 +83,15 @@ if not _backtest_ok:
 
 if not lancer:
     st.info(
-        "👈 Configurez les paramètres dans la barre latérale puis cliquez sur **Lancer le backtest**."
+        "Configurez les paramètres dans la barre latérale puis cliquez sur **Lancer le backtest**."
     )
 
     # Afficher la liste des portefeuilles disponibles
     st.subheader("Portefeuilles disponibles")
     for nom, pf in PORTEFEUILLES_DISPONIBLES.items():
         with st.expander(f"**{nom}**"):
-            st.write(f"📝 {pf.description}")
-            st.write(f"📚 Source : {pf.source}")
+            st.write(f"{pf.description}")
+            st.write(f"Source : {pf.source}")
             alloc_data = {k: f"{v * 100:.1f}%" for k, v in pf.allocations.items()}
             st.table(alloc_data)
     st.stop()
@@ -116,14 +120,14 @@ with st.spinner("Calcul en cours…"):
 
 # ─── Affichage résultats ──────────────────────────────────────────────────────
 
-st.success(f"✅ Backtest terminé — **{portefeuille_choisi}**")
+st.success(f"Backtest terminé — **{portefeuille_choisi}**")
 
 # Métriques clés en colonnes
 modes_labels = {
-    "brut": "📊 Brut",
-    "net_frais": "💸 Net Frais",
-    "net_fiscal_cto": "🏛️ Net Fiscal CTO",
-    "net_optimise": "✨ Net Optimisé",
+    "brut": "Brut",
+    "net_frais": "Net Frais",
+    "net_fiscal_cto": "Net Fiscal CTO",
+    "net_optimise": "Net Optimisé",
 }
 
 cols = st.columns(4)
@@ -139,7 +143,7 @@ for i, (mode, label) in enumerate(modes_labels.items()):
 st.divider()
 
 # Tableau comparatif détaillé
-st.subheader("📋 Tableau comparatif")
+st.subheader("Tableau comparatif")
 
 rows = []
 for mode, res in rapport.resultats.items():
@@ -159,14 +163,14 @@ for mode, res in rapport.resultats.items():
 st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
 # Deltas
-st.subheader("📉 Impact des frais et de la fiscalité")
+st.subheader("Impact des frais et de la fiscalité")
 col1, col2, col3 = st.columns(3)
 col1.metric("Impact frais (bps/an)", f"{rapport.delta_frais_bps:.1f} bps")
 col2.metric("Impact fiscal CTO (bps/an)", f"{rapport.delta_fiscal_bps:.1f} bps")
 col3.metric("Gain optimisation fiscale (bps/an)", f"{rapport.delta_optimise_bps:.1f} bps")
 
 # Graphique évolution du portefeuille
-st.subheader("📈 Évolution de la valeur du portefeuille")
+st.subheader("Évolution de la valeur du portefeuille")
 try:
     import plotly.graph_objects as go
 
@@ -202,7 +206,7 @@ except ImportError:
     st.info("Installer plotly pour afficher le graphique interactif.")
 
 # Détail annuel
-with st.expander("📅 Détail annuel (mode brut)"):
+with st.expander("Détail annuel (mode brut)"):
     brut_detail = rapport.resultats["brut"].detail_annuel
     if brut_detail:
         df_annuel = pd.DataFrame(brut_detail)
@@ -212,7 +216,7 @@ with st.expander("📅 Détail annuel (mode brut)"):
         st.dataframe(df_annuel, use_container_width=True, hide_index=True)
 
 st.caption(
-    "⚠️ Les données utilisées sont synthétiques à des fins de démonstration. "
+    "Les données utilisées sont synthétiques à des fins de démonstration. "
     "Les performances passées ne préjugent pas des performances futures. "
     "Cet outil ne constitue pas un conseil en investissement."
 )

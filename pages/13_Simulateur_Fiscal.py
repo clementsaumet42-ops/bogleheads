@@ -8,10 +8,13 @@ import streamlit as st
 from src.fiscalite import (
     calculer_fiscalite_operation,
 )
+from src.ui.theme import injecter_css
 
-st.set_page_config(page_title="Simulateur Fiscal", page_icon="💰", layout="wide")
+st.set_page_config(page_title="Simulateur Fiscal", page_icon="🏛️", layout="wide")
 
-st.title("💰 Simulateur Fiscal")
+injecter_css()
+
+st.title("Simulateur Fiscal")
 st.markdown("Calculez la fiscalité détaillée de vos opérations d'investissement.")
 
 # Sidebar : profil contribuable
@@ -80,7 +83,7 @@ if st.button("Calculer", type="primary"):
         result = calculer_fiscalite_operation(operation, profil)
 
         # Affichage résultat
-        st.success("✅ Calcul terminé")
+        st.success("Calcul terminé")
 
         col1, col2, col3, col4 = st.columns(4)
         with col1:
@@ -93,7 +96,7 @@ if st.button("Calculer", type="primary"):
             st.metric("Taux effectif", f"{result.taux_effectif:.1%}")
 
         # Cascade détaillée
-        st.subheader("📊 Cascade fiscale détaillée")
+        st.subheader("Cascade fiscale détaillée")
         if result.cascade:
             import pandas as pd
 
@@ -112,14 +115,14 @@ if st.button("Calculer", type="primary"):
 
         # Articles cités
         if result.articles_cites:
-            st.subheader("📚 Articles de loi cités")
+            st.subheader("Articles de loi cités")
             for article in result.articles_cites:
                 if article:
                     st.caption(f"• {article}")
 
         # Avertissements
         if result.avertissements:
-            st.subheader("⚠️ Avertissements")
+            st.subheader("Avertissements")
             for avert in result.avertissements:
                 st.warning(avert)
 
@@ -129,6 +132,4 @@ if st.button("Calculer", type="primary"):
 
 # Footer
 st.markdown("---")
-st.caption(
-    "⚠️ Simulation indicative. Consultez un expert-comptable pour votre situation personnelle."
-)
+st.caption("Simulation indicative. Consultez un expert-comptable pour votre situation personnelle.")

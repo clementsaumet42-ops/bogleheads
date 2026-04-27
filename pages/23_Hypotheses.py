@@ -5,8 +5,12 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-st.set_page_config(page_title="Hypothèses & Sources", page_icon="📚", layout="wide")
-st.title("📚 Hypothèses & Sources")
+from src.ui.theme import injecter_css
+
+st.set_page_config(page_title="Hypothèses & Sources", page_icon="🏛️", layout="wide")
+injecter_css()
+
+st.title("Hypothèses & Sources")
 st.caption(
     "Registre central des hypothèses utilisées dans le tool. "
     "Lecture seule — modification via config/hypotheses.yaml."
@@ -29,7 +33,7 @@ except Exception as exc:
 col_f1, col_f2, col_f3 = st.columns([3, 2, 2])
 
 with col_f1:
-    filtre_texte = st.text_input("🔍 Recherche (clé, description, source…)", "")
+    filtre_texte = st.text_input("Recherche (clé, description, source…)", "")
 
 with col_f2:
     cats_dispo = sorted(categories.keys())
@@ -122,7 +126,7 @@ else:
         c3.metric("Version", h_detail.version)
         st.markdown(f"**Description :** {h_detail.description.strip()}")
         if h_detail.commentaire_methodologique:
-            st.info(f"💬 {h_detail.commentaire_methodologique.strip()}")
+            st.info(f"{h_detail.commentaire_methodologique.strip()}")
         if h_detail.sources:
             st.markdown("**Sources :**")
             for i, s in enumerate(h_detail.sources, 1):
@@ -143,7 +147,7 @@ else:
     st.divider()
     csv = df.to_csv(index=False).encode("utf-8")
     st.download_button(
-        "📥 Exporter CSV",
+        "Exporter CSV",
         data=csv,
         file_name="hypotheses_boglehead_fr.csv",
         mime="text/csv",

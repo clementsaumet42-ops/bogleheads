@@ -10,8 +10,11 @@ import yaml
 from src.ui.cards import badge_statut, carte_kpi
 from src.ui.charts import camembert_allocation
 from src.ui.formatters import format_euro, format_pct, format_ratio_sharpe
+from src.ui.theme import injecter_css
 
 # ─── Injection typographie premium ───────────────────────────────────────────
+
+injecter_css()
 
 st.markdown(
     """
@@ -23,14 +26,14 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif !important; }
     unsafe_allow_html=True,
 )
 
-st.title("🎯 Allocation cible")
+st.title("Allocation cible")
 
 # ─── Vérification du profil ───────────────────────────────────────────────────
 
 profil = st.session_state.get("profil_actif")
 if not profil:
-    st.warning("⚠️ Aucun profil chargé. Veuillez d'abord configurer un profil client.")
-    if st.button("👤 Aller au profil client"):
+    st.warning("Aucun profil chargé. Veuillez d'abord configurer un profil client.")
+    if st.button("Aller au profil client"):
         st.switch_page("pages/04_Profil.py")
     st.stop()
 
@@ -39,7 +42,7 @@ st.markdown(f"**Profil actif :** {nom}")
 
 # ─── Toggle mode allocation ───────────────────────────────────────────────────
 
-st.subheader("⚙️ Mode allocation")
+st.subheader("Mode allocation")
 mode_label = st.radio(
     "Mode allocation",
     options=["Simple (ACWI monde)", "Granulaire (US / Dev ex-US / EM)"],
@@ -52,7 +55,7 @@ mode = "simple" if mode_label == "Simple (ACWI monde)" else "granulaire"
 
 # ─── Sliders contraintes ──────────────────────────────────────────────────────
 
-st.subheader("⚙️ Contraintes personnalisées")
+st.subheader("Contraintes personnalisées")
 contraintes_raw = profil.get("contraintes_personnalisees") or {}
 
 if mode == "granulaire":
@@ -108,7 +111,7 @@ else:
         )
     with col2:
         st.info(
-            "ⓘ En mode Simple (ACWI), les contraintes régionales USA/EM ne sont pas applicables. "
+            "En mode Simple (ACWI), les contraintes régionales USA/EM ne sont pas applicables. "
             "L'allocation est dominée par un ETF monde unique capi-pondéré.",
             icon=None,
         )
@@ -143,7 +146,7 @@ def _calculer_allocation(
 
 age = profil.get("age") if isinstance(profil, dict) else getattr(profil, "age", None)
 
-with st.spinner("⚙️ Calcul Markowitz en cours…"):
+with st.spinner("Calcul Markowitz en cours…"):
     resultat = _calculer_allocation(aversion, usa_max, em_max, age, mode)
 
 poids = resultat["poids"]
@@ -165,7 +168,7 @@ afficher_health_check(poids, profil_ar, statut, mode)
 # ─── KPIs premium ─────────────────────────────────────────────────────────────
 
 st.divider()
-st.subheader("📊 Résultats de l'optimisation")
+st.subheader("Résultats de l'optimisation")
 
 rendement_val = resultat["rendement_attendu"]
 volatilite_val = resultat["volatilite_attendue"]
@@ -230,7 +233,7 @@ with col4:
     )
 
 if resultat.get("message"):
-    st.info(f"ℹ️ {resultat['message']}")
+    st.info(f"ℹ {resultat['message']}")
 
 # ─── Graphiques ───────────────────────────────────────────────────────────────
 
@@ -262,7 +265,7 @@ with col_right:
 # ─── Comparatif AV gestion pilotée ────────────────────────────────────────────
 
 st.divider()
-st.subheader("📊 Comparaison avec l'AV gestion pilotée")
+st.subheader("Comparaison avec l'AV gestion pilotée")
 
 try:
     import plotly.graph_objects as go
@@ -316,9 +319,9 @@ try:
 except Exception:
     pass
 
-# ─── Expander "Pourquoi cette allocation ?" ────────────────────────────────────
+# ─── Expander "Pourquoi cette allocation ?"────────────────────────────────────
 
-with st.expander("💡 Pourquoi cette allocation ?"):
+with st.expander("Pourquoi cette allocation ?"):
     profil_descriptions = {
         "defensif": "protection du capital, horizon court terme, faible tolérance au risque",
         "equilibre": "compromis rendement/risque, horizon moyen terme",
@@ -380,7 +383,7 @@ def _charger_hypotheses() -> dict:
         return {}
 
 
-with st.expander("📖 Sources et hypothèses de calibration"):
+with st.expander("Sources et hypothèses de calibration"):
     cfg_full = _charger_hypotheses()
     meta_s11 = cfg_full.get("metadonnees", {})
     meta_base = cfg_full.get("hypotheses_meta", {})
@@ -447,7 +450,7 @@ with st.expander("📖 Sources et hypothèses de calibration"):
         if avertissements:
             st.markdown("---")
             for av in avertissements:
-                st.warning(f"⚠️ {av}")
+                st.warning(f"{av}")
     elif meta_base:
         st.markdown(f"**Base :** {meta_base.get('base', '—')}")
         st.markdown(f"**Date de mise à jour :** {meta_base.get('date_maj', '—')}")
@@ -458,7 +461,7 @@ with st.expander("📖 Sources et hypothèses de calibration"):
                 st.markdown(f"- {src}")
         avert = meta_base.get("avertissement", "")
         if avert:
-            st.warning(f"⚠️ {avert.strip()}")
+            st.warning(f"{avert.strip()}")
     else:
         st.info("Métadonnées non disponibles.")
 
@@ -468,16 +471,16 @@ st.divider()
 col_etf1, col_etf2 = st.columns([2, 1])
 with col_etf1:
     st.markdown(
-        "📚 Retrouvez les ETF éligibles pour cette allocation, filtrés par enveloppe (PEA, AV, PER, CTO)"
+        "Retrouvez les ETF éligibles pour cette allocation, filtrés par enveloppe (PEA, AV, PER, CTO)"
     )
 with col_etf2:
-    if st.button("📚 Voir les ETFs éligibles →", use_container_width=True):
+    if st.button("Voir les ETFs éligibles →", use_container_width=True):
         st.switch_page("pages/12_Univers_ETF.py")
 
 # ─── Explication pédagogique (S8.1 — preuve bout-en-bout) ────────────────────
 
 st.divider()
-st.subheader("🎓 Comprendre cette allocation")
+st.subheader("Comprendre cette allocation")
 
 try:
     from src.pedagogie import expliquer_allocation
@@ -534,7 +537,7 @@ except Exception:
 # ─── Sauvegarde en session ────────────────────────────────────────────────────
 
 st.divider()
-if st.session_state.get("resultat_optim") is None or st.button("🔄 Recalculer et sauvegarder"):
+if st.session_state.get("resultat_optim") is None or st.button("Recalculer et sauvegarder"):
     st.session_state["resultat_optim"] = resultat
     profil_copy = dict(profil) if isinstance(profil, dict) else profil
     if isinstance(profil_copy, dict):
@@ -545,9 +548,9 @@ if st.session_state.get("resultat_optim") is None or st.button("🔄 Recalculer 
         }
         profil_copy["mode_allocation"] = mode
         st.session_state["profil_actif"] = profil_copy
-    st.success("✅ Résultat sauvegardé en session.")
+    st.success("Résultat sauvegardé en session.")
 
-if st.button("🏦 Optimiser l'asset location →", type="primary"):
+if st.button("Optimiser l'asset location →", type="primary"):
     st.switch_page("pages/07_Asset_Location.py")
 
 # ─── Widget mission (non-invasif) ────────────────────────────────────────────

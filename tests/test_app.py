@@ -289,7 +289,7 @@ def test_streamlit_config_contient_theme():
     from pathlib import Path
 
     content = Path(".streamlit/config.toml").read_text(encoding="utf-8")
-    assert "#1B3A5B" in content
+    assert "#8B6F47" in content
     assert "[theme]" in content
 
 

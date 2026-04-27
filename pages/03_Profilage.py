@@ -7,8 +7,12 @@ from pathlib import Path
 import streamlit as st
 import yaml
 
-st.set_page_config(page_title="Profilage", page_icon="🎯")
-st.title("🎯 Profilage Client")
+from src.ui.theme import injecter_css
+
+st.set_page_config(page_title="Profilage", page_icon="🏛️")
+injecter_css()
+
+st.title("Profilage Client")
 st.caption("Questionnaire MIF2 + Grable-Lytton + Scénarios comportementaux")
 
 _ROOT = Path(__file__).parent.parent
@@ -99,7 +103,7 @@ elif step == "2. Grable-Lytton":
 
         st.markdown("**Seuils des profils :**")
         for cat, seuils in categories.items():
-            marker = " ← *votre profil*" if cat == p.categorie else ""
+            marker = "← *votre profil*" if cat == p.categorie else ""
             st.write(f"- **{cat}** : {seuils['min']} – {seuils['max']}{marker}")
 
 elif step == "3. Scénarios":

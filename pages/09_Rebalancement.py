@@ -5,15 +5,18 @@ from __future__ import annotations
 import streamlit as st
 
 from src.ui.formatters import format_euro
+from src.ui.theme import injecter_css
 
-st.title("🔄 Rebalancement")
+injecter_css()
+
+st.title("Rebalancement")
 
 # ─── Vérification du profil ───────────────────────────────────────────────────
 
 profil = st.session_state.get("profil_actif")
 if not profil:
-    st.warning("⚠️ Aucun profil chargé. Veuillez d'abord configurer un profil client.")
-    if st.button("👤 Aller au profil client"):
+    st.warning("Aucun profil chargé. Veuillez d'abord configurer un profil client.")
+    if st.button("Aller au profil client"):
         st.switch_page("pages/04_Profil.py")
     st.stop()
 
@@ -24,7 +27,7 @@ profil_dict = dict(profil) if isinstance(profil, dict) else {}
 
 # ─── Panneau « Pourquoi rebalancer ? » (S11-C) ────────────────────────────────
 
-with st.expander("🔍 Pourquoi rebalancer ? — Simulation drift naturel 12 mois", expanded=False):
+with st.expander("Pourquoi rebalancer ? — Simulation drift naturel 12 mois", expanded=False):
     st.markdown(
         """
 Simulation du **drift naturel de l'allocation** sur 12 mois, en supposant que chaque classe
@@ -45,7 +48,7 @@ d'actifs évolue selon ses rendements espérés sans action de votre part.
             }
 
     if not _alloc_cible_drift:
-        st.info("ℹ️ Allocation cible non disponible — calculez d'abord l'allocation (page 05).")
+        st.info("ℹ Allocation cible non disponible — calculez d'abord l'allocation (page 05).")
     else:
         try:
             from src.optimiseur_allocation import charger_config_optimiseur as _cfg_drift
@@ -95,13 +98,13 @@ d'actifs évolue selon ses rendements espérés sans action de votre part.
 
             # Verdict
             if derive_max < 0.01:
-                verdict = "💚 Pas d'urgence — drift naturel limité (< 1 pp)"
+                verdict = "Pas d'urgence — drift naturel limité (< 1 pp)"
                 couleur = "success"
             elif derive_max < 0.05:
-                verdict = "🟡 Surveillance — rebalancer dans les prochains mois (1–5 pp)"
+                verdict = "Surveillance — rebalancer dans les prochains mois (1–5 pp)"
                 couleur = "warning"
             else:
-                verdict = "🔴 Rebalancement recommandé maintenant (≥ 5 pp)"
+                verdict = "Rebalancement recommandé maintenant (≥ 5 pp)"
                 couleur = "error"
 
             # Affichage
@@ -150,14 +153,14 @@ d'actifs évolue selon ses rendements espérés sans action de votre part.
             )
 
         except Exception as exc:
-            st.info(f"ℹ️ Simulation non disponible : {exc}")
+            st.info(f"ℹ Simulation non disponible : {exc}")
 
 # ─── Sélecteur d'approche ─────────────────────────────────────────────────────
 
-st.subheader("⚙️ Approche de rebalancement")
+st.subheader("Approche de rebalancement")
 approche = st.radio(
     "Méthode",
-    ["🌊 Par flux (cash flow rebalancing)", "🔧 Optimal MILP (cascade fiscale)"],
+    ["Par flux (cash flow rebalancing)", "Optimal MILP (cascade fiscale)"],
     horizontal=True,
 )
 
@@ -217,12 +220,12 @@ else:
 # ─── Calcul du plan ───────────────────────────────────────────────────────────
 
 if patrimoine <= 0:
-    st.info("ℹ️ Le patrimoine financier est à 0 — aucun rebalancement possible.")
+    st.info("ℹ Le patrimoine financier est à 0 — aucun rebalancement possible.")
     st.stop()
 
-if approche.startswith("🌊"):
+if approche.startswith(""):
     # ── Approche par flux ─────────────────────────────────────────────────────
-    st.subheader("🌊 Rebalancement par flux")
+    st.subheader("Rebalancement par flux")
     st.markdown(
         "Le **cash flow rebalancing** réoriente les nouveaux versements vers les classes "
         "sous-pondérées, **sans vendre** les positions existantes. Aucune fiscalité déclenchée."
@@ -258,18 +261,16 @@ if approche.startswith("🌊"):
             st.dataframe(df_flux, use_container_width=True, hide_index=True)
             st.metric("Total orienté", format_euro(sum(repartition.values())))
         else:
-            st.success(
-                "✅ Le portefeuille est dans les bandes de tolérance — pas de flux nécessaire."
-            )
+            st.success("Le portefeuille est dans les bandes de tolérance — pas de flux nécessaire.")
 
         if rep.recommandation:
             st.info(rep.recommandation)
     except Exception as exc:
-        st.error(f"❌ Erreur lors du calcul par flux : {exc}")
+        st.error(f"Erreur lors du calcul par flux : {exc}")
 
 else:
     # ── Approche MILP ─────────────────────────────────────────────────────────
-    st.subheader("🔧 Plan de rebalancement optimal (cascade fiscale)")
+    st.subheader("Plan de rebalancement optimal (cascade fiscale)")
     st.markdown(
         """
 Le plan suit une **cascade fiscale en 3 étapes** ordonnées par coût fiscal croissant :
@@ -325,7 +326,7 @@ Le plan suit une **cascade fiscale en 3 étapes** ordonnées par coût fiscal cr
                 cout_e1 = sum(a.get("cout_fiscal", 0) for a in arb)
                 st.metric("Coût fiscal étape 1", format_euro(cout_e1))
             else:
-                st.success("✅ Aucun arbitrage gratuit nécessaire.")
+                st.success("Aucun arbitrage gratuit nécessaire.")
 
         with col_e2:
             st.markdown("### Étape 2 — Par flux")
@@ -339,7 +340,7 @@ Le plan suit une **cascade fiscale en 3 étapes** ordonnées par coût fiscal cr
                 for f in flux:
                     st.info(f.get("detail", str(f)))
             else:
-                st.success("✅ Aucun flux nécessaire.")
+                st.success("Aucun flux nécessaire.")
 
         # Étape 3
         st.markdown("### Étape 3 — Ventes optimisées (si nécessaire)")
@@ -382,26 +383,26 @@ Le plan suit une **cascade fiscale en 3 étapes** ordonnées par coût fiscal cr
                 cout_total = sum(v.cout_fiscal + v.frais_courtage for v in ventes)
                 st.metric("Coût fiscal total étape 3", format_euro(cout_total))
             else:
-                st.success("✅ Aucune vente nécessaire.")
+                st.success("Aucune vente nécessaire.")
         else:
             st.info(
-                "ℹ️ Aucune position détaillée dans le profil — "
+                "ℹ Aucune position détaillée dans le profil — "
                 "l'étape 3 nécessite des positions avec prix de revient."
             )
 
     except Exception as exc:
-        st.error(f"❌ Erreur lors du calcul du plan MILP : {exc}")
+        st.error(f"Erreur lors du calcul du plan MILP : {exc}")
 
 st.divider()
 
 # ─── Bilan coût/bénéfice (S11-C) ─────────────────────────────────────────────
 
-with st.expander("💰 Bilan coût / bénéfice du rebalancement", expanded=False):
+with st.expander("Bilan coût / bénéfice du rebalancement", expanded=False):
     st.markdown(
         """
 Estimation indicative de la rentabilité du rebalancement comparé à l'inaction.
 
-> *⚠️ Calcul approximatif — ne tient pas compte de l'évolution réelle des marchés.*
+> * Calcul approximatif — ne tient pas compte de l'évolution réelle des marchés.*
 """
     )
 
@@ -486,14 +487,14 @@ Estimation indicative de la rentabilité du rebalancement comparé à l'inaction
 
         if ratio is not None:
             if ratio < 1:
-                st.success(f"✅ Rebalancement rentable — ratio {ratio:.2f} < 1 (bénéfice > coût)")
+                st.success(f"Rebalancement rentable — ratio {ratio:.2f} < 1 (bénéfice > coût)")
             else:
                 st.warning(
-                    f"⚠️ Coût supérieur au bénéfice attendu (ratio {ratio:.2f} ≥ 1) — "
+                    f"Coût supérieur au bénéfice attendu (ratio {ratio:.2f} ≥ 1) — "
                     "envisager d'attendre ou d'utiliser uniquement les flux entrants"
                 )
         else:
-            st.info("ℹ️ Patrimoine non renseigné — configurez le profil pour obtenir l'estimation.")
+            st.info("ℹ Patrimoine non renseigné — configurez le profil pour obtenir l'estimation.")
 
         st.caption(
             "*Estimation indicative — ne tient pas compte de l'évolution réelle des marchés. "
@@ -501,12 +502,12 @@ Estimation indicative de la rentabilité du rebalancement comparé à l'inaction
         )
 
     except Exception as exc:
-        st.info(f"ℹ️ Bilan non disponible : {exc}")
+        st.info(f"ℹ Bilan non disponible : {exc}")
 
 col1, col2 = st.columns(2)
 with col1:
-    if st.button("📈 ← Monte-Carlo", use_container_width=True):
+    if st.button("← Monte-Carlo", use_container_width=True):
         st.switch_page("pages/08_Monte_Carlo.py")
 with col2:
-    if st.button("📥 Téléchargements →", type="primary", use_container_width=True):
+    if st.button("Téléchargements →", type="primary", use_container_width=True):
         st.switch_page("pages/11_Exports.py")
