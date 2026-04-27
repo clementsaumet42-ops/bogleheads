@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import Literal
 from pathlib import Path
+from typing import Literal
 
 import pandas as pd
 import streamlit as st
@@ -15,7 +15,6 @@ from src.ui.theme import (
     BLANC_CASSE,
     BLEU_NUIT,
     IVOIRE,
-    OR_CLAIR,
     OR_VIEILLI,
     ROUGE_BORDEAUX,
 )
@@ -115,17 +114,22 @@ def tableau_elegant(df: pd.DataFrame, colonnes_chiffrees: list[str] | None = Non
     """st.dataframe stylé : alternance lignes, chiffres serif tabulaire, en-têtes lettre-espacement."""
     colonnes_chiffrees = colonnes_chiffrees or []
 
-    def _styler(s: pd.Series) -> list[str]:
-        return [
-            f"font-variant-numeric:tabular-nums;font-family:'EB Garamond',Georgia,serif;"
-            f"font-size:0.95rem;"
-            if s.name in colonnes_chiffrees
-            else "font-family:Inter,system-ui,sans-serif;font-size:0.875rem;"
-            for _ in s
-        ]
+    try:
 
-    styler = df.style.apply(_styler, axis=0)
-    st.dataframe(styler, use_container_width=True)
+        def _styler(s: pd.Series) -> list[str]:
+            return [
+                "font-variant-numeric:tabular-nums;font-family:'EB Garamond',Georgia,serif;"
+                "font-size:0.95rem;"
+                if s.name in colonnes_chiffrees
+                else "font-family:Inter,system-ui,sans-serif;font-size:0.875rem;"
+                for _ in s
+            ]
+
+        styler = df.style.apply(_styler, axis=0)
+        st.dataframe(styler, use_container_width=True)
+    except AttributeError:
+        # Fallback si jinja2 manquant (environnement sans Styler)
+        st.dataframe(df, use_container_width=True)
 
 
 def bouton_principal(label: str, key: str, icone_lucide_nom: str | None = None) -> bool:
