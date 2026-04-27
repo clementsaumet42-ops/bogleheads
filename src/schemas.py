@@ -634,6 +634,65 @@ class ConfigBacktest(_Lenient):
     backtest: BacktestParams
 
 
+# ─── S14 — Conformité CIF ────────────────────────────────────────────────────
+
+
+class DocumentConformite(_Lenient):
+    """Métadonnées communes à DER, Lettre de Mission, Rapport d'Adéquation."""
+
+    type_doc: Literal["DER", "LETTRE_MISSION", "RAPPORT_ADEQUATION"]
+    profil_id: int
+    client_nom: str
+    client_email: str | None = None
+    date_generation: str  # ISO 8601
+    chemin_pdf: str
+    sha256: str  # hash du PDF
+    signe: bool = False
+    date_signature: str | None = None  # ISO 8601
+    ip_signature: str | None = None
+    user_agent_signature: str | None = None
+    hash_signature: str | None = None  # SHA256(pdf_hash + date_signature + nom_client)
+    version_template: str  # ex. "DER_v1.0"
+
+
+class ConformiteConfig(_Lenient):
+    """Configuration cabinet pour conformité CIF."""
+
+    cabinet_orias: str
+    cabinet_associations: list[str]  # ex. ["CNCIF", "ANACOFI-CIF"]
+    cabinet_assurance_rcp: str  # nom assureur RC pro
+    cabinet_assurance_rcp_numero: str
+    cabinet_mediateur: str  # ex. "Médiateur de l'AMF"
+    horizon_conservation_annees: int = 5  # MIF II minimum
+    textes_der: dict[str, str]  # sections du DER
+    textes_lettre_mission: dict[str, str]
+    textes_rapport_adequation: dict[str, str]
+
+
+class ParametresMission(_Lenient):
+    """Paramètres de la lettre de mission CIF."""
+
+    objet: str
+    perimetre: list[str]  # ["audit", "allocation", "fiscalite", "suivi_annuel"]
+    honoraires_eur: float
+    honoraires_modalite: Literal["forfait", "horaire", "pct_actifs"]
+    duree_mois: int
+    date_debut: str  # ISO 8601
+
+
+class PreuveSignature(_Lenient):
+    """Preuve de signature eIDAS simple."""
+
+    document_sha256: str  # hash du PDF avant signature
+    nom_signataire: str
+    email_signataire: str
+    date_signature: str  # ISO 8601 UTC
+    ip_signataire: str | None = None
+    user_agent: str | None = None
+    hash_signature: str  # SHA256(document_sha256 + nom + email + date_signature)
+    version_protocole: str = "SIMPLE_v1"
+
+
 _SCHEMAS: dict = {
     "univers_etf.yaml": UniversETFWrapper,
     "enveloppes.yaml": EnveloppesWrapper,
@@ -652,6 +711,8 @@ _SCHEMAS: dict = {
     "backtest.yaml": ConfigBacktest,
     # S13 — Teneurs PER
     "teneurs_per.yaml": TeneursPERConfig,
+    # S14 — Conformité CIF
+    "conformite.yaml": ConformiteConfig,
 }
 
 
