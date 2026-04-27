@@ -12,13 +12,13 @@ logger = logging.getLogger(__name__)
 
 # ─── Seuils et règles métier ──────────────────────────────────────────────────
 
-_SEUIL_LUMP_SUM_EUR = 50_000     # capital < 50k€ → lump sum
-_SEUIL_DCA_EUR = 100_000         # capital ≥ 100k€ → DCA possible
-_DUREE_DCA_MOIS_COURT = 6        # DCA court (profil agressif)
-_DUREE_DCA_MOIS_LONG = 12        # DCA long (profil prudent)
-_DUREE_HYBRIDE_MOIS = 6          # DCA de la tranche DCA en mode hybride
-_PART_LUMP_HYBRIDE = 0.50        # 50% lump sum en mode hybride
-_TMI_PER_SEUIL = 0.30            # TMI ≥ 30% → PER prioritaire
+_SEUIL_LUMP_SUM_EUR = 50_000  # capital < 50k€ → lump sum
+_SEUIL_DCA_EUR = 100_000  # capital ≥ 100k€ → DCA possible
+_DUREE_DCA_MOIS_COURT = 6  # DCA court (profil agressif)
+_DUREE_DCA_MOIS_LONG = 12  # DCA long (profil prudent)
+_DUREE_HYBRIDE_MOIS = 6  # DCA de la tranche DCA en mode hybride
+_PART_LUMP_HYBRIDE = 0.50  # 50% lump sum en mode hybride
+_TMI_PER_SEUIL = 0.30  # TMI ≥ 30% → PER prioritaire
 
 
 # Séquence d'enveloppes par défaut (modifiable par override)

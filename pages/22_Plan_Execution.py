@@ -15,9 +15,7 @@ logger = logging.getLogger(__name__)
 
 st.set_page_config(page_title="Plan d'Exécution", page_icon="🚀", layout="wide")
 st.title("🚀 Plan d'Exécution — Du théorique au concret")
-st.caption(
-    "Screener ETF · Ordres chiffrés · Déploiement DCA/lump · Calendrier de mise en œuvre"
-)
+st.caption("Screener ETF · Ordres chiffrés · Déploiement DCA/lump · Calendrier de mise en œuvre")
 
 ROOT = Path(__file__).parent.parent
 CONFIG_DIR = ROOT / "config"
@@ -190,7 +188,9 @@ if st.button("🔍 Lancer le screener", key="btn_screener"):
                                 "Score global": f"{r['score_global']:.2f}",
                             }
                         )
-                    st.dataframe(pd.DataFrame(detail_rows), use_container_width=True, hide_index=True)
+                    st.dataframe(
+                        pd.DataFrame(detail_rows), use_container_width=True, hide_index=True
+                    )
 
                 # Sauvegarde dans session state pour utilisation dans les ordres
                 st.session_state["screener_resultats"] = {
@@ -205,9 +205,7 @@ if st.button("🔍 Lancer le screener", key="btn_screener"):
 
 st.header("3. Plan d'exécution chiffré — Lot B")
 
-st.info(
-    "Saisissez l'allocation finale et les prix de référence pour générer les ordres."
-)
+st.info("Saisissez l'allocation finale et les prix de référence pour générer les ordres.")
 
 with st.expander("Saisir l'allocation finale et les prix", expanded=False):
     col_ord1, col_ord2 = st.columns(2)
@@ -230,14 +228,17 @@ with st.expander("Saisir l'allocation finale et les prix", expanded=False):
             key="ordres_prix",
         )
 
-    tolerance_prix = st.slider(
-        "Tolérance prix limité (%)",
-        min_value=0.5,
-        max_value=5.0,
-        value=2.0,
-        step=0.5,
-        key="ordres_tolerance",
-    ) / 100
+    tolerance_prix = (
+        st.slider(
+            "Tolérance prix limité (%)",
+            min_value=0.5,
+            max_value=5.0,
+            value=2.0,
+            step=0.5,
+            key="ordres_tolerance",
+        )
+        / 100
+    )
 
     if st.button("⚡ Générer les ordres", key="btn_ordres"):
         try:
@@ -305,6 +306,7 @@ if plan_ordres and plan_ordres.get("ordres"):
     col_dl1, col_dl2 = st.columns(2)
     with col_dl1:
         from src.execution.ordres import export_ordres_csv
+
         csv_content = export_ordres_csv(plan_ordres)
         st.download_button(
             label="📥 Télécharger CSV",
@@ -415,7 +417,10 @@ if plan_dep:
     with col_info1:
         st.metric("Mode de déploiement", plan_dep["mode"])
     with col_info2:
-        st.metric("Durée DCA", f"{plan_dep['duree_mois']} mois" if plan_dep["duree_mois"] > 0 else "Immédiat")
+        st.metric(
+            "Durée DCA",
+            f"{plan_dep['duree_mois']} mois" if plan_dep["duree_mois"] > 0 else "Immédiat",
+        )
 
     st.subheader("Séquence d'enveloppes")
     seq = plan_dep.get("sequence_enveloppes", [])
@@ -479,8 +484,12 @@ if calendrier:
             {
                 "N°": e["ordre"],
                 "Type": f"{_icons.get(e['type'], '')} {e['type']}",
-                "Date début": e["date_debut"].strftime("%d/%m/%Y") if isinstance(e["date_debut"], date) else str(e["date_debut"]),
-                "Date fin": e["date_fin"].strftime("%d/%m/%Y") if isinstance(e["date_fin"], date) else str(e["date_fin"]),
+                "Date début": e["date_debut"].strftime("%d/%m/%Y")
+                if isinstance(e["date_debut"], date)
+                else str(e["date_debut"]),
+                "Date fin": e["date_fin"].strftime("%d/%m/%Y")
+                if isinstance(e["date_fin"], date)
+                else str(e["date_fin"]),
                 "Enveloppe": e.get("enveloppe") or "—",
                 "Titre": e["titre"],
                 "Dépend de": ", ".join(str(d) for d in e["depends_on"]) if e["depends_on"] else "—",

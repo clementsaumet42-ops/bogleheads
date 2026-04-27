@@ -52,11 +52,20 @@ def _plan_hybride(enveloppes=None, duree_mois=6):
     tranches = []
     # Tranche lump (mois 0)
     for env in enveloppes:
-        tranches.append({"mois": 0, "enveloppe": env, "montant_eur": 25_000.0, "justification": "Hybride lump"})
+        tranches.append(
+            {"mois": 0, "enveloppe": env, "montant_eur": 25_000.0, "justification": "Hybride lump"}
+        )
     # Tranches DCA (mois 1 à duree_mois)
     for mois in range(1, duree_mois + 1):
         for env in enveloppes:
-            tranches.append({"mois": mois, "enveloppe": env, "montant_eur": 4_000.0, "justification": "Hybride DCA"})
+            tranches.append(
+                {
+                    "mois": mois,
+                    "enveloppe": env,
+                    "montant_eur": 4_000.0,
+                    "justification": "Hybride DCA",
+                }
+            )
     return {
         "mode": "hybride",
         "duree_mois": duree_mois,
@@ -218,7 +227,10 @@ class TestDates:
     def test_rebalancing_annuel_apres_un_an(self):
         """Le rebalancing annuel est après 1 an."""
         from datetime import timedelta
+
         cal = generer_calendrier(_plan_lump_sum(), DATE_DEBUT)
-        rebal = next((e for e in cal if "M+12" in e["titre"] or "annuel" in e["titre"].lower()), None)
+        rebal = next(
+            (e for e in cal if "M+12" in e["titre"] or "annuel" in e["titre"].lower()), None
+        )
         if rebal:
             assert rebal["date_debut"] >= DATE_DEBUT + timedelta(days=360)

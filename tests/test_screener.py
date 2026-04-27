@@ -368,8 +368,14 @@ class TestScreenerETF:
         """Les pondérations personnalisées influencent le classement."""
         catalogue = _catalogue_minimal()
         # Pondération forte sur TER
-        poids_ter = {"ter": 1.0, "aum": 0.0, "tracking_diff": 0.0,
-                     "eligibilite": 0.0, "capi_dist": 0.0, "domicile_ue": 0.0}
+        poids_ter = {
+            "ter": 1.0,
+            "aum": 0.0,
+            "tracking_diff": 0.0,
+            "eligibilite": 0.0,
+            "capi_dist": 0.0,
+            "domicile_ue": 0.0,
+        }
         result = screener_etf("actions_monde_dev", "CTO", {}, catalogue, top_n=3, poids=poids_ter)
         assert len(result) > 0
         # Doit contenir IWDA (TER 0.20%, le meilleur)
