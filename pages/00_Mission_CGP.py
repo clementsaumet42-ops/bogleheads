@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import io
 import logging
-from datetime import date
+import zipfile
+from datetime import date, datetime
 from pathlib import Path
 
 import streamlit as st
 
+from src.mission.autosave import activer_autosave
 from src.mission.checklist import ETAPES_CANONIQUES, PHASES
 from src.mission.etat import (
     EtatEtape,
@@ -20,6 +22,7 @@ from src.mission.etat import (
     supprimer_mission,
 )
 from src.mission.progress import calculer_progression
+from src.validations.coherence import valider_coherence
 
 logger = logging.getLogger(__name__)
 
@@ -97,6 +100,19 @@ except FileNotFoundError:
     st.stop()
 
 progression = calculer_progression(etat)
+
+# ─── Auto-save toggle (S18-A) ─────────────────────────────────────────────────
+
+_autosave_cle = f"_autosave_actif_{etat.mission_id}"
+autosave_actif = st.sidebar.toggle(
+    "💾 Auto-save activé",
+    value=st.session_state.get(_autosave_cle, False),
+    help="Sauvegarde automatique du formulaire toutes les 30 secondes (opt-in).",
+    key=_autosave_cle,
+)
+if autosave_actif:
+    activer_autosave(etat.mission_id, intervalle_secondes=30)
+    st.sidebar.caption("💾 Session sauvegardée automatiquement.")
 
 # ─── Section 2 — En-tête mission active ───────────────────────────────────────
 
@@ -264,7 +280,42 @@ if progression["pct_par_rdv"]:
     for i, (rdv, pct_rdv) in enumerate(progression["pct_par_rdv"].items()):
         cols_rdv[i].metric(f"Avancement {rdv}", f"{pct_rdv}%")
 
-# ─── Section 6 — Export PDF récap mission ─────────────────────────────────────
+# ─── Section S18-C — Avertissements de cohérence ─────────────────────────────
+
+st.divider()
+st.subheader("⚠️ Avertissements de cohérence")
+st.caption("Détection d'incohérences dans le profil — non bloquant, à titre indicatif.")
+
+try:
+    _profil_pour_validation = dict(st.session_state.get("profil_actif") or {})
+    if not _profil_pour_validation and etat.session_state_snapshot:
+        _profil_pour_validation = dict(etat.session_state_snapshot.get("profil_actif") or {})
+
+    _avertissements = valider_coherence(_profil_pour_validation) if _profil_pour_validation else []
+
+    if _avertissements:
+        for _avert in _avertissements:
+            _color_fn = (
+                st.warning
+                if _avert.severity == "warning"
+                else (st.error if _avert.severity == "danger" else st.info)
+            )
+            _pages_str = (
+                " · ".join(f"`{p}`" for p in _avert.pages_concernees)
+                if _avert.pages_concernees
+                else ""
+            )
+            _msg = f"**{_avert.titre}** — {_avert.description}"
+            if _avert.suggestion:
+                _msg += f" _Suggestion : {_avert.suggestion}_"
+            if _pages_str:
+                _msg += f" Pages concernées : {_pages_str}"
+            _color_fn(_msg)
+    else:
+        st.success("✅ Aucune incohérence détectée dans le profil actif.")
+except Exception as _exc_val:
+    st.caption(f"Validations indisponibles : {_exc_val}")
+
 
 st.divider()
 st.subheader("6. Export récap mission")
@@ -481,3 +532,125 @@ if "mission_id" in st.session_state and st.session_state["mission_id"]:
             st.caption("Aucun snapshot enregistré pour cette mission.")
     except Exception:
         pass
+
+# ─── Section S18-D — 🚀 Tout générer ─────────────────────────────────────────
+
+st.divider()
+st.subheader("🚀 Tout générer")
+st.caption(
+    "Génère tous les livrables en une seule action : PDF client, Excel, récap mission, "
+    "snapshot hypothèses — le tout archivé dans un ZIP."
+)
+
+# Étapes obligatoires à vérifier avant d'autoriser le bouton
+_ETAPES_REQUISES = [
+    "profil_saisi",
+    "profilage_mif",
+    "allocation_cible",
+    "asset_location",
+    "plan_execution",
+]
+
+_etapes_manquantes = [
+    cle
+    for cle in _ETAPES_REQUISES
+    if etat.etapes.get(cle, EtatEtape.NON_COMMENCE) not in (EtatEtape.VALIDE, EtatEtape.SKIP)
+]
+
+if _etapes_manquantes:
+    st.warning(
+        f"⚠️ {len(_etapes_manquantes)} étape(s) obligatoire(s) non validée(s) avant de pouvoir "
+        "tout générer : " + ", ".join(f"`{c}`" for c in _etapes_manquantes)
+    )
+else:
+    if st.button("🚀 Tout générer maintenant", type="primary"):
+        _ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+        _output_dir = Path(__file__).parent.parent / "output" / "missions" / etat.mission_id
+        _output_dir.mkdir(parents=True, exist_ok=True)
+        _zip_path = _output_dir / f"{_ts}.zip"
+
+        _prog = st.progress(0, text="Initialisation…")
+        _zip_buf = io.BytesIO()
+
+        with zipfile.ZipFile(_zip_buf, mode="w", compression=zipfile.ZIP_DEFLATED) as _zf:
+            # ── Étape 1 : Récap mission PDF ───────────────────────────────
+            _prog.progress(10, text="📋 Génération récap mission…")
+            try:
+                _pdf_recap_bytes = _generer_pdf_recap(etat, progression)
+                _zf.writestr(f"recap_mission_{etat.mission_id}.pdf", _pdf_recap_bytes)
+            except Exception as _exc:
+                st.warning(f"Récap mission : {_exc}")
+
+            # ── Étape 2 : Snapshot hypothèses (S17) ──────────────────────
+            _prog.progress(25, text="📎 Snapshot hypothèses…")
+            try:
+                from src.hypotheses.snapshot import creer_snapshot, sauvegarder_snapshot
+
+                _snap = creer_snapshot(etat.mission_id)
+                _snap_chemin = sauvegarder_snapshot(_snap)
+                _zf.write(_snap_chemin, f"snapshot_hypotheses_{_snap_chemin.name}")
+            except Exception as _exc:
+                st.warning(f"Snapshot hypothèses : {_exc}")
+
+            # ── Étape 3 : PDF client ──────────────────────────────────────
+            _prog.progress(45, text="📑 Génération PDF client…")
+            try:
+                from src.pdf_builder import charger_config_pdf, generer_pdf
+
+                _profil_obj = st.session_state.get("profil_actif")
+                if _profil_obj:
+                    _config_pdf = charger_config_pdf()
+                    _pdf_client_path = _output_dir / f"rapport_client_{etat.mission_id}_{_ts}.pdf"
+                    generer_pdf(_profil_obj, _config_pdf, _pdf_client_path)
+                    _zf.write(_pdf_client_path, f"rapport_client_{etat.mission_id}.pdf")
+                else:
+                    st.warning("PDF client ignoré : profil non chargé en session.")
+            except Exception as _exc:
+                st.warning(f"PDF client : {_exc}")
+
+            # ── Étape 4 : Excel ───────────────────────────────────────────
+            _prog.progress(65, text="📊 Génération Excel…")
+            try:
+                from src.excel.builder import generer_excel
+
+                _excel_path = _output_dir / f"portefeuille_{etat.mission_id}_{_ts}.xlsx"
+                generer_excel(str(_excel_path))
+                _zf.write(_excel_path, f"portefeuille_{etat.mission_id}.xlsx")
+            except Exception as _exc:
+                st.warning(f"Excel : {_exc}")
+
+            # ── Étape 5 : Ordres CSV (plan d'exécution S15) ───────────────
+            _prog.progress(80, text="📋 Export ordres CSV…")
+            try:
+                _ordres_ss = st.session_state.get("ordres_df")
+                if _ordres_ss is not None:
+                    import pandas as pd
+
+                    if hasattr(_ordres_ss, "to_csv"):
+                        _zf.writestr(
+                            f"ordres_{etat.mission_id}.csv",
+                            _ordres_ss.to_csv(index=False),
+                        )
+            except Exception as _exc:
+                st.warning(f"Ordres CSV : {_exc}")
+
+            # ── Finalisation ──────────────────────────────────────────────
+            _prog.progress(95, text="📦 Archivage…")
+
+        # Écriture du ZIP sur disque
+        _zip_path.write_bytes(_zip_buf.getvalue())
+
+        # Marquer l'étape livrables_pdf_excel comme validée
+        if "livrables_pdf_excel" in etat.etapes:
+            etat.etapes["livrables_pdf_excel"] = EtatEtape.VALIDE
+            sauvegarder_mission(etat)
+
+        _prog.progress(100, text="✅ Terminé !")
+        st.success(f"✅ Tous les livrables générés dans `{_zip_path.name}`")
+        st.download_button(
+            label="📥 Télécharger l'archive complète",
+            data=_zip_buf.getvalue(),
+            file_name=f"mission_{etat.mission_id}_{_ts}.zip",
+            mime="application/zip",
+        )
+        st.rerun()
