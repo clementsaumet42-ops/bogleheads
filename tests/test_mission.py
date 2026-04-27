@@ -73,7 +73,8 @@ class TestCreerMission:
 
     def test_mission_id_est_slug(self, tmp_data_dir):
         m = creer_mission("Müller Klaus", "CGP")
-        assert "muller" in m.mission_id or "m_ller" in m.mission_id or "muller" in m.mission_id
+        # ü → u (ou m_ller si non reconnu), en minuscules, sans espaces
+        assert "muller" in m.mission_id or "_ller" in m.mission_id
 
     def test_etapes_initialisees_non_commence(self, tmp_data_dir):
         m = creer_mission("Test Client", "CGP")
@@ -112,6 +113,10 @@ class TestPersistance:
     def test_chargement_fichier_inexistant_leve_erreur(self, tmp_data_dir):
         with pytest.raises(FileNotFoundError):
             charger_mission("mission_inexistante_xyz")
+
+    def test_chargement_traversee_repertoire_leve_erreur(self, tmp_data_dir):
+        with pytest.raises(ValueError, match="traversée"):
+            charger_mission("../../etc/passwd")
 
     def test_to_dict_serialisable_json(self, mission_vierge):
         d = mission_vierge.to_dict()

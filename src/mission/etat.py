@@ -69,7 +69,15 @@ def _data_dir() -> Path:
 
 
 def _mission_path(mission_id: str) -> Path:
-    return _data_dir() / f"{mission_id}.json"
+    """Retourne le chemin sécurisé pour un mission_id.
+
+    Lève ValueError si mission_id tente une traversée de répertoire.
+    """
+    data = _data_dir()
+    chemin = (data / f"{mission_id}.json").resolve()
+    if not chemin.is_relative_to(data.resolve()):
+        raise ValueError(f"mission_id invalide (traversée de répertoire) : {mission_id!r}")
+    return data / f"{mission_id}.json"
 
 
 def _slug(text: str) -> str:
