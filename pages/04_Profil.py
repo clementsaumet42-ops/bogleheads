@@ -339,3 +339,9 @@ with st.expander("📦 Patrimoine financier déjà constitué", expanded=False):
             if st.session_state.get("profil_actif"):
                 st.session_state["profil_actif"]["composition_actuelle"] = []
             st.rerun()
+
+# ─── Widget mission (non-invasif) ────────────────────────────────────────────
+
+from src.mission.widgets import widget_mission_etape  # noqa: E402
+
+widget_mission_etape("profil_saisi")
