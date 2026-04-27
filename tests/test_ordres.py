@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 import io
 import math
+from pathlib import Path
 from types import SimpleNamespace
 
 from src.execution.ordres import (
@@ -229,8 +230,7 @@ class TestExportOrdresCSV:
         chemin = str(tmp_path / "ordres.csv")
         result = export_ordres_csv(plan, path=chemin)
         assert result == chemin
-        import os
-        assert os.path.exists(chemin)
+        assert Path(chemin).exists()
 
     def test_csv_contient_frais_total(self):
         """Le CSV contient la ligne FRAIS TOTAL."""

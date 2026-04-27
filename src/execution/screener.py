@@ -7,6 +7,7 @@ multi-critères à partir du catalogue univers_etf.yaml.
 from __future__ import annotations
 
 import logging
+import math
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -53,8 +54,6 @@ def _score_aum(aum_m_eur: float | None) -> float:
     if aum_m_eur < _AUM_SEUIL_MIN_M:
         return 0.0  # filtre dur : malus maximal sous 100M€
     # Bonus logarithmique : 1.0 pour 10 000M€, 0.5 pour 100M€
-    import math
-
     return min(1.0, math.log10(aum_m_eur / _AUM_SEUIL_MIN_M) / math.log10(100))
 
 
