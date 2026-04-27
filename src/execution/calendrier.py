@@ -16,15 +16,15 @@ TypeEtape = Literal["admin", "virement", "ordre", "controle"]
 
 # Durées types par type d'étape (en jours ouvrés)
 _DUREES_ETAPES: dict[str, int] = {
-    "admin": 14,     # ouverture de compte (2 semaines)
-    "virement": 3,   # virement bancaire (3 jours)
-    "ordre": 1,      # passage d'ordre (1 jour)
-    "controle": 1,   # contrôle exécution (1 jour)
+    "admin": 14,  # ouverture de compte (2 semaines)
+    "virement": 3,  # virement bancaire (3 jours)
+    "ordre": 1,  # passage d'ordre (1 jour)
+    "controle": 1,  # contrôle exécution (1 jour)
 }
 
 # Délai entre étapes en jours calendaires
-_DELAI_POST_ADMIN = 2        # 2 jours après ouverture avant premier virement
-_DELAI_POST_VIREMENT = 1     # 1 jour après virement avant de passer ordres
+_DELAI_POST_ADMIN = 2  # 2 jours après ouverture avant premier virement
+_DELAI_POST_VIREMENT = 1  # 1 jour après virement avant de passer ordres
 
 
 def _date_plus_jours(d: date, jours: int) -> date:
@@ -95,9 +95,7 @@ def generer_calendrier(
 
     # Date après ouverture de tous les comptes
     if etapes:
-        date_apres_admin = _date_plus_jours(
-            max(e["date_fin"] for e in etapes), _DELAI_POST_ADMIN
-        )
+        date_apres_admin = _date_plus_jours(max(e["date_fin"] for e in etapes), _DELAI_POST_ADMIN)
     else:
         date_apres_admin = date_debut
 
@@ -118,9 +116,7 @@ def generer_calendrier(
         enveloppes_mois = list({t["enveloppe"] for t in tranches_mois})
 
         for env in enveloppes_mois:
-            montant_mois = sum(
-                t["montant_eur"] for t in tranches_mois if t["enveloppe"] == env
-            )
+            montant_mois = sum(t["montant_eur"] for t in tranches_mois if t["enveloppe"] == env)
 
             # Dépendances du virement
             deps_virement = list(ids_admin)
@@ -175,13 +171,14 @@ def generer_calendrier(
 
         # ── Étape contrôle après chaque tranche ───────────────────────────────
         ids_ordres_mois = [
-            e["ordre"] for e in etapes
+            e["ordre"]
+            for e in etapes
             if e["type"] == "ordre"
             and e.get("enveloppe") in enveloppes_mois
             and e["ordre"] > (max(ids_admin) if ids_admin else 0)
         ]
         # Prendre les ordres du mois courant seulement
-        ids_ordres_mois_courant = ids_ordres_mois[-(len(enveloppes_mois)):]
+        ids_ordres_mois_courant = ids_ordres_mois[-(len(enveloppes_mois)) :]
 
         if ids_ordres_mois_courant:
             date_controle = _date_plus_jours(

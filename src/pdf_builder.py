@@ -2090,12 +2090,8 @@ def _page_plan_execution(styles: dict) -> list:
         ["Obligations Monde", "AV", "AGGH — iShares Global Agg.", "0,10%", "0,88"],
         ["Actions Émergents", "CTO", "IEEM — iShares MSCI EM", "0,18%", "0,79"],
     ]
-    formatted = [
-        [Paragraph(str(c), styles["body"]) for c in row] for row in etf_exemple_data
-    ]
-    elems.append(
-        _zebra_table(formatted, col_widths=[3.5 * cm, 2.5 * cm, 5 * cm, 2 * cm, 2 * cm])
-    )
+    formatted = [[Paragraph(str(c), styles["body"]) for c in row] for row in etf_exemple_data]
+    elems.append(_zebra_table(formatted, col_widths=[3.5 * cm, 2.5 * cm, 5 * cm, 2 * cm, 2 * cm]))
     elems.append(
         Paragraph(
             "Utiliser la page <b>Plan d'Exécution</b> (page 22) pour personnaliser "
@@ -2128,14 +2124,8 @@ def _page_plan_execution(styles: dict) -> list:
             "PEA → AV → CTO",
         ],
     ]
-    formatted2 = [
-        [Paragraph(str(c), styles["body"]) for c in row] for row in deploiement_data
-    ]
-    elems.append(
-        _zebra_table(
-            formatted2, col_widths=[2.5 * cm, 5 * cm, 4 * cm, 5 * cm]
-        )
-    )
+    formatted2 = [[Paragraph(str(c), styles["body"]) for c in row] for row in deploiement_data]
+    elems.append(_zebra_table(formatted2, col_widths=[2.5 * cm, 5 * cm, 4 * cm, 5 * cm]))
     elems.append(Spacer(1, 0.3 * cm))
 
     # ── Section 3 : Calendrier opérationnel ──────────────────────────────────
@@ -2149,12 +2139,8 @@ def _page_plan_execution(styles: dict) -> list:
         ["5+", "Ordre", "Tranches DCA suivantes (M+1, M+2…)", "4"],
         ["N", "Contrôle", "Rebalancing annuel M+12", "—"],
     ]
-    formatted3 = [
-        [Paragraph(str(c), styles["body"]) for c in row] for row in calendrier_data
-    ]
-    elems.append(
-        _zebra_table(formatted3, col_widths=[1.5 * cm, 2.5 * cm, 8 * cm, 2.5 * cm])
-    )
+    formatted3 = [[Paragraph(str(c), styles["body"]) for c in row] for row in calendrier_data]
+    elems.append(_zebra_table(formatted3, col_widths=[1.5 * cm, 2.5 * cm, 8 * cm, 2.5 * cm]))
     elems.append(Spacer(1, 0.2 * cm))
     elems.append(
         Paragraph(
