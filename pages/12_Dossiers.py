@@ -6,8 +6,12 @@ from pathlib import Path
 
 import streamlit as st
 
-st.set_page_config(page_title="Dossiers", page_icon="🗂")
-st.title("🗂 Journal des Dossiers Clients")
+from src.ui.theme import injecter_css
+
+st.set_page_config(page_title="Dossiers", page_icon="🏛️")
+injecter_css()
+
+st.title("Journal des Dossiers Clients")
 st.caption("Audit SQLite + chiffrement Fernet (AES-256)")
 
 ROOT = Path(__file__).parent.parent
@@ -15,7 +19,7 @@ DB_PATH = ROOT / "data" / "journal_cif.db"
 
 passphrase = st.text_input("Passphrase de déchiffrement", value="changeme", type="password")
 
-if st.button("📖 Voir les conseils enregistrés"):
+if st.button("Voir les conseils enregistrés"):
     from src.cif.journal import JournalConseils
 
     journal = JournalConseils(DB_PATH, passphrase)
@@ -31,7 +35,7 @@ st.divider()
 st.subheader("Ajouter un conseil test")
 client_id = st.text_input("ID client", value="CLIENT_001")
 type_conseil = st.text_input("Type de conseil", value="allocation")
-if st.button("➕ Enregistrer"):
+if st.button("Enregistrer"):
     from src.cif.journal import JournalConseils
 
     journal = JournalConseils(DB_PATH, passphrase)

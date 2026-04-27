@@ -22,12 +22,15 @@ from src.mission.etat import (
     supprimer_mission,
 )
 from src.mission.progress import calculer_progression
+from src.ui.theme import injecter_css
 from src.validations.coherence import valider_coherence
 
 logger = logging.getLogger(__name__)
 
-st.set_page_config(page_title="Mission CGP", page_icon="🗂️", layout="wide")
-st.title("🗂️ Mission CGP — Fil conducteur")
+st.set_page_config(page_title="Mission CGP", page_icon="🏛️", layout="wide")
+injecter_css()
+
+st.title("Mission CGP — Fil conducteur")
 st.caption("Pilotez votre mission de bout en bout : de la prise en charge au suivi M+3.")
 
 # ─── Section 1 — Sélecteur de mission ────────────────────────────────────────
@@ -57,24 +60,24 @@ with col_sel:
         st.session_state["mission_id"] = None
 
 with col_new:
-    with st.popover("➕ Nouvelle mission"):
+    with st.popover("Nouvelle mission"):
         nc = st.text_input("Nom du client", key="_new_nom_client")
         cgp = st.text_input("CGP", key="_new_cgp")
         if st.button("Créer", key="_btn_creer_mission"):
             if nc and cgp:
                 nouvelle = creer_mission(nc, cgp)
                 st.session_state["mission_id"] = nouvelle.mission_id
-                st.success(f"Mission **{nouvelle.mission_id}** créée ✅")
+                st.success(f"Mission **{nouvelle.mission_id}** créée ")
                 st.rerun()
             else:
                 st.warning("Renseignez le nom du client et le CGP.")
 
 with col_del:
-    if selected_id and st.button("🗑️", key="_btn_del_mission", help="Supprimer la mission"):
+    if selected_id and st.button("", key="_btn_del_mission", help="Supprimer la mission"):
         st.session_state["_confirm_delete"] = True
 
 if st.session_state.get("_confirm_delete") and selected_id:
-    st.warning(f"⚠️ Confirmer la suppression de **{selected_id}** ?")
+    st.warning(f"Confirmer la suppression de **{selected_id}** ?")
     c1, c2 = st.columns(2)
     with c1:
         if st.button("Oui, supprimer", key="_btn_confirm_del"):
@@ -105,14 +108,14 @@ progression = calculer_progression(etat)
 
 _autosave_cle = f"_autosave_actif_{etat.mission_id}"
 autosave_actif = st.sidebar.toggle(
-    "💾 Auto-save activé",
+    "Auto-save activé",
     value=st.session_state.get(_autosave_cle, False),
     help="Sauvegarde automatique du formulaire toutes les 30 secondes (opt-in).",
     key=_autosave_cle,
 )
 if autosave_actif:
     activer_autosave(etat.mission_id, intervalle_secondes=30)
-    st.sidebar.caption("💾 Session sauvegardée automatiquement.")
+    st.sidebar.caption("Session sauvegardée automatiquement.")
 
 # ─── Section 2 — En-tête mission active ───────────────────────────────────────
 
@@ -137,13 +140,13 @@ rdv1_pct = progression["pct_par_rdv"].get("RDV1", 0)
 rdv2_pct = progression["pct_par_rdv"].get("RDV2", 0)
 
 if etapes_bloquees:
-    st.error(f"🔴 Bloqué — {len(etapes_bloquees)} étape(s) bloquée(s)")
+    st.error(f"Bloqué — {len(etapes_bloquees)} étape(s) bloquée(s)")
 elif rdv1_pct == 100 and rdv2_pct < 100:
-    st.warning("🟡 En cours d'analyse — RDV1 prêt, RDV2 en préparation")
+    st.warning("En cours d'analyse — RDV1 prêt, RDV2 en préparation")
 elif rdv1_pct < 100:
-    st.info(f"🔵 En cours — RDV1 : {rdv1_pct}%")
+    st.info(f"En cours — RDV1 : {rdv1_pct}%")
 else:
-    st.success("🟢 Mission avancée — tous les RDV préparés")
+    st.success("Mission avancée — tous les RDV préparés")
 
 # ─── Section 3 — Checklist visuelle ───────────────────────────────────────────
 
@@ -151,7 +154,7 @@ st.divider()
 st.subheader("3. Checklist de mission")
 
 STATUT_OPTIONS = [e.value for e in EtatEtape]
-STATUT_LABELS = {e.value: f"{e.value} {e.name.replace('_', ' ').title()}" for e in EtatEtape}
+STATUT_LABELS = {e.value: f"{e.value} {e.name.replace('_', '').title()}" for e in EtatEtape}
 
 changed = False
 
@@ -171,11 +174,11 @@ for phase in PHASES:
                 st.markdown(f"## {statut.value}")
 
             with col_titre:
-                badge = " 🔒" if est_bloque else (" ⭐" if etape.obligatoire else "")
+                badge = "" if est_bloque else ("" if etape.obligatoire else "")
                 st.markdown(f"**{etape.titre}**{badge}")
                 st.caption(etape.description)
                 if etape.livrables:
-                    st.caption("📎 " + " · ".join(etape.livrables))
+                    st.caption("" + "· ".join(etape.livrables))
                 # Note libre
                 note_key = f"_note_{etape.cle}"
                 note = st.text_area(
@@ -196,7 +199,7 @@ for phase in PHASES:
                     if page_path.exists():
                         st.page_link(str(page_path), label="→ Aller à la page")
                     else:
-                        st.caption(f"📄 {etape.page_streamlit}")
+                        st.caption(f"{etape.page_streamlit}")
 
             with col_statut:
                 idx = STATUT_OPTIONS.index(statut.value)
@@ -233,9 +236,9 @@ for etape in ETAPES_CANONIQUES:
             "Phase": etape.phase,
             "Étape": etape.titre,
             "Statut": statut.value,
-            "Obligatoire": "⭐" if etape.obligatoire else "",
+            "Obligatoire": "" if etape.obligatoire else "",
             "Dépendances": ", ".join(etape.depends_on) if etape.depends_on else "—",
-            "Bloqué": "🔒" if est_bloque else "",
+            "Bloqué": "" if est_bloque else "",
             "RDV": etape.rdv or "—",
         }
     )
@@ -269,7 +272,7 @@ if alertes:
     for alerte in alertes:
         st.warning(alerte)
 else:
-    st.success("✅ Aucun blocage détecté.")
+    st.success("Aucun blocage détecté.")
 
 if prochaine:
     st.info(f"**Prochaine action recommandée :** {prochaine.titre} — {prochaine.description}")
@@ -283,7 +286,7 @@ if progression["pct_par_rdv"]:
 # ─── Section S18-C — Avertissements de cohérence ─────────────────────────────
 
 st.divider()
-st.subheader("⚠️ Avertissements de cohérence")
+st.subheader("Avertissements de cohérence")
 st.caption("Détection d'incohérences dans le profil — non bloquant, à titre indicatif.")
 
 try:
@@ -301,18 +304,18 @@ try:
                 else (st.error if _avert.severity == "danger" else st.info)
             )
             _pages_str = (
-                " · ".join(f"`{p}`" for p in _avert.pages_concernees)
+                "· ".join(f"`{p}`" for p in _avert.pages_concernees)
                 if _avert.pages_concernees
                 else ""
             )
             _msg = f"**{_avert.titre}** — {_avert.description}"
             if _avert.suggestion:
-                _msg += f" _Suggestion : {_avert.suggestion}_"
+                _msg += f"_Suggestion : {_avert.suggestion}_"
             if _pages_str:
-                _msg += f" Pages concernées : {_pages_str}"
+                _msg += f"Pages concernées : {_pages_str}"
             _color_fn(_msg)
     else:
-        st.success("✅ Aucune incohérence détectée dans le profil actif.")
+        st.success("Aucune incohérence détectée dans le profil actif.")
 except Exception as _exc_val:
     st.caption(f"Validations indisponibles : {_exc_val}")
 
@@ -425,11 +428,11 @@ def _generer_pdf_recap(etat: EtatMission, prog: dict) -> bytes:
     return buf.getvalue()
 
 
-if st.button("📄 Exporter récap mission (PDF 1 page)"):
+if st.button("Exporter récap mission (PDF 1 page)"):
     try:
         pdf_bytes = _generer_pdf_recap(etat, progression)
         st.download_button(
-            label="⬇️ Télécharger le récap PDF",
+            label="Télécharger le récap PDF",
             data=pdf_bytes,
             file_name=f"recap_mission_{etat.mission_id}.pdf",
             mime="application/pdf",
@@ -441,7 +444,7 @@ if st.button("📄 Exporter récap mission (PDF 1 page)"):
 # ─── Section hypothèses & sources (S17) ──────────────────────────────────────
 
 st.divider()
-st.subheader("📚 Hypothèses & Sources")
+st.subheader("Hypothèses & Sources")
 st.caption("Registre des hypothèses actives — sources citées, versions, snapshots.")
 
 with st.expander("Voir les hypothèses actives"):
@@ -478,13 +481,13 @@ if "mission_id" in st.session_state and st.session_state["mission_id"]:
     with col_snap1:
         st.markdown("**Snapshots d'hypothèses** — traçabilité en cas de contestation future.")
     with col_snap2:
-        if st.button("📎 Figer un snapshot maintenant"):
+        if st.button("Figer un snapshot maintenant"):
             try:
                 from src.hypotheses.snapshot import creer_snapshot, sauvegarder_snapshot
 
                 snap = creer_snapshot(_mid)
                 chemin = sauvegarder_snapshot(snap)
-                st.success(f"✅ Snapshot figé : {chemin.name}")
+                st.success(f"Snapshot figé : {chemin.name}")
                 st.caption(f"Hash SHA-256 : `{snap.hash_integrite[:16]}…`")
             except Exception as exc:
                 st.error(f"Erreur lors du snapshot : {exc}")
@@ -498,7 +501,7 @@ if "mission_id" in st.session_state and st.session_state["mission_id"]:
             for s_path in reversed(snaps[-5:]):
                 st.markdown(f"- `{s_path.name}`")
             # Bouton diff entre les 2 derniers snapshots
-            if len(snaps) >= 2 and st.button("🔍 Comparer les 2 derniers snapshots"):
+            if len(snaps) >= 2 and st.button("Comparer les 2 derniers snapshots"):
                 try:
                     import json
 
@@ -513,19 +516,19 @@ if "mission_id" in st.session_state and st.session_state["mission_id"]:
                     )
                     diff = comparer_snapshots(snap_a, snap_b)
                     if diff["modifiees"]:
-                        st.warning(f"⚠️ {len(diff['modifiees'])} hypothèse(s) modifiée(s) :")
+                        st.warning(f"{len(diff['modifiees'])} hypothèse(s) modifiée(s) :")
                         for m in diff["modifiees"]:
-                            st.markdown(f"  - `{m['cle']}` : {m['delta_valeur']}")
+                            st.markdown(f"- `{m['cle']}` : {m['delta_valeur']}")
                     if diff["ajoutees"]:
                         st.info(
-                            f"➕ {len(diff['ajoutees'])} ajoutée(s) : {[h.cle for h in diff['ajoutees']]}"
+                            f"{len(diff['ajoutees'])} ajoutée(s) : {[h.cle for h in diff['ajoutees']]}"
                         )
                     if diff["retirees"]:
                         st.info(
-                            f"➖ {len(diff['retirees'])} retirée(s) : {[h.cle for h in diff['retirees']]}"
+                            f"{len(diff['retirees'])} retirée(s) : {[h.cle for h in diff['retirees']]}"
                         )
                     if not diff["modifiees"] and not diff["ajoutees"] and not diff["retirees"]:
-                        st.success("✅ Aucun changement entre les deux snapshots.")
+                        st.success("Aucun changement entre les deux snapshots.")
                 except Exception as exc:
                     st.error(f"Erreur comparaison : {exc}")
         else:
@@ -533,10 +536,10 @@ if "mission_id" in st.session_state and st.session_state["mission_id"]:
     except Exception:
         pass
 
-# ─── Section S18-D — 🚀 Tout générer ─────────────────────────────────────────
+# ─── Section S18-D —  Tout générer ─────────────────────────────────────────
 
 st.divider()
-st.subheader("🚀 Tout générer")
+st.subheader("Tout générer")
 st.caption(
     "Génère tous les livrables en une seule action : PDF client, Excel, récap mission, "
     "snapshot hypothèses — le tout archivé dans un ZIP."
@@ -559,11 +562,11 @@ _etapes_manquantes = [
 
 if _etapes_manquantes:
     st.warning(
-        f"⚠️ {len(_etapes_manquantes)} étape(s) obligatoire(s) non validée(s) avant de pouvoir "
+        f"{len(_etapes_manquantes)} étape(s) obligatoire(s) non validée(s) avant de pouvoir "
         "tout générer : " + ", ".join(f"`{c}`" for c in _etapes_manquantes)
     )
 else:
-    if st.button("🚀 Tout générer maintenant", type="primary"):
+    if st.button("Tout générer maintenant", type="primary"):
         _ts = datetime.now().strftime("%Y%m%d-%H%M%S")
         _output_dir = Path(__file__).parent.parent / "output" / "missions" / etat.mission_id
         _output_dir.mkdir(parents=True, exist_ok=True)
@@ -574,7 +577,7 @@ else:
 
         with zipfile.ZipFile(_zip_buf, mode="w", compression=zipfile.ZIP_DEFLATED) as _zf:
             # ── Étape 1 : Récap mission PDF ───────────────────────────────
-            _prog.progress(10, text="📋 Génération récap mission…")
+            _prog.progress(10, text="Génération récap mission…")
             try:
                 _pdf_recap_bytes = _generer_pdf_recap(etat, progression)
                 _zf.writestr(f"recap_mission_{etat.mission_id}.pdf", _pdf_recap_bytes)
@@ -582,7 +585,7 @@ else:
                 st.warning(f"Récap mission : {_exc}")
 
             # ── Étape 2 : Snapshot hypothèses (S17) ──────────────────────
-            _prog.progress(25, text="📎 Snapshot hypothèses…")
+            _prog.progress(25, text="Snapshot hypothèses…")
             try:
                 from src.hypotheses.snapshot import creer_snapshot, sauvegarder_snapshot
 
@@ -593,7 +596,7 @@ else:
                 st.warning(f"Snapshot hypothèses : {_exc}")
 
             # ── Étape 3 : PDF client ──────────────────────────────────────
-            _prog.progress(45, text="📑 Génération PDF client…")
+            _prog.progress(45, text="Génération PDF client…")
             try:
                 from src.pdf_builder import charger_config_pdf, generer_pdf
 
@@ -609,7 +612,7 @@ else:
                 st.warning(f"PDF client : {_exc}")
 
             # ── Étape 4 : Excel ───────────────────────────────────────────
-            _prog.progress(65, text="📊 Génération Excel…")
+            _prog.progress(65, text="Génération Excel…")
             try:
                 from src.excel.builder import generer_excel
 
@@ -620,7 +623,7 @@ else:
                 st.warning(f"Excel : {_exc}")
 
             # ── Étape 5 : Ordres CSV (plan d'exécution S15) ───────────────
-            _prog.progress(80, text="📋 Export ordres CSV…")
+            _prog.progress(80, text="Export ordres CSV…")
             try:
                 _ordres_ss = st.session_state.get("ordres_df")
                 if _ordres_ss is not None:
@@ -635,7 +638,7 @@ else:
                 st.warning(f"Ordres CSV : {_exc}")
 
             # ── Finalisation ──────────────────────────────────────────────
-            _prog.progress(95, text="📦 Archivage…")
+            _prog.progress(95, text="Archivage…")
 
         # Écriture du ZIP sur disque
         _zip_path.write_bytes(_zip_buf.getvalue())
@@ -645,10 +648,10 @@ else:
             etat.etapes["livrables_pdf_excel"] = EtatEtape.VALIDE
             sauvegarder_mission(etat)
 
-        _prog.progress(100, text="✅ Terminé !")
-        st.success(f"✅ Tous les livrables générés dans `{_zip_path.name}`")
+        _prog.progress(100, text="Terminé !")
+        st.success(f"Tous les livrables générés dans `{_zip_path.name}`")
         st.download_button(
-            label="📥 Télécharger l'archive complète",
+            label="Télécharger l'archive complète",
             data=_zip_buf.getvalue(),
             file_name=f"mission_{etat.mission_id}_{_ts}.zip",
             mime="application/zip",

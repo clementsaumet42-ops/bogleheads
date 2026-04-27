@@ -11,10 +11,13 @@ from src.fiscalite import (
     comparer_per_vs_cto,
 )
 from src.fiscalite.constantes import TAUX_PFU_TOTAL, TAUX_PS
+from src.ui.theme import injecter_css
 
-st.set_page_config(page_title="Comparateur Enveloppes", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Comparateur Enveloppes", page_icon="🏛️", layout="wide")
 
-st.title("📊 Comparateur d'Enveloppes Fiscales")
+injecter_css()
+
+st.title("Comparateur d'Enveloppes Fiscales")
 st.markdown(
     "Comparez la fiscalité de différentes enveloppes d'investissement sur un horizon donné."
 )
@@ -69,7 +72,7 @@ if st.button("Comparer", type="primary"):
     capital_net_per = result_per["capital_per_net"]
 
     # Résultats
-    st.success("✅ Comparaison terminée")
+    st.success("Comparaison terminée")
 
     # Tableau comparatif
     st.subheader("Comparaison des enveloppes")
@@ -141,41 +144,41 @@ if st.button("Comparer", type="primary"):
         st.info("Installer plotly pour visualiser le graphique : pip install plotly")
 
     # Insights
-    st.subheader("💡 Insights")
+    st.subheader("Insights")
 
     # Meilleure enveloppe
     meilleure = df.loc[
         df["Capital net"]
-        .str.replace(" €", "")
+        .str.replace("€", "")
         .str.replace(",", "")
-        .str.replace(" ", "")
+        .str.replace("", "")
         .astype(float)
         .idxmax(),
         "Enveloppe",
     ]
-    st.info(f"🏆 **Meilleure enveloppe** : {meilleure}")
+    st.info(f"**Meilleure enveloppe** : {meilleure}")
 
     # PEA vs CTO
     if duree_pea >= 5:
         st.success(
-            f"✅ PEA > 5 ans : exonération IR, économie de **{result_pea['economie']:,.0f} €** vs CTO"
+            f"PEA > 5 ans : exonération IR, économie de **{result_pea['economie']:,.0f} €** vs CTO"
         )
     else:
         st.warning(
-            f"⚠️ PEA < 5 ans : pas d'avantage fiscal significatif vs CTO (durée actuelle : {duree_pea} ans)"
+            f"PEA < 5 ans : pas d'avantage fiscal significatif vs CTO (durée actuelle : {duree_pea} ans)"
         )
 
     # PER
     if result_per["avantage_per"] > 0:
         st.success(
-            f"✅ PER avantageux : économie de **{result_per['avantage_per']:,.0f} €** vs CTO grâce à la déduction"
+            f"PER avantageux : économie de **{result_per['avantage_per']:,.0f} €** vs CTO grâce à la déduction"
         )
     else:
-        st.warning("⚠️ PER moins avantageux si TMI retraite > TMI actuel")
+        st.warning("PER moins avantageux si TMI retraite > TMI actuel")
 
 # Footer
 st.markdown("---")
 st.caption(
-    "⚠️ Simulation simplifiée indicative. Hypothèses : AV >8 ans avec abattement, "
+    "Simulation simplifiée indicative. Hypothèses : AV >8 ans avec abattement, "
     "PER sortie en capital sur versements déduits. Consultez un CGP pour votre situation."
 )
