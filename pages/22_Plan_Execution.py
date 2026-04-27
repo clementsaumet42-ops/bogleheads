@@ -301,7 +301,7 @@ if plan_ordres and plan_ordres.get("ordres"):
         st.metric("Frais totaux estimés", f"{plan_ordres['frais_total']:,.2f} €")
     with col_frais:
         if plan_ordres.get("reliquats"):
-            reliq_str = "| ".join(
+            reliq_str = " | ".join(
                 f"{env}: {rel:,.2f} €" for env, rel in plan_ordres["reliquats"].items()
             )
             st.info(f"Reliquats cash : {reliq_str}")
@@ -407,7 +407,7 @@ if st.button("Calculer le plan de déploiement", key="btn_deploiement"):
             st.success(
                 f"Mode **{plan_dep['mode']}** — "
                 f"Durée : {plan_dep['duree_mois']} mois — "
-                f"Séquence : {'→ '.join(plan_dep['sequence_enveloppes'])}"
+                f"Séquence : {' → '.join(plan_dep['sequence_enveloppes'])}"
             )
 
         except Exception as exc:

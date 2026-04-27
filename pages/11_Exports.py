@@ -116,7 +116,7 @@ Rapport PDF personnalisé **13 pages** :
                     config_pdf = charger_config_pdf()
 
                     with tempfile.TemporaryDirectory() as tmp_dir:
-                        chemin_pdf = Path(tmp_dir) / f"boglehead_{nom.replace('', '_')}.pdf"
+                        chemin_pdf = Path(tmp_dir) / f"boglehead_{nom.replace(' ', '_')}.pdf"
                         generer_pdf(profil_obj, config_pdf, chemin_pdf)
                         st.session_state["pdf_bytes"] = chemin_pdf.read_bytes()
 
@@ -126,7 +126,7 @@ Rapport PDF personnalisé **13 pages** :
                     st.error(f"Erreur lors de la génération PDF : {exc}")
     else:
         st.success("Rapport PDF prêt au téléchargement.")
-        nom_fichier = f"boglehead_{nom.replace('', '_').replace('/', '_')}.pdf"
+        nom_fichier = f"boglehead_{nom.replace(' ', '_').replace('/', '_')}.pdf"
         st.download_button(
             label="Télécharger le rapport PDF",
             data=st.session_state["pdf_bytes"],
@@ -143,8 +143,8 @@ Rapport PDF personnalisé **13 pages** :
             b64 = base64.b64encode(st.session_state["pdf_bytes"]).decode("utf-8")
             st.markdown("**Aperçu du PDF :**")
             pdf_display = (
-                f'<iframe src="data:application/pdf;base64,{b64}"'
-                'width="100%"height="500px"type="application/pdf">'
+                f'<iframe src="data:application/pdf;base64,{b64}" '
+                'width="100%" height="500px" type="application/pdf">'
                 "</iframe>"
             )
             st.markdown(pdf_display, unsafe_allow_html=True)

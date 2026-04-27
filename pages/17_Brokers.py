@@ -130,7 +130,7 @@ if brokers:
         nouveau_data[_KEY_LIST] = [b for b in brokers if b.get("id") != bid]
         try:
             sauvegarder_yaml(_FILENAME, nouveau_data)
-            st.success(f"Broker '{bid}'supprimé.")
+            st.success(f"Broker '{bid}' supprimé.")
             st.cache_data.clear()
         except Exception as exc:
             st.error(f"Erreur : {exc}")

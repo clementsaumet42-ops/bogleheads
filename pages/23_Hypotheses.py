@@ -83,7 +83,7 @@ else:
                 "Valeur": h.valeur,
                 "Unité": h.unite,
                 "Catégorie": h.categorie,
-                "Description": h.description.strip().replace("\n", "")[:120],
+                "Description": h.description.strip().replace("\n", " ")[:120],
                 "Source principale": source_principale.organisme if source_principale else "—",
                 "Année source": source_principale.date_publication.year
                 if source_principale

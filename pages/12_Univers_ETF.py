@@ -59,20 +59,22 @@ def _badge_verification(dv_str: str | None) -> str:
     try:
         dv = date.fromisoformat(str(dv_str)) if not isinstance(dv_str, date) else dv_str
         age = (date.today() - dv).days
-        if age <= 180 or age <= 365:
-            return f"{dv} ({age}j)"
+        if age <= 180:
+            return f"Récent — {dv} ({age}j)"
+        elif age <= 365:
+            return f"Ancien — {dv} ({age}j)"
         else:
-            return f"{dv} ({age}j)"
+            return f"Expiré — {dv} ({age}j)"
     except Exception:
         return f"{dv_str}"
 
 
 def _bool_icon(val: bool | None) -> str:
     if val is True:
-        return ""
+        return "Oui"
     if val is False:
-        return ""
-    return ""
+        return "Non"
+    return "—"
 
 
 # ─── Construction du DataFrame ───────────────────────────────────────────────
@@ -304,7 +306,9 @@ else:
         if v is None or (isinstance(v, float) and pd.isna(v)):
             return "—"
         bps = float(v)
-        if bps > _DRAG_MATERIEL_BPS or bps > 0:
+        if bps > _DRAG_MATERIEL_BPS:
+            return f"Élevé — {bps:.0f} bps"
+        elif bps > 0:
             return f"{bps:.0f} bps"
         return "0 bps"
 

@@ -149,9 +149,9 @@ if st.button("Comparer", type="primary"):
     # Meilleure enveloppe
     meilleure = df.loc[
         df["Capital net"]
-        .str.replace("€", "")
+        .str.replace(" €", "")
         .str.replace(",", "")
-        .str.replace("", "")
+        .str.replace(" ", "")
         .astype(float)
         .idxmax(),
         "Enveloppe",

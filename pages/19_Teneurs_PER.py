@@ -165,7 +165,7 @@ if teneurs:
         nouveau_data[_KEY_LIST] = [t for t in teneurs if t.get("id") != tid]
         try:
             sauvegarder_yaml(_FILENAME, nouveau_data)
-            st.success(f"Teneur PER '{tid}'supprimé.")
+            st.success(f"Teneur PER '{tid}' supprimé.")
             st.cache_data.clear()
         except Exception as exc:
             st.error(f"Erreur : {exc}")

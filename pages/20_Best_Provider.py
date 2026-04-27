@@ -164,7 +164,7 @@ if st.button("Calculer le classement") and enveloppes_choisies:
 
             rows = []
             for i, c in enumerate(candidats):
-                medal = "" if i == 0 or i == 1 or i == 2 else f"#{i + 1}"
+                medal = f"#{i + 1}"
                 rows.append(
                     {
                         "Rang": medal,

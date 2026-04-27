@@ -154,7 +154,7 @@ st.divider()
 st.subheader("3. Checklist de mission")
 
 STATUT_OPTIONS = [e.value for e in EtatEtape]
-STATUT_LABELS = {e.value: f"{e.value} {e.name.replace('_', '').title()}" for e in EtatEtape}
+STATUT_LABELS = {e.value: f"{e.value} {e.name.replace('_', ' ').title()}" for e in EtatEtape}
 
 changed = False
 
@@ -178,7 +178,7 @@ for phase in PHASES:
                 st.markdown(f"**{etape.titre}**{badge}")
                 st.caption(etape.description)
                 if etape.livrables:
-                    st.caption("" + "· ".join(etape.livrables))
+                    st.caption("· ".join(etape.livrables))
                 # Note libre
                 note_key = f"_note_{etape.cle}"
                 note = st.text_area(

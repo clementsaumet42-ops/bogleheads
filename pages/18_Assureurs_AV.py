@@ -145,7 +145,7 @@ if contrats:
         nouveau_data[_KEY_LIST] = [c for c in contrats if c.get("id") != cid]
         try:
             sauvegarder_yaml(_FILENAME, nouveau_data)
-            st.success(f"Contrat '{cid}'supprimé.")
+            st.success(f"Contrat '{cid}' supprimé.")
             st.cache_data.clear()
         except Exception as exc:
             st.error(f"Erreur : {exc}")
