@@ -2,24 +2,28 @@
 
 from __future__ import annotations
 
-import re
+import unicodedata
 from pathlib import Path
 
-# Regex pour détecter les emojis Unicode (exclut les caractères de dessin de boîtes U+2500-U+25FF)
-_EMOJI_PATTERN = re.compile(
-    "["
-    "\U0001f600-\U0001f64f"  # emoticons
-    "\U0001f300-\U0001f5ff"  # symbols & pictographs
-    "\U0001f680-\U0001f6ff"  # transport & map
-    "\U0001f1e0-\U0001f1ff"  # flags
-    "\U00002702-\U000027b0"  # dingbats
-    "\U000024c2-\U000024ff"  # enclosed alphanumerics (exclut box-drawing U+2500+)
-    "\U0001f900-\U0001f9ff"  # supplemental symbols
-    "]+",
-    flags=re.UNICODE,
-)
-
 PAGE_IMPORT = Path(__file__).parent.parent / "pages" / "24_Import_Patrimoine.py"
+
+# Catégories Unicode qui correspondent à des emoji (So = Other Symbol, Sm = Math Symbol)
+# Exclut les caractères de dessin de boîtes (box-drawing, U+2500-U+257F)
+_BOX_DRAWING_RANGE = range(0x2500, 0x2580)
+
+
+def _est_emoji(char: str) -> bool:
+    """Retourne True si le caractère est un emoji Unicode."""
+    cp = ord(char)
+    # Exclure box-drawing et block elements (utilisés comme séparateurs visuels)
+    if cp in _BOX_DRAWING_RANGE or 0x2580 <= cp <= 0x259F:
+        return False
+    cat = unicodedata.category(char)
+    # So = Other Symbol (inclut beaucoup d'emoji), Sk = Modifier Symbol
+    if cat in ("So",):
+        return True
+    # Plages d'emoji standards dans le BMP étendu (> U+1F000)
+    return cp >= 0x1F000
 
 
 def test_pas_demoji_dans_page_import() -> None:
@@ -29,9 +33,9 @@ def test_pas_demoji_dans_page_import() -> None:
 
     trouvees = []
     for numero, ligne in enumerate(contenu.splitlines(), start=1):
-        matches = _EMOJI_PATTERN.findall(ligne)
-        for m in matches:
-            trouvees.append((numero, m, ligne.strip()))
+        for char in ligne:
+            if _est_emoji(char):
+                trouvees.append((numero, char, ligne.strip()))
 
     assert trouvees == [], "Emoji(s) trouvé(s) dans 24_Import_Patrimoine.py :\n" + "\n".join(
         f"  Ligne {num}: '{em}' dans: {ctx}" for num, em, ctx in trouvees

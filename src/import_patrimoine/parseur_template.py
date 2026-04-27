@@ -69,10 +69,13 @@ def _parse_montant(valeur_brute: str, regex_montant: str) -> float | None:
             valeur_fallback = v
             break
 
-    # Préfère la valeur la plus grande/précise entre les deux
+    # Préfère la valeur la plus grande/précise entre les deux.
+    # Le seuil ×2 détecte les cas où le regex s'est arrêté trop tôt
+    # (ex : "123" pour "1234.56") : si le fallback est plus du double,
+    # c'est que le regex a extrait un sous-ensemble du montant réel.
+    _SEUIL_FALLBACK = 2
     if valeur_regex is not None and valeur_fallback is not None:
-        # Si le fallback est significativement plus grand, préférer le fallback
-        return valeur_fallback if valeur_fallback > valeur_regex * 2 else valeur_regex
+        return valeur_fallback if valeur_fallback > valeur_regex * _SEUIL_FALLBACK else valeur_regex
     return valeur_regex if valeur_regex is not None else valeur_fallback
 
 
@@ -220,8 +223,6 @@ def appliquer_template(
                 methode_extraction=f"template:{nom_template}",
                 confiance=0,
             )
-            from src.import_patrimoine.confiance import calculer_confiance
-
             score = calculer_confiance(ligne, template_matche=True, via_ocr=via_ocr)
             lignes.append(ligne.model_copy(update={"confiance": score}))
 

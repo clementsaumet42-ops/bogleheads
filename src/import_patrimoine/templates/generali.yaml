@@ -6,7 +6,7 @@ emetteur:
     - "Generali Vie"
     - "Generali France"
     - "generali.fr"
-    - "ORIAS 07 008 `"
+    - "ORIAS 07 008"
   enveloppe_par_defaut_si_indetectable: "AV"
 
 extraction:
