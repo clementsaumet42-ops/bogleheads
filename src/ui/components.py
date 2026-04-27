@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from typing import Literal
 from pathlib import Path
 
 import pandas as pd
@@ -159,7 +160,9 @@ def bouton_secondaire(label: str, key: str, icone_lucide_nom: str | None = None)
     return st.button(label_html, key=key)
 
 
-def panneau_avertissement(severity: str, titre: str, description: str) -> None:
+def panneau_avertissement(
+    severity: Literal["info", "warning", "danger"], titre: str, description: str
+) -> None:
     """Panneau avec filet gauche 4px coloré. severity: 'info', 'warning', 'danger'."""
     color_map = {
         "info": OR_VIEILLI,
