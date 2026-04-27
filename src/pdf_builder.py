@@ -2057,6 +2057,117 @@ def _page_backtest_realiste(styles: dict) -> list:
     return elems
 
 
+def _page_plan_execution(styles: dict) -> list:
+    """Page S15 — Plan d'exécution : ordres, déploiement, calendrier."""
+    elems: list = []
+    elems.append(Paragraph("Plan d'Exécution", styles["title"]))
+    elems.append(Spacer(1, 0.2 * cm))
+
+    elems.append(
+        Paragraph(
+            "Ce plan d'exécution traduit l'allocation théorique en ordres concrets, "
+            "définit le rythme de déploiement du capital et le calendrier opérationnel "
+            "de mise en œuvre.",
+            styles["body"],
+        )
+    )
+    elems.append(Spacer(1, 0.3 * cm))
+
+    # ── Section 1 : Sélection ETF ─────────────────────────────────────────────
+    elems.append(Paragraph("1. Sélection ETF par enveloppe", styles["h2"]))
+    elems.append(
+        Paragraph(
+            "Pour chaque case d'allocation, le screener retient les ETF les mieux "
+            "notés sur 6 critères : TER (30%), AUM (20%), tracking difference (15%), "
+            "éligibilité enveloppe (20%), capi/dist selon fiscalité (10%), domicile UE (5%).",
+            styles["body"],
+        )
+    )
+    etf_exemple_data = [
+        ["Case", "Enveloppe", "ETF retenu", "TER", "Score"],
+        ["Actions Monde Dév.", "PEA", "CW8 — Amundi MSCI World", "0,38%", "0,82"],
+        ["Actions Monde Dév.", "CTO", "IWDA — iShares MSCI World", "0,20%", "0,91"],
+        ["Obligations Monde", "AV", "AGGH — iShares Global Agg.", "0,10%", "0,88"],
+        ["Actions Émergents", "CTO", "IEEM — iShares MSCI EM", "0,18%", "0,79"],
+    ]
+    formatted = [
+        [Paragraph(str(c), styles["body"]) for c in row] for row in etf_exemple_data
+    ]
+    elems.append(
+        _zebra_table(formatted, col_widths=[3.5 * cm, 2.5 * cm, 5 * cm, 2 * cm, 2 * cm])
+    )
+    elems.append(
+        Paragraph(
+            "Utiliser la page <b>Plan d'Exécution</b> (page 22) pour personnaliser "
+            "la sélection ETF et valider les ordres.",
+            styles["body"],
+        )
+    )
+    elems.append(Spacer(1, 0.3 * cm))
+
+    # ── Section 2 : Plan de déploiement ──────────────────────────────────────
+    elems.append(Paragraph("2. Plan de déploiement du capital", styles["h2"]))
+    deploiement_data = [
+        ["Mode", "Condition", "Durée DCA", "Séquence enveloppes"],
+        [
+            "Lump sum",
+            "Capital < 50 k€ ou horizon > 15 ans",
+            "—",
+            "PEA → AV → CTO",
+        ],
+        [
+            "DCA",
+            "Capital ≥ 100 k€ et profil prudent/équilibré",
+            "6–12 mois",
+            "PEA → PER → AV → CTO",
+        ],
+        [
+            "Hybride",
+            "Capital ≥ 100 k€, profil intermédiaire",
+            "50% lump + 50% DCA 6 mois",
+            "PEA → AV → CTO",
+        ],
+    ]
+    formatted2 = [
+        [Paragraph(str(c), styles["body"]) for c in row] for row in deploiement_data
+    ]
+    elems.append(
+        _zebra_table(
+            formatted2, col_widths=[2.5 * cm, 5 * cm, 4 * cm, 5 * cm]
+        )
+    )
+    elems.append(Spacer(1, 0.3 * cm))
+
+    # ── Section 3 : Calendrier opérationnel ──────────────────────────────────
+    elems.append(Paragraph("3. Calendrier opérationnel de mise en œuvre", styles["h2"]))
+    calendrier_data = [
+        ["Étape", "Type", "Titre", "Dépend de"],
+        ["1", "Admin", "Ouvrir compte PEA chez broker", "—"],
+        ["2", "Virement", "Virement initial vers PEA", "1"],
+        ["3", "Ordre", "Passer ordres ETF tranche 1 (PEA)", "2"],
+        ["4", "Contrôle", "Contrôle exécution + reporting", "3"],
+        ["5+", "Ordre", "Tranches DCA suivantes (M+1, M+2…)", "4"],
+        ["N", "Contrôle", "Rebalancing annuel M+12", "—"],
+    ]
+    formatted3 = [
+        [Paragraph(str(c), styles["body"]) for c in row] for row in calendrier_data
+    ]
+    elems.append(
+        _zebra_table(formatted3, col_widths=[1.5 * cm, 2.5 * cm, 8 * cm, 2.5 * cm])
+    )
+    elems.append(Spacer(1, 0.2 * cm))
+    elems.append(
+        Paragraph(
+            "<b>Règle PEA :</b> Ouvrir le PEA en priorité absolue pour lancer "
+            "l'horloge fiscale 5 ans. Les gains seront exonérés d'IR après 5 ans de détention.",
+            styles["body"],
+        )
+    )
+
+    elems.append(PageBreak())
+    return elems
+
+
 def generer_pdf(
     profil: Any,
     config_pdf: Any,
@@ -2173,6 +2284,7 @@ def generer_pdf(
         story += _page_best_provider(styles)
         story += _page_fiscalite_transmission(profil, styles)
         story += _page_suivi_recommande(styles)
+        story += _page_plan_execution(styles)
         story += _page_mentions_legales(config_pdf, styles, today)
 
         # Pages S5 conditionnelles (ajoutées uniquement si données présentes)
