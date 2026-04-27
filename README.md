@@ -7,6 +7,45 @@
 
 ---
 
+## 🗺️ Workflow CGP en 1 mission (S16 → S17 → S18)
+
+### Séquence recommandée
+
+```
+S16 — Fil conducteur (page 00_Mission_CGP)
+  ↓
+  1. Créer / sélectionner une mission
+  2. Saisir le profil client (04_Profil)
+  3. Profilage MIF II (03_Profilage)
+  4. Allocation cible (05_Allocation)  ← 💡 pré-calculée automatiquement (S18)
+  5. Asset location (07_Asset_Location)
+  6. Plan d'exécution (22_Plan_Execution)
+  7. Conformité CIF (21_Conformite_CIF)
+
+S17 — Hypothèses traçables
+  - Toutes les hypothèses sources citées dans config/hypotheses.yaml
+  - Snapshot SHA-256 figé à chaque génération PDF (page 17)
+  - Diff entre snapshots disponible dans page Mission CGP
+
+S18 — Densification UX
+  - 💾 Auto-save opt-in toutes les 30s (toggle dans sidebar)
+  - 💡 Préremplissage intelligent : TMI, profil risque, espérance de vie
+  - ⚠️  Validations croisées non bloquantes (incohérences détectées à la saisie)
+  - 🚀 Bouton "Tout générer" → ZIP complet en un clic
+```
+
+### Gain visé par S18
+
+| Friction supprimée | Gain estimé |
+|---|---|
+| Perte de saisie après refresh | ~15 min évitées |
+| Ressaisie TMI / profil risque | ~20 min évitées |
+| Détection tardive d'incohérences | ~15 min évitées |
+| Allers-retours pour générer les livrables | ~10 min évitées |
+| **Total** | **~1h/mission** |
+
+---
+
 ## 📋 Description
 
 Ce projet génère un fichier Excel **`output/portefeuille_bogleheads.xlsx`** contenant 22 onglets dédiés à la gestion d'un portefeuille Boglehead en France, avec optimisation multi-enveloppes fiscales (PEA, PER, PEE, CTO, Contrat Cap IS).

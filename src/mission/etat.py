@@ -35,9 +35,11 @@ class EtatMission:
     etapes: dict[str, EtatEtape]
     chemin_persistance: Path
     notes: dict[str, str] = field(default_factory=dict)
+    # S18-A : snapshot de session_state pour auto-save (rétro-compatible)
+    session_state_snapshot: dict[str, Any] | None = field(default=None)
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        d: dict[str, Any] = {
             "mission_id": self.mission_id,
             "nom_client": self.nom_client,
             "cgp": self.cgp,
@@ -46,6 +48,9 @@ class EtatMission:
             "etapes": {k: v.value for k, v in self.etapes.items()},
             "notes": self.notes,
         }
+        if self.session_state_snapshot is not None:
+            d["session_state_snapshot"] = self.session_state_snapshot
+        return d
 
     @classmethod
     def from_dict(cls, data: dict[str, Any], chemin: Path) -> EtatMission:
@@ -59,6 +64,7 @@ class EtatMission:
             etapes=etapes,
             chemin_persistance=chemin,
             notes=data.get("notes", {}),
+            session_state_snapshot=data.get("session_state_snapshot"),
         )
 
 
