@@ -27,7 +27,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -e ".[dev,web,optim,cif]"
+          pip install -e ".[dev,web,optim,cif,pdf]"
 
       - name: Lint with ruff
         run: |
