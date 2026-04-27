@@ -530,3 +530,9 @@ if calendrier:
     nb_total = len(calendrier)
     if nb_total > 0:
         st.progress(nb_valides / nb_total, text=f"{nb_valides}/{nb_total} étapes validées")
+
+# ─── Widget mission (non-invasif) ────────────────────────────────────────────
+
+from src.mission.widgets import widget_mission_etape  # noqa: E402
+
+widget_mission_etape("plan_execution")

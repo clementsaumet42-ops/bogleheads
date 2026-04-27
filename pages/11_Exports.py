@@ -161,3 +161,9 @@ st.caption(
 
 if st.button("🔄 ← Rebalancement"):
     st.switch_page("pages/09_Rebalancement.py")
+
+# ─── Widget mission (non-invasif) ────────────────────────────────────────────
+
+from src.mission.widgets import widget_mission_etape  # noqa: E402
+
+widget_mission_etape("livrables_pdf_excel")

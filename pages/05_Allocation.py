@@ -549,3 +549,9 @@ if st.session_state.get("resultat_optim") is None or st.button("🔄 Recalculer 
 
 if st.button("🏦 Optimiser l'asset location →", type="primary"):
     st.switch_page("pages/07_Asset_Location.py")
+
+# ─── Widget mission (non-invasif) ────────────────────────────────────────────
+
+from src.mission.widgets import widget_mission_etape  # noqa: E402
+
+widget_mission_etape("allocation_cible")
