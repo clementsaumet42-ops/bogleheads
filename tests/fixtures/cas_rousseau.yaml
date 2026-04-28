@@ -1,0 +1,237 @@
+# Fixture E2E — Cas Rousseau-Marchand
+# Usage : tests de régression et validation des modules (yaml.safe_load uniquement)
+# DONNÉES 100 % FICTIVES — aucun client réel
+
+mission:
+  id: "rousseau_marchand_2026"
+  date_creation: "2026-04-30"
+  type: "etude_patrimoniale_complete"
+
+foyer:
+  declarant_principal:
+    nom: "Rousseau"
+    prenom: "Antoine"
+    date_naissance: "1973-08-15"
+    profession: "Directeur Financier"
+    statut: "salarie_cadre"
+    salaire_brut_annuel: 180000
+    bonus_min: 30000
+    bonus_max: 50000
+    tmi: 0.41
+    tmi_max_annee_bonus: 0.45
+  conjoint:
+    nom: "Marchand"
+    prenom: "Camille"
+    date_naissance: "1976-11-22"
+    profession: "Avocate fiscaliste associée"
+    statut: "tns_bnc_declaration_controlee"
+    benefice_net_annuel: 140000
+    tmi: 0.41
+  regime_matrimonial: "communaute_reduite_acquets"
+  date_mariage: "2003-06-14"
+  enfants:
+    - prenom: "Léa"
+      date_naissance: "2007-02-10"
+      situation: "etudiante"
+      rattachement_fiscal: true
+    - prenom: "Hugo"
+      date_naissance: "2010-05-18"
+      situation: "lyceen"
+      rattachement_fiscal: true
+    - prenom: "Jules"
+      date_naissance: "2014-01-30"
+      situation: "collegien"
+      rattachement_fiscal: true
+  parts_fiscales: 3.5
+  rfr_2025: 218400
+
+patrimoine_immobilier:
+  - libelle: "Résidence principale Lyon 6e"
+    type: "RP"
+    valeur_2026: 1600000
+    date_achat: "2014-09-12"
+    prix_achat: 980000
+    credit_restant: 240000
+    taux_credit: 0.0145
+    fin_credit: "2034-09-30"
+    mensualite: 2850
+  - libelle: "Résidence secondaire Annecy"
+    type: "RS_LMNP_REEL"
+    valeur_2026: 520000
+    date_achat: "2019-04-05"
+    prix_achat: 480000
+    credit_restant: 180000
+    taux_credit: 0.0185
+    fin_credit: "2039-04-30"
+    revenus_locatifs_annuels: 18000
+    nb_semaines_louees: 6
+
+patrimoine_financier:
+  liquidites:
+    cc_joint_lcl: 42000
+    livret_a_antoine: 22950
+    livret_a_camille: 22950
+    ldds_antoine: 12000
+    ldds_camille: 12000
+    livret_bancaire_lcl: 18000
+    cat_bnp: 55000  # 3 % — échéance décembre 2026
+  pea:
+    - titulaire: "antoine"
+      broker: "Bourse Direct"
+      date_ouverture: "2008-04-22"
+      encours: 110000
+      versements_total: 82000
+      pv_latente: 28000
+      lignes:
+        - isin: "FR0010315770"
+          nom: "Amundi MSCI World UCITS ETF PEA"
+          valorisation: 66000
+          part: 0.60
+        - isin: "LU1681045370"
+          nom: "Amundi PEA Émergents"
+          valorisation: 44000
+          part: 0.40
+    - titulaire: "camille"
+      statut: "non_ouvert_opportunite_anteriorite"
+  cto:
+    - titulaire: "joint"
+      broker: "Boursorama"
+      encours: 165000
+      pv_latente: 31000
+      lignes:
+        - isin: "US0378331005"
+          nom: "Apple"
+          valorisation: 18000
+        - isin: "US5949181045"
+          nom: "Microsoft"
+          valorisation: 17000
+        - isin: "FR0000121014"
+          nom: "LVMH"
+          valorisation: 16000
+        - isin: "FR0000120271"
+          nom: "TotalEnergies"
+          valorisation: 14000
+        - isin: "IE00B4L5Y983"
+          nom: "iShares MSCI World"
+          valorisation: 45000
+        - isin: "IE00B3RBWM25"
+          nom: "Vanguard FTSE All-World"
+          valorisation: 35000
+        - isin: "GB00BP6MXD84"
+          nom: "Shell"
+          valorisation: 11000
+          attention: "convention_uk_fr_retenue_15_dividendes"
+        - isin: "GB0007980591"
+          nom: "BP"
+          valorisation: 9000
+          attention: "convention_uk_fr_retenue_15_dividendes"
+  assurance_vie:
+    - libelle: "Generali Espace Lux"
+      titulaire: "antoine"
+      date_ouverture: "2010-03-12"
+      encours: 380000
+      versements_total: 240000
+      pv_latente: 140000
+      anciennete_fiscale: ">15ans"
+      composition:
+        fonds_euro_eurossima: 228000
+        uc_carmignac_patrimoine: 60800
+        uc_pictet_global_megatrend: 53200
+        uc_h2o_multibonds: 38000
+      alerte: "h2o_multibonds_historique_suspendu"
+    - libelle: "Linxea Spirit 2"
+      titulaire: "camille"
+      date_ouverture: "2018-09-05"
+      encours: 290000
+      versements_total: 220000
+      pv_latente: 70000
+      anciennete_fiscale: ">5ans_<8ans_jusqu_2026_09"
+    - libelle: "Yomoni Vie (ex-PER converti)"
+      titulaire: "antoine"
+      date_ouverture: "2022-11-18"
+      encours: 60000
+      anciennete_fiscale: "<8ans_defavorable"
+      profil_gestion: "8/10"
+  per:
+    - libelle: "Generali Plein Cap"
+      titulaire: "antoine"
+      encours: 220000
+      versements_deductibles_2020_2025: 78000
+      plafond_annuel_courant: 32000
+      report_3_ans_non_utilises: true
+      allocation:
+        fonds_euro: 0.50
+        uc_actions_monde: 0.50
+    - libelle: "Caravel TNS"
+      titulaire: "camille"
+      encours: 90000
+      versements_deductibles_annuels_moyens: 18000
+      regime_plafond: "tns_10pct_benefice_15pct_au_dessus_pass"
+  epargne_salariale:
+    - libelle: "PEE Amundi"
+      titulaire: "antoine"
+      encours: 95000
+      composition:
+        fcpe_actionnariat_employeur: 57000
+        fcpe_diversifie: 38000
+      alerte: "concentration_actionnariat_employeur_60pct"
+    - libelle: "PERCOL Amundi"
+      titulaire: "antoine"
+      encours: 85000
+  alternatifs:
+    crowdfunding_immobilier_anaxago:
+      encours: 12000
+      taux_promis: 0.09
+      echeances:
+        - "2027-06"
+        - "2028-03"
+        - "2028-09"
+    crypto_coinbase:
+      encours: 8000
+      composition:
+        - "BTC"
+        - "ETH"
+      pv_latente_pct: 0.30
+
+objectifs:
+  - id: "retraite_antoine"
+    horizon_annees: 10
+    cible_revenu_net_mensuel: 8500
+    age_depart: 62
+  - id: "etudes_enfants"
+    horizon_min: 0
+    horizon_max: 8
+    enveloppe_globale: 220000
+    decaissements: "etalones_2026_2034"
+  - id: "optimisation_fiscale_immediate"
+    contexte: "tmi_41_45_ifi_imminent"
+  - id: "transmission_long_terme"
+    horizon: ">2030"
+    alerte: "clauses_beneficiaires_generali_a_revoir"
+  - id: "achat_3e_residence_sud_ouest"
+    horizon: "2028_2030"
+    budget: 600000
+
+pieges_attendus:
+  fiscalite:
+    - 1  # TMI variable Antoine 41-45 %
+    - 2  # 3,5 parts fiscales vs détachement étudiante
+    - 3  # PER Antoine report 3 ans
+    - 4  # PER Camille TNS formule spécifique
+    - 5  # AV : ordre optimal de rachat
+    - 6  # Versements AV avant 70 ans
+    - 7  # IFI : patrimoine immo net > 1,3 M€
+  conformite_mif2:
+    - 8  # Profil Camille avocate = client averti ?
+    - 9  # H2O Multibonds fonds suspendu
+    - 10  # PEE concentration actionnariat employeur 60 %
+  allocation_coherence:
+    - 11  # Liquidités 185 k€ vs horizon 10 ans
+    - 12  # Crypto + crowdfunding actifs alternatifs
+    - 13  # PEA Camille jamais ouvert
+    - 14  # Titres UK CTO retenue 15 %
+    - 15  # PEA Antoine plafond 68 k€ restants
+  projection_montecarlo:
+    - 16  # 3e résidence 2028 rachat AV Camille > 8 ans
+    - 17  # Études 2026-2034 décaissement PEA Antoine
+    - 18  # Inflation différentielle immo Annecy
