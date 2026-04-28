@@ -6,6 +6,22 @@ Format : [Semantic Versioning](https://semver.org/lang/fr/) — [Keep a Changelo
 
 ---
 
+## [Unreleased] — Dogfood cas Rousseau-Marchand
+
+### Ajouté
+
+- `dogfood/cas_rousseau/` — artefacts de test E2E fictifs (cas "Famille Rousseau-Marchand")
+  - 5 contenus de relevés Markdown prêts-à-PDF (`pdf_a_generer/`) pour tester S20 en dogfood
+  - `grille_scoring.md` — 18 pièges scorables (fiscalité, conformité MIF II, allocation, Monte-Carlo)
+  - `README.md` — mode d'emploi 6 étapes
+- `tests/fixtures/cas_rousseau.yaml` — fixture YAML complète pour tests de régression futurs
+- `README.md` — section "Cas de test dogfood" pointant vers le dossier dogfood
+- `.gitignore` — exclusion de `dogfood/cas_rousseau/pdf_generes/`
+
+> Aucun code métier modifié. Aucune régression introduite. (`docs: add dogfood case Rousseau-Marchand`)
+
+---
+
 ## [1.0.0] — Sprint S20 — Import patrimoine depuis PDF
 
 ### Ajouté

@@ -950,6 +950,18 @@ L'interface suit la charte graphique Private Banking décrite dans [`docs/charte
 
 ---
 
+## Cas de test dogfood
+
+Un cas fictif complexe ("Famille Rousseau-Marchand") est disponible dans [`dogfood/cas_rousseau/`](dogfood/cas_rousseau/README.md) pour tester le tool de bout en bout sans client réel.
+
+Le cas couvre 5 enveloppes importables via S20, 18 pièges fiscaux et réglementaires scorables, et une fixture YAML pour les tests de régression.
+
+- [Mode d'emploi et contenu](dogfood/cas_rousseau/README.md)
+- [Grille de scoring (18 pièges)](dogfood/cas_rousseau/grille_scoring.md)
+- [Fixture E2E YAML](tests/fixtures/cas_rousseau.yaml)
+
+---
+
 ## Licence
 
 Ce projet est fourni à titre pédagogique. Les paramètres fiscaux sont indicatifs et doivent être validés par un expert-comptable ou conseiller fiscal agréé avant toute utilisation professionnelle.
