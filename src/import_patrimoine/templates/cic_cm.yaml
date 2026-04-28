@@ -1,0 +1,46 @@
+emetteur:
+  nom: "CIC / Crédit Mutuel"
+  type: "banque"
+  signatures:
+    - "CIC"
+    - "CREDIT MUTUEL"
+    - "Crédit Mutuel"
+    - "cic.fr"
+    - "creditmutuel.fr"
+    - "CM-CIC"
+  enveloppe_par_defaut_si_indetectable: "CTO"
+
+extraction:
+  methode: "tableau"
+  page_strategie: "toutes"
+
+  detection_enveloppe:
+    pea: ["PEA", "Plan d'Épargne en Actions"]
+    pea_pme: ["PEA-PME"]
+    cto: ["Compte titres", "CTO"]
+    av: ["Assurance vie", "Assurances du Crédit Mutuel", "ACM", "Contrat"]
+    per: ["PER", "Plan d'Épargne Retraite"]
+    livret: ["Livret A", "LDD", "Livret Bleu"]
+
+  colonnes_attendues:
+    - nom: "isin"
+      patterns: ["Code ISIN", "ISIN", "Code"]
+    - nom: "libelle"
+      patterns: ["Valeur", "Libellé", "Titre", "Support"]
+    - nom: "quantite"
+      patterns: ["Quantité", "Nombre", "Qté"]
+    - nom: "valorisation"
+      patterns: ["Valorisation", "Valeur de marché", "Montant"]
+    - nom: "cours"
+      patterns: ["Cours", "VL", "Prix unitaire"]
+
+  filtres_lignes:
+    exclure_si_contient: ["Total", "TOTAL", "Solde"]
+    inclure_si_isin: false
+
+regex_isin: '\b([A-Z]{2}[A-Z0-9]{9}[0-9])\b'
+regex_montant_eur: '(\d{1,3}(?:[\s.,]\d{3})*(?:[,.]\d{2})?)\s*€?'
+
+post_traitement:
+  normalise_devises: true
+  conversion_si_non_eur: false

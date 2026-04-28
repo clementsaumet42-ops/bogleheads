@@ -1,0 +1,41 @@
+emetteur:
+  nom: "Bourse Direct"
+  type: "courtier"
+  signatures:
+    - "BOURSE DIRECT"
+    - "Bourse Direct SA"
+    - "ORIAS 07 005 622"
+  enveloppe_par_defaut_si_indetectable: "CTO"
+
+extraction:
+  methode: "tableau"
+  page_strategie: "auto"
+
+  detection_enveloppe:
+    pea: ["PEA", "Plan d'Épargne en Actions"]
+    pea_pme: ["PEA-PME", "PEA PME"]
+    cto: ["Compte titres", "CTO", "Compte ordinaire"]
+    av: ["Assurance vie", "Contrat d'assurance"]
+
+  colonnes_attendues:
+    - nom: "isin"
+      patterns: ["ISIN", "Code ISIN", "Code"]
+    - nom: "libelle"
+      patterns: ["Libellé", "Désignation", "Valeur"]
+    - nom: "quantite"
+      patterns: ["Qté", "Quantité", "Nombre"]
+    - nom: "valorisation"
+      patterns: ["Valorisation", "Montant", "Valeur €", "Total"]
+    - nom: "cours"
+      patterns: ["Cours", "Prix unitaire"]
+
+  filtres_lignes:
+    exclure_si_contient: ["Total", "Sous-total", "TOTAL"]
+    inclure_si_isin: true
+
+regex_isin: '\b([A-Z]{2}[A-Z0-9]{9}[0-9])\b'
+regex_montant_eur: '(\d{1,3}(?:[\s.,]\d{3})*(?:[,.]\d{2})?)\s*€?'
+
+post_traitement:
+  normalise_devises: true
+  conversion_si_non_eur: false

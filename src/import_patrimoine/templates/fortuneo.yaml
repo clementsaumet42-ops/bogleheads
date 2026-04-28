@@ -1,0 +1,43 @@
+emetteur:
+  nom: "Fortuneo"
+  type: "banque_en_ligne"
+  signatures:
+    - "Fortuneo"
+    - "FORTUNEO"
+    - "Fortuneo Banque"
+    - "ORIAS 07 023 738"
+  enveloppe_par_defaut_si_indetectable: "CTO"
+
+extraction:
+  methode: "tableau"
+  page_strategie: "auto"
+
+  detection_enveloppe:
+    pea: ["PEA", "Plan d'Épargne en Actions"]
+    pea_pme: ["PEA-PME"]
+    cto: ["Compte titres ordinaire", "CTO"]
+    av: ["Assurance vie", "Contrat d'assurance vie"]
+    per: ["PER", "Plan d'Épargne Retraite"]
+
+  colonnes_attendues:
+    - nom: "isin"
+      patterns: ["Code ISIN", "ISIN"]
+    - nom: "libelle"
+      patterns: ["Valeur", "Libellé", "Désignation"]
+    - nom: "quantite"
+      patterns: ["Quantité", "Qté"]
+    - nom: "valorisation"
+      patterns: ["Valorisation EUR", "Valorisation", "Valeur de marché"]
+    - nom: "cours"
+      patterns: ["Cours", "Dernier cours"]
+
+  filtres_lignes:
+    exclure_si_contient: ["Total", "TOTAL", "Sous-total"]
+    inclure_si_isin: true
+
+regex_isin: '\b([A-Z]{2}[A-Z0-9]{9}[0-9])\b'
+regex_montant_eur: '(\d{1,3}(?:[\s.,]\d{3})*(?:[,.]\d{2})?)\s*€?'
+
+post_traitement:
+  normalise_devises: true
+  conversion_si_non_eur: false

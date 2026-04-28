@@ -1,0 +1,42 @@
+emetteur:
+  nom: "Boursorama Banque"
+  type: "banque_en_ligne"
+  signatures:
+    - "BOURSORAMA"
+    - "Boursorama Banque"
+    - "ORIAS 07 005 527"
+  enveloppe_par_defaut_si_indetectable: "CTO"
+
+extraction:
+  methode: "tableau"
+  page_strategie: "auto"
+
+  detection_enveloppe:
+    pea: ["PEA", "Plan d'Épargne en Actions"]
+    pea_pme: ["PEA-PME"]
+    cto: ["Compte titres", "CTO"]
+    av: ["Assurance vie", "Boursorama Vie"]
+    per: ["PER", "Plan d'Épargne Retraite"]
+
+  colonnes_attendues:
+    - nom: "isin"
+      patterns: ["Code ISIN", "ISIN", "Code"]
+    - nom: "libelle"
+      patterns: ["Libellé", "Valeur", "Instrument"]
+    - nom: "quantite"
+      patterns: ["Quantité", "Qté", "Nombre de titres"]
+    - nom: "valorisation"
+      patterns: ["Valorisation", "Montant", "Valeur totale"]
+    - nom: "cours"
+      patterns: ["Cours", "Dernier cours"]
+
+  filtres_lignes:
+    exclure_si_contient: ["Total", "TOTAL", "Sous-total", "Solde"]
+    inclure_si_isin: true
+
+regex_isin: '\b([A-Z]{2}[A-Z0-9]{9}[0-9])\b'
+regex_montant_eur: '(\d{1,3}(?:[\s.,]\d{3})*(?:[,.]\d{2})?)\s*€?'
+
+post_traitement:
+  normalise_devises: true
+  conversion_si_non_eur: false

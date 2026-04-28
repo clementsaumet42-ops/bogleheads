@@ -21,6 +21,17 @@ class Etape:
 # Étapes canoniques validées par lecture de pages/
 ETAPES_CANONIQUES: list[Etape] = [
     Etape(
+        cle="patrimoine_importe",
+        titre="Patrimoine importé depuis PDF",
+        description="Relevés PDF traités et patrimoine importé dans la mission.",
+        page_streamlit="24_Import_Patrimoine.py",
+        depends_on=[],
+        livrables=["imports_patrimoine en mission"],
+        rdv=None,
+        obligatoire=False,
+        phase="RDV1",
+    ),
+    Etape(
         cle="profil_saisi",
         titre="Profil client saisi",
         description="Le formulaire profil client est rempli et validé.",

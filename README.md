@@ -7,11 +7,18 @@
 
 ---
 
-## 🗺️ Workflow CGP en 1 mission (S16 → S17 → S18)
+## 🗺️ Workflow CGP en 1 mission (S16 → S17 → S18 → S20)
 
 ### Séquence recommandée
 
 ```
+S20 — Import patrimoine depuis PDF (page 24_Import_Patrimoine) [NOUVEAU]
+  - Déposer 1-N relevés PDF (banques, courtiers, assureurs AV)
+  - Extraction locale : pdfplumber (texte natif) + OCR Tesseract (fallback scan)
+  - Détection automatique de l'émetteur (10 templates)
+  - Validation ligne par ligne (mode conservateur)
+  - Merge dans la mission active
+
 S16 — Fil conducteur (page 00_Mission_CGP)
   ↓
   1. Créer / sélectionner une mission
@@ -33,6 +40,23 @@ S18 — Densification UX
   - ⚠️  Validations croisées non bloquantes (incohérences détectées à la saisie)
   - 🚀 Bouton "Tout générer" → ZIP complet en un clic
 ```
+
+### Import patrimoine PDF — Émetteurs supportés (S20)
+
+| Émetteur | Type | Template |
+|---|---|---|
+| Bourse Direct | Courtier | `bourse_direct.yaml` |
+| Boursorama | Banque/Courtier | `boursorama.yaml` |
+| Fortuneo | Banque/Courtier | `fortuneo.yaml` |
+| BNP Paribas | Banque | `bnp_paribas.yaml` |
+| Société Générale | Banque | `societe_generale.yaml` |
+| Crédit Agricole | Banque (toutes caisses) | `credit_agricole.yaml` |
+| CIC / Crédit Mutuel | Banque | `cic_cm.yaml` |
+| Generali | Assureur AV | `generali.yaml` |
+| Linxea | Courtier AV | `linxea.yaml` |
+| AXA | Assureur AV | `axa.yaml` |
+
+> Pour ajouter un émetteur ou affiner un template existant : voir [`docs/import_patrimoine.md`](docs/import_patrimoine.md) — aucun code à modifier, uniquement le YAML.
 
 ### Gain visé par S18
 

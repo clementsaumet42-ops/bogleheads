@@ -6,6 +6,76 @@ Format : [Semantic Versioning](https://semver.org/lang/fr/) — [Keep a Changelo
 
 ---
 
+## [1.0.0] — Sprint S20 — Import patrimoine depuis PDF
+
+### Ajouté
+
+#### Lot A — Pipeline extraction `src/import_patrimoine/`
+- `extracteur.py` — orchestrateur complet : pdfplumber (texte natif) → OCR Tesseract (fallback scan) → détection émetteur → template → lignes Pydantic
+- `modele.py` — modèles Pydantic v2 : `LignePatrimoine` (ISIN, nom, valorisation, enveloppe, broker, confiance…), `ImportPDF`, `ResultatExtraction`
+- `confiance.py` — score 0-100 par ligne : template+40, ISIN valide+25, valorisation parsée+20, enveloppe identifiée+10, texte natif+5
+- `detecteur_emetteur.py` — détection signature émetteur par regex sur en-têtes + scan global PDF
+- `parseur_template.py` — lecture YAML template + application règles tableau/regex/hybride avec `_parse_montant` robuste
+- `audit.py` — journal d'audit append-only JSON dans `data/missions/{id}/audit.json`
+- `ocr.py` — OCR via pytesseract + pdf2image avec fallback gracieux si Tesseract absent
+
+#### Lot B — 10 templates YAML `src/import_patrimoine/templates/`
+| Template | Émetteur | Type |
+|---|---|---|
+| `bourse_direct.yaml` | Bourse Direct | Courtier |
+| `boursorama.yaml` | Boursorama | Banque/courtier |
+| `fortuneo.yaml` | Fortuneo | Banque/courtier |
+| `bnp_paribas.yaml` | BNP Paribas | Banque détail |
+| `societe_generale.yaml` | Société Générale | Banque détail |
+| `credit_agricole.yaml` | Crédit Agricole | Banque détail (toutes caisses) |
+| `cic_cm.yaml` | CIC / Crédit Mutuel | Banque |
+| `generali.yaml` | Generali | Assureur AV |
+| `linxea.yaml` | Linxea | Courtier AV (Spirit, Avenir, Zen) |
+| `axa.yaml` | AXA | Assureur AV |
+
+#### Lot C — OCR Tesseract
+- `src/import_patrimoine/ocr.py` : `extraire_via_ocr()`, `detecter_pdf_scanne()` (seuil < 100 caractères)
+- Fallback gracieux : si Tesseract absent → message clair, pas de crash
+- CI `.github/workflows/ci.yml` : step `Install Tesseract` (tesseract-ocr + tesseract-ocr-fra + poppler-utils)
+
+#### Lot D — UI Streamlit `pages/24_Import_Patrimoine.py`
+- Upload multi-PDF (`st.file_uploader`)
+- Extraction automatique avec barre de progression
+- Tableau éditable (`st.data_editor`) : statut couleur (Vert/Orange/Rouge), ISIN, nom, valorisation, enveloppe, broker, confiance
+- Validation conservatrice ligne par ligne (checkbox individuel)
+- Boutons : "Valider toutes les lignes vertes" / "Valider toutes (avec confirmation)"
+- Bouton "Importer dans la mission" → merge dans `EtatMission.imports_patrimoine`
+- Historique des imports par mission
+- Zéro emoji dans l'UI (charte S19)
+
+#### Lot E — Intégration mission S16
+- `EtatMission.imports_patrimoine: list[dict]` (default `[]`) — rétro-compatible
+- `EtatMission.ajouter_import(import_pdf: ImportPDF)` — méthode d'ajout
+- `to_dict()` / `from_dict()` mis à jour (missions existantes chargées sans erreur)
+- Étape optionnelle `patrimoine_importe` ajoutée à `ETAPES_CANONIQUES` (phase RDV1, obligatoire=False)
+
+### Tests
+- `tests/test_extracteur.py` : extraction texte, détection scan, roundtrip Pydantic
+- `tests/test_detecteur_emetteur.py` : détection pour chaque template synthétique + inconnu
+- `tests/test_confiance.py` : score haute confiance ≥ 90, score OCR sans template < 30
+- `tests/test_ocr.py` : fallback gracieux (3 cas), skip si Tesseract installé
+- `tests/test_import_mission_integration.py` : merge, sérialisation, rétro-compatibilité, audit append-only
+
+### Infrastructure
+- `.gitignore` : `data/missions/*/imports/` ajouté (PDF jamais commités)
+- `pyproject.toml` : dépendances optionnelles `[pdf]` : `pdfplumber>=0.10`, `pytesseract>=0.3`, `pdf2image>=1.17`
+- `docs/import_patrimoine.md` : guide calibration templates YAML
+
+### Contraintes respectées
+- ❌ Aucune logique métier touchée (fiscalité, allocation, optimiseur, audit, conformité, exécution, hypothèses, profilage, asset_location, rebalancement)
+- ❌ Aucun appel cloud/LLM — 100% local
+- ❌ Aucun merge silencieux — validation ligne par ligne obligatoire
+- ❌ Aucun emoji dans l'UI
+- ✅ Rétro-compatibilité S16/S17/S18 totale
+- ✅ Tests métier existants 100% verts
+
+---
+
 ## [1.0.0] — Sprint S19 — UX Private Banking (refonte visuelle haut de gamme)
 
 ### Ajouté
@@ -68,6 +138,7 @@ Format : [Semantic Versioning](https://semver.org/lang/fr/) — [Keep a Changelo
 
 ---
 
+## [0.9.0] — Sprint S18 — Densification UX
 
 ### Ajouté
 

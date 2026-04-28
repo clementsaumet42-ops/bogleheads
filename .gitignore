@@ -56,6 +56,9 @@ output/audit_univers_etf_*.md
 # Mission CGP — données de missions persistées
 data/missions/
 
+# S20 — imports PDF temporaires
+data/missions/*/imports/
+
 # OS
 .DS_Store
 Thumbs.db
