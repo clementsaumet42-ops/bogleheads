@@ -1,13 +1,18 @@
 """Tests unitaires — module glide path (lifecycle investing)"""
 
+import contextlib
+
 import pytest
 
-from src.glide_path import (
-    _evaluer_formule_glide,
-    _interpoler_points,
-    charger_glide_paths,
-    glide_path_pour_profil,
-)
+with contextlib.suppress(ImportError):
+    from src.glide_path import (
+        _evaluer_formule_glide,
+        _interpoler_points,
+        charger_glide_paths,
+        glide_path_pour_profil,
+    )
+
+pytestmark = pytest.mark.skip(reason="Module archivé suite au pivot EC — voir archive/README.md")
 
 
 def test_charger_glide_paths():

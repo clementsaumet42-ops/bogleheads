@@ -1,9 +1,14 @@
 """Integration test: generate Excel file and verify structure."""
 
+import contextlib
 from pathlib import Path
 
-import openpyxl
 import pytest
+
+with contextlib.suppress(ImportError):
+    import openpyxl
+
+pytestmark = pytest.mark.skip(reason="Module archivé suite au pivot EC — voir archive/README.md")
 
 OUTPUT_PATH = Path(__file__).parent.parent / "output" / "test_bogleheads.xlsx"
 

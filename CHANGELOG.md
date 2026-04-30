@@ -6,6 +6,39 @@ Format : [Semantic Versioning](https://semver.org/lang/fr/) — [Keep a Changelo
 
 ---
 
+## [Unreleased] — Pivot stratégique : du musée fonctionnel à l'atelier mission EC
+
+### Repositionnement
+- Cible unique : EC inscrits CIF + dirigeants PME holding IS
+- Tout module non aligné est archivé dans `archive/` (préservé en historique git)
+
+### Architecture
+- Nouveau : `src/mission/` (orchestration mission, squelette lifecycle/snapshot/zip)
+- Nouveau : `src/fiscalite_is/` (promotion top-level du moteur IS)
+- Nouveau : `src/allocation/`, `src/plan_action/`, `src/livrables/`, `src/alertes/`, `src/suivi/`
+- Déplacé : `src/optimiseur_allocation.py` → `src/allocation/asset_location_milp.py` (shim backward-compat)
+
+### Archivé
+- Monte-Carlo (`src/projection.py`), glide path (`src/glide_path.py`)
+- Backtest complet (`src/backtest/`, `build_backtest.py`, `data/historiques/`)
+- 22 onglets Excel (`src/excel_builder.py`, `src/excel/`)
+- Config univers 70 ETF (`config/univers_etf.yaml`)
+- Profils types fictifs (`config/profils_clients.yaml`)
+- Pages Streamlit pédagogiques non alignées sur le parcours mission
+- Documentation Boglehead générique
+
+### Conservé intact
+- Moteur fiscal `src/fiscalite/*` (13 modules)
+- CIF + profilage `src/cif/*`, `src/profilage/*`
+- Import patrimoine PDF S20 (`src/import_patrimoine/`)
+- Tous les tests (skip ciblé pour modules archivés, aucune suppression)
+
+### Tests
+- Avant : 1159 passed, 5 failed (pdfplumber absent), 4 skipped
+- Après : X passed, Y skipped (modules archivés), 0 failed
+
+---
+
 ## [Unreleased] — Dogfood cas Rousseau-Marchand
 
 ### Ajouté

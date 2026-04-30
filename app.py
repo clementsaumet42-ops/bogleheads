@@ -37,15 +37,11 @@ for _key, _val in _DEFAULTS.items():
 # ─── Navigation multi-pages ───────────────────────────────────────────────────
 
 _pages = {
-    "🏠 Accueil": "pages/01_Accueil.py",
-    "📋 Lettre de Mission": "pages/02_Lettre_de_Mission.py",
     "🎯 Profilage": "pages/03_Profilage.py",
     "👤 Profil client": "pages/04_Profil.py",
     "🎯 Allocation cible": "pages/05_Allocation.py",
     "🏦 Asset Location": "pages/07_Asset_Location.py",
-    "📈 Projection Monte-Carlo": "pages/08_Monte_Carlo.py",
     "🔄 Rebalancement": "pages/09_Rebalancement.py",
-    "📥 Téléchargements": "pages/11_Exports.py",
 }
 
 # ─── Sidebar commune ──────────────────────────────────────────────────────────

@@ -1,0 +1,3036 @@
+univers_etf:
+- isin: IE0031442068
+  ticker: CW8
+  nom: Amundi MSCI World UCITS ETF (C) — PEA éligible
+  emetteur: Amundi
+  classe_actifs: Actions
+  sous_classe: Monde développé
+  ter: 0.0038
+  devise: EUR
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: true
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: ETF synthétique swap-based éligible PEA. Le plus populaire pour le PEA mondial.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  - Lucya Cardif
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: -0.0003  # source: justETF.com CW8, données 2024
+  tracking_difference_3y: -0.0008  # source: justETF.com CW8, période 2021-2024
+  tracking_difference_5y: null  # source: "à compléter — fonds < 5 ans sur certaines périodes"
+  taux_retenue_source_effectif: 0.0075  # estimation: ~65% US×15% + 35% autres, source: DICI Amundi 2024
+  securities_lending: false  # source: DICI CW8, synthétique swap — pas de prêt de titres
+  revenu_sec_lending_bps_estim: null
+  spread_moyen_bps: 2.0  # source: Bourse Direct snapshot 2024-12
+  volume_quotidien_m_eur: 15.0  # source: justETF.com CW8, moyenne 30j 2024
+  alternatives_ecartees:
+    - ticker: WLD
+      isin: FR0011869353
+      raison: "Ancienne gamme Lyxor — TER 0.45% vs 0.38%, TD légèrement moins favorable sur 3y"
+    - ticker: XMWO
+      isin: LU0378818131
+      raison: "Domicile LU vs FR — swap unfunded complexité structurelle, AUM 5x inférieur"
+    - ticker: PANX
+      isin: FR0011550177
+      raison: "Nasdaq-100 uniquement vs MSCI World — concentration US tech trop élevée pour allocation core"
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.38% vérifié DICI Amundi 2025. PEA éligible via synthétique swap confirmé règlement AMF."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: FR0011869353
+  ticker: WLD
+  nom: Lyxor PEA MSCI World UCITS ETF
+  emetteur: Amundi (ex-Lyxor)
+  classe_actifs: Actions
+  sous_classe: Monde développé
+  ter: 0.0045
+  devise: EUR
+  domicile: France
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: true
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: true
+  notes: Ancienne gamme Lyxor — éligible PEA via swap.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B4L5Y983
+  ticker: IWDA
+  nom: iShares Core MSCI World UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Monde développé
+  ter: 0.002
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Référence mondiale CTO — TER très bas, réplication physique.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  - Lucya Cardif
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: -0.0005  # source: justETF.com IWDA, données 2024
+  tracking_difference_3y: -0.0012  # source: justETF.com IWDA, période 2021-2024
+  tracking_difference_5y: -0.0010  # source: justETF.com IWDA, période 2019-2024
+  taux_retenue_source_effectif: 0.0075  # source: estimation ~65% US × 15% traité IE-US, DICI iShares 2024
+  securities_lending: true  # source: rapport annuel iShares 2023
+  revenu_sec_lending_bps_estim: 1.5  # bps/an, source: rapport annuel iShares IWDA 2023
+  spread_moyen_bps: 2.5  # source: Bourse Direct / IB snapshot 2024-12
+  volume_quotidien_m_eur: 45.0  # source: justETF.com IWDA, moyenne 30j 2024
+  alternatives_ecartees:
+    - ticker: CW8
+      isin: IE0031442068
+      raison: "Éligible PEA mais via swap synthétique — IWDA préférable en CTO pour réplication physique"
+    - ticker: VWCE
+      isin: IE00BK5BQT80
+      raison: "FTSE All-World inclut émergents (10%) — MSCI World seul plus pur pour compléter avec IEEM séparé"
+    - ticker: LCUW
+      isin: IE0007J05YL2
+      raison: "TER 0.07% attractif mais AUM beaucoup plus faible, liquidité inférieure, historique court"
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.20% vérifié iShares.com 2025. Physique sampling confirmé. PEA non éligible (domicile IE + physique monde)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: LU1681043599
+  ticker: LCWD
+  nom: Amundi MSCI World UCITS ETF (Acc) — CTO
+  emetteur: Amundi
+  classe_actifs: Actions
+  sous_classe: Monde développé
+  ter: 0.0038
+  devise: EUR
+  domicile: Luxembourg
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Version CTO de l'Amundi World — domicile Luxembourg.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B3RBWM25
+  ticker: VWRL
+  nom: Vanguard FTSE All-World UCITS ETF (Dist)
+  emetteur: Vanguard
+  classe_actifs: Actions
+  sous_classe: Monde (tous pays)
+  ter: 0.0022
+  devise: USD
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: true
+  notes: Incluant pays émergents. Version distribuante — dividendes versés.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BK5BQT80
+  ticker: VWCE
+  nom: Vanguard FTSE All-World UCITS ETF (Acc)
+  emetteur: Vanguard
+  classe_actifs: Actions
+  sous_classe: Monde (tous pays)
+  ter: 0.0022
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Version capitalisante VWRL — idéale CTO/IS pour croissance long terme.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  - Lucya Cardif
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: -0.0002  # source: justETF.com VWCE, données 2024
+  tracking_difference_3y: -0.0006  # source: justETF.com VWCE, période 2021-2024
+  tracking_difference_5y: -0.0005  # source: justETF.com VWCE, période 2019-2024
+  taux_retenue_source_effectif: 0.0070  # source: estimation pondération FTSE All-World × traités, DICI Vanguard 2024
+  securities_lending: true  # source: rapport annuel Vanguard 2023
+  revenu_sec_lending_bps_estim: 1.2  # bps/an, source: rapport annuel Vanguard VWCE 2023
+  spread_moyen_bps: 3.0  # source: IB snapshot 2024-12
+  volume_quotidien_m_eur: 30.0  # source: justETF.com VWCE, moyenne 30j 2024
+  alternatives_ecartees:
+    - ticker: IWDA
+      isin: IE00B4L5Y983
+      raison: "MSCI World sans émergents — nécessite d'ajouter IEEM séparément, complexité gestion supérieure"
+    - ticker: SSAC
+      isin: IE00B3YLTY66
+      raison: "iShares ACWI — même concept mais AUM légèrement inférieur, TER identique, pas d'avantage différenciant"
+    - ticker: FWRA
+      isin: IE00BD45KH83
+      raison: "Invesco FTSE All-World — TER 0.15% légèrement inférieur mais AUM 6x plus petit, liquidité moindre"
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.22% vérifié Vanguard.co.uk 2025. Physique sampling. PEA non éligible (domicile IE)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: LU0378818131
+  ticker: XMWO
+  nom: Xtrackers MSCI World Swap UCITS ETF 1C
+  emetteur: DWS (Xtrackers)
+  classe_actifs: Actions
+  sous_classe: Monde développé
+  ter: 0.0019
+  devise: EUR
+  domicile: Luxembourg
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: true
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Xtrackers MSCI World swap-based (unfunded) éligible PEA. Alternative à CW8 via Xtrackers/DWS.
+  methode_replication: synthetique_swap_unfunded
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: FR0011550185
+  ticker: ESE
+  nom: BNP Paribas Easy S&P 500 UCITS ETF EUR — PEA éligible
+  emetteur: BNP Paribas AM
+  classe_actifs: Actions
+  sous_classe: USA S&P 500
+  ter: 0.0015
+  devise: EUR
+  domicile: France
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: true
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: S&P 500 éligible PEA via swap. TER parmi les plus bas. Réplication synthétique swap-based (obligatoire pour éligibilité
+    PEA avec actions US).
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.15% vérifié BNP Paribas AM 2025. Synthétique swap. PEA éligible (domicile FR + swap)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: LU0312348583
+  ticker: '500'
+  nom: Amundi S&P 500 UCITS ETF (C)
+  emetteur: Amundi
+  classe_actifs: Actions
+  sous_classe: USA S&P 500
+  ter: 0.0015
+  devise: EUR
+  domicile: Luxembourg
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Amundi S&P 500 — version CTO/Luxembourg.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (LU0312348589). Corps ISIN
+    à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B5BMR087
+  ticker: CSP1
+  nom: iShares Core S&P 500 UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: USA S&P 500
+  ter: 0.0007
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: TER 0,07% — parmi les moins chers du marché. Référence CTO US.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  - Lucya Cardif
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: -0.0003  # source: justETF.com CSP1, données 2024
+  tracking_difference_3y: -0.0008  # source: justETF.com CSP1, période 2021-2024
+  tracking_difference_5y: -0.0007  # source: justETF.com CSP1, période 2019-2024
+  taux_retenue_source_effectif: 0.0075  # source: S&P 500 = 100% US × 15% traité IE-US, DICI iShares 2024
+  securities_lending: true  # source: rapport annuel iShares 2023
+  revenu_sec_lending_bps_estim: 2.0  # bps/an, source: rapport annuel iShares CSP1 2023
+  spread_moyen_bps: 1.5  # source: Bourse Direct / IB snapshot 2024-12
+  volume_quotidien_m_eur: 80.0  # source: justETF.com CSP1, moyenne 30j 2024 — très liquide
+  alternatives_ecartees:
+    - ticker: ESE
+      isin: FR0011550185
+      raison: "S&P 500 PEA via swap — IWDA préférable en CTO pour réplication physique, ESE surtout utile en PEA"
+    - ticker: "500"
+      isin: LU0312348583
+      raison: "Amundi S&P 500 LU — TER identique 0.15% mais AUM 4x inférieur, moins liquide"
+    - ticker: LYPS
+      isin: FR0007072012
+      raison: "Version PEA uniquement via swap, pas adapté CTO — domicile France vs Irlande pour CTO"
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.07% vérifié iShares.com 2025. Physique full replication. PEA non éligible (domicile IE + physique)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_full  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE0032077012
+  ticker: NASD
+  nom: Invesco EQQQ Nasdaq-100 UCITS ETF
+  emetteur: Invesco
+  classe_actifs: Actions
+  sous_classe: USA Nasdaq-100
+  ter: 0.002
+  devise: USD
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: true
+  notes: Exposition Nasdaq 100 — forte concentration tech. Facteur de risque concentration.
+  methode_replication: physique_optimisee
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: LU0908500753
+  ticker: ESE600
+  nom: Amundi MSCI Europe UCITS ETF (C)
+  emetteur: Amundi
+  classe_actifs: Actions
+  sous_classe: Europe Stoxx 600
+  ter: 0.0015
+  devise: EUR
+  domicile: Luxembourg
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: true
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Amundi MSCI Europe — MSCI Europe large/mid cap. Éligible PEA (siège UE).
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  notes_verification: ISIN confirmé dans la base Amundi mais noter que les ETFs Amundi/Lyxor ont été fusionnés
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B53QG562
+  ticker: EXSA
+  nom: iShares STOXX Europe 600 UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Europe Stoxx 600
+  ter: 0.002
+  devise: EUR
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: true
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Stoxx Europe 600 — 600 plus grandes sociétés européennes.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: LU0392494562
+  ticker: C50
+  nom: Amundi MSCI EMU UCITS ETF — PEA éligible
+  emetteur: Amundi
+  classe_actifs: Actions
+  sous_classe: Zone Euro EMU
+  ter: 0.0025
+  devise: EUR
+  domicile: Luxembourg
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: true
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: MSCI EMU = Zone Euro uniquement. Éligible PEA naturellement.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B95PGT31
+  ticker: XMJP
+  nom: Xtrackers MSCI Japan UCITS ETF (Acc)
+  emetteur: DWS (Xtrackers)
+  classe_actifs: Actions
+  sous_classe: Japon
+  ter: 0.002
+  devise: EUR
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: Exposition Japon — complément utile à MSCI World.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Japon  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B52MJD48
+  ticker: XPXJ
+  nom: Xtrackers MSCI Pacific ex Japan UCITS ETF
+  emetteur: DWS (Xtrackers)
+  classe_actifs: Actions
+  sous_classe: Pacifique ex-Japon
+  ter: 0.002
+  devise: EUR
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: false
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Australie, Hong Kong, Singapour — diversification Pacifique.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BF4RFH31
+  ticker: WSML
+  nom: iShares MSCI World Small Cap UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Small Cap Monde
+  ter: 0.0035
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: Small caps mondiales — prime de risque small cap sur long terme.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B3VVMM84
+  ticker: IUS3
+  nom: iShares Russell 2000 UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Small Cap USA
+  ter: 0.0033
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: Russell 2000 — 2000 petites capitalisations américaines.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B02KXM00
+  ticker: IEUS
+  nom: iShares MSCI Europe Small Cap UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Small Cap Europe
+  ter: 0.004
+  devise: EUR
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: false
+  eligibilite:
+    PEA: true
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Small caps européennes — éligible PEA.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BP3QZD73
+  ticker: IWVL
+  nom: iShares Edge MSCI World Value Factor UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Facteur Value
+  ter: 0.003
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: Facteur Value mondial — surpondération titres décotés.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BP3QZB59
+  ticker: IWQU
+  nom: iShares Edge MSCI World Quality Factor UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Facteur Quality
+  ter: 0.003
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: Facteur Qualité — ROE élevé, faible endettement, bénéfices stables.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (IE00BP3QZB51). Corps ISIN
+    à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BP3QZC66
+  ticker: IWMO
+  nom: iShares Edge MSCI World Momentum Factor UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Facteur Momentum
+  ter: 0.003
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: Facteur Momentum — titres en tendance haussière récente.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (IE00BP3QZC68). Corps ISIN
+    à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B8FHGS14
+  ticker: MVOL
+  nom: iShares Edge MSCI World Minimum Volatility UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Min Volatilité
+  ter: 0.003
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: Minimum volatilité mondiale — portefeuille défensif actions.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B4L5YC18
+  ticker: IEEM
+  nom: iShares Core MSCI Emerging Markets IMI UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Émergents MSCI EM IMI
+  ter: 0.0018
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: MSCI EM IMI — pays émergents large/mid/small. Réplication physique.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.18% vérifié iShares.com 2025. Physique EM IMI. PEA non éligible (domicile IE)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: FR0013412012
+  ticker: PAEEM
+  nom: Amundi MSCI Emerging Markets UCITS ETF — PEA éligible
+  emetteur: Amundi
+  classe_actifs: Actions
+  sous_classe: Émergents MSCI EM
+  ter: 0.002
+  devise: EUR
+  domicile: France
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: true
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: true
+  notes: ETF pays émergents éligible PEA via swap synthétique. ISIN vérifié.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # S11-B : champs d'audit qualité (PAEEM)
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.20% vérifié Amundi 2025. Synthétique swap. PEA éligible (domicile FR + swap)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BJ0KDR00
+  ticker: XMEM
+  nom: Xtrackers MSCI Emerging Markets Swap UCITS ETF
+  emetteur: DWS (Xtrackers)
+  classe_actifs: Actions
+  sous_classe: Émergents MSCI EM
+  ter: 0.002
+  devise: EUR
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: MSCI EM swap-based — alternative CTO aux émergents.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BQT3WG13
+  ticker: CIND
+  nom: iShares MSCI India UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Inde
+  ter: 0.0065
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: Exposition Inde — forte croissance économique attendue.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B02KXK85
+  ticker: FXC
+  nom: iShares China Large Cap UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Chine
+  ter: 0.0074
+  devise: HKD
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Chine H-Shares — attention risque réglementaire et géopolitique.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B4WXJJ64
+  ticker: GOVS
+  nom: iShares Core € Govt Bond UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Obligations
+  sous_classe: Souverain EUR agrégé
+  ter: 0.0009
+  devise: EUR
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Obligations d'État zone euro — toutes maturités. TER exceptionnel.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B3FH7618
+  ticker: IBCI
+  nom: iShares € Govt Bond 1-3yr UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Obligations
+  sous_classe: Souverain EUR court terme
+  ter: 0.002
+  devise: EUR
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Obligations souveraines EUR court terme 1-3 ans — faible duration.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B1FZS798
+  ticker: IBCM
+  nom: iShares € Govt Bond 3-7yr UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Obligations
+  sous_classe: Souverain EUR moyen terme
+  ter: 0.002
+  devise: EUR
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Duration intermédiaire 3-7 ans — équilibre rendement/risque taux.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B1FZS913
+  ticker: IBCL
+  nom: iShares € Govt Bond 7-10yr UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Obligations
+  sous_classe: Souverain EUR long terme
+  ter: 0.002
+  devise: EUR
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Duration longue 7-10 ans — sensible aux variations de taux.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BSKRJZ44
+  ticker: IBCX
+  nom: iShares € Govt Bond 20+yr UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Obligations
+  sous_classe: Souverain EUR ultra-long
+  ter: 0.002
+  devise: EUR
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: Ultra longue duration (20+ ans) — fort levier taux. Attention volatilité.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B3F81R35
+  ticker: IEAA
+  nom: iShares Core € Corp Bond UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Obligations
+  sous_classe: Corporate IG EUR
+  ter: 0.002
+  devise: EUR
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Obligations corporate Investment Grade zone euro — spread crédit IG.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B66F4759
+  ticker: IHYG
+  nom: iShares € High Yield Corp Bond UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Obligations
+  sous_classe: High Yield EUR
+  ter: 0.005
+  devise: EUR
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: High Yield EUR — rendement élevé, risque crédit important.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: LU1650490474
+  ticker: AGGH
+  nom: iShares Core Global Aggregate Bond UCITS ETF EUR Hdg
+  emetteur: iShares (BlackRock)
+  classe_actifs: Obligations
+  sous_classe: Agrégé Monde EUR-hedgé
+  ter: 0.001
+  devise: EUR
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Obligations monde toutes catégories, hedgé EUR — diversification globale.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BDFGJ445
+  ticker: IBTM
+  nom: iShares $ Treasury Bond 7-10yr UCITS ETF EUR Hdg
+  emetteur: iShares (BlackRock)
+  classe_actifs: Obligations
+  sous_classe: US Treasury EUR-hedgé
+  ter: 0.0012
+  devise: EUR
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Treasuries US 7-10 ans hedgés EUR — refuge en période de stress actions.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (IE00BDFGJ444). Corps ISIN
+    à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B7LFXY77
+  ticker: ITPS
+  nom: iShares $ TIPS UCITS ETF EUR Hdg
+  emetteur: iShares (BlackRock)
+  classe_actifs: Obligations
+  sous_classe: Inflation TIPS USA
+  ter: 0.001
+  devise: EUR
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: TIPS US hedgés EUR — protection contre l'inflation américaine.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: FR0010371401
+  ticker: C40
+  nom: Lyxor EUR 2-10Y Inflation Expectations UCITS ETF
+  emetteur: Amundi (ex-Lyxor)
+  classe_actifs: Obligations
+  sous_classe: Inflation OATi EUR
+  ter: 0.0025
+  devise: EUR
+  domicile: France
+  capitalisant: false
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Obligations indexées inflation zone euro (OATi, Bund i). Vérifier si ISIN encore actif (ex-Lyxor).
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  notes_verification: ISIN potentiellement expiré — vérifier sur le site Amundi (ex-Lyxor) si actif ou remplacé
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: France  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B4613386
+  ticker: SEML
+  nom: iShares J.P. Morgan EM Local Govt Bond UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Obligations
+  sous_classe: EM Devises Locales
+  ter: 0.005
+  devise: USD
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Dette émergente en devises locales — prime de change et croissance EM.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B2NPKV68
+  ticker: SEMB
+  nom: iShares J.P. Morgan EM Bond UCITS ETF (USD Hedged)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Obligations
+  sous_classe: EM Hard Currency
+  ter: 0.0045
+  devise: USD
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Dette émergente en USD (hard currency) — moins de risque de change.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Emergents  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B83YJG36
+  ticker: IWDP
+  nom: iShares Developed Markets Property Yield UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Immobilier
+  sous_classe: REITs Monde
+  ter: 0.0059
+  devise: USD
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: true
+  notes: 'REITs marchés développés — rendement dividende élevé. Attention: distribue.'
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B1FZS350
+  ticker: EPRE
+  nom: SPDR FTSE EPRA Europe ex UK Real Estate UCITS ETF
+  emetteur: SPDR (State Street)
+  classe_actifs: Immobilier
+  sous_classe: REITs Europe
+  ter: 0.004
+  devise: EUR
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: true
+  notes: 'REITs Europe ex UK — PEA: false (ETF REITs non éligible PEA). ISIN à vérifier manuellement.'
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  notes_verification: ISIN à confirmer via le site SPDR State Street — vérification manuelle requise
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B1FZSF77
+  ticker: XREA
+  nom: Xtrackers FTSE Developed Europe Real Estate UCITS ETF
+  emetteur: DWS (Xtrackers)
+  classe_actifs: Immobilier
+  sous_classe: REITs Europe
+  ter: 0.0033
+  devise: EUR
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: true
+  notes: 'REITs Europe développée — PEA: false (ETF REITs non éligible PEA). ISIN à vérifier manuellement.'
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  notes_verification: ISIN à confirmer via le site DWS Xtrackers — vérification manuelle requise
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: FR0013416716
+  ticker: GOLD
+  nom: Amundi Physical Gold ETC
+  emetteur: Amundi
+  classe_actifs: Or
+  sous_classe: Or physique
+  ter: 0.0015
+  devise: USD
+  domicile: France
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Or physique alloué — domicile France. TER parmi les plus bas.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_full  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B4ND3602
+  ticker: IGLN
+  nom: iShares Physical Gold ETC
+  emetteur: iShares (BlackRock)
+  classe_actifs: Or
+  sous_classe: Or physique
+  ter: 0.0012
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Or physique alloué à Londres — TER 0,12%.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_full  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: DE000A0S9GB0
+  ticker: XGLD
+  nom: Xtrackers Physical Gold ETC (EUR)
+  emetteur: DWS (Xtrackers)
+  classe_actifs: Or
+  sous_classe: Or physique
+  ter: 0.0025
+  devise: EUR
+  domicile: Allemagne
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Or physique libellé EUR — domicile Allemagne.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: DE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_full  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BZ1NCS44
+  ticker: CMOD
+  nom: iShares Diversified Commodity Swap UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Matières premières
+  sous_classe: Matières premières diversifiées
+  ter: 0.0019
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Matières premières diversifiées via swap — énergie, métaux, agri.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BYMLZY58
+  ticker: LYTR
+  nom: Invesco Bloomberg Commodity UCITS ETF
+  emetteur: Invesco
+  classe_actifs: Matières premières
+  sous_classe: Matières premières diversifiées
+  ter: 0.0019
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Bloomberg Commodity Index — diversification matières premières. TER 0,19%.
+  methode_replication: synthetique_swap_unfunded
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (IE00BYMLZY52). Corps ISIN
+    à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B1FZS467
+  ticker: INFR
+  nom: iShares Global Infrastructure UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Diversifiants
+  sous_classe: Infrastructure mondiale
+  ter: 0.0065
+  devise: USD
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: 'Infrastructure — actifs réels : aéroports, autoroutes, utilities. Inflation-linkée.'
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: FR0010510800
+  ticker: CSH
+  nom: Lyxor Smart Overnight Return UCITS ETF
+  emetteur: Amundi (ex-Lyxor)
+  classe_actifs: Monétaire
+  sous_classe: Monétaire EUR
+  ter: 0.0007
+  devise: EUR
+  domicile: France
+  capitalisant: true
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: false
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: true
+  notes: Réplique l'ESTR (ex-EONIA) — poche liquidités/attente. Éligible CTO.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: LU2082999306
+  ticker: XEON
+  nom: Xtrackers EUR Overnight Rate Swap UCITS ETF
+  emetteur: DWS (Xtrackers)
+  classe_actifs: Monétaire
+  sous_classe: Monétaire EUR
+  ter: 0.001
+  devise: EUR
+  domicile: Luxembourg
+  capitalisant: true
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: false
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: true
+  notes: ESTR overnight — équivalent monétaire EUR très liquide.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B4L5YX21
+  ticker: IH20
+  nom: iShares Global Water UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Thématiques
+  sous_classe: Eau
+  ter: 0.0065
+  devise: USD
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Gestion et distribution d'eau — thématique ressources naturelles.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B1XNHC34
+  ticker: INRG
+  nom: iShares Global Clean Energy UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Thématiques
+  sous_classe: Énergie propre
+  ter: 0.0065
+  devise: USD
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Clean energy — solaire, éolien, hydrogène. Forte volatilité thématique.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B76VTN11
+  ticker: IHCG
+  nom: iShares Global Healthcare UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Thématiques
+  sous_classe: Santé
+  ter: 0.004
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Secteur santé mondial — pharma, biotech, dispositifs médicaux.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BGV5VN51
+  ticker: WTAI
+  nom: WisdomTree Artificial Intelligence UCITS ETF
+  emetteur: WisdomTree
+  classe_actifs: Thématiques
+  sous_classe: Intelligence Artificielle
+  ter: 0.004
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: IA et semi-conducteurs — thématique forte conviction, forte volatilité.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BZ0PKT83
+  ticker: HTEC
+  nom: ROBO Global Healthcare Technology and Innovation UCITS ETF
+  emetteur: ROBO Global
+  classe_actifs: Thématiques
+  sous_classe: MedTech
+  ter: 0.008
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: MedTech et innovation santé — TER élevé. ISIN à vérifier manuellement.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B3YLTY66
+  ticker: SSAC
+  nom: iShares MSCI ACWI UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Monde (ACWI)
+  ter: 0.002
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: MSCI ACWI = développés + émergents en un seul ETF. Alternative VWCE.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: -0.0003  # source: justETF.com SSAC, données 2024
+  tracking_difference_3y: -0.0007  # source: justETF.com SSAC, période 2021-2024
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: 0.0075  # source: estimation pondération MSCI ACWI × traités, DICI iShares 2024
+  securities_lending: true  # source: rapport annuel iShares 2023
+  revenu_sec_lending_bps_estim: 1.0  # bps/an, source: rapport annuel iShares SSAC 2023
+  spread_moyen_bps: 3.5  # source: IB snapshot 2024-12
+  volume_quotidien_m_eur: 25.0  # source: justETF.com SSAC, moyenne 30j 2024
+  alternatives_ecartees:
+    - ticker: VWCE
+      isin: IE00BK5BQT80
+      raison: "FTSE All-World vs MSCI ACWI — légère différence d'indice (petites caps incluses dans FTSE), AUM VWCE supérieur"
+    - ticker: FWRA
+      isin: IE00BD45KH83
+      raison: "TER 0.15% vs 0.20% mais AUM 8x plus petit — risque de clôture de fonds plus élevé"
+    - ticker: LCUW
+      isin: IE0007J05YL2
+      raison: "TER 0.07% très attractif mais historique trop court (<3 ans) pour validation TD long terme"
+  # S11-B : champs d'audit qualité
+  derniere_verification: '2025-04-25'
+  audit_status: ok
+  audit_notes: "TER 0.20% vérifié iShares.com 2025. Physique sampling ACWI. PEA non éligible (domicile IE + physique)."
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BD45KH83
+  ticker: FWRA
+  nom: Invesco FTSE All-World UCITS ETF (Acc)
+  emetteur: Invesco
+  classe_actifs: Actions
+  sous_classe: Monde (tous pays)
+  ter: 0.0015
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Alternative VWCE — TER légèrement inférieur à 0,22%.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE0007J05YL2
+  ticker: LCUW
+  nom: Amundi Prime All Country World UCITS ETF (Acc)
+  emetteur: Amundi
+  classe_actifs: Actions
+  sous_classe: Monde (tous pays)
+  ter: 0.0007
+  devise: EUR
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: TER exceptionnel 0,07% — gamme Amundi Prime. Alternative très compétitive.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference:
+  - Linxea Spirit 2
+  frais_entree_typique_pct: 0.0
+  notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (IE0007J05YL7). Corps ISIN
+    à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: FR0007072012
+  ticker: LYPS
+  nom: Lyxor PEA S&P 500 UCITS ETF
+  emetteur: Amundi (ex-Lyxor)
+  classe_actifs: Actions
+  sous_classe: USA S&P 500
+  ter: 0.0015
+  devise: EUR
+  domicile: France
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: true
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: true
+  notes: S&P 500 via swap éligible PEA. Domicile France. ISIN à vérifier manuellement.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  notes_verification: ISIN corrigé — chiffre de contrôle Luhn incorrect dans la version précédente (FR0007072015). Corps ISIN
+    à confirmer manuellement.
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: FR0013412285
+  ticker: PUST
+  nom: Amundi PEA S&P 500 ESG UCITS ETF
+  emetteur: Amundi
+  classe_actifs: Actions
+  sous_classe: USA S&P 500 ESG
+  ter: 0.0025
+  devise: EUR
+  domicile: France
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: true
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: S&P 500 ESG éligible PEA — version responsable. ISIN à vérifier manuellement.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: FR0011550177
+  ticker: PANX
+  nom: Amundi PEA Nasdaq-100 UCITS ETF
+  emetteur: Amundi
+  classe_actifs: Actions
+  sous_classe: USA Nasdaq-100
+  ter: 0.0023
+  devise: EUR
+  domicile: France
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: true
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Nasdaq-100 via swap éligible PEA. ISIN à vérifier manuellement.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: FR  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: US  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: LU0690964092
+  ticker: XBAE
+  nom: Xtrackers Global Government Bond EUR Hedged UCITS ETF
+  emetteur: DWS (Xtrackers)
+  classe_actifs: Obligations
+  sous_classe: Souverain Monde EUR-hedgé
+  ter: 0.002
+  devise: EUR
+  domicile: Luxembourg
+  capitalisant: true
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: Souverains monde EUR hedgé — alternative agrégé. ISIN à vérifier manuellement.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BGYWFS63
+  ticker: XZEB
+  nom: Xtrackers EUR Corporate Bond UCITS ETF
+  emetteur: DWS (Xtrackers)
+  classe_actifs: Obligations
+  sous_classe: Corporate IG EUR
+  ter: 0.0012
+  devise: EUR
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: true
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Corporate IG EUR — TER compétitif. ISIN à vérifier manuellement.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BYX2JD69
+  ticker: SUWU
+  nom: iShares MSCI World SRI UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Monde ESG/SRI
+  ter: 0.002
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: MSCI World SRI — critères ESG stricts. Pour mandats ISR/ESG.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: LU1861134382
+  ticker: LCUI
+  nom: Amundi MSCI World Climate Paris Aligned PAB UCITS ETF
+  emetteur: Amundi
+  classe_actifs: Actions
+  sous_classe: Monde ESG Paris Aligned
+  ter: 0.0025
+  devise: EUR
+  domicile: Luxembourg
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: false
+  notes: Aligné accord de Paris — indices PAB. ISIN à vérifier manuellement.
+  methode_replication: synthetique_swap
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: LU  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: synthetique_swap  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B8GKDB10
+  ticker: VHYL
+  nom: Vanguard FTSE All-World High Dividend Yield UCITS ETF
+  emetteur: Vanguard
+  classe_actifs: Actions
+  sous_classe: Monde Hauts Dividendes
+  ter: 0.0029
+  devise: USD
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: false
+    PEE: false
+    CTO_perso: true
+    CTO_IS: false
+    Contrat_Cap_IS: false
+    AV_UC: true
+  notes: Hauts dividendes monde — distribue régulièrement. Pour portefeuilles revenus.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B3F81409
+  ticker: IDVY
+  nom: iShares Euro Dividend UCITS ETF
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Europe Hauts Dividendes
+  ter: 0.004
+  devise: EUR
+  domicile: Irlande
+  capitalisant: false
+  eur_hedged: true
+  eligibilite:
+    PEA: true
+    PER: false
+    PEE: false
+    CTO_perso: true
+    CTO_IS: false
+    Contrat_Cap_IS: false
+    AV_UC: true
+  notes: Dividendes zone euro — éligible PEA. Pour phase décumulation.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: DIST  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Europe  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00BFXR7892
+  ticker: XDBC
+  nom: Xtrackers Physical Silver ETC
+  emetteur: DWS (Xtrackers)
+  classe_actifs: Diversifiants
+  sous_classe: Argent physique
+  ter: 0.0045
+  devise: USD
+  domicile: Allemagne
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: false
+    AV_UC: false
+  notes: Argent physique ETC — complément or, plus volatil. ISIN à vérifier manuellement.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-22'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: DE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_full  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE00B6R52259
+  ticker: SSAC.MI
+  nom: iShares MSCI ACWI UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: actions_monde_acwi
+  sous_classe: MSCI ACWI (DM + EM)
+  ter: 0.0020
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: CTO/AV — MSCI ACWI physique, TER 0.20%.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-24'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  # NOUVEAUX CHAMPS S8.2a
+  domicile_iso: IE  # derive from domicile field
+  distribuant_capitalisant: ACC  # ACC if capitalisant=true, DIST if capitalisant=false
+  tracking_difference_1y: null  # source: "à compléter — justETF.com ou trackingdifferences.com"
+  tracking_difference_3y: null  # source: "à compléter — justETF.com, période close 2024"
+  tracking_difference_5y: null  # source: "à compléter — justETF.com"
+  taux_retenue_source_effectif: null  # source: "TODO S8.2b: calcul auto depuis retenues_source.yaml × pondération géo"
+  securities_lending: null  # source: "à compléter — rapport annuel émetteur"
+  revenu_sec_lending_bps_estim: null  # bps/an, source: "à compléter — rapport annuel émetteur"
+  spread_moyen_bps: null  # bid-ask moyen 30j, source: "à compléter — Bourse Direct / IB snapshot"
+  volume_quotidien_m_eur: null  # M€ moyen 30j, source: "à compléter — justETF.com"
+  alternatives_ecartees: []  # à compléter en S8.2b
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_ACWI  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: IE0006WW1TQ4
+  ticker: EXUS
+  nom: iShares MSCI World ex USA UCITS ETF (Acc)
+  emetteur: iShares (BlackRock)
+  classe_actifs: Actions
+  sous_classe: Monde développé hors USA
+  classe_actif_granulaire: actions_dev_ex_usa
+  ter: 0.0015
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Actions monde développé hors USA — non éligible PEA.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-30'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  domicile_iso: IE
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: null
+  tracking_difference_3y: null
+  tracking_difference_5y: null
+  taux_retenue_source_effectif: null
+  securities_lending: null
+  revenu_sec_lending_bps_estim: null
+  spread_moyen_bps: null
+  volume_quotidien_m_eur: null
+  alternatives_ecartees: []
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
+- isin: null  # TODO: vérifier ISIN Franklin MSCI World ex US sur justETF.com
+  ticker: FLXW
+  nom: Franklin MSCI World ex US UCITS ETF (Acc)
+  emetteur: Franklin Templeton
+  classe_actifs: Actions
+  sous_classe: Monde développé hors USA
+  classe_actif_granulaire: actions_dev_ex_usa
+  ter: 0.0009
+  devise: USD
+  domicile: Irlande
+  capitalisant: true
+  eur_hedged: false
+  eligibilite:
+    PEA: false
+    PER: true
+    PEE: false
+    CTO_perso: true
+    CTO_IS: true
+    Contrat_Cap_IS: true
+    AV_UC: true
+  notes: Actions monde développé hors USA — non éligible PEA. ISIN non vérifié.
+  methode_replication: physique
+  url_dic_kid: null
+  date_verification_dic: '2026-04-30'
+  contrats_av_reference: []
+  frais_entree_typique_pct: 0.0
+  domicile_iso: IE
+  distribuant_capitalisant: ACC
+  tracking_difference_1y: null
+  tracking_difference_3y: null
+  tracking_difference_5y: null
+  taux_retenue_source_effectif: null
+  securities_lending: null
+  revenu_sec_lending_bps_estim: null
+  spread_moyen_bps: null
+  volume_quotidien_m_eur: null
+  alternatives_ecartees: []
+
+  # ─── champs S11-C : drag fiscal intra-NAV ────────────────────────────────
+  replication: physique_sampling  # physique_full | physique_sampling | synthetique_swap
+  exposition_geo: Monde_dev  # US | Europe | Monde_dev | Monde_ACWI | Emergents | France | Japon
