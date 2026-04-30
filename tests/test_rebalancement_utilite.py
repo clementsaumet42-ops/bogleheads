@@ -137,4 +137,3 @@ def test_benefice_nul_ratio_none():
 def test_page_rebalancement_compilable():
     """La page 09_Rebalancement.py se compile sans erreur de syntaxe."""
     pytest.skip("Page archivée — pivot EC")
-

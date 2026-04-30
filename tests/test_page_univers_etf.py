@@ -64,6 +64,7 @@ def test_page_univers_etf_compilable():
     """La page 12_Univers_ETF.py se compile sans erreur de syntaxe."""
     pytest.skip("Page archivée — pivot EC")
 
+
 # ─── Tests de filtrage logique ────────────────────────────────────────────────
 
 

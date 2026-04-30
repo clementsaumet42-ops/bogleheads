@@ -13,6 +13,7 @@ def test_page_audit_patrimonial_compile_sans_erreur():
     """La page doit être syntaxiquement correcte (compile sans lever d'exception)."""
     pytest.skip("Page archivée — pivot EC")
 
+
 def test_page_audit_imports_helpers_ok():
     """Les modules helpers utilisés par la page doivent être importables."""
     from src.audit.adapter import contexte_depuis_profil  # noqa: F401
