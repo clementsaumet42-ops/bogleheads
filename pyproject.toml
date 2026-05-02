@@ -38,7 +38,7 @@ pdf = ["pdfplumber>=0.10", "pytesseract>=0.3", "pdf2image>=1.17"]
 
 [tool.setuptools.packages.find]
 where = ["." ]
-include = ["src*"]
+include = ["src*", "bogleheads*"]
 
 [tool.ruff]
 line-length = 100

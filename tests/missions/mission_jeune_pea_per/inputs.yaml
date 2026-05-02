@@ -1,0 +1,33 @@
+profil:
+  id: 3
+  code: "jeune_pea_per"
+  nom: "Mission Jeune PEA PER (test fixture)"
+  age: 35
+  tmi: 0.11
+  rfr_annuel: 42000
+  patrimoine_financier_total: 150000
+  regime_fiscal_detenteur: "IR"
+  allocation_cible_bogleheads:
+    actions: 0.85
+    obligations: 0.10
+    liquidites: 0.05
+  profil_aversion_risque: "agressif"
+  enveloppes_disponibles:
+    PEA:
+      encours_actuel: 60000
+      versements_cumules: 55000
+    PER:
+      encours_actuel: 20000
+    CTO_perso:
+      encours_actuel: 10000
+    AV_recente:
+      encours_actuel: 30000
+  a_livret_a: true
+  epargne_precaution: 15000
+  est_en_couple: false
+  a_testament: false
+  plafond_per_non_utilise: 8000
+mission_params:
+  profil_mif2: "agressif_85_15"
+  lf_active: 2026
+  patrimoine_total_eur: 150000

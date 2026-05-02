@@ -1,0 +1,43 @@
+name: Missions Regression
+
+on:
+  pull_request:
+    paths:
+      - "src/fiscalite/**"
+      - "src/allocation/**"
+      - "src/audit/**"
+      - "src/alertes/**"
+      - "src/asset_location/**"
+      - "src/livrables/**"
+      - "src/hypotheses/**"
+      - "tests/missions/**"
+
+jobs:
+  missions-regression:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e ".[dev,optim,cif]"
+
+      - name: Run missions regression tests
+        run: pytest tests/missions/ -v --tb=short
+
+      - name: Upload generated outputs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: missions-regression-outputs
+          path: |
+            tests/missions/**/actual_outputs.json
+            output/
+          if-no-files-found: ignore

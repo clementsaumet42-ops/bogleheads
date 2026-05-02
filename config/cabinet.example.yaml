@@ -1,0 +1,16 @@
+# config/cabinet.example.yaml — Template à copier en config/cabinet.yaml
+# NE PAS remplir avec de vraies données — config/cabinet.yaml est hors-repo
+cabinet:
+  nom: "Cabinet de Conseil en Gestion de Patrimoine (exemple)"
+  raison_sociale: "CGP Exemple SAS"
+  siret: "000 000 000 00000"
+  orias: "XX-000000"
+  adresse: "1 rue de la Finance, 75001 Paris"
+  telephone: "+33 1 00 00 00 00"
+  email: "contact@exemple-cgp.fr"
+  site_web: "https://exemple-cgp.fr"
+  mentions_legales: >
+    Conseiller en Investissements Financiers (CIF) immatriculé à l'ORIAS.
+    Responsabilité civile professionnelle souscrite.
+  logo_path: null
+lf_active: 2026
