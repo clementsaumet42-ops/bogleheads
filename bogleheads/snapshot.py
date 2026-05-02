@@ -9,6 +9,7 @@ Exit codes:
     1 — signature invalide ou mismatch SHA-256
     2 — erreur (fichier introuvable, etc.)
 """
+
 from __future__ import annotations
 
 import argparse

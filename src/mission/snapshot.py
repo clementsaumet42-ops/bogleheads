@@ -269,9 +269,7 @@ def verifier_snapshot_fichier(
         except Exception as exc:
             erreurs.append(f"Erreur vérification signature : {exc}")
     else:
-        details.append(
-            "⚠️  Fichier de signature absent (.json.sig) — vérification crypto ignorée"
-        )
+        details.append("⚠️  Fichier de signature absent (.json.sig) — vérification crypto ignorée")
 
     # 3. Recalculer SHA-256 des livrables référencés
     livrables_sha = snapshot.get("livrables_sha256", {})

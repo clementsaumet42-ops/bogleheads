@@ -3,6 +3,7 @@
 Pipeline: inputs.yaml → alertes → allocation cible → fiscal → compare expected_outputs.json
 Tolérance: 1e-6 pour fractions, 0.01€ pour montants.
 """
+
 from __future__ import annotations
 
 import json

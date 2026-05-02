@@ -1,4 +1,5 @@
 """Shared fixtures for mission regression tests."""
+
 from __future__ import annotations
 
 import numpy as np

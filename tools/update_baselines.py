@@ -8,6 +8,7 @@ Usage:
 ATTENTION: Après régénération, réviser manuellement les valeurs fiscales
 avant de committer (voir docs/fiabilisation.md §3).
 """
+
 from __future__ import annotations
 
 import json
@@ -127,9 +128,7 @@ def main() -> None:
             sys.exit(1)
         update_mission(mission_dir)
     else:
-        missions = [
-            d for d in MISSIONS_DIR.iterdir() if d.is_dir() and not d.name.startswith("_")
-        ]
+        missions = [d for d in MISSIONS_DIR.iterdir() if d.is_dir() and not d.name.startswith("_")]
         if not missions:
             print("Aucune mission trouvée dans tests/missions/", file=sys.stderr)
             sys.exit(1)
