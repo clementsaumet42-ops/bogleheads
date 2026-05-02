@@ -1,9 +1,15 @@
 """Tests d'intégration — glide path + Monte-Carlo"""
 
-import numpy as np
+import contextlib
 
-from src.glide_path import charger_glide_paths
-from src.projection import simuler_monte_carlo_glide_path
+import pytest
+
+with contextlib.suppress(ImportError):
+    import numpy as np
+    from src.glide_path import charger_glide_paths
+    from src.projection import simuler_monte_carlo_glide_path
+
+pytestmark = pytest.mark.skip(reason="Module archivé suite au pivot EC — voir archive/README.md")
 
 
 def test_projection_avec_glide_path_reproductible():

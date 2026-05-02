@@ -5,6 +5,8 @@ from __future__ import annotations
 from datetime import date, timedelta
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).parent.parent
 
 
@@ -60,12 +62,7 @@ def test_badge_verification_intermediaire():
 
 def test_page_univers_etf_compilable():
     """La page 12_Univers_ETF.py se compile sans erreur de syntaxe."""
-    page_path = ROOT / "pages" / "12_Univers_ETF.py"
-    assert page_path.exists(), "La page 12_Univers_ETF.py n'existe pas."
-
-    with open(page_path, encoding="utf-8") as fh:
-        source = fh.read()
-    compile(source, str(page_path), "exec")  # lève SyntaxError si invalide
+    pytest.skip("Page archivée — pivot EC")
 
 
 # ─── Tests de filtrage logique ────────────────────────────────────────────────

@@ -1,15 +1,21 @@
 """Tests unitaires — projection patrimoniale Monte-Carlo"""
 
-import numpy as np
+import contextlib
 
-from src.projection import (
-    AllocationClasses,
-    ParametresProjection,
-    calculer_capital_net_impots,
-    charger_params,
-    probabilite_atteindre_objectif,
-    simuler_monte_carlo,
-)
+import pytest
+
+with contextlib.suppress(ImportError):
+    import numpy as np
+    from src.projection import (
+        AllocationClasses,
+        ParametresProjection,
+        calculer_capital_net_impots,
+        charger_params,
+        probabilite_atteindre_objectif,
+        simuler_monte_carlo,
+    )
+
+pytestmark = pytest.mark.skip(reason="Module archivé suite au pivot EC — voir archive/README.md")
 
 
 def test_charger_params():

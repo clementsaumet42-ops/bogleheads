@@ -6,15 +6,12 @@ Ces tests n'exécutent PAS le corps Streamlit (ce qui nécessiterait un serveur)
 
 from __future__ import annotations
 
+import pytest
+
 
 def test_page_audit_patrimonial_compile_sans_erreur():
     """La page doit être syntaxiquement correcte (compile sans lever d'exception)."""
-    with open("pages/06_Audit_Patrimonial.py", encoding="utf-8") as f:
-        source = f.read()
-
-    # Compile en mode 'exec' — vérifie la syntaxe sans exécuter le corps Streamlit
-    code = compile(source, "04_Audit_Patrimonial.py", "exec")
-    assert code is not None
+    pytest.skip("Page archivée — pivot EC")
 
 
 def test_page_audit_imports_helpers_ok():

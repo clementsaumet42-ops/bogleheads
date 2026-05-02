@@ -2,58 +2,64 @@
 
 from __future__ import annotations
 
-import pandas as pd
+import contextlib
+
 import pytest
 
-from src.backtest.donnees_historiques import aligner_series, charger_serie
-from src.backtest.fiscalite_backtest import (
-    ConfigFiscalite,
-    calculer_impot_dividendes_cto,
-)
-from src.backtest.frais import ConfigFrais, appliquer_ter_mensuel
-from src.backtest.metriques import (
-    calculer_cagr,
-    calculer_calmar,
-    calculer_max_drawdown,
-    calculer_sharpe,
-    calculer_volatilite_annuelle,
-)
-from src.backtest.moteur_backtest import ResultatBacktest, backtester
-from src.backtest.portefeuilles_bogle import (
-    BOGLE_2_FUNDS_70_30,
-    PORTEFEUILLES_DISPONIBLES,
-    PortefeuilleBogle,
-)
+with contextlib.suppress(ImportError):
+    import pandas as pd
+    from src.backtest.donnees_historiques import aligner_series, charger_serie
+    from src.backtest.fiscalite_backtest import (
+        ConfigFiscalite,
+        calculer_impot_dividendes_cto,
+    )
+    from src.backtest.frais import ConfigFrais, appliquer_ter_mensuel
+    from src.backtest.metriques import (
+        calculer_cagr,
+        calculer_calmar,
+        calculer_max_drawdown,
+        calculer_sharpe,
+        calculer_volatilite_annuelle,
+    )
+    from src.backtest.moteur_backtest import ResultatBacktest, backtester
+    from src.backtest.portefeuilles_bogle import (
+        BOGLE_2_FUNDS_70_30,
+        PORTEFEUILLES_DISPONIBLES,
+        PortefeuilleBogle,
+    )
+
+pytestmark = pytest.mark.skip(reason="Module archivé suite au pivot EC — voir archive/README.md")
 
 # ─── Fixtures ────────────────────────────────────────────────────────────────
 
-CONFIG_FRAIS_ZERO = ConfigFrais(
-    ter_par_classe={},
-    courtage_par_ordre_eur=0.0,
-    spread_bps=0.0,
-    frais_enveloppe_annuel_pct={},
-)
+with contextlib.suppress(NameError):
+    CONFIG_FRAIS_ZERO = ConfigFrais(
+        ter_par_classe={},
+        courtage_par_ordre_eur=0.0,
+        spread_bps=0.0,
+        frais_enveloppe_annuel_pct={},
+    )
 
-CONFIG_FRAIS_REEL = ConfigFrais(
-    ter_par_classe={"actions_monde_developpe": 0.002, "obligations_euro_agg": 0.001},
-    courtage_par_ordre_eur=1.0,
-    spread_bps=5.0,
-    frais_enveloppe_annuel_pct={"PEA": 0.0, "AV": 0.006},
-)
+    CONFIG_FRAIS_REEL = ConfigFrais(
+        ter_par_classe={"actions_monde_developpe": 0.002, "obligations_euro_agg": 0.001},
+        courtage_par_ordre_eur=1.0,
+        spread_bps=5.0,
+        frais_enveloppe_annuel_pct={"PEA": 0.0, "AV": 0.006},
+    )
 
-CONFIG_FISCAL_ZERO = ConfigFiscalite(
-    pfu_taux=0.30,
-    ps_taux=0.172,
-    distribution_par_classe={},
-    rebalancement_seuil_pct=0.05,
-)
+    CONFIG_FISCAL_ZERO = ConfigFiscalite(
+        pfu_taux=0.30,
+        ps_taux=0.172,
+        distribution_par_classe={},
+        rebalancement_seuil_pct=0.05,
+    )
 
-CONFIG_FISCAL_AVEC_DISTRIB = ConfigFiscalite(
-    pfu_taux=0.30,
-    ps_taux=0.172,
-    distribution_par_classe={"obligations_euro_agg": 0.02, "cash_eur": 0.03},
-    rebalancement_seuil_pct=0.05,
-)
+    CONFIG_FISCAL_AVEC_DISTRIB = ConfigFiscalite(
+        pfu_taux=0.30,
+        ps_taux=0.172,
+        distribution_par_classe={"obligations_euro_agg": 0.02, "cash_eur": 0.03},
+        rebalancement_seuil_pct=0.05,
+    )
 
 
 # ─── Tests chargement données ────────────────────────────────────────────────
