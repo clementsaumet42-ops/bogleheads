@@ -100,6 +100,7 @@ def construire_snapshot_mission(
     Returns:
         Dict JSON-sérialisable représentant le snapshot complet.
     """
+    # frozen_ts (explicit) takes precedence, then env var for test determinism, then now()
     ts = frozen_ts or os.environ.get("MISSION_TEST_FROZEN_TIME") or datetime.now().isoformat()
 
     snapshot: dict[str, Any] = {
@@ -184,8 +185,8 @@ def verifier_signature(
         from cryptography.exceptions import InvalidSignature
         from cryptography.hazmat.primitives import hashes, serialization
         from cryptography.hazmat.primitives.asymmetric import ec
-    except ImportError:
-        raise RuntimeError("La bibliothèque 'cryptography' est requise.")
+    except ImportError as e:
+        raise RuntimeError("La bibliothèque 'cryptography' est requise.") from e
 
     chemin = cle_publique_path or PUBLIC_KEY_PATH
     if not chemin.exists():
@@ -214,7 +215,9 @@ def sauvegarder_snapshot_signe(
         Tuple (chemin_json, chemin_sig).
     """
     dossier.mkdir(parents=True, exist_ok=True)
-    ts_safe = snapshot.get("timestamp", "unknown").replace(":", "-").replace("T", "_")[:19]
+    raw_ts = snapshot.get("timestamp", "unknown")
+    # Keep only the datetime part (up to seconds) for the filename; guard against short values
+    ts_safe = raw_ts[:19].replace(":", "-").replace("T", "_") if len(raw_ts) >= 19 else "unknown"
     base = f"snapshot_{mission_id}_{ts_safe}"
 
     chemin_json = dossier / f"{base}.json"

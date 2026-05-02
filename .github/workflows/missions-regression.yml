@@ -3,7 +3,6 @@ name: Missions Regression
 on:
   pull_request:
     paths:
-      - "src/fiscal/**"
       - "src/fiscalite/**"
       - "src/allocation/**"
       - "src/audit/**"

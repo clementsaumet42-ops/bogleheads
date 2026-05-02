@@ -177,10 +177,12 @@ class TestVerifierSnapshotFichier:
         dossier = tmp_path / "snap2"
         dossier.mkdir(parents=True)
         j, s = sauvegarder_snapshot_signe(snapshot_simple, sig, dossier, "test_altere")
-        # Altérer le JSON après signature
+        # Altérer le JSON après signature — réutilise _snapshot_bytes pour cohérence
+        from src.mission.snapshot import _snapshot_bytes
+
         data = json.loads(j.read_bytes())
         data["mission_id"] = "ALTERE"
-        j.write_bytes(json.dumps(data, ensure_ascii=False, sort_keys=True, indent=2).encode())
+        j.write_bytes(_snapshot_bytes(data))
         result = verifier_snapshot_fichier(j, tmp_keys["public"])
         assert result["ok"] is False
         assert any("INVALIDE" in e for e in result["erreurs"])

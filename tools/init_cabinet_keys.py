@@ -73,8 +73,14 @@ def generer_cle_ecdsa_p256() -> None:
     # Permissions restrictives sur la clé privée (Unix)
     try:
         private_path.chmod(0o600)
-    except Exception:
-        pass
+    except Exception as exc:
+        import warnings
+
+        warnings.warn(
+            f"Impossible de restreindre les permissions sur la clé privée : {exc}\n"
+            "Vérifiez manuellement que le fichier n'est lisible que par votre utilisateur.",
+            stacklevel=2,
+        )
 
     print("\n✅ Paire de clés ECDSA P-256 générée avec succès !")
     print(f"   Clé privée : {private_path}")
