@@ -1,0 +1,21 @@
+{
+  "alertes_codes": ["R16", "R17", "R35", "R36"],
+  "nb_alertes_min": 3,
+  "allocation_cible": {
+    "actions_monde_acwi": 0.7,
+    "obligations_agg_monde": 0.2545664893617022,
+    "or_matieres": 0.04543351063829786,
+    "monetaire": 0.0
+  },
+  "allocation_tolerance": 1e-6,
+  "profil_mif2": "dynamique_75_25",
+  "pea_plafond_atteint": false,
+  "per_deduction_max_eur": 9500.0,
+  "fiscal": {
+    "taux_pfu_total": 0.314,
+    "taux_ps": 0.186,
+    "regime_is": false,
+    "is_taux_normal": 0.25,
+    "is_taux_reduit": 0.15
+  }
+}

@@ -1,0 +1,36 @@
+profil:
+  id: 2
+  code: "cadre_sup_ir"
+  nom: "Mission Cadre Sup IR (test fixture)"
+  age: 45
+  tmi: 0.30
+  rfr_annuel: 95000
+  patrimoine_financier_total: 800000
+  regime_fiscal_detenteur: "IR"
+  allocation_cible_bogleheads:
+    actions: 0.75
+    obligations: 0.20
+    liquidites: 0.05
+  profil_aversion_risque: "dynamique"
+  enveloppes_disponibles:
+    PEA:
+      encours_actuel: 120000
+      versements_cumules: 100000
+    PER:
+      encours_actuel: 50000
+    CTO_perso:
+      encours_actuel: 80000
+    AV_avant_2017:
+      encours_actuel: 200000
+    AV_apres_2017:
+      encours_actuel: 150000
+  a_livret_a: true
+  epargne_precaution: 30000
+  est_en_couple: true
+  a_testament: true
+  clause_beneficiaire_renseignee: true
+  plafond_per_non_utilise: 15000
+mission_params:
+  profil_mif2: "dynamique_75_25"
+  lf_active: 2026
+  patrimoine_total_eur: 800000

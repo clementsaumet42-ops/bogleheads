@@ -1,0 +1,33 @@
+profil:
+  id: 1
+  code: "dirigeant_is_holding"
+  nom: "Mission Dirigeant IS Holding (test fixture)"
+  age: 50
+  tmi: 0.41
+  rfr_annuel: 180000
+  patrimoine_financier_total: 3000000
+  regime_fiscal_detenteur: "IS"
+  allocation_cible_bogleheads:
+    actions: 0.60
+    obligations: 0.35
+    liquidites: 0.05
+  profil_aversion_risque: "equilibre"
+  enveloppes_disponibles:
+    PEA:
+      encours_actuel: 150000
+      versements_cumules: 150000
+    AV_IR:
+      encours_actuel: 300000
+    CTO_IS:
+      encours_actuel: 1200000
+    Contrat_Cap_IS:
+      encours_actuel: 1350000
+  a_livret_a: true
+  epargne_precaution: 50000
+  est_en_couple: true
+  a_testament: false
+  clause_beneficiaire_renseignee: false
+mission_params:
+  profil_mif2: "equilibre_60_40"
+  lf_active: 2026
+  patrimoine_total_eur: 3000000
