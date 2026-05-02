@@ -81,7 +81,7 @@ def build_expected_outputs(inputs_path: Path) -> dict:
 
     return {
         "alertes_codes": [a.code for a in alertes],
-        "nb_alertes_min": max(1, len(alertes)),
+        "nb_alertes_min": len(alertes),
         "allocation_cible": alloc_cible,
         "allocation_tolerance": 1e-6,
         "profil_mif2": profil_mif2,
