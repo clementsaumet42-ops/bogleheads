@@ -69,7 +69,8 @@ class EtatMission:
         return cls(
             mission_id=data["mission_id"],
             nom_client=data["nom_client"],
-            conseiller=data.get("conseiller") or data.get("cgp", ""),  # "cgp" : rétro-compat missions S16
+            conseiller=data.get("conseiller")
+            or data.get("cgp", ""),  # "cgp" : rétro-compat missions S16
             date_creation=date.fromisoformat(data["date_creation"]),
             date_derniere_maj=date.fromisoformat(data["date_derniere_maj"]),
             etapes=etapes,
