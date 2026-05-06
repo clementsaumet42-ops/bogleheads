@@ -16,7 +16,7 @@ Le cas Rousseau-Marchand est un dossier patrimonial fictif complexe conçu pour 
 **Prérequis :** l'application Streamlit est lancée localement (`streamlit run app.py`).
 
 **Étape 1 — Créer la mission**  
-Depuis la page `00_Mission_CGP`, créer une nouvelle mission intitulée "Rousseau-Marchand 2026". Saisir le profil du foyer en s'appuyant sur la fixture `tests/fixtures/cas_rousseau.yaml`.
+Depuis la page `00_Mission_EC`, créer une nouvelle mission intitulée "Rousseau-Marchand 2026". Saisir le profil du foyer en s'appuyant sur la fixture `tests/fixtures/cas_rousseau.yaml`.
 
 **Étape 2 — Générer les PDF de test**  
 Ouvrir chacun des 5 fichiers Markdown du dossier `dogfood/cas_rousseau/pdf_a_generer/` dans un éditeur (Word, Pages, Typora). Exporter au format PDF. Sauvegarder les 5 PDF dans un dossier local temporaire (non commité — voir `.gitignore`).
@@ -28,7 +28,7 @@ Depuis la page `24_Import_Patrimoine`, déposer successivement les 5 PDF génér
 - les alertes déclenchées (H2O, concentration PEE, titres UK)
 
 **Étape 4 — Parcourir le fil conducteur S16**  
-Depuis la page `00_Mission_CGP`, suivre les étapes : Profil → Profilage MIF II → Allocation cible → Asset location → Plan d'exécution → Conformité CIF. Vérifier à chaque étape que les données importées en S20 sont bien reprises.
+Depuis la page `00_Mission_EC`, suivre les étapes : Profil → Profilage MIF II → Allocation cible → Asset location → Plan d'exécution → Conformité CIF. Vérifier à chaque étape que les données importées en S20 sont bien reprises.
 
 **Étape 5 — Générer tous les livrables**  
 Depuis la page Mission, utiliser le bouton "Tout générer" (S18) pour produire le ZIP complet : rapport PDF, DER, lettre de mission, Excel.

@@ -6,6 +6,15 @@ Format : [Semantic Versioning](https://semver.org/lang/fr/) — [Keep a Changelo
 
 ---
 
+## [Unreleased] — Renommage en Sextant : nouveau positionnement
+
+### Renommage
+- Projet renommé **Sextant** — atelier de mission patrimoniale Bogleheads pour experts-comptables inscrits CIF
+- `README.md` intégralement réécrit pour refléter le nouveau positionnement produit
+- `pages/00_Mission_CGP.py` → `pages/00_Mission_EC.py`
+
+---
+
 ## [Unreleased] — Pivot stratégique : du musée fonctionnel à l'atelier mission EC
 
 ### Repositionnement
@@ -197,7 +206,7 @@ Format : [Semantic Versioning](https://semver.org/lang/fr/) — [Keep a Changelo
 - `sauvegarder_immediatement(mission_id, cle, valeur)` : force le flush d'une clé critique
 - Filtre automatique des types non sérialisables (DataFrames → `list[dict]`, objets complexes → ignorés avec log)
 - Champ `session_state_snapshot: dict | None` ajouté à `EtatMission` (rétro-compatible — missions S16 sans ce champ chargées sans erreur)
-- Toggle "💾 Auto-save activé" dans la sidebar de `pages/00_Mission_CGP.py` (off par défaut)
+- Toggle "💾 Auto-save activé" dans la sidebar de `pages/00_Mission_EC.py` (off par défaut)
 
 #### Lot B — Préremplissage intelligent (`src/preremplissage/`)
 - `deduire_tmi(revenu_net_annuel, situation, nb_enfants)` : déduit la TMI depuis le revenu via `src/fiscalite/tmi` (aucune duplication)
@@ -216,9 +225,9 @@ Format : [Semantic Versioning](https://semver.org/lang/fr/) — [Keep a Changelo
 - **Règle 4** : Âge ≥ objectif retraite → info
 - **Règle 5** : Capital < frais courtage × 10 → warning
 - **Règle 6** : >80% monétaire avec horizon >10 ans → warning rendement réel négatif
-- Section "⚠️ Avertissements de cohérence" dans `pages/00_Mission_CGP.py`
+- Section "⚠️ Avertissements de cohérence" dans `pages/00_Mission_EC.py`
 
-#### Lot D — Bouton "🚀 Tout générer" (`pages/00_Mission_CGP.py`)
+#### Lot D — Bouton "🚀 Tout générer" (`pages/00_Mission_EC.py`)
 - Section "🚀 Tout générer" en bas de la page Mission CGP
 - Vérifie les 5 étapes obligatoires (profil_saisi, profilage_mif, allocation_cible, asset_location, plan_execution)
 - Génère séquentiellement avec `st.progress` : récap mission PDF, snapshot hypothèses S17, PDF client, Excel, ordres CSV
@@ -255,7 +264,7 @@ Format : [Semantic Versioning](https://semver.org/lang/fr/) — [Keep a Changelo
 ## [0.7.0] — Sprint S16 — Page Mission CGP unifiée
 
 - `src/mission/` : EtatMission, checklist 13 étapes, progression, widgets
-- `pages/00_Mission_CGP.py` : fil conducteur avec checklist visuelle et export PDF récap
+- `pages/00_Mission_EC.py` : fil conducteur avec checklist visuelle et export PDF récap
 
 ---
 
