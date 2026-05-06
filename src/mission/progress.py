@@ -1,4 +1,4 @@
-"""Calcul de progression et détection de blocages d'une mission CGP."""
+"""Calcul de progression et détection de blocages d'une mission EC."""
 
 from __future__ import annotations
 

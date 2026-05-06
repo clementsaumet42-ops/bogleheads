@@ -3,7 +3,7 @@
 ## Introduction
 
 La webapp Boglehead FR est une interface web interactive construite avec Streamlit au-dessus
-de toute la logique métier S1–S3. Elle permet à un CGP de démontrer l'outil à un client
+de toute la logique métier S1–S3. Elle permet à un EC de démontrer l'outil à un client
 sans avoir besoin d'un terminal.
 
 ## Installation et lancement

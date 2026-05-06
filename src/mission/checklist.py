@@ -1,4 +1,4 @@
-"""Définition des étapes canoniques d'une mission CGP."""
+"""Définition des étapes canoniques d'une mission EC."""
 
 from __future__ import annotations
 

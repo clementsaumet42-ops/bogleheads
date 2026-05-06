@@ -341,7 +341,7 @@ class RebalancementFlux(_Lenient):
 
 
 class CabinetInfo(_Lenient):
-    """Informations sur le cabinet CGP."""
+    """Informations sur le cabinet EC-CIF."""
 
     nom: str
     logo_path: str | None = None

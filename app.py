@@ -13,7 +13,7 @@ import streamlit as st
 # ─── Configuration de la page ─────────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="Boglehead FR — CGP Multi-Enveloppes",
+    page_title="Sextant — EC-CIF Multi-Enveloppes",
     page_icon="🏦",
     layout="wide",
     initial_sidebar_state="expanded",

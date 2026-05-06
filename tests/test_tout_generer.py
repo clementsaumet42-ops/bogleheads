@@ -24,7 +24,7 @@ def tmp_data_dir(tmp_path, monkeypatch):
 @pytest.fixture
 def mission_prete(tmp_data_dir) -> EtatMission:
     """Mission avec toutes les étapes requises validées."""
-    m = creer_mission("Dupont Jean", "Alice CGP")
+    m = creer_mission("Dupont Jean", "Alice EC")
     for cle in [
         "profil_saisi",
         "profilage_mif",
@@ -41,7 +41,7 @@ def mission_prete(tmp_data_dir) -> EtatMission:
 @pytest.fixture
 def mission_incomplete(tmp_data_dir) -> EtatMission:
     """Mission avec des étapes manquantes."""
-    m = creer_mission("Martin", "Bob CGP")
+    m = creer_mission("Martin", "Bob EC")
     # Seule profil_saisi validée
     m.etapes["profil_saisi"] = EtatEtape.VALIDE
     sauvegarder_mission(m)
@@ -80,7 +80,7 @@ class TestEtapesRequises:
         assert "profilage_mif" in manquantes
 
     def test_etapes_skip_comptent_comme_validees(self, tmp_data_dir):
-        m = creer_mission("Test Skip", "CGP")
+        m = creer_mission("Test Skip", "EC")
         for cle in self._ETAPES_REQUISES:
             if cle in m.etapes:
                 m.etapes[cle] = EtatEtape.SKIP
@@ -100,7 +100,7 @@ class TestCreationZip:
         """Un ZIP vide est valide (cas de base)."""
         buf = io.BytesIO()
         with zipfile.ZipFile(buf, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
-            zf.writestr("readme.txt", "Test archive mission CGP")
+            zf.writestr("readme.txt", "Test archive mission EC")
         assert buf.getbuffer().nbytes > 0
         buf.seek(0)
         with zipfile.ZipFile(buf) as zf:

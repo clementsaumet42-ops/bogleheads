@@ -1,4 +1,4 @@
-"""Moteur fiscal IS — cœur du projet HoldIS Advisor.
+"""Moteur fiscal IS — cœur du projet Sextant.
 
 Traite spécifiquement les enjeux fiscaux des holdings à l'IS :
 - Piège mark-to-market Art. 209-0 A CGI

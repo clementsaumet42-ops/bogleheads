@@ -97,7 +97,7 @@ def filtrer_session_state(session_state: dict[str, Any]) -> dict[str, Any]:
 def activer_autosave(mission_id: str, intervalle_secondes: int = 30) -> None:
     """Active la routine d'auto-save pour la mission active.
 
-    Doit être appelée une fois par run Streamlit depuis la page Mission CGP.
+    Doit être appelée une fois par run Streamlit depuis la page Mission EC.
     Flush le session_state dans EtatMission quand l'intervalle est dépassé.
 
     Args:

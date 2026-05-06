@@ -119,7 +119,7 @@ Variantes disponibles :
 - `assets/monogramme_or.svg` — or sur transparent
 - `assets/monogramme_blanc.svg` — blanc sur transparent
 
-Le CGP peut remplacer ce monogramme par son logo via `config/pdf_cabinet.yaml` (champ `cabinet.logo_path`).
+L'EC peut remplacer ce monogramme par son logo via `config/pdf_cabinet.yaml` (champ `cabinet.logo_path`).
 
 ---
 
@@ -138,7 +138,7 @@ Icônes SVG monochromes, stroke 1.5px, couleur par défaut `--ardoise-claire`, h
 | `download` | `download.svg` | Téléchargement, génération |
 | `file-text` | `file-text.svg` | Documents, hypothèses |
 | `users` | `users.svg` | Clients, profils |
-| `briefcase` | `briefcase.svg` | Mission, CGP |
+| `briefcase` | `briefcase.svg` | Mission, EC |
 | `trending-up` | `trending-up.svg` | Projection, performance |
 | `pie-chart` | `pie-chart.svg` | Allocation, répartition |
 | `calendar` | `calendar.svg` | Dates, planning |

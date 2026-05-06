@@ -343,10 +343,10 @@ contrats_av:
 - id: swisslife_assurance_patrimoine
   nom: "Swiss Life Assurance et Patrimoine"
   assureur: "Swiss Life"
-  distributeur: "Swiss Life (réseaux CGP)"
-  frais_gestion_uc_pct: 0.0090  # source: grille tarifaire Swiss Life CGP 2025
+  distributeur: "Swiss Life (réseaux EC-CIF)"
+  frais_gestion_uc_pct: 0.0090  # source: grille tarifaire Swiss Life 2025
   frais_gestion_fonds_euros_pct: 0.0090
-  frais_entree_pct: 0.0  # variable selon CGP, 0% en direct
+  frais_entree_pct: 0.0  # variable selon conseiller, 0% en direct
   frais_arbitrage_pct: 0.0
   nb_arbitrages_gratuits_an: null
   nb_uc_total: 400
@@ -368,13 +368,13 @@ contrats_av:
   date_souscription_possible: "2005-01-01"
   sources:
     - "https://www.swisslife.fr/contrats-assurance-vie.html"
-    - "Grille tarifaire Swiss Life CGP 2025"
+    - "Grille tarifaire Swiss Life 2025"
 
 - id: generali_himalia
   nom: "Generali Himalia"
   assureur: "Generali"
-  distributeur: "Generali (réseaux CGP)"
-  frais_gestion_uc_pct: 0.0080  # source: grille tarifaire Generali CGP 2025
+  distributeur: "Generali (réseaux EC-CIF)"
+  frais_gestion_uc_pct: 0.0080  # source: grille tarifaire Generali 2025
   frais_gestion_fonds_euros_pct: 0.0085
   frais_entree_pct: 0.0
   frais_arbitrage_pct: 0.0
@@ -398,7 +398,7 @@ contrats_av:
   date_souscription_possible: "2010-01-01"
   sources:
     - "https://www.generali.fr/contrats-assurance-vie/himalia/"
-    - "Grille tarifaire Generali CGP 2025"
+    - "Grille tarifaire Generali 2025"
 
 - id: placement_direct_essentiel
   nom: "Placement-Direct Essentiel"

@@ -1,4 +1,4 @@
-"""Page 00 — Mission CGP : fil conducteur et checklist de mission."""
+"""Page 00 — Mission EC : fil conducteur et checklist de mission."""
 
 from __future__ import annotations
 
@@ -27,10 +27,10 @@ from src.validations.coherence import valider_coherence
 
 logger = logging.getLogger(__name__)
 
-st.set_page_config(page_title="Mission CGP", page_icon="🏛️", layout="wide")
+st.set_page_config(page_title="Mission EC", page_icon="🏛️", layout="wide")
 injecter_css()
 
-st.title("Mission CGP — Fil conducteur")
+st.title("Mission EC — Fil conducteur")
 st.caption("Pilotez votre mission de bout en bout : de la prise en charge au suivi M+3.")
 
 # ─── Section 1 — Sélecteur de mission ────────────────────────────────────────
@@ -62,15 +62,15 @@ with col_sel:
 with col_new:
     with st.popover("Nouvelle mission"):
         nc = st.text_input("Nom du client", key="_new_nom_client")
-        cgp = st.text_input("CGP", key="_new_cgp")
+        conseiller = st.text_input("Conseiller EC", key="_new_conseiller")
         if st.button("Créer", key="_btn_creer_mission"):
-            if nc and cgp:
-                nouvelle = creer_mission(nc, cgp)
+            if nc and conseiller:
+                nouvelle = creer_mission(nc, conseiller)
                 st.session_state["mission_id"] = nouvelle.mission_id
                 st.success(f"Mission **{nouvelle.mission_id}** créée ")
                 st.rerun()
             else:
-                st.warning("Renseignez le nom du client et le CGP.")
+                st.warning("Renseignez le nom du client et le conseiller EC.")
 
 with col_del:
     if selected_id and st.button("", key="_btn_del_mission", help="Supprimer la mission"):
@@ -124,7 +124,7 @@ st.subheader("2. Mission active")
 
 col_a, col_b, col_c, col_d = st.columns(4)
 col_a.metric("Client", etat.nom_client)
-col_b.metric("CGP", etat.cgp)
+col_b.metric("Conseiller EC", etat.conseiller)
 col_c.metric("Créée le", etat.date_creation.strftime("%d/%m/%Y"))
 col_d.metric("Mise à jour", etat.date_derniere_maj.strftime("%d/%m/%Y"))
 
@@ -364,10 +364,10 @@ def _generer_pdf_recap(etat: EtatMission, prog: dict) -> bytes:
     normal = styles["Normal"]
 
     story = []
-    story.append(Paragraph("Récapitulatif Mission CGP", titre_style))
+    story.append(Paragraph("Récapitulatif Mission EC", titre_style))
     story.append(
         Paragraph(
-            f"Client : <b>{etat.nom_client}</b> — CGP : {etat.cgp} "
+            f"Client : <b>{etat.nom_client}</b> — Conseiller EC : {etat.conseiller} "
             f"— Créée le {etat.date_creation.strftime('%d/%m/%Y')}",
             sub_style,
         )
@@ -419,7 +419,7 @@ def _generer_pdf_recap(etat: EtatMission, prog: dict) -> bytes:
     story.append(Spacer(1, 0.5 * cm))
     story.append(
         Paragraph(
-            f"Généré le {date.today().strftime('%d/%m/%Y')} — Outil CGP Boglehead FR",
+            f"Généré le {date.today().strftime('%d/%m/%Y')} — Sextant",
             normal,
         )
     )

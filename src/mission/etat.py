@@ -1,4 +1,4 @@
-"""State machine d'une mission CGP avec persistance JSON sur disque."""
+"""State machine d'une mission EC avec persistance JSON sur disque."""
 
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ class EtatEtape(Enum):
 class EtatMission:
     mission_id: str
     nom_client: str
-    cgp: str
+    conseiller: str
     date_creation: date
     date_derniere_maj: date
     etapes: dict[str, EtatEtape]
@@ -51,7 +51,7 @@ class EtatMission:
         d: dict[str, Any] = {
             "mission_id": self.mission_id,
             "nom_client": self.nom_client,
-            "cgp": self.cgp,
+            "conseiller": self.conseiller,
             "date_creation": self.date_creation.isoformat(),
             "date_derniere_maj": self.date_derniere_maj.isoformat(),
             "etapes": {k: v.value for k, v in self.etapes.items()},
@@ -69,7 +69,7 @@ class EtatMission:
         return cls(
             mission_id=data["mission_id"],
             nom_client=data["nom_client"],
-            cgp=data["cgp"],
+            conseiller=data.get("conseiller") or data.get("cgp", ""),  # "cgp" : rétro-compat missions S16
             date_creation=date.fromisoformat(data["date_creation"]),
             date_derniere_maj=date.fromisoformat(data["date_derniere_maj"]),
             etapes=etapes,
@@ -119,7 +119,7 @@ def _etapes_initiales() -> dict[str, EtatEtape]:
     return {etape.cle: EtatEtape.NON_COMMENCE for etape in ETAPES_CANONIQUES}
 
 
-def creer_mission(nom_client: str, cgp: str) -> EtatMission:
+def creer_mission(nom_client: str, conseiller: str) -> EtatMission:
     """Crée une nouvelle mission et la persiste."""
     today = date.today()
     base = f"{_slug(nom_client)}_{today.year}_{today.month:02d}"
@@ -136,7 +136,7 @@ def creer_mission(nom_client: str, cgp: str) -> EtatMission:
     etat = EtatMission(
         mission_id=mission_id,
         nom_client=nom_client,
-        cgp=cgp,
+        conseiller=conseiller,
         date_creation=today,
         date_derniere_maj=today,
         etapes=_etapes_initiales(),

@@ -26,7 +26,7 @@ def tmp_data_dir(tmp_path, monkeypatch):
 
 @pytest.fixture
 def mission_vierge(tmp_data_dir) -> EtatMission:
-    return creer_mission("Dupont Jean", "Alice CGP")
+    return creer_mission("Dupont Jean", "Alice EC")
 
 
 # ─── Tests filtrer_session_state ─────────────────────────────────────────────
@@ -113,7 +113,7 @@ class TestRoundTripSession:
                 {
                     "mission_id": mission_id,
                     "nom_client": "Ancien Client",
-                    "cgp": "CGP",
+                    "conseiller": "EC",
                     "date_creation": "2024-01-01",
                     "date_derniere_maj": "2024-01-01",
                     "etapes": {},

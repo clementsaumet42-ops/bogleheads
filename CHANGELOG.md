@@ -13,6 +13,15 @@ Format : [Semantic Versioning](https://semver.org/lang/fr/) — [Keep a Changelo
 - `README.md` intégralement réécrit pour refléter le nouveau positionnement produit
 - `pages/00_Mission_CGP.py` → `pages/00_Mission_EC.py`
 
+### Modifié (B.2 — Purge vocabulaire)
+- Vocabulaire "CGP" purgé de tout le code source (`src/`, `pages/`, `tests/`, `app.py`)
+- Commentaires, docstrings, libellés UI mis à jour vers "EC-CIF" / "Sextant"
+- Identifiant `cgp` renommé `conseiller` dans `EtatMission` (rétro-compat JSON préservée via `from_dict`)
+- `creer_mission(nom_client, cgp)` → `creer_mission(nom_client, conseiller)`
+- Dossier `dogfood/cas_rousseau/` nettoyé
+- `archive/` préservé (historique figé)
+- Aucune logique métier modifiée
+
 ---
 
 ## [Unreleased] — Pivot stratégique : du musée fonctionnel à l'atelier mission EC

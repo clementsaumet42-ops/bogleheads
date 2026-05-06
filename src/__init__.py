@@ -1,1 +1,1 @@
-# Paquet source — outil CGP Bogleheads France
+# Paquet source — Sextant, outil EC-CIF Bogleheads France

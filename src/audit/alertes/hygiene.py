@@ -29,7 +29,7 @@ def detecter_R35(profil) -> Alerte | None:
                 gain_eur_annuel=None,
                 gain_eur_horizon=None,
                 action_concrete="Planifier une revue patrimoniale annuelle (idéalement en novembre/décembre avant la clôture fiscale).",
-                sources=["AMF guide investisseur", "Bonne pratique CGP"],
+                sources=["AMF guide investisseur", "Bonne pratique EC-CIF"],
             )
 
         if isinstance(date_revue, str):
@@ -52,8 +52,8 @@ def detecter_R35(profil) -> Alerte | None:
                     ),
                     gain_eur_annuel=None,
                     gain_eur_horizon=None,
-                    action_concrete="Planifier une revue patrimoniale avec votre CGP avant fin d'année.",
-                    sources=["AMF guide investisseur", "Bonne pratique CGP"],
+                    action_concrete="Planifier une revue patrimoniale avec votre conseiller EC avant fin d'année.",
+                    sources=["AMF guide investisseur", "Bonne pratique EC-CIF"],
                 )
 
         return None
