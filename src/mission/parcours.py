@@ -237,3 +237,64 @@ def prochaine_page_recommandee(etat: EtatMission) -> str | None:
     if phase.pages:
         return phase.pages[0]
     return None
+
+
+# ── Talking points contextuels par phase ──────────────────────────────────
+#
+# Source de verite unique : ce que l'EC dit / fait avec le client en RDV.
+# Affiche par les pages metier dans un expander "Que dire au client".
+
+TALKING_POINTS_PAR_PHASE: dict[str, tuple[str, ...]] = {
+    "qualification": (
+        "Confirmer avec le client la pertinence d'une mission CIF dediee.",
+        "Annoncer le pricing indicatif (5 a 15 k€ HT) et la duree (4 semaines).",
+        "Clarifier que cette mission est independante de la mission d'expertise comptable.",
+    ),
+    "onboarding": (
+        "Saisir le foyer : situation familiale, revenus, regime matrimonial.",
+        "Faire passer le questionnaire MIF II : connaissance, experience, "
+        "tolerance au risque, capacite de perte, horizon, objectifs.",
+        "Generer DER + lettre de mission, envoyer pour signature eIDAS.",
+    ),
+    "diagnostic": (
+        "Importer les 3 a 8 derniers releves PDF (PEA, AV, CTO, PEE...).",
+        "Valider chaque ligne ligne par ligne — jamais de merge silencieux.",
+        "Presenter au client la friction fiscale ANNUELLE actuelle "
+        "(en € et en bps) — c'est l'argument economique cle.",
+        "Hierarchiser les alertes : concentration, frais courants, pieges "
+        "MIF II, fonds bloques, retenues source UK.",
+    ),
+    "recommandations": (
+        "Proposer une allocation cible Boglehead adaptee au profil "
+        "(ex. 60/40 ou 70/30) avec coeur indiciel mondial.",
+        "Justifier l'asset location MILP : pour chaque ETF, dans quelle "
+        "enveloppe et pourquoi (defendabilite fiscale).",
+        "Faire valider l'allocation par le client — toujours modifiable, jamais imposee.",
+    ),
+    "plan_action": (
+        "Presenter la cascade trimestrielle : versements cibles sur les "
+        "enveloppes sous-ponderees, en priorite.",
+        "Chiffrer le COUT FISCAL EVITE vs un rebalancement naif — c'est "
+        "le ROI defendable a presenter au client.",
+        "Lister les arbitrages eventuels en privilegiant les enveloppes "
+        "sans friction (PEA anteriorite, AV >8 ans, PEE debloque).",
+        "Remettre les ordres prets a passer (CSV ou copie-broker).",
+    ),
+    "livrables": (
+        "Generer le ZIP horodate : PDF diagnostic, DER, LM, RAA, Excel, "
+        "CSV ordres, journal de mission.",
+        "Verifier la conformite CIF et la signature eIDAS de tous les documents.",
+        "Transmettre au client par canal securise et obtenir l'accuse de reception.",
+    ),
+    "suivi_annuel": (
+        "Re-importer les releves a J+12 mois et comparer realise vs cible.",
+        "Chiffrer la friction fiscale REELLEMENT evitee vs scenario naif.",
+        "Mettre a jour le DER si situation foyer ou objectifs ont evolue.",
+        "Produire le nouveau plan 12 mois pour l'annee a venir.",
+    ),
+}
+
+
+def talking_points_pour_phase(cle_phase: str) -> tuple[str, ...]:
+    """Retourne la liste de talking points de la phase, ou tuple vide si inconnue."""
+    return TALKING_POINTS_PAR_PHASE.get(cle_phase, ())

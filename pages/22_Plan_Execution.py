@@ -11,12 +11,14 @@ import pandas as pd
 import streamlit as st
 import yaml
 
+from src.ui.parcours_widget import afficher_talking_points, injecter_bandeau_si_mission
 from src.ui.theme import injecter_css
 
 logger = logging.getLogger(__name__)
 
 st.set_page_config(page_title="Plan d'Exécution", page_icon="🏛️", layout="wide")
 injecter_css()
+injecter_bandeau_si_mission("22_Plan_Execution.py")
 
 st.title("Plan d'Exécution — Du théorique au concret")
 st.caption("Screener ETF · Ordres chiffrés · Déploiement DCA/lump · Calendrier de mise en œuvre")
@@ -540,3 +542,7 @@ if calendrier:
 from src.mission.widgets import widget_mission_etape  # noqa: E402
 
 widget_mission_etape("plan_execution")
+
+
+# ─── Talking points ──────────────────────────────────────────────────────
+afficher_talking_points("22_Plan_Execution.py")

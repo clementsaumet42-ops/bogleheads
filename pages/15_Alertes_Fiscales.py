@@ -13,11 +13,13 @@ from src.fiscalite.constantes import (
 )
 from src.fiscalite.cto_is import detecter_piege_mtm
 from src.fiscalite.pea import verifier_plafond_pea
+from src.ui.parcours_widget import afficher_talking_points, injecter_bandeau_si_mission
 from src.ui.theme import injecter_css
 
 st.set_page_config(page_title="Alertes Fiscales", page_icon="🏛️", layout="wide")
 
 injecter_css()
+injecter_bandeau_si_mission("15_Alertes_Fiscales.py")
 
 st.title("Alertes Fiscales")
 st.markdown("Détectez les pièges fiscaux et optimisez votre stratégie d'investissement.")
@@ -192,3 +194,7 @@ st.caption(
     "Alertes indicatives basées sur la réglementation 2026. "
     "Consultez un expert-comptable pour votre situation spécifique."
 )
+
+
+# ─── Talking points ──────────────────────────────────────────────────────
+afficher_talking_points("15_Alertes_Fiscales.py")

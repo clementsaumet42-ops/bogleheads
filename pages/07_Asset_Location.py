@@ -6,9 +6,11 @@ import streamlit as st
 
 from src.ui.charts import heatmap_asset_location
 from src.ui.formatters import format_euro, format_pct
+from src.ui.parcours_widget import afficher_talking_points, injecter_bandeau_si_mission
 from src.ui.theme import injecter_css
 
 injecter_css()
+injecter_bandeau_si_mission("07_Asset_Location.py")
 
 st.title("Asset Location")
 
@@ -142,3 +144,7 @@ with col_etf1:
 with col_etf2:
     if st.button("Voir les ETFs disponibles par enveloppe →", use_container_width=True):
         st.switch_page("pages/12_Univers_ETF.py")
+
+
+# ─── Talking points ──────────────────────────────────────────────────────
+afficher_talking_points("07_Asset_Location.py")

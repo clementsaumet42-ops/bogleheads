@@ -9,9 +9,11 @@ import streamlit as st
 import yaml
 
 from src.ui.formatters import format_euro
+from src.ui.parcours_widget import afficher_talking_points, injecter_bandeau_si_mission
 from src.ui.theme import injecter_css
 
 injecter_css()
+injecter_bandeau_si_mission("04_Profil.py")
 
 st.title("Profil client")
 
@@ -348,3 +350,7 @@ with st.expander("Patrimoine financier déjà constitué", expanded=False):
 from src.mission.widgets import widget_mission_etape  # noqa: E402
 
 widget_mission_etape("profil_saisi")
+
+
+# ─── Talking points ──────────────────────────────────────────────────────
+afficher_talking_points("04_Profil.py")

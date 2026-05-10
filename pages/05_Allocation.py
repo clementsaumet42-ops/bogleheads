@@ -10,11 +10,13 @@ import yaml
 from src.ui.cards import badge_statut, carte_kpi
 from src.ui.charts import camembert_allocation
 from src.ui.formatters import format_euro, format_pct, format_ratio_sharpe
+from src.ui.parcours_widget import afficher_talking_points, injecter_bandeau_si_mission
 from src.ui.theme import injecter_css
 
 # ─── Injection typographie premium ───────────────────────────────────────────
 
 injecter_css()
+injecter_bandeau_si_mission("05_Allocation.py")
 
 st.markdown(
     """
@@ -558,3 +560,7 @@ if st.button("Optimiser l'asset location →", type="primary"):
 from src.mission.widgets import widget_mission_etape  # noqa: E402
 
 widget_mission_etape("allocation_cible")
+
+
+# ─── Talking points ──────────────────────────────────────────────────────
+afficher_talking_points("05_Allocation.py")

@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from src.mission.etat import EtatMission
+from src.mission.etat import EtatMission, charger_mission
 from src.mission.parcours import (
     PHASES_PARCOURS,
     PhaseParcours,
@@ -22,6 +22,7 @@ from src.mission.parcours import (
     phase_d_une_page,
     prochaine_page_recommandee,
     progression_par_phase,
+    talking_points_pour_phase,
 )
 from src.ui.theme import (
     ARDOISE,
@@ -135,6 +136,65 @@ def afficher_bandeau_parcours(
                 use_container_width=True,
             ):
                 st.switch_page(f"pages/{prochaine}")
+
+
+def injecter_bandeau_si_mission(page_courante: str) -> None:
+    """Wrapper pratique : charge la mission active depuis session_state et
+    affiche le bandeau parcours. Silencieux si aucune mission active.
+
+    A appeler en haut de toute page metier juste apres `injecter_css()` :
+
+        from src.ui.parcours_widget import injecter_bandeau_si_mission
+        injecter_bandeau_si_mission("05_Allocation.py")
+    """
+    mission_id = st.session_state.get("mission_id")
+    if not mission_id:
+        return
+    try:
+        etat = charger_mission(mission_id)
+    except FileNotFoundError:
+        return
+    afficher_bandeau_parcours(etat, page_courante=page_courante)
+
+
+def afficher_talking_points(page_courante: str | None = None) -> None:
+    """Affiche un expander 'Que dire au client en phase X' au bas d'une page.
+
+    Lit la mission active dans session_state. Silencieux si aucune mission.
+    Utilise la cle de phase de la page courante si fournie, sinon la phase
+    courante de la mission.
+    """
+    mission_id = st.session_state.get("mission_id")
+    if not mission_id:
+        return
+    try:
+        etat = charger_mission(mission_id)
+    except FileNotFoundError:
+        return
+
+    phase = None
+    if page_courante:
+        phase = phase_d_une_page(page_courante)
+    if phase is None:
+        phase = phase_courante(etat)
+
+    points = talking_points_pour_phase(phase.cle)
+    if not points:
+        return
+
+    with st.expander(
+        f"Que dire au client en phase {phase.numero} — {phase.titre}",
+        expanded=False,
+    ):
+        for i, point in enumerate(points, 1):
+            st.markdown(
+                f'<div style="display:flex;gap:8px;margin-bottom:6px;">'
+                f'<span style="color:{OR_VIEILLI};font-weight:600;'
+                f'min-width:20px;">{i}.</span>'
+                f'<span style="color:{ARDOISE};">{point}</span>'
+                f"</div>",
+                unsafe_allow_html=True,
+            )
 
 
 def afficher_carte_phase(phase: PhaseParcours, pct: int) -> None:

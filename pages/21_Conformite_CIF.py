@@ -8,12 +8,14 @@ from pathlib import Path
 import streamlit as st
 import yaml
 
+from src.ui.parcours_widget import afficher_talking_points, injecter_bandeau_si_mission
 from src.ui.theme import injecter_css
 
 logger = logging.getLogger(__name__)
 
 st.set_page_config(page_title="Conformité CIF", page_icon="🏛️", layout="wide")
 injecter_css()
+injecter_bandeau_si_mission("21_Conformite_CIF.py")
 
 st.title("Conformité CIF — Documents réglementaires")
 st.caption(
@@ -431,3 +433,7 @@ with tab_archives:
                         st.text(f"{icon} {chemin}")
     except Exception as e:
         st.error(f"Erreur lors de la lecture des archives : {e}")
+
+
+# ─── Talking points ──────────────────────────────────────────────────────
+afficher_talking_points("21_Conformite_CIF.py")

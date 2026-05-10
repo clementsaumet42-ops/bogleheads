@@ -7,10 +7,12 @@ from pathlib import Path
 import streamlit as st
 import yaml
 
+from src.ui.parcours_widget import afficher_talking_points, injecter_bandeau_si_mission
 from src.ui.theme import injecter_css
 
 st.set_page_config(page_title="Profilage", page_icon="🏛️")
 injecter_css()
+injecter_bandeau_si_mission("03_Profilage.py")
 
 st.title("Profilage Client")
 st.caption("Questionnaire MIF2 + Grable-Lytton + Scénarios comportementaux")
@@ -131,3 +133,7 @@ elif step == "4. Synthèse":
         pc = synthetiser_profil(aversion)
         st.success(f"Recommandation : **{pc.recommandation_allocation}**")
         st.write(f"Cohérence : {pc.delta_confiance}")
+
+
+# ─── Talking points ──────────────────────────────────────────────────────
+afficher_talking_points("03_Profilage.py")

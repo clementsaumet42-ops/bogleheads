@@ -203,3 +203,62 @@ def test_prochaine_page_phase_7_renvoie_none(tmp_path):
         etat.etapes[e.cle] = EtatEtape.VALIDE
     page = prochaine_page_recommandee(etat)
     assert page is None
+
+
+# ── Talking points par phase ─────────────────────────────────────────────
+
+
+def test_talking_points_couvre_toutes_les_phases():
+    """Chaque phase du parcours doit avoir des talking points."""
+    from src.mission.parcours import TALKING_POINTS_PAR_PHASE
+
+    cles_phases = {p.cle for p in PHASES_PARCOURS}
+    cles_tp = set(TALKING_POINTS_PAR_PHASE.keys())
+    assert cles_phases == cles_tp, (
+        f"Cles manquantes : {cles_phases - cles_tp}, cles superflues : {cles_tp - cles_phases}"
+    )
+
+
+def test_chaque_phase_a_au_moins_3_talking_points():
+    from src.mission.parcours import TALKING_POINTS_PAR_PHASE
+
+    for cle, points in TALKING_POINTS_PAR_PHASE.items():
+        assert len(points) >= 3, f"Phase {cle} : seulement {len(points)} point(s)"
+        for p in points:
+            assert p.strip(), f"Phase {cle} : point vide"
+
+
+def test_talking_points_pour_phase_inconnue_renvoie_tuple_vide():
+    from src.mission.parcours import talking_points_pour_phase
+
+    assert talking_points_pour_phase("inconnue") == ()
+
+
+# ── Coherence pages metier <-> bandeau ───────────────────────────────────
+
+
+def test_pages_du_parcours_injectent_le_bandeau():
+    """Toute page mappee dans une phase doit appeler injecter_bandeau_si_mission.
+
+    Verifie qu'on n'oublie pas de cabler une page nouvellement mappee.
+    """
+    pages_dir = Path(__file__).parent.parent / "pages"
+    manquantes: list[str] = []
+    for phase in PHASES_PARCOURS:
+        for nom_page in phase.pages:
+            chemin = pages_dir / nom_page
+            if not chemin.exists():
+                continue
+            contenu = chemin.read_text(encoding="utf-8")
+            # On accepte le wrapper injecter_bandeau_si_mission ou
+            # l'appel direct afficher_bandeau_parcours (cas Mission_EC
+            # qui a deja charge l'etat localement).
+            if (
+                "injecter_bandeau_si_mission" not in contenu
+                and "afficher_bandeau_parcours" not in contenu
+            ):
+                manquantes.append(nom_page)
+    assert not manquantes, (
+        f"Pages sans bandeau parcours injecte : {manquantes}. "
+        "Ajoutez injecter_bandeau_si_mission(...) apres injecter_css()."
+    )

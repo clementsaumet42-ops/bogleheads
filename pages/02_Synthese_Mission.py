@@ -23,6 +23,7 @@ from src.mission.parcours import (
     PHASES_PARCOURS,
     phase_courante,
     progression_par_phase,
+    talking_points_pour_phase,
 )
 from src.mission.progress import calculer_progression
 from src.ui.parcours_widget import afficher_bandeau_parcours, afficher_carte_phase
@@ -160,59 +161,8 @@ if kpis["par_type"]:
 
 # ─── Talking points contextuels ──────────────────────────────────────────────
 
-TALKING_POINTS_PAR_PHASE: dict[str, list[str]] = {
-    "qualification": [
-        "Confirmer avec le client la pertinence d'une mission CIF dediee.",
-        "Annoncer le pricing indicatif (5 a 15 k€ HT) et la duree (4 semaines).",
-        "Clarifier que cette mission est independante de la mission d'expertise comptable.",
-    ],
-    "onboarding": [
-        "Saisir le foyer : situation familiale, revenus, regime matrimonial.",
-        "Faire passer le questionnaire MIF II : connaissance, experience, "
-        "tolerance au risque, capacite de perte, horizon, objectifs.",
-        "Generer DER + lettre de mission, envoyer pour signature eIDAS.",
-    ],
-    "diagnostic": [
-        "Importer les 3 a 8 derniers releves PDF (PEA, AV, CTO, PEE...).",
-        "Valider chaque ligne ligne par ligne — jamais de merge silencieux.",
-        "Presenter au client la friction fiscale ANNUELLE actuelle "
-        "(en € et en bps) — c'est l'argument economique cle.",
-        "Hierarchiser les alertes : concentration, frais courants, pieges "
-        "MIF II, fonds bloques, retenues source UK.",
-    ],
-    "recommandations": [
-        "Proposer une allocation cible Boglehead adaptee au profil "
-        "(ex. 60/40 ou 70/30) avec coeur indiciel mondial.",
-        "Justifier l'asset location MILP : pour chaque ETF, dans quelle "
-        "enveloppe et pourquoi (defendabilite fiscale).",
-        "Faire valider l'allocation par le client — toujours modifiable, jamais imposee.",
-    ],
-    "plan_action": [
-        "Presenter la cascade trimestrielle : versements cibles sur les "
-        "enveloppes sous-ponderees, en priorite.",
-        "Chiffrer le COUT FISCAL EVITE vs un rebalancement naïf — c'est "
-        "le ROI defendable a presenter au client.",
-        "Lister les arbitrages eventuels en privilegiant les enveloppes "
-        "sans friction (PEA antériorité, AV >8 ans, PEE débloqué).",
-        "Remettre les ordres prets a passer (CSV ou copie-broker).",
-    ],
-    "livrables": [
-        "Generer le ZIP horodate : PDF diagnostic, DER, LM, RAA, Excel, "
-        "CSV ordres, journal de mission.",
-        "Verifier la conformite CIF et la signature eIDAS de tous les documents reglementaires.",
-        "Transmettre au client par canal securise et obtenir l'accuse de reception.",
-    ],
-    "suivi_annuel": [
-        "Re-importer les releves a J+12 mois et comparer realise vs cible.",
-        "Chiffrer la friction fiscale REELLEMENT evitee vs scenario naïf.",
-        "Mettre a jour le DER si situation foyer ou objectifs ont evolue.",
-        "Produire le nouveau plan 12 mois pour l'annee a venir.",
-    ],
-}
-
-
 st.subheader(f"Que faire avec le client en phase {phase.numero}")
-points = TALKING_POINTS_PAR_PHASE.get(phase.cle, [])
+points = talking_points_pour_phase(phase.cle)
 for i, point in enumerate(points, 1):
     st.markdown(
         f'<div style="display:flex;gap:8px;margin-bottom:6px;">'

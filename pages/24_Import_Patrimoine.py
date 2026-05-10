@@ -9,10 +9,12 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from src.ui.parcours_widget import afficher_talking_points, injecter_bandeau_si_mission
 from src.ui.theme import injecter_css
 
 st.set_page_config(page_title="Import Patrimoine PDF", layout="wide")
 injecter_css()
+injecter_bandeau_si_mission("24_Import_Patrimoine.py")
 st.title("Import Patrimoine depuis PDF")
 st.caption(
     "Importez des relevés PDF pour alimenter le patrimoine de la mission active. "
@@ -333,3 +335,7 @@ st.caption(
     "Import patrimoine PDF — Sprint S20. "
     "Toutes les extractions sont 100% locales, aucun envoi de données vers des services tiers."
 )
+
+
+# ─── Talking points ──────────────────────────────────────────────────────
+afficher_talking_points("24_Import_Patrimoine.py")

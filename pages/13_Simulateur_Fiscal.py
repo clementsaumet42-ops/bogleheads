@@ -8,11 +8,13 @@ import streamlit as st
 from src.fiscalite import (
     calculer_fiscalite_operation,
 )
+from src.ui.parcours_widget import afficher_talking_points, injecter_bandeau_si_mission
 from src.ui.theme import injecter_css
 
 st.set_page_config(page_title="Simulateur Fiscal", page_icon="🏛️", layout="wide")
 
 injecter_css()
+injecter_bandeau_si_mission("13_Simulateur_Fiscal.py")
 
 st.title("Simulateur Fiscal")
 st.markdown("Calculez la fiscalité détaillée de vos opérations d'investissement.")
@@ -133,3 +135,7 @@ if st.button("Calculer", type="primary"):
 # Footer
 st.markdown("---")
 st.caption("Simulation indicative. Consultez un expert-comptable pour votre situation personnelle.")
+
+
+# ─── Talking points ──────────────────────────────────────────────────────
+afficher_talking_points("13_Simulateur_Fiscal.py")
