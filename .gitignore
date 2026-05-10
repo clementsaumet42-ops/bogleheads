@@ -61,7 +61,6 @@ data/missions/*/imports/
 
 # Dogfood — PDF générés par le CGP (non commités)
 dogfood/cas_rousseau/pdf_generes/
-dogfood/cas_rousseau/docx_generes/
 
 # Cabinet CGP — clés de signature (ne jamais committer la clé privée)
 config/cabinet/keys/private.pem
