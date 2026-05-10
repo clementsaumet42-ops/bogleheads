@@ -148,9 +148,7 @@ with col_f2:
     statuts = ["Tous", "Demarrage", "Analyse", "Livrables", "Terminee"]
     statut_filtre = st.selectbox("Filtrer par statut", statuts, index=0)
 with col_f3:
-    inactivite_filtre = st.checkbox(
-        "A relancer uniquement (inactives > 30j)", value=False
-    )
+    inactivite_filtre = st.checkbox("A relancer uniquement (inactives > 30j)", value=False)
 
 df_filtre = df.copy()
 if phase_filtre != "Toutes":
@@ -231,8 +229,7 @@ else:
             if not raison:
                 raison.append(f"progression {int(row['Progression'])} %")
             st.markdown(
-                f"**{row['Mission']}** — {row['Prochaine etape']}  \n"
-                f"_{' · '.join(raison)}_"
+                f"**{row['Mission']}** — {row['Prochaine etape']}  \n_{' · '.join(raison)}_"
             )
         with col_r:
             if st.button("Ouvrir", key=f"_open_{row['ID']}"):
@@ -254,7 +251,4 @@ with col_ex1:
         mime="text/csv",
     )
 with col_ex2:
-    st.caption(
-        f"Genere le {date.today().isoformat()} — "
-        f"{nb_total} mission(s) — Sextant"
-    )
+    st.caption(f"Genere le {date.today().isoformat()} — {nb_total} mission(s) — Sextant")

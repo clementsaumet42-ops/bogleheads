@@ -138,9 +138,7 @@ class CalendrierTrimestriel:
         }
 
 
-def _derive_max(
-    portefeuille: EtatPortefeuille, allocation_cible: dict[str, float]
-) -> float:
+def _derive_max(portefeuille: EtatPortefeuille, allocation_cible: dict[str, float]) -> float:
     """Renvoie l'ecart max |poids_actuel - poids_cible| (en fraction, pas %)."""
     poids = portefeuille.poids_actuels()
     return max(
@@ -215,7 +213,9 @@ def _proposer_arbitrages(
         for env in enveloppes_disponibles:
             if env in enveloppes_sans_friction:
                 return env
-        return "CTO_perso" if "CTO_perso" not in enveloppes_disponibles else enveloppes_disponibles[0]
+        return (
+            "CTO_perso" if "CTO_perso" not in enveloppes_disponibles else enveloppes_disponibles[0]
+        )
 
     arbitrages: list[Arbitrage] = []
     # On apparie surponderees -> sousponderees jusqu'a equilibrer.
@@ -370,9 +370,7 @@ def generer_calendrier(
     pv_pct = cfg.get("hypothese_plus_value_latente_pct", 0.30)
     taux_naif = cfg.get("taux_fiscalite_par_enveloppe", {}).get("CTO_perso", 0.314)
     ecarts_init = calculer_ecarts(portefeuille_actuel, allocation_cible, cfg)
-    montant_a_arbitrer_naif = sum(
-        abs(e.ecart_montant) for e in ecarts_init if not e.sous_pondere
-    )
+    montant_a_arbitrer_naif = sum(abs(e.ecart_montant) for e in ecarts_init if not e.sous_pondere)
     cout_naif = montant_a_arbitrer_naif * pv_pct * taux_naif
     cout_optimise = sum(a.cout_fiscal_estime for a in arbitrages)
     economie = max(0.0, cout_naif - cout_optimise)

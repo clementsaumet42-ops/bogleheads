@@ -61,12 +61,10 @@ def test_versements_priorisent_classe_sous_ponderee():
         flux_entrants_12m=40_000,
     )
     montant_actions = sum(
-        v.montant for t in plan.trimestres for v in t.versements
-        if v.classe == "actions_monde"
+        v.montant for t in plan.trimestres for v in t.versements if v.classe == "actions_monde"
     )
     montant_obligs = sum(
-        v.montant for t in plan.trimestres for v in t.versements
-        if v.classe == "obligations"
+        v.montant for t in plan.trimestres for v in t.versements if v.classe == "obligations"
     )
     assert montant_actions > montant_obligs
 
@@ -139,6 +137,7 @@ def test_dump_dict_serialisable():
         flux_entrants_12m=20_000,
     )
     import json
+
     dump = plan.vers_dict()
     # Doit etre JSON-serialisable sans erreur
     json.dumps(dump)

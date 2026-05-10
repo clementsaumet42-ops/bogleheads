@@ -80,9 +80,7 @@ def simuler_decumulation(
         contexte_initial : contexte fiscal foyer (situation, TMI...).
     """
     contexte = contexte_initial or ContexteFiscal()
-    enveloppes_courantes = [
-        EnveloppeDecumulation(**e.__dict__) for e in enveloppes_initiales
-    ]
+    enveloppes_courantes = [EnveloppeDecumulation(**e.__dict__) for e in enveloppes_initiales]
     patrimoine_initial = sum(e.valeur for e in enveloppes_courantes)
     annees: list[AnneeProjection] = []
     cout_cumule = 0.0
@@ -97,9 +95,7 @@ def simuler_decumulation(
             situation=contexte.situation,
             tmi=contexte.tmi,
             abattement_av_deja_utilise_annee=0.0,
-            encours_av_total_foyer=sum(
-                e.valeur for e in enveloppes_courantes if e.type_ == "AV"
-            ),
+            encours_av_total_foyer=sum(e.valeur for e in enveloppes_courantes if e.type_ == "AV"),
         )
         plan = optimiser_retraits_annuels(
             besoin_net_annuel=besoin,

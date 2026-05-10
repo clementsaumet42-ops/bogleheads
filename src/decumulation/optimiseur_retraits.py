@@ -216,9 +216,7 @@ def optimiser_retraits_annuels(
             encours_av_total_foyer=sum(e.valeur for e in enveloppes if e.type_ == "AV"),
         )
 
-    enveloppes_courantes = [
-        EnveloppeDecumulation(**e.__dict__) for e in enveloppes
-    ]
+    enveloppes_courantes = [EnveloppeDecumulation(**e.__dict__) for e in enveloppes]
     retraits: list[Retrait] = []
     total_net = 0.0
     avertissements: list[str] = []
@@ -256,9 +254,7 @@ def optimiser_retraits_annuels(
         if montant < 0.01:
             break
 
-        retrait, nouvelle_env, nouveau_contexte = _retirer_sur_enveloppe(
-            env, contexte, montant
-        )
+        retrait, nouvelle_env, nouveau_contexte = _retirer_sur_enveloppe(env, contexte, montant)
         retraits.append(retrait)
         enveloppes_courantes[idx_choisi] = nouvelle_env
         contexte = nouveau_contexte
@@ -281,8 +277,7 @@ def optimiser_retraits_annuels(
 
     if abattement_total >= contexte.abattement_av_annuel * 0.99:
         avertissements.append(
-            f"Abattement AV annuel ({contexte.abattement_av_annuel:,.0f} €) "
-            "consomme integralement."
+            f"Abattement AV annuel ({contexte.abattement_av_annuel:,.0f} €) consomme integralement."
         )
 
     return PlanDecumulation(
