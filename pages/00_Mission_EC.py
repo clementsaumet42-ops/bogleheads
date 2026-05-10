@@ -22,6 +22,7 @@ from src.mission.etat import (
     supprimer_mission,
 )
 from src.mission.progress import calculer_progression
+from src.ui.parcours_widget import afficher_bandeau_parcours
 from src.ui.theme import injecter_css
 from src.validations.coherence import valider_coherence
 
@@ -116,6 +117,10 @@ autosave_actif = st.sidebar.toggle(
 if autosave_actif:
     activer_autosave(etat.mission_id, intervalle_secondes=30)
     st.sidebar.caption("Session sauvegardée automatiquement.")
+
+# ─── Bandeau parcours mission VISION ──────────────────────────────────────────
+
+afficher_bandeau_parcours(etat, page_courante="00_Mission_EC.py")
 
 # ─── Section 2 — En-tête mission active ───────────────────────────────────────
 
