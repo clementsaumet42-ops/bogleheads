@@ -38,6 +38,29 @@ Ouvrir `dogfood/cas_rousseau/grille_scoring.md`. Pour chacun des 18 pièges, coc
 
 ---
 
+## Observations à remplir au fil de l'eau
+
+En complément de la grille des 18 pièges (`grille_scoring.md`), 4 fichiers
+de capture de douleur **parcours** doivent être remplis en parallèle de la
+session de dogfood :
+
+| Fichier | À noter |
+|---|---|
+| [`ruptures_parcours.md`](ruptures_parcours.md) | Chaque sortie forcée hors de Sextant (Excel, calculette, fichier local…) |
+| [`ressaisies.md`](ressaisies.md) | Chaque champ que l'app oblige à retaper |
+| [`calculs_non_verifiables.md`](calculs_non_verifiables.md) | Chaque chiffre que je ne saurais pas défendre au client |
+| [`livrables_a_retoucher.md`](livrables_a_retoucher.md) | Ce que je n'enverrais pas en l'état |
+
+La grille des 18 pièges mesure la **qualité métier** (l'outil détecte-t-il
+les bons problèmes ?). Ces 4 fichiers mesurent la **qualité parcours**
+(l'outil est-il utilisable lundi matin par un EC réel ?).
+
+Les deux comptent. La grille pilotera le durcissement des règles d'alerte.
+Les 4 fichiers piloteront le Bloc B (orchestration mission) et le Bloc C
+(rebalancement par flux) de la `ROADMAP.md`.
+
+---
+
 ## Contenu de ce dossier
 
 | Fichier / Dossier | Description |
