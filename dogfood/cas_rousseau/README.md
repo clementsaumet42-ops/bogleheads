@@ -7,7 +7,7 @@
 
 ## Présentation du cas
 
-Le cas Rousseau-Marchand est un dossier patrimonial fictif complexe conçu pour tester le tool CGP de bout en bout. Il met en scène un couple avec des revenus hétérogènes (cadre salarié + TNS), un patrimoine financier diversifié de 1,3 M€ (PEA, CTO, AV, PER, épargne salariale, actifs alternatifs), un patrimoine immobilier net de 2,1 M€ soumis à l'IFI, et cinq enveloppes financières importables via la page S20. Le cas inclut 18 pièges fiscaux, réglementaires et d'allocation délibérément insérés pour évaluer la qualité de détection du tool.
+Le cas Rousseau-Marchand est un dossier patrimonial fictif complexe conçu pour tester Sextant de bout en bout. Il met en scène un couple avec des revenus hétérogènes (cadre salarié + TNS), un patrimoine financier diversifié de 1,3 M€ (PEA, CTO, AV, PER, épargne salariale, actifs alternatifs), un patrimoine immobilier net de 2,1 M€ soumis à l'IFI, et cinq enveloppes financières importables via la page S20. Le cas inclut 18 pièges fiscaux, réglementaires et d'allocation délibérément insérés pour évaluer la qualité de détection du tool.
 
 ---
 
@@ -56,4 +56,4 @@ Ouvrir `dogfood/cas_rousseau/grille_scoring.md`. Pour chacun des 18 pièges, coc
 
 Ce dossier contient exclusivement des données fictives inventées à des fins de test interne. Tout ressemblance avec une situation patrimoniale réelle est fortuite. Les ISIN utilisés sont ceux d'instruments financiers réels cotés, mais les quantités, valorisations et données personnelles sont intégralement inventées.
 
-Les PDF générés par le CGP à partir des fichiers Markdown ne doivent pas être committés dans le dépôt (voir `.gitignore` : `dogfood/cas_rousseau/pdf_generes/`).
+Les PDF générés par l'EC à partir des fichiers Markdown ne doivent pas être committés dans le dépôt (voir `.gitignore` : `dogfood/cas_rousseau/pdf_generes/`).

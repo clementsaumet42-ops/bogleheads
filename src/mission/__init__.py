@@ -1,4 +1,4 @@
-"""Module mission — fil conducteur d'une mission CGP."""
+"""Module mission — fil conducteur d'une mission EC."""
 
 from src.mission.checklist import ETAPES_CANONIQUES, Etape
 from src.mission.etat import (

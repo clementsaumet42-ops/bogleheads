@@ -1,4 +1,4 @@
-# Import Patrimoine depuis PDF — Guide CGP
+# Import Patrimoine depuis PDF — Guide EC
 
 ## Vue d'ensemble
 
@@ -7,7 +7,7 @@ depuis des relevés PDF (banques, courtiers, assureurs AV) et de les importer da
 active (S16).
 
 Le mode d'extraction est **conservateur** : chaque ligne doit être validée individuellement
-par le CGP avant import. Aucun merge silencieux.
+par l'EC avant import. Aucun merge silencieux.
 
 ---
 

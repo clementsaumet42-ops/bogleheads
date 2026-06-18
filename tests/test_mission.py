@@ -1,4 +1,4 @@
-"""Tests Sprint S16 — Module mission CGP."""
+"""Tests Sprint S16 — Module mission EC."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ def tmp_data_dir(tmp_path, monkeypatch):
 @pytest.fixture
 def mission_vierge(tmp_data_dir) -> EtatMission:
     """Crée une mission vierge dans le dossier temporaire."""
-    return creer_mission("Dupont Jean", "Alice CGP")
+    return creer_mission("Dupont Jean", "Alice EC")
 
 
 @pytest.fixture
@@ -65,34 +65,34 @@ def mission_complete(mission_vierge) -> EtatMission:
 
 class TestCreerMission:
     def test_cree_avec_bons_champs(self, tmp_data_dir):
-        m = creer_mission("Martin Sophie", "Bob CGP")
+        m = creer_mission("Martin Sophie", "Bob EC")
         assert m.nom_client == "Martin Sophie"
-        assert m.cgp == "Bob CGP"
+        assert m.conseiller == "Bob EC"
         assert m.date_creation == date.today()
         assert m.date_derniere_maj == date.today()
 
     def test_mission_id_est_slug(self, tmp_data_dir):
-        m = creer_mission("Müller Klaus", "CGP")
+        m = creer_mission("Müller Klaus", "EC")
         # ü → u (ou m_ller si non reconnu), en minuscules, sans espaces
         assert "muller" in m.mission_id or "_ller" in m.mission_id
 
     def test_etapes_initialisees_non_commence(self, tmp_data_dir):
-        m = creer_mission("Test Client", "CGP")
+        m = creer_mission("Test Client", "EC")
         for etape in ETAPES_CANONIQUES:
             assert m.etapes[etape.cle] == EtatEtape.NON_COMMENCE
 
     def test_toutes_etapes_canoniques_presentes(self, tmp_data_dir):
-        m = creer_mission("Test Client", "CGP")
+        m = creer_mission("Test Client", "EC")
         for etape in ETAPES_CANONIQUES:
             assert etape.cle in m.etapes
 
     def test_fichier_json_cree(self, tmp_data_dir):
-        m = creer_mission("Fichier Test", "CGP")
+        m = creer_mission("Fichier Test", "EC")
         assert m.chemin_persistance.exists()
 
     def test_doublon_genere_id_unique(self, tmp_data_dir):
-        m1 = creer_mission("Dupont Jean", "CGP")
-        m2 = creer_mission("Dupont Jean", "CGP")
+        m1 = creer_mission("Dupont Jean", "EC")
+        m2 = creer_mission("Dupont Jean", "EC")
         assert m1.mission_id != m2.mission_id
 
 
@@ -131,15 +131,15 @@ class TestPersistance:
         rechargee = EtatMission.from_dict(d, mission_vierge.chemin_persistance)
         assert rechargee.mission_id == mission_vierge.mission_id
         assert rechargee.nom_client == mission_vierge.nom_client
-        assert rechargee.cgp == mission_vierge.cgp
+        assert rechargee.conseiller == mission_vierge.conseiller
 
     def test_maj_date_derniere_maj_a_la_sauvegarde(self, mission_vierge):
         sauvegarder_mission(mission_vierge)
         assert mission_vierge.date_derniere_maj == date.today()
 
     def test_lister_missions_retourne_toutes(self, tmp_data_dir):
-        creer_mission("Client A", "CGP")
-        creer_mission("Client B", "CGP")
+        creer_mission("Client A", "EC")
+        creer_mission("Client B", "EC")
         missions = lister_missions()
         assert len(missions) >= 2
 

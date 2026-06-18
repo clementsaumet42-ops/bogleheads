@@ -52,7 +52,7 @@ def test_ajouter_import_mission(import_pdf_exemple: ImportPDF) -> None:
     mission = EtatMission(
         mission_id="test_s20_temp",
         nom_client="Test Client",
-        cgp="CGP Test",
+        conseiller="EC Test",
         date_creation=date.today(),
         date_derniere_maj=date.today(),
         etapes=_etapes_initiales(),
@@ -74,7 +74,7 @@ def test_serialisation_imports_patrimoine(import_pdf_exemple: ImportPDF) -> None
     mission = EtatMission(
         mission_id="test_s20_serial",
         nom_client="Test Client",
-        cgp="CGP Test",
+        conseiller="EC Test",
         date_creation=date.today(),
         date_derniere_maj=date.today(),
         etapes=_etapes_initiales(),
@@ -96,7 +96,7 @@ def test_deserialisation_mission_sans_imports_patrimoine() -> None:
     data = {
         "mission_id": "test_s20_retro",
         "nom_client": "Client Retro",
-        "cgp": "CGP",
+        "conseiller": "EC",
         "date_creation": date.today().isoformat(),
         "date_derniere_maj": date.today().isoformat(),
         "etapes": {},
@@ -116,7 +116,7 @@ def test_mission_multiple_imports(import_pdf_exemple: ImportPDF) -> None:
     mission = EtatMission(
         mission_id="test_s20_multi",
         nom_client="Client Multi",
-        cgp="CGP",
+        conseiller="EC",
         date_creation=date.today(),
         date_derniere_maj=date.today(),
         etapes=_etapes_initiales(),

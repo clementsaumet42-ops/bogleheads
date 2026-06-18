@@ -2,12 +2,12 @@
 # AVERTISSEMENT LÉGAL : Ces profils sont entièrement fictifs et construits à des fins
 # pédagogiques et d'illustration uniquement. Ils ne constituent en aucun cas un conseil
 # en investissement personnalisé au sens de la Directive MIF II. Tout conseil doit être
-# personnalisé par un CIF/CGP agréé AMF.
+# personnalisé par un EC-CIF agréé AMF.
 
 disclaimer: |
   Ces profils sont fictifs et illustratifs. Ils ne constituent pas un conseil personnalisé.
   Tout investissement comporte des risques. Les performances passées ne préjugent pas
-  des performances futures. Consulter un CGP/CIF agréé AMF avant toute décision.
+  des performances futures. Consulter un EC-CIF agréé AMF avant toute décision.
 
 profils:
   - id: 1
